@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import { UserService } from "../services/UserService";
 
 export class UserController {
@@ -6,7 +7,16 @@ export class UserController {
 
 
 
-    createStudent = async () => { }
+    createStudent = async (req: Request, res: Response) => {
+        if (!req.body.email) {
+            res.status(400).json({ error: "email address is missed" });
+            return;
+        };
+        if (!req.body.password) {
+            res.status(400).json({ error: "password is missed" });
+            return;
+        }
+    }
     createTutor = async () => { }
     //TODO:
     loginPassword = async (req: Request, res: Response) => {

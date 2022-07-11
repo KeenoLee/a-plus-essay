@@ -14,17 +14,17 @@ const userRoutes = express.Router();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+userRoutes.post("/signup/student", userController.createStudent);
+userRoutes.post("/signup/tutor", userController.createTutor);
+// userRoutes.post("/login/password", userController.loginPassword);
+// userRoutes.get("/login/google", userController.loginGoogle);
+// userRoutes.get("/login/facebook", userController.loginFacebook);
+// userRoutes.post("/logout", logout);
 
 app.get("/", (req: Request, res: Response) => {
     res.json({ message: 'hello world' })
 })
 
-// userRoutes.post("/signup/student", userController.createStudent);
-// userRoutes.post("/signup/tutor", userController.createTutor);
-// userRoutes.post("/login/password", userController.loginPassword);
-// userRoutes.get("/login/google", userController.loginGoogle);
-// userRoutes.get("/login/facebook", userController.loginFacebook);
-// userRoutes.post("/logout", logout);
 
 const port = 8111
 
