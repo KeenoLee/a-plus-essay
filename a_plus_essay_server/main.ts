@@ -25,6 +25,9 @@ app.get("/", (req: Request, res: Response) => {
     res.json({ message: 'hello world' })
 })
 
+app.use(userRoutes)
+app.use(orderRoutes)
+
 // userRoutes.post("/signup/student", userController.createStudent);
 // userRoutes.post("/signup/tutor", userController.createTutor);
 // userRoutes.post("/login/password", userController.loginPassword);
@@ -32,10 +35,10 @@ app.get("/", (req: Request, res: Response) => {
 // userRoutes.get("/login/facebook", userController.loginFacebook);
 // userRoutes.post("/logout", logout);
 
-//orderRoutes.get("/order/data", orderController.getOrderData)
+orderRoutes.get("/order/data", orderController.getOrderData)
 
-const port = 8111
+const PORT = 8111
 
-app.listen(port, () => {
-    console.log(`Listening to ${port}`)
+app.listen(PORT, () => {
+    console.log(`Listening to ${PORT}`)
 })
