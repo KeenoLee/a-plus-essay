@@ -2,15 +2,12 @@ import { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Button } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
-import { create, MMKVLoader } from "react-native-mmkv-storage";
 import { Formik, Field, Form } from 'formik';
 import { StackActions, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegisterSuccess from "./RegisterSuccess";
 
 
-const MMKV = new MMKVLoader().initialize();
-export const useStorage = create(MMKV);
 const roleData: RadioButtonProps[] = [{
     id: '1',
     label: 'Student',
@@ -52,8 +49,8 @@ export default function Register() {
     const [firmPassword, setFirmPassword] = useState(null)
     const [isTutor, setIsTutor] = useState(false)
     const [isSignal, setIsSignal] = useState(false)
-    const [page, setPage] = useState(1)
-    const navigation = useNavigation()
+    const [page, setPage] = useState({step: 1})
+    
 
     function onPressRole(roleData: RadioButtonProps[]) {
         setRole(roleData);
@@ -69,7 +66,8 @@ export default function Register() {
 
     return (
         <View style={styles.form}>
-            
+            {page.step === 1?
+            <>
             <RadioGroup
                 containerStyle={{ flexDirection: 'row' }}
                 radioButtons={role}
@@ -82,9 +80,10 @@ export default function Register() {
             <TextInput style={styles.input} placeholder="Email address" onChangeText={() => setEmail(email)} />
             <TextInput style={styles.input} placeholder="Password" onChangeText={() => setPassword(password)} />
             <TextInput style={styles.input} placeholder="Confirm Password" onChangeText={() => setFirmPassword(firmPassword)} />
-            {!isTutor && <Button title='Create Account' onPress={() => setContact} />}
+            </> : null}
+            {!isTutor && page.step === 1 && <Button title='Create Account' onPress={() => setContact} />}
             {/* Submit Page 1 */}
-            {isTutor &&
+            {isTutor && page.step === 1 &&
                 <>
                     <RadioGroup
                         containerStyle={{ flexDirection: 'row' }}
@@ -97,9 +96,25 @@ export default function Register() {
                     <TextInput style={styles.input} placeholder='Mobile Number'></TextInput>
                     <Button title='Next' onPress={() => {
                         setContact
+                        setPage({step: 2})
                         }} />
                 </>
             }
+            {page.step === 2? 
+            <>
+                {/* TutorAcademic */}
+            </>: null}
+
+            {page.step === 3?
+            <>
+                {/* Tutor School Life */}
+            </> : null}
+
+            {page.step === 4?
+            <>
+                {/* Tutor subject */}
+                {/* Stack to Success Page */}
+            </> : null}
         </View>
     )
 }
