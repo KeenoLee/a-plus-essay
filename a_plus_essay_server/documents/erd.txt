@@ -1,0 +1,135 @@
+# Visualize on https://erd.surge.sh
+# or https://quick-erd.surge.sh
+#
+# Relationship Types
+#  -    - one to one
+#  -<   - one to many
+#  >-   - many to one
+#  >-<  - many to many
+#  -0   - one to zero or one
+#  0-   - zero or one to one
+#  0-0  - zero or one to zero or one
+#  -0<  - one to zero or many
+#  >0-  - zero or many to one
+#
+////////////////////////////////////
+
+
+tutors
+------
+id integer PK
+users_id integer FK >- users.id
+is_verified boolean
+transcript varchar(127)
+student_card varchar(127)
+phone_number integer unique
+is_whatsapp boolean
+is_signal boolean
+school varchar(127) NULL
+majors_id integer FK -> majors.id
+rating decimal(1,2) NULL
+self_intro text NULL
+ongoing_order_amount integer
+completed_order_amount integer
+created_at timestamp
+updated_at timestamp
+
+
+preferred_subjects
+------------------
+id integer PK
+tutors_id integer FK >- tutors.id
+subjects_id integer FK >- subjects.id
+created_at timestamp
+updated_at timestamp
+
+
+majors
+------
+id integer PK
+major varchar(127)
+created_at timestamp
+updated_at timestamp
+
+
+subjects
+--------
+id integer PK
+subject_name varchar(127)
+created_at timestamp
+updated_at timestamp
+
+
+orders_subjects
+--------------
+id integer PK
+orders_id integer FK >- orders.id
+subjects_id integer FK >- subjects.id
+
+
+transcript_subjects
+-------------------
+id integer PK
+tutors_id integer FK >- tutors.id
+subjects_id integer FK >- subjects.id
+grade varchar(20)
+created_at timestamp
+updated_at timestamp
+
+
+users
+-----
+id integer PK
+is_admin boolean
+is_tutor boolean
+nickname varchar(31)
+email varchar(127) unique
+hashed_password varchar(60) NULL
+created_at timestamp
+updated_at timestamp
+
+comments
+--------
+id integer PK
+comment text
+students_id integer FK >- users.id
+tutors_id integer FK >- tutors.id
+created_at timestamp
+updated_at timestamp
+
+
+samples
+-------
+id integer PK
+sample varchar(127)
+tutors_id integer FK >- tutors.id
+created_at timestamp
+updated_at timestamp
+
+
+chatrooms
+-----------------
+id integer PK
+orders_id integer FK - orders.id
+send_by_tutor boolean
+message text
+created_at timestamp
+updated_at timestamp
+
+
+orders
+------
+id integer PK
+students_id integer FK - users.id
+tutors_id integer NULL FK - tutors.id
+is_matched boolean
+title varchar(63)
+description text
+required_note text NULL
+budget integer
+completed timestamp NULL
+paid timestamp NULL
+tutor_submission_deadline date
+student_submission_deadline date
+created_at timestamp
+updated_at timestamp
