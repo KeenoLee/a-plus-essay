@@ -7,7 +7,7 @@ import { StackActions, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegisterSuccess from "./RegisterSuccess";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 
 
@@ -93,7 +93,7 @@ export default function Register() {
                             setIsTutor(!isTutor)
                         }}
                     />
-                    <TextInput style={styles.input} placeholder="NicknameSSS" onChangeText={() => setNickname(nickname)} />
+                    <TextInput style={styles.input} placeholder="Nickname" onChangeText={() => setNickname(nickname)} />
                     <TextInput style={styles.input} placeholder="Email address" onChangeText={() => setEmail(email)} />
                     <TextInput style={styles.input} placeholder="Password" onChangeText={() => setPassword(password)} />
                     <TextInput style={styles.input} placeholder="Confirm Password" onChangeText={() => setFirmPassword(firmPassword)} />
@@ -167,34 +167,34 @@ export default function Register() {
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
-                    
+
                     <Text>Preference Subject (3 Limited)</Text>
                     <TextInput onChangeText={(value) => {
                         setPreSubject([...preSubject, value])
@@ -205,7 +205,7 @@ export default function Register() {
                     <TextInput onChangeText={(value) => {
                         setPreSubject([...preSubject, value])
                     }} />
-                    
+
                     <TouchableOpacity>
                         <Button title='Create Account' onPress={() => {
                             setContact
