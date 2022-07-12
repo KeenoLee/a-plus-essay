@@ -20,17 +20,12 @@ const orderRoutes = express.Router();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
-app.get("/", (req: Request, res: Response) => {
-    res.json({ message: 'hello world' })
-})
-
 app.use(userRoutes)
 app.use(orderRoutes)
 
-userRoutes.post("/signup/student", userController.createStudent);
-// userRoutes.post("/signup/tutor", userController.createTutor);
-// userRoutes.post("/login/password", userController.loginPassword);
+userRoutes.post("/signup/student", userController.createUser);
+userRoutes.post("/signup/tutor", userController.createTutor);
+userRoutes.post("/login/password", userController.loginPassword);
 // userRoutes.get("/login/google", userController.loginGoogle);
 // userRoutes.get("/login/facebook", userController.loginFacebook);
 // userRoutes.post("/logout", logout);
