@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 userRoutes.post("/signup/student", userController.createStudent);
-userRoutes.post("/signup/tutor", userController.createTutor);
+// userRoutes.post("/signup/tutor", userController.createTutor);
 // userRoutes.post("/login/password", userController.loginPassword);
 // userRoutes.get("/login/google", userController.loginGoogle);
 // userRoutes.get("/login/facebook", userController.loginFacebook);
