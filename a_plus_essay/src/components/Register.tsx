@@ -93,14 +93,14 @@ export default function Register() {
                             setIsTutor(!isTutor)
                         }}
                     />
-                    <TextInput style={styles.input} placeholder="NicknameSSS" onChangeText={() => setNickname(nickname)} />
+                    <TextInput style={styles.input} placeholder="Nicknameeee" onChangeText={() => setNickname(nickname)} />
                     <TextInput style={styles.input} placeholder="Email address" onChangeText={() => setEmail(email)} />
                     <TextInput style={styles.input} placeholder="Password" onChangeText={() => setPassword(password)} />
                     <TextInput style={styles.input} placeholder="Confirm Password" onChangeText={() => setFirmPassword(firmPassword)} />
                 </> : null}
             {!isTutor && page.step === 1 &&
                 <TouchableOpacity>
-                    <Button title='Create Account' onPress={() => {
+                    <Button title='Create Accountsssss' onPress={() => {
                         setContact
                     }} />
                 </TouchableOpacity>
