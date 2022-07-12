@@ -7,7 +7,7 @@ import { StackActions, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegisterSuccess from "./RegisterSuccess";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 
 
@@ -53,6 +53,7 @@ export default function Register() {
     const [firmPassword, setFirmPassword] = useState(null)
     const [isTutor, setIsTutor] = useState(false)
     const [isSignal, setIsSignal] = useState(false)
+    const [imageUri, setImageUri] = useState({})
     const [transcription, setTranscription] = useState(null)
     const [studentCard, setStudentCard] = useState(null)
     const [schoolLife, setSchoolLife] = useState({
@@ -63,8 +64,36 @@ export default function Register() {
     const [subject, setSubject] = useState([''])
     const [preSubject, setPreSubject] = useState([''])
 
-    // const result = await launchCamera({mediaType: 'photo', cameraType: 'back'});
+    const openCamera = () => {
+        launchCamera({
+            mediaType: 'photo',
+            includeBase64: true
+        }, res => {
+            if (res.didCancel) {
+                console.log('user cancelled image picker')
+            } else if (res.errorMessage) {
+                console.log('Error: ', res.errorMessage)
+            } else {
+                const source = { url: 'data:image/jpeg:base64,' + res.assets }
+            }
+        })
+    }
 
+    const openGallery = () => {
+        launchImageLibrary({
+            mediaType: 'photo',
+            includeBase64: true
+        }, res => {
+            if (res.didCancel) {
+                console.log('user cancelled image picker')
+            } else if (res.errorMessage) {
+                console.log('Error: ', res.errorMessage)
+            } else {
+                const source = { uri: 'data:image/jpeg:base64,' + res.assets }
+                setImageUri(source)
+            }
+        })
+    }
 
 
     function onPressRole(roleData: RadioButtonProps[]) {
@@ -117,22 +146,28 @@ export default function Register() {
                         }}
                     />
                     <TextInput style={styles.input} placeholder='Mobile Number' />
-                    <TouchableOpacity>
-                        <Button title='Next' onPress={() => {
-                            setContact
-                            setPage({ step: 2 })
-                        }} />
+                    <TouchableOpacity onPress={() => {
+                        setPage({ step: 2 })
+                    }}>
+                        <Text>Next</Text>
                     </TouchableOpacity>
                 </>
             }
             {page.step === 2 ?
                 <>
                     <Text>Academic Infomation</Text>
-                    <TouchableOpacity>
-                        <Button title='Next' onPress={() => {
-                            setContact
-                            setPage({ step: 3 })
-                        }} />
+                    <TouchableOpacity onPress={() => openCamera()}>
+                        <Text>Take Photo</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => openGallery()}>
+                        <Text>Choose Photo</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => {
+                        setPage({ step: 3 })
+                    }} >
+                        <Text>Next</Text>
                     </TouchableOpacity>
 
                 </> : null}
@@ -153,11 +188,10 @@ export default function Register() {
                         tutorIntroduction: value
                     })} />
 
-                    <TouchableOpacity>
-                        <Button title='Next' onPress={() => {
-                            setContact
-                            setPage({ step: 4 })
-                        }} />
+                    <TouchableOpacity onPress={() => {
+                        setPage({ step: 4 })
+                    }} >
+                        <Text>Next</Text>
                     </TouchableOpacity>
                 </> : null}
 
@@ -167,34 +201,34 @@ export default function Register() {
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput onChangeText={(value) => {
                             setSubject([...subject, value])
-                        }}/>
+                        }} />
                         <TextInput />
                     </View>
-                    
+
                     <Text>Preference Subject (3 Limited)</Text>
                     <TextInput onChangeText={(value) => {
                         setPreSubject([...preSubject, value])
@@ -205,11 +239,11 @@ export default function Register() {
                     <TextInput onChangeText={(value) => {
                         setPreSubject([...preSubject, value])
                     }} />
-                    
-                    <TouchableOpacity>
-                        <Button title='Create Account' onPress={() => {
-                            setContact
-                        }} />
+
+                    <TouchableOpacity onPress={() => {
+                        setContact
+                    }} >
+                        <Text>Create Account</Text>
                     </TouchableOpacity>
                 </> : null}
         </View>

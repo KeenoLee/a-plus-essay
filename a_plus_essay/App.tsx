@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, { type PropsWithChildren } from 'react';
+import * as React from 'react';
 import {
   ImageBackground,
   SafeAreaView,
