@@ -28,12 +28,17 @@ app.get("/", (req: Request, res: Response) => {
 app.use(userRoutes)
 app.use(orderRoutes)
 
-// userRoutes.post("/signup/student", userController.createStudent);
+userRoutes.post("/signup/student", userController.createStudent);
 // userRoutes.post("/signup/tutor", userController.createTutor);
 // userRoutes.post("/login/password", userController.loginPassword);
 // userRoutes.get("/login/google", userController.loginGoogle);
 // userRoutes.get("/login/facebook", userController.loginFacebook);
 // userRoutes.post("/logout", logout);
+
+app.get("/", (req: Request, res: Response) => {
+    res.json({ message: 'hello world' })
+})
+
 
 orderRoutes.get("/order/data", orderController.getOrderData)
 
