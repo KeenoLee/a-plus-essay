@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet, Button, Text } from "react-native";
+import { View, TextInput, StyleSheet, Button, Text, Image } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import { Formik, Field, Form } from 'formik';
@@ -53,7 +53,12 @@ export default function Register() {
     const [firmPassword, setFirmPassword] = useState(null)
     const [isTutor, setIsTutor] = useState(false)
     const [isSignal, setIsSignal] = useState(false)
-    const [imageUri, setImageUri] = useState({})
+    const [transcriptUri, setTranscriptUri] = useState(null)
+    const [studentCardUri, setStudentCardUri] = useState(null)
+
+    const [transcriptName, setTranscriptName] = useState(null)
+    const [studentCardName, setStudentCardName] = useState(null)
+
     const [transcription, setTranscription] = useState(null)
     const [studentCard, setStudentCard] = useState(null)
     const [schoolLife, setSchoolLife] = useState({
@@ -61,25 +66,25 @@ export default function Register() {
         major: '',
         tutorIntroduction: ''
     })
-    const [subject, setSubject] = useState([''])
-    const [preSubject, setPreSubject] = useState([''])
+    const [subject, setSubject] = useState([])
+    const [preSubject, setPreSubject] = useState([])
 
-    const openCamera = () => {
-        launchCamera({
-            mediaType: 'photo',
-            includeBase64: true
-        }, res => {
-            if (res.didCancel) {
-                console.log('user cancelled image picker')
-            } else if (res.errorMessage) {
-                console.log('Error: ', res.errorMessage)
-            } else {
-                const source = { url: 'data:image/jpeg:base64,' + res.assets }
-            }
-        })
-    }
-
-    const openGallery = () => {
+    // const openCamera = () => {
+    //     launchCamera({
+    //         mediaType: 'photo',
+    //         includeBase64: true
+    //     }, res => {
+    //         if (res.didCancel) {
+    //             console.log('user cancelled image picker')
+    //         } else if (res.errorMessage) {
+    //             console.log('Error: ', res.errorMessage)
+    //         } else {
+    //             const source = { url: 'data:image/jpeg:base64,' + res.assets }
+    //         }
+    //     })
+    // }
+    
+    const openGallery = (type: string) => {
         launchImageLibrary({
             mediaType: 'photo',
             includeBase64: true
@@ -88,10 +93,21 @@ export default function Register() {
                 console.log('user cancelled image picker')
             } else if (res.errorMessage) {
                 console.log('Error: ', res.errorMessage)
-            } else {
-                const source = { uri: 'data:image/jpeg:base64,' + res.assets }
-                setImageUri(source)
+            } else if (type === 'transcript') {
+                const file = { uri: 'data:image/jpeg:base64,' + res.assets[0].base64 }
+                const filename = res.assets[0].fileName
+                setTranscriptUri(file)
+                setTranscriptName(filename)
+            } else if (type === 'studentCard') {
+                const file = { uri: 'data:image/jpeg:base64,' + res.assets[0].base64 }
+                const filename = res.assets[0].fileName
+                setStudentCardUri(file)
+                setStudentCardName(filename)
+                console.log('A: ', filename)
+                console.log(typeof filename)
+                console.log('Should same: ', studentCardName) // Old State!
             }
+            return
         })
     }
 
@@ -156,34 +172,42 @@ export default function Register() {
             {page.step === 2 ?
                 <>
                     <Text>Academic Infomation</Text>
-                    <TouchableOpacity onPress={() => openCamera()}>
-                        <Text>Take Photo</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => openGallery()}>
+                    <View style={{flexDirection: 'row'}}>
+                    <Text>Transcript</Text>
+                    <TouchableOpacity onPress={() => openGallery('transcript')}>
                         <Text>Choose Photo</Text>
                     </TouchableOpacity>
+                    </View>
+                    {/* {transcriptName !== null && <View>{transcriptName}</View>} */}
+
+                    <View style={{flexDirection: 'row'}}>
+                    <Text>Student Card</Text>
+                    <TouchableOpacity onPress={() => openGallery('studentCard')}>
+                        <Text>Choose Photo</Text>
+                    </TouchableOpacity>
+                    </View>
+                    {/* {studentCardName !== null && <View>HIHIHI</View>} */}
+                    <Image source={studentCardUri}/>
 
                     <TouchableOpacity onPress={() => {
                         setPage({ step: 3 })
                     }} >
                         <Text>Next</Text>
                     </TouchableOpacity>
-
                 </> : null}
 
             {page.step === 3 ?
                 <>
                     <Text>School Life</Text>
-                    <TextInput style={styles.input} placeholder="School" onChangeText={(value) => setSchoolLife({
+                    <TextInput style={styles.input} placeholder="School" onChangeText={value => setSchoolLife({
                         ...schoolLife,
                         school: value
                     })} />
-                    <TextInput style={styles.input} placeholder="Major" onChangeText={(value) => setSchoolLife({
+                    <TextInput style={styles.input} placeholder="Major" onChangeText={value => setSchoolLife({
                         ...schoolLife,
                         major: value
                     })} />
-                    <TextInput style={styles.input} placeholder="Tutor Introduction" onChangeText={(value) => setSchoolLife({
+                    <TextInput style={styles.input} placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
                         ...schoolLife,
                         tutorIntroduction: value
                     })} />
@@ -230,13 +254,13 @@ export default function Register() {
                     </View>
 
                     <Text>Preference Subject (3 Limited)</Text>
-                    <TextInput onChangeText={(value) => {
+                    <TextInput onChangeText={value => {
                         setPreSubject([...preSubject, value])
                     }} />
-                    <TextInput onChangeText={(value) => {
+                    <TextInput onChangeText={value => {
                         setPreSubject([...preSubject, value])
                     }} />
-                    <TextInput onChangeText={(value) => {
+                    <TextInput onChangeText={value => {
                         setPreSubject([...preSubject, value])
                     }} />
 
@@ -249,12 +273,6 @@ export default function Register() {
         </View>
     )
 }
-
-// export function TutorAcademic() {
-//     return (
-
-//     )
-// }
 
 const styles = StyleSheet.create({
     form: {
