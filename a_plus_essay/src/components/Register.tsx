@@ -72,6 +72,7 @@ export default function Register() {
         tutorIntroduction: null
     })
 
+<<<<<<< HEAD
     // Checking Page Three
 
     // Page Four Information (School Life 2)
@@ -81,6 +82,22 @@ export default function Register() {
     useEffect(()=>{
         mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
     },[subjects])
+=======
+    // const openCamera = () => {
+    //     launchCamera({
+    //         mediaType: 'photo',
+    //         includeBase64: true
+    //     }, res => {
+    //         if (res.didCancel) {
+    //             console.log('user cancelled image picker')
+    //         } else if (res.errorMessage) {
+    //             console.log('Error: ', res.errorMessage)
+    //         } else {
+    //             const source = { url: 'data:image/jpeg:base64,' + res.assets }
+    //         }
+    //     })
+    // }
+>>>>>>> 6a0495a1bba06aff282b69d5d7fd12661ac9780b
 
     const openGallery = (type: string) => {
         launchImageLibrary({
@@ -205,9 +222,12 @@ export default function Register() {
                 </> : null}
             {!isTutor && page.step === 1 &&
                 <TouchableOpacity>
-                    <Button title='Create Account' onPress={() => {
-                        setContact
-                    }} />
+                    <Button
+                        title='Create Account'
+                        onPress={() => {
+                            setContact
+                        }}
+                        disabled={!nickname && !email && !password && !firmPassword} />
                 </TouchableOpacity>
             }
             {/* Submit Page 1 */}
@@ -247,7 +267,12 @@ export default function Register() {
                             <Text>Choose Photo</Text>
                         </TouchableOpacity>
                     </View>
+<<<<<<< HEAD
                     {studentCardName && <Text>{studentCardName}</Text>}
+=======
+                    {/* {studentCardName !== null && <View>HIHIHI</View>} */}
+                    <Image source={studentCardUri} />
+>>>>>>> 6a0495a1bba06aff282b69d5d7fd12661ac9780b
 
                     {/* FOR TESTING */}
                     <View>
