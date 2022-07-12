@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import * as bcrypt from 'bcryptjs';
+import { hashPassword } from "../utils/hash";
 
 export class UserService {
 
@@ -14,8 +14,7 @@ export class UserService {
     }
 
     async createStudent(email: string, password: string) {
-        const saltRounds = 12;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = hashPassword(password);
         await this.knex.insert({ email: email, hashed_password: hashedPassword }).into("users");
         return;
     }
