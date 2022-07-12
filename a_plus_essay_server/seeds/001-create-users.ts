@@ -3,10 +3,10 @@ import { hashPassword } from "../utils/hash"
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
-    await knex("majors").del();
     await knex("subjects").del();
     await knex("samples").del();
     await knex("tutors").del();
+    await knex("majors").del();
     await knex("users").del();
 
     // Inserts seed entries
@@ -22,6 +22,7 @@ export async function seed(knex: Knex): Promise<void> {
 
     const majorRow = await knex("majors").insert([{ id: 1, major: 'dummy_major' }]).returning("id")
     const subjectId = await knex("subjects").insert([{ id: 1, subject_name: 'dummy_subject' }]).returning("id")
+
     let majorId = majorRow[0].id
 
     const tutorRow = await knex("tutors").insert([{

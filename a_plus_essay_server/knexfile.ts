@@ -9,7 +9,7 @@ const config: { [key: string]: Knex.Config } = {
     client: 'postgresql',
     connection: {
       database: process.env.DB_NAME,
-      user:     process.env.DB_USERNAME,
+      user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD
     },
   },
@@ -48,4 +48,5 @@ const config: { [key: string]: Knex.Config } = {
 
 };
 
-module.exports = config;
+// module.exports = config;
+export default config; //es 6 module

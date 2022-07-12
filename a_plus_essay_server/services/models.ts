@@ -1,5 +1,7 @@
 export interface OrderItem {
     id: number;
+    students_id: number;
+    tutors_id?: number;
     is_matched: Boolean;
     title: string;
     description: string;
