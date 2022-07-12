@@ -83,7 +83,7 @@ export default function Register() {
     //         }
     //     })
     // }
-    
+
     const openGallery = (type: string) => {
         launchImageLibrary({
             mediaType: 'photo',
@@ -145,9 +145,12 @@ export default function Register() {
                 </> : null}
             {!isTutor && page.step === 1 &&
                 <TouchableOpacity>
-                    <Button title='Create Account' onPress={() => {
-                        setContact
-                    }} />
+                    <Button
+                        title='Create Account'
+                        onPress={() => {
+                            setContact
+                        }}
+                        disabled={!nickname && !email && !password && !firmPassword} />
                 </TouchableOpacity>
             }
             {/* Submit Page 1 */}
@@ -172,22 +175,22 @@ export default function Register() {
             {page.step === 2 ?
                 <>
                     <Text>Academic Infomation</Text>
-                    <View style={{flexDirection: 'row'}}>
-                    <Text>Transcript</Text>
-                    <TouchableOpacity onPress={() => openGallery('transcript')}>
-                        <Text>Choose Photo</Text>
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text>Transcript</Text>
+                        <TouchableOpacity onPress={() => openGallery('transcript')}>
+                            <Text>Choose Photo</Text>
+                        </TouchableOpacity>
                     </View>
                     {/* {transcriptName !== null && <View>{transcriptName}</View>} */}
 
-                    <View style={{flexDirection: 'row'}}>
-                    <Text>Student Card</Text>
-                    <TouchableOpacity onPress={() => openGallery('studentCard')}>
-                        <Text>Choose Photo</Text>
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text>Student Card</Text>
+                        <TouchableOpacity onPress={() => openGallery('studentCard')}>
+                            <Text>Choose Photo</Text>
+                        </TouchableOpacity>
                     </View>
                     {/* {studentCardName !== null && <View>HIHIHI</View>} */}
-                    <Image source={studentCardUri}/>
+                    <Image source={studentCardUri} />
 
                     <TouchableOpacity onPress={() => {
                         setPage({ step: 3 })
