@@ -31,12 +31,12 @@ export class UserService {
     };
 
     async checkEmailDuplication(email: string) {
-        const result = await this.knex.select("id").from("users").where("email", email);
+        const result = await this.knex.select("id").from("user").where("email", email);
         return result;
     }
 
     async checkPhoneNumberDuplication(phoneNumber: number) {
-        const result = await this.knex.select("id").from("users").where("phone_number", phoneNumber);
+        const result = await this.knex.select("id").from("uses").where("phone_number", phoneNumber);
         return result;
     }
 
@@ -51,7 +51,7 @@ export class UserService {
             hashed_password: hashedPassword,
             created_at: date.toLocaleString(),
             updated_at: null
-        }).into("users")
+        }).into("user")
             .returning("id");
         return id;
     }
@@ -78,7 +78,7 @@ export class UserService {
             completed_order_amount: 0,
             created_at: date.toLocaleString(),
             updated_at: null
-        }).into("tutors")
+        }).into("tutor")
             .returning("id");
 
         let subjectId: number[] = await this.knex.select("id").from("subject").where("subject_name", tutor.subjects);
@@ -104,8 +104,8 @@ export class UserService {
     };
 
     async identityVerification(identity: { email: string, password: string }) {
-        const hashedPassword: string[] = await this.knex.select("hashed_password").from("users").where("email", identity.email);
-        const isMatched = checkPassword(identity.password, hashedPassword[0]);
+        const hashedPassword: string[] = await this.knex.select("hashed_password").from("user").where("email", identity.email);
+        const isMatched = await checkPassword(identity.password, hashedPassword[0]);
         return isMatched;
     }
 }

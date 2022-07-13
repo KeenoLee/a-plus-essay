@@ -119,24 +119,22 @@ export class UserController {
         return;
     }
 
-    // createTutor = async () => { }
     //TODO:
-    loginPassword = async (req: Request, res: Response) => {
-        let email: string = req.body;
-        let password: string = req.body;
+    loginWithPassword = async (req: Request, res: Response) => {
+        let { email, password } = req.body;
 
         if (!email) {
             res.status(400).json({ error: "missing email" })
             return;
-        }
+        };
 
         if (!password) {
             res.status(400).json({ error: "missing password" })
             return;
-        }
+        };
 
-        const result = await this.userService.identityVerification({ email, password });
-        if (result) {
+        const correctPassword = await this.userService.identityVerification({ email, password });
+        if (correctPassword) {
             res.json({ success: true });
         } else res.status(400).json({ error: "incorrect password" });
         return;
