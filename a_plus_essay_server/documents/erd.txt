@@ -15,10 +15,9 @@
 ////////////////////////////////////
 
 
-tutors
+tutor
 ------
-id integer PK
-users_id integer FK >- users.id
+id integer PK FK >- user.id
 is_verified boolean
 transcript varchar(127)
 student_card varchar(127)
@@ -26,7 +25,7 @@ phone_number integer unique
 is_whatsapp boolean
 is_signal boolean
 school varchar(127) NULL
-majors_id integer FK -> majors.id
+major_id integer FK -> major.id
 rating decimal(1,2) NULL
 self_intro text NULL
 ongoing_order_amount integer
@@ -35,24 +34,21 @@ created_at timestamp
 updated_at timestamp
 
 
-preferred_subjects
+preferred_subject
 ------------------
 id integer PK
-tutors_id integer FK >- tutors.id
-subjects_id integer FK >- subjects.id
-created_at timestamp
-updated_at timestamp
+tutor_id integer FK >- tutor.id
+subject_id integer FK >- subject.id
 
 
-majors
+
+major
 ------
 id integer PK
 major varchar(127)
-created_at timestamp
-updated_at timestamp
 
 
-subjects
+subject
 --------
 id integer PK
 subject_name varchar(127)
@@ -60,24 +56,23 @@ created_at timestamp
 updated_at timestamp
 
 
-orders_subjects
+orders_subject
 --------------
 id integer PK
-orders_id integer FK >- orders.id
-subjects_id integer FK >- subjects.id
+order_id integer FK >- order.id
+subject_id integer FK >- subject.id
 
 
-transcript_subjects
+transcript_subject
 -------------------
 id integer PK
-tutors_id integer FK >- tutors.id
-subjects_id integer FK >- subjects.id
+tutor_id integer FK >- tutor.id
+subject_id integer FK >- subject.id
 grade varchar(20)
-created_at timestamp
-updated_at timestamp
 
 
-users
+
+user
 -----
 id integer PK
 is_admin boolean
@@ -88,48 +83,58 @@ hashed_password varchar(60) NULL
 created_at timestamp
 updated_at timestamp
 
-comments
+comment
 --------
 id integer PK
 comment text
-students_id integer FK >- users.id
-tutors_id integer FK >- tutors.id
+student_id integer FK >- user.id
+tutor_id integer FK >- tutor.id
 created_at timestamp
 updated_at timestamp
 
 
-samples
+sample
 -------
 id integer PK
 sample varchar(127)
-tutors_id integer FK >- tutors.id
-created_at timestamp
-updated_at timestamp
+tutor_id integer FK >- tutor.id
 
 
-chatrooms
+
+chat_message
 -----------------
 id integer PK
-orders_id integer FK - orders.id
-send_by_tutor boolean
+order_id integer FK - order.id
+sent_by_tutor boolean
 message text
+file_name   varchar(127) null
 created_at timestamp
 updated_at timestamp
 
 
-orders
+order
 ------
 id integer PK
-students_id integer FK - users.id
-tutors_id integer NULL FK - tutors.id
-is_matched boolean
+student_id integer FK - user.id
+tutor_id integer NULL FK - user.id
+matched_time timestamp null
 title varchar(63)
 description text
 required_note text NULL
 budget integer
-completed timestamp NULL
-paid timestamp NULL
+completed_time timestamp NULL
+paid_time timestamp NULL
 tutor_submission_deadline date
 student_submission_deadline date
 created_at timestamp
 updated_at timestamp
+
+candidate
+----
+id 
+order_id  integer  FK >- order.id
+tutor_id  integer  FK >- tutor.id 
+charge   integer
+accept_time   timestamp null
+reject_time   timestamp null
+expire_time   timestamp
