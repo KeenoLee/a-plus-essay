@@ -87,7 +87,7 @@ comment text
 sample
 ------
 id integer PK
-sample varchar(127)
+sample text
 tutor_id integer FK >- tutor.id
 
 
