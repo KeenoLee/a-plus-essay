@@ -24,8 +24,8 @@ app.use(userRoutes)
 app.use(orderRoutes)
 
 userRoutes.post("/signup/student", userController.createUser);
-userRoutes.post("/signup/tutor", userController.createTutor);
-userRoutes.post("/login/password", userController.loginPassword);
+userRoutes.post("/signup/tutor", userController.createUser);
+userRoutes.post("/login/password", userController.loginWithPassword);
 // userRoutes.get("/login/google", userController.loginGoogle);
 // userRoutes.get("/login/facebook", userController.loginFacebook);
 // userRoutes.post("/logout", logout);
