@@ -39,7 +39,7 @@ export class UserController {
             return;
         };
 
-        this.userService.createStudent(email, password);
+        this.userService.createStudent(nickname, email, password);
         res.json({ success: true });
         return;
     }

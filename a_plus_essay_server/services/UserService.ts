@@ -13,9 +13,18 @@ export class UserService {
         return result;
     }
 
-    async createStudent(email: string, password: string) {
+    async createStudent(nickname: string, email: string, password: string) {
         const hashedPassword = hashPassword(password);
-        await this.knex.insert({ email: email, hashed_password: hashedPassword }).into("users");
+        const date = new Date();
+        await this.knex.insert({
+            is_admin: false,
+            is_tutor: false,
+            nickname: nickname,
+            email: email,
+            hashed_password: hashedPassword,
+            created_at: date.toLocaleString(),
+            updated_at: null
+        }).into("users");
         return;
     }
 }
