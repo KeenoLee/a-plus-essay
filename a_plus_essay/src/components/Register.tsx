@@ -128,33 +128,24 @@ export default function Register() {
         }
         if (true) {
             setEmailUnique(true)
-            console.log('email: ', emailUnique)
         }
         if (password.length > passwordLength) {
             setPasswordLengthEnough(true)
-            console.log('pw length: ', passwordLengthEnough)
         } else {
             setPasswordLengthEnough(false)
-            console.log('pw length: ', passwordLengthEnough)
         }
         if (firmPassword === password) {
             setPasswordMatch(true)
-            console.log('pw match: ', passwordMatch)
-            console.log('pw: ', password)
         } else {
             setPasswordMatch(false)
-            console.log('pw match: ', passwordMatch)
         }
         if (mobileNumber.length === mobileNumberLength && !isNaN(+mobileNumber)) {
             setMobileValid(true)
-            console.log('mobile valid', mobileValid)
         } else {
             setMobileValid(false)
-            console.log('mobile valid', mobileValid)
         }
         if (emailUnique && passwordLengthEnough && passwordMatch && mobileValid) {
             setDisableNext(false)
-            console.log('disable next: ', disableNext)
         }
         // }, [nickname, email, password, firmPassword, mobileNumber])
     })
@@ -295,7 +286,7 @@ export default function Register() {
                         <Text>Next</Text>
                     </TouchableOpacity>
                 </> : null}
-                
+
             {/* TODO: Subjects & Preference Subjects */}
             {page.step === 4 ?
                 <>
@@ -379,3 +370,7 @@ const styles = StyleSheet.create({
         textDecoration: 'none'
     }
 })
+
+
+// yarn remove react-native-web
+// yarn remove babel-plugin-react-native-web webpack webpack-cli webpack-dev-server html-webpack-plugin react-dom babel-loader url-loader @svgr/webpack
