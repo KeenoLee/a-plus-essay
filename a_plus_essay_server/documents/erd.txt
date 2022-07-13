@@ -16,7 +16,7 @@
 
 
 tutor
-------
+-----
 id integer PK FK >- user.id
 is_verified boolean
 transcript varchar(127)
@@ -30,30 +30,25 @@ rating decimal(1,2) NULL
 self_intro text NULL
 ongoing_order_amount integer
 completed_order_amount integer
-created_at timestamp
-updated_at timestamp
 
 
 preferred_subject
-------------------
+-----------------
 id integer PK
 tutor_id integer FK >- tutor.id
 subject_id integer FK >- subject.id
 
 
-
 major
-------
+-----
 id integer PK
 major varchar(127)
 
 
 subject
---------
+-------
 id integer PK
 subject_name varchar(127)
-created_at timestamp
-updated_at timestamp
 
 
 orders_subject
@@ -64,60 +59,53 @@ subject_id integer FK >- subject.id
 
 
 transcript_subject
--------------------
+------------------
 id integer PK
 tutor_id integer FK >- tutor.id
 subject_id integer FK >- subject.id
 grade varchar(20)
 
 
-
 user
------
+----
 id integer PK
 is_admin boolean
 is_tutor boolean
 nickname varchar(31)
 email varchar(127) unique
 hashed_password varchar(60) NULL
-created_at timestamp
-updated_at timestamp
+
 
 comment
---------
+-------
 id integer PK
-comment text
 student_id integer FK >- user.id
 tutor_id integer FK >- tutor.id
-created_at timestamp
-updated_at timestamp
+comment text
 
 
 sample
--------
+------
 id integer PK
 sample varchar(127)
 tutor_id integer FK >- tutor.id
 
 
-
 chat_message
------------------
+------------
 id integer PK
 order_id integer FK - order.id
 sent_by_tutor boolean
 message text
 file_name   varchar(127) null
-created_at timestamp
-updated_at timestamp
 
 
 order
-------
+-----
 id integer PK
 student_id integer FK - user.id
 tutor_id integer NULL FK - user.id
-matched_time timestamp null
+matched_time timestamp NULL
 title varchar(63)
 description text
 required_note text NULL
@@ -126,15 +114,14 @@ completed_time timestamp NULL
 paid_time timestamp NULL
 tutor_submission_deadline date
 student_submission_deadline date
-created_at timestamp
-updated_at timestamp
+
 
 candidate
-----
-id 
-order_id  integer  FK >- order.id
-tutor_id  integer  FK >- tutor.id 
-charge   integer
-accept_time   timestamp null
-reject_time   timestamp null
-expire_time   timestamp
+---------
+id integer PK
+order_id integer FK >- order.id
+tutor_id integer FK >- tutor.id
+charge integer
+accept_time timestamp NULL
+reject_time timestamp NULL
+expire_time timestamp
