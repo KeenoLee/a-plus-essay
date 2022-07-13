@@ -37,7 +37,7 @@ const mobileNumberLength = 8
 
 export default function Register() {
     const [page, setPage] = useState({ step: 1 })
-    const [disableNext, setDisableNext] = useState(true)
+    const [disableNext, setDisableNext] = useState(false)
 
     const [role, setRole] = useState<RadioButtonProps[]>(roleData)
     const [contact, setContact] = useState<RadioButtonProps[]>(contactData)
@@ -75,12 +75,14 @@ export default function Register() {
     // Checking Page Three
 
     // Page Four Information (School Life 2)
-    const [subjects, setSubjects] = useState([])
+    const [subjects, setSubjects] = useState([''])
     const [preSubjects, setPreSubjects] = useState([])
-    let mapSubjectRow = subjects.map((_, i) => <SubjectRow id={i} />)
-    useEffect(() => {
-        mapSubjectRow = subjects.map((_, i) => <SubjectRow id={i} />)
-    }, [subjects])
+    let mapSubjectRow = subjects.map((subject,i)=> <SubjectRow key={i} subject={subject}/>)
+    // let mapSubjectRow
+    useEffect(()=>{
+        mapSubjectRow
+        // mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
+    },[subjects])
 
     const openGallery = (type: string) => {
         launchImageLibrary({
@@ -227,7 +229,7 @@ export default function Register() {
                     <TextInput style={styles.input} placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     <TouchableOpacity disabled={disableNext} onPress={() => {
                         setPage({ step: 2 })
-                        setDisableNext(true)
+                        // setDisableNext(true)
                     }}>
                         <Text>Next</Text>
                     </TouchableOpacity>
@@ -259,7 +261,7 @@ export default function Register() {
 
                     <TouchableOpacity disabled={disableNext} onPress={() => {
                         setPage({ step: 3 })
-                        setDisableNext(true)
+                        // setDisableNext(true)
                     }} >
                         <Text>Next</Text>
                     </TouchableOpacity>
@@ -283,7 +285,7 @@ export default function Register() {
 
                     <TouchableOpacity disabled={disableNext} onPress={() => {
                         setPage({ step: 4 })
-                        setDisableNext(true)
+                        // setDisableNext(true)
                     }} >
                         <Text>Next</Text>
                     </TouchableOpacity>
@@ -293,9 +295,9 @@ export default function Register() {
                 <>
                     <Text>School Life</Text>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ flex: 0.7, marginLeft: 55, alignItems: 'center' }}>Subject</Text>
+                        <Text style={{ flex: 0.7, marginLeft: 55, alignItems: 'center'}}>Subject</Text>
                         <Text style={{ flex: 0.2, alignItems: 'center' }}>Grade</Text>
-                        <Button title='+' onPress={() => setSubjects([...subjects, ''])} />
+                        <Button title='+' onPress={()=>setSubjects([...subjects, ''])} />
                         {/* <TouchableOpacity onPress={()=>setSubjects([...subjects, ''])}>
                             <Text style={{ flex: 0.1, marginRight: 50, fontSize: 20}}>+</Text>
                         </TouchableOpacity> */}
