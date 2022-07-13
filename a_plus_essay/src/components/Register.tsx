@@ -250,8 +250,7 @@ export default function Register() {
                             <Text>Choose Photo</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* {studentCardName !== null && <View>HIHIHI</View>} */}
-                    <Image source={studentCardUri} />
+                    {studentCardName && <Text>{studentCardName}</Text>}
 
                     {/* FOR TESTING */}
                     <View>
