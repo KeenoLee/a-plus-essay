@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Button, Text, Image } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
-import { Formik, Field, Form } from 'formik';
-import { StackActions, useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import RegisterSuccess from "./RegisterSuccess";
+// import { Formik, Field, Form } from 'formik';
+// import { StackActions, useNavigation } from "@react-navigation/native";
+// import { createStackNavigator } from "@react-navigation/stack";
+// import RegisterSuccess from "./RegisterSuccess";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow from "./SubjectRow";
 
 
@@ -75,11 +75,13 @@ export default function Register() {
     // Checking Page Three
 
     // Page Four Information (School Life 2)
-    const [subjects, setSubjects] = useState([])
+    const [subjects, setSubjects] = useState([''])
     const [preSubjects, setPreSubjects] = useState([])
-    let mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
+    let mapSubjectRow = subjects.map((subject,i)=> <SubjectRow key={i} subject={subject}/>)
+    // let mapSubjectRow
     useEffect(()=>{
-        mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
+        mapSubjectRow
+        // mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
     },[subjects])
 
     const openGallery = (type: string) => {
