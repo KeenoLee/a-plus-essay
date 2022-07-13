@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Button, Text, Image } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
-import { Formik, Field, Form } from 'formik';
-import { StackActions, useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import RegisterSuccess from "./RegisterSuccess";
+// import { Formik, Field, Form } from 'formik';
+// import { StackActions, useNavigation } from "@react-navigation/native";
+// import { createStackNavigator } from "@react-navigation/stack";
+// import RegisterSuccess from "./RegisterSuccess";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow from "./SubjectRow";
 
 
@@ -37,7 +37,7 @@ const mobileNumberLength = 8
 
 export default function Register() {
     const [page, setPage] = useState({ step: 1 })
-    const [disableNext, setDisableNext] = useState(false)
+    const [disableNext, setDisableNext] = useState(true)
 
     const [role, setRole] = useState<RadioButtonProps[]>(roleData)
     const [contact, setContact] = useState<RadioButtonProps[]>(contactData)
@@ -227,7 +227,7 @@ export default function Register() {
                     <TextInput style={styles.input} placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     <TouchableOpacity disabled={disableNext} onPress={() => {
                         setPage({ step: 2 })
-                        // setDisableNext(true)
+                        setDisableNext(true)
                     }}>
                         <Text>Next</Text>
                     </TouchableOpacity>
@@ -259,7 +259,7 @@ export default function Register() {
 
                     <TouchableOpacity disabled={disableNext} onPress={() => {
                         setPage({ step: 3 })
-                        // setDisableNext(true)
+                        setDisableNext(true)
                     }} >
                         <Text>Next</Text>
                     </TouchableOpacity>
@@ -283,7 +283,7 @@ export default function Register() {
 
                     <TouchableOpacity disabled={disableNext} onPress={() => {
                         setPage({ step: 4 })
-                        // setDisableNext(true)
+                        setDisableNext(true)
                     }} >
                         <Text>Next</Text>
                     </TouchableOpacity>
