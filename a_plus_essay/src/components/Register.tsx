@@ -72,32 +72,15 @@ export default function Register() {
         tutorIntroduction: null
     })
 
-<<<<<<< HEAD
     // Checking Page Three
 
     // Page Four Information (School Life 2)
     const [subjects, setSubjects] = useState([])
     const [preSubjects, setPreSubjects] = useState([])
-    let mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
-    useEffect(()=>{
-        mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
-    },[subjects])
-=======
-    // const openCamera = () => {
-    //     launchCamera({
-    //         mediaType: 'photo',
-    //         includeBase64: true
-    //     }, res => {
-    //         if (res.didCancel) {
-    //             console.log('user cancelled image picker')
-    //         } else if (res.errorMessage) {
-    //             console.log('Error: ', res.errorMessage)
-    //         } else {
-    //             const source = { url: 'data:image/jpeg:base64,' + res.assets }
-    //         }
-    //     })
-    // }
->>>>>>> 6a0495a1bba06aff282b69d5d7fd12661ac9780b
+    let mapSubjectRow = subjects.map((_, i) => <SubjectRow id={i} />)
+    useEffect(() => {
+        mapSubjectRow = subjects.map((_, i) => <SubjectRow id={i} />)
+    }, [subjects])
 
     const openGallery = (type: string) => {
         launchImageLibrary({
@@ -267,12 +250,8 @@ export default function Register() {
                             <Text>Choose Photo</Text>
                         </TouchableOpacity>
                     </View>
-<<<<<<< HEAD
-                    {studentCardName && <Text>{studentCardName}</Text>}
-=======
                     {/* {studentCardName !== null && <View>HIHIHI</View>} */}
                     <Image source={studentCardUri} />
->>>>>>> 6a0495a1bba06aff282b69d5d7fd12661ac9780b
 
                     {/* FOR TESTING */}
                     <View>
@@ -315,9 +294,9 @@ export default function Register() {
                 <>
                     <Text>School Life</Text>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ flex: 0.7, marginLeft: 55, alignItems: 'center'}}>Subject</Text>
+                        <Text style={{ flex: 0.7, marginLeft: 55, alignItems: 'center' }}>Subject</Text>
                         <Text style={{ flex: 0.2, alignItems: 'center' }}>Grade</Text>
-                        <Button title='+' onPress={()=>setSubjects([...subjects, ''])} />
+                        <Button title='+' onPress={() => setSubjects([...subjects, ''])} />
                         {/* <TouchableOpacity onPress={()=>setSubjects([...subjects, ''])}>
                             <Text style={{ flex: 0.1, marginRight: 50, fontSize: 20}}>+</Text>
                         </TouchableOpacity> */}
