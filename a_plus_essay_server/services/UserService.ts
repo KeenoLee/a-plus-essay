@@ -1,24 +1,26 @@
+import { formDataToBlob } from "formdata-polyfill/esm.min";
 import { Knex } from "knex";
 import { hashPassword, checkPassword } from "../utils/hash";
 
 type User = {
-    isTutor: boolean;
-    nickname: string;
-    email: string;
-    password: string;
+    isTutor: boolean,
+    nickname: string,
+    email: string,
+    password: string,
 };
 
 type Tutor = {
-    isVerified: boolean;
-    transcript: string;
-    studentCard: string;
-    phoneNumber: number;
-    isWhatsapp: boolean;
-    isSignal: boolean;
-    school?: string;
-    major_id: number;
-    rating: null;
-    selfIntro?: string;
+    transcript: string,
+    studentCard: string,
+    phoneNumber: number,
+    isWhatsapp: boolean,
+    isSignal: boolean,
+    school: string,
+    major: number,
+    selfIntro?: string,
+    subjects: string,
+    grades: string,
+    preferredSubjects: string,
 };
 
 export class UserService {
@@ -41,7 +43,7 @@ export class UserService {
     async createUser(user: User) {
         const hashedPassword = hashPassword(user.password);
         const date = new Date();
-        const id: number[] = await this.knex.insert({
+        const id: number = await this.knex.insert({
             is_admin: false,
             is_tutor: user.isTutor,
             nickname: user.nickname,
@@ -56,25 +58,49 @@ export class UserService {
 
     async createTutor(tutor: Tutor) {
         const date = new Date();
-        const id: number[] = await this.knex.insert({
-            users_id: foreign key to users.id,
+        let majorId: number[] = await this.knex.select("id").from("major").where("major", tutor.major);
+        if (majorId.length === 0) {
+            majorId = await this.knex.insert({ major: tutor.major }).into("major").returning("id");
+        };
+        const tutorId: number = await this.knex.insert({
+            // users_id: foreign key to users.id,
             is_verified: false,
-            transcript: ???????,
-            student_card: ???????,
+            // transcript: ???????,
+            // student_card: ???????,
             phone_number: tutor.phoneNumber,
             is_whatsapp: tutor.isWhatsapp,
             is_signal: tutor.isSignal,
             school: tutor.school,
-            majors_id:???????,
+            majors_id: majorId[0],
             rating: null,
-            self_intro: tutor.selfIntro,
+            self_intro: tutor.selfIntro || null,
             ongoing_order_amount: 0,
             completed_order_amount: 0,
             created_at: date.toLocaleString(),
             updated_at: null
         }).into("tutors")
             .returning("id");
-        return id;
+
+        let subjectId: number[] = await this.knex.select("id").from("subject").where("subject_name", tutor.subjects);
+        if (subjectId.length === 0) {
+            subjectId = await this.knex.insert({
+                subject_name: tutor.subjects,
+                created_at: date.toLocaleString(),
+                updated_at: null
+            }).into("subject").returning("id");
+        };
+        await this.knex.insert({
+            tutor_id: tutorId,
+            subject_id: subjectId[0],
+            grade: tutor.grades
+        }).into("transcript_subject");
+
+        await this.knex.insert({
+            tutor_id: tutorId,
+            subject_id: subjectId
+        }).into("preferred_subject");
+
+        return tutorId;
     };
 
     async identityVerification(identity: { email: string, password: string }) {

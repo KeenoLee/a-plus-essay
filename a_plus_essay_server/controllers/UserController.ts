@@ -13,6 +13,7 @@ export class UserController {
         const email: string = req.body.email;
         const password: string = req.body.password;
         const rePassword: string = req.body.rePassword;
+        const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (isTutor === undefined) {
             res.status(400).json({ error: "Please state your role, student or tutor" });
@@ -28,6 +29,11 @@ export class UserController {
             res.status(400).json({ error: "email address is missed" });
             return;
         };
+
+        if (reg.test(email) === false) {
+            res.status(400).json({ error: "Invalid email address" });
+            return;
+        }
 
         const emailDuplication = await this.userService.checkEmailDuplication(email);
         if (emailDuplication.length > 0) {
@@ -46,25 +52,25 @@ export class UserController {
         };
 
         const id = await this.userService.createUser({ isTutor, nickname, email, password });
-        return id;
-    }
-
-    createTutor = async (req: Request, res: Response) => {
-        const isTutor: boolean = req.body.isTutor;
-        const regID = this.createUser;
-        let { ................} = req.body;
-
-        if (isTutor === false && regID.length > 0) {
+        if (isTutor === false) {
             res.json({ success: true });
             return;
         };
 
-        if no transcript ......
+        this.createTutor;
+        return;
+    }
 
-        if no studentCard ......
+    createTutor = async (req: Request, res: Response) => {
 
-        if (phoneNumber === undefined) {
-            res.status(400).json({ error: "Phone number is missed" })
+        let { transcript, studentCard, phoneNumber, isWhatsapp, isSignal, school, major, selfIntro, subjects, grades, preferredSubjects } = req.body;
+
+
+        // if no transcript, .......
+        // if no studentCard, .......
+
+        if (phoneNumber === undefined || phoneNumber.length !== 8) {
+            res.status(400).json({ error: "Invalid phone number" })
             return;
         };
 
@@ -75,27 +81,38 @@ export class UserController {
         };
 
         if (isWhatsapp === undefined && isSignal === undefined) {
-            res.status(400).json({ error: "Please choose one instant messenger" })
+            res.status(400).json({ error: "Instant messenger selection is missed" })
+            return;
+        };
+
+        if (!school) {
+            res.status(400).json({ error: "The major is missed" })
             return;
         };
 
         if (!major) {
             res.status(400).json({ error: "The major is missed" })
             return;
-        }
+        };
+
+        if (!subjects || !grades || !preferredSubjects) {
+            res.status(400).json({ error: "Subject or grade or preferred subject is missed" });
+            return;
+        };
 
         const id = await this.userService.createTutor(
             {
-                isVerified,
                 transcript,
                 studentCard,
                 phoneNumber,
                 isWhatsapp,
                 isSignal,
                 school,
-                major_id,
-                rating,
+                major,
                 selfIntro,
+                subjects,
+                grades,
+                preferredSubjects
             }
         );
         res.json({ success: true });
