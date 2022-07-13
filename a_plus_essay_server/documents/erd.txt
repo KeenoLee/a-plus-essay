@@ -97,7 +97,7 @@ id integer PK
 order_id integer FK - order.id
 sent_by_tutor boolean
 message text
-file_name   varchar(127) null
+filename varchar(127) NULL
 
 
 order
