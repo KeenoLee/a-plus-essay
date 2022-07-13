@@ -17,7 +17,7 @@
 
 tutor
 -----
-id integer PK FK >- user.id
+id integer PK FK - user.id
 is_verified boolean
 transcript varchar(127)
 student_card varchar(127)
@@ -25,7 +25,7 @@ phone_number integer unique
 is_whatsapp boolean
 is_signal boolean
 school varchar(127) NULL
-major_id integer FK -> major.id
+major_id integer FK >0- major.id
 rating decimal(1,2) NULL
 self_intro text NULL
 ongoing_order_amount integer
@@ -51,11 +51,11 @@ id integer PK
 subject_name varchar(127)
 
 
-orders_subject
+order_subject
 --------------
 id integer PK
-order_id integer FK >- order.id
-subject_id integer FK >- subject.id
+order_id integer FK >0- order.id
+subject_id integer FK >0- subject.id
 
 
 transcript_subject
@@ -79,8 +79,8 @@ hashed_password varchar(60) NULL
 comment
 -------
 id integer PK
-student_id integer FK >- user.id
-tutor_id integer FK >- tutor.id
+student_id integer FK >0- user.id
+tutor_id integer FK >0- tutor.id
 comment text
 
 
@@ -88,13 +88,13 @@ sample
 ------
 id integer PK
 sample text
-tutor_id integer FK >- tutor.id
+tutor_id integer FK >0- tutor.id
 
 
 chat_message
 ------------
 id integer PK
-order_id integer FK - order.id
+order_id integer FK >0- order.id
 sent_by_tutor boolean
 message text
 filename varchar(127) NULL
@@ -103,8 +103,8 @@ filename varchar(127) NULL
 order
 -----
 id integer PK
-student_id integer FK - user.id
-tutor_id integer NULL FK - user.id
+student_id integer FK >0- user.id
+tutor_id integer NULL FK >0- user.id
 matched_time timestamp NULL
 title varchar(63)
 description text
@@ -119,8 +119,8 @@ student_submission_deadline date
 candidate
 ---------
 id integer PK
-order_id integer FK >- order.id
-tutor_id integer FK >- tutor.id
+order_id integer FK >0- order.id
+tutor_id integer FK >0- tutor.id
 charge integer
 accept_time timestamp NULL
 reject_time timestamp NULL
