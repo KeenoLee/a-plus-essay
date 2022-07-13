@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet, Button, Text, Image } from "react-native";
+import { Button, View, Text, TextInput, StyleSheet, Image } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 // import { Formik, Field, Form } from 'formik';
@@ -34,6 +34,12 @@ const contactData: RadioButtonProps[] = [{
 }]
 const passwordLength = 7
 const mobileNumberLength = 8
+function shorterFilename(filename: string) {
+    if (filename.length > 10) {
+        return filename.substring(0, 11) + '...'
+    }
+    return filename
+}
 
 export default function Register() {
     const [page, setPage] = useState({ step: 1 })
@@ -100,12 +106,12 @@ export default function Register() {
                 const file = { uri: res.assets[0].uri }
                 const filename = res.assets[0].fileName
                 setTranscriptUri(() => file)
-                setTranscriptName(() => filename)
+                setTranscriptName(() => shorterFilename(filename))
             } else if (type === 'studentCard') {
                 const file = { uri: res.assets[0].uri }
                 const filename = res.assets[0].fileName
                 setStudentCardUri(() => file)
-                setStudentCardName(() => filename)
+                setStudentCardName(() => shorterFilename(filename))
             }
             return
         })
@@ -122,10 +128,10 @@ export default function Register() {
 
     // Check Page One (Create an account)
     useEffect(() => {
-        // Todo: fetch server to check email
         if (page.step !== 1) {
             return
         }
+        // Todo: fetch server to check email
         if (true) {
             setEmailUnique(true)
             console.log('email: ', emailUnique)
@@ -195,9 +201,9 @@ export default function Register() {
         <View style={styles.form}>
             {page.step === 1 ?
                 <>
-                    <Text>Create New Account</Text>
+                    <Text style={styles.title}>Create New Account</Text>
                     <RadioGroup
-                        containerStyle={{ flexDirection: 'row' }}
+                        containerStyle={{ flexDirection: 'row', color: 'blue' }}
                         radioButtons={role}
                         onPress={() => {
                             onPressRole
@@ -205,19 +211,19 @@ export default function Register() {
                         }}
                     />
                     <TextInput style={styles.input} placeholder="Nickname" onChangeText={(nickname) => setNickname(nickname)} />
-                    <TextInput style={styles.input} placeholder="Email address" onChangeText={(email) => setEmail(email)} />
-                    <TextInput style={styles.input} placeholder="Password" onChangeText={(password) => setPassword(password)} />
-                    <TextInput style={styles.input} placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
+                    <TextInput style={styles.input} textContentType='emailAddress' placeholder="Email address" onChangeText={(email) => setEmail(email)} />
+                    <TextInput style={styles.input} textContentType='password' placeholder="Password" onChangeText={(password) => setPassword(password)} />
+                    <TextInput style={styles.input} textContentType='password' placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
             {!isTutor && page.step === 1 &&
-                <TouchableOpacity>
-                    <Button
-                        title='Create Account'
-                        onPress={() => {
-                            setContact
-                        }}
-                        disabled={!nickname && !email && !password && !firmPassword} />
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        setContact
+                    }}
+                    disabled={!nickname && !email && !password && !firmPassword}>
+                    <Text style={styles.buttonText}>Create Account</Text>
                 </TouchableOpacity>
             }
             {/* Submit Page 1 */}
@@ -231,50 +237,57 @@ export default function Register() {
                             setIsSignal(!isSignal)
                         }}
                     />
-                    <TextInput style={styles.input} placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
-                    <TouchableOpacity disabled={disableNext} onPress={() => {
+                    <TextInput style={styles.input} textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
+                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
                         setPage({ step: 2 })
                         // setDisableNext(true)
                     }}>
-                        <Text>Next</Text>
+                        <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
                 </>
             }
             {page.step === 2 ?
                 <>
-                    <Text>Academic Infomation</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text>Transcript</Text>
-                        <TouchableOpacity onPress={() => openGallery('transcript')}>
-                            <Text>Choose Photo</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {transcriptName && <Text>{transcriptName}</Text>}
+                    <Text style={styles.title}>Academic Infomation</Text>
+                    <View style={{ padding: 10 }}>
+                        <View style={styles.fileSelector}>
+                            <Text>Transcript</Text>
+                            <TouchableOpacity onPress={() => openGallery('transcript')}>
+                                <Text>Choose Photo</Text>
+                            </TouchableOpacity>
 
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text>Student Card</Text>
-                        <TouchableOpacity onPress={() => openGallery('studentCard')}>
-                            <Text>Choose Photo</Text>
-                        </TouchableOpacity>
+                        </View>
+                        <View style={{ height: 25 }}>
+                            {transcriptName && <Text>{transcriptName}</Text>}
+                        </View>
                     </View>
-                    {studentCardName && <Text>{studentCardName}</Text>}
+                    <View style={{ padding: 10 }}>
+                        <View style={styles.fileSelector}>
+                            <Text>Student Card</Text>
+                            <TouchableOpacity onPress={() => openGallery('studentCard')}>
+                                <Text>Choose Photo</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ height: 25 }}>
+
+                            {studentCardName && <Text>{studentCardName}</Text>}
+                        </View>
+                    </View>
 
                     {/* FOR TESTING */}
-                    <View>
-                        <Image source={studentCardUri} style={{ height: 100, width: 100 }} />
-                    </View>
+                    {/* <Image source={studentCardUri} style={{ height: 100, width: 100 }} /> */}
 
-                    <TouchableOpacity disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
                         setPage({ step: 3 })
                         // setDisableNext(true)
                     }} >
-                        <Text>Next</Text>
+                        <Text style={styles.buttonText} >Next</Text>
                     </TouchableOpacity>
                 </> : null}
 
             {page.step === 3 ?
                 <>
-                    <Text>School Life</Text>
+                    <Text style={styles.title}>School Life</Text>
                     <TextInput style={styles.input} placeholder="School" onChangeText={value => setSchoolLife({
                         ...schoolLife,
                         school: value
@@ -283,27 +296,29 @@ export default function Register() {
                         ...schoolLife,
                         major: value
                     })} />
-                    <TextInput style={styles.input} placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
+                    <TextInput style={styles.tutorIntroduction} multiline placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
                         ...schoolLife,
                         tutorIntroduction: value
                     })} />
 
-                    <TouchableOpacity disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
                         setPage({ step: 4 })
                         // setDisableNext(true)
                     }} >
-                        <Text>Next</Text>
+                        <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
                 </> : null}
-                
+
             {/* TODO: Subjects & Preference Subjects */}
             {page.step === 4 ?
                 <>
-                    <Text>School Life</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ flex: 0.7, marginLeft: 55, alignItems: 'center' }}>Subject</Text>
-                        <Text style={{ flex: 0.2, alignItems: 'center' }}>Grade</Text>
-                        <Button title='+' onPress={() => setSubjects([...subjects, { subject: '', grade: '' }])} />
+                    <Text style={styles.title}>School Life</Text>
+                    <View style={{ flexDirection: 'row', width: 300 }}>
+                        <Text style={{ flex: 7 }}>Subject</Text>
+                        <Text style={{ flex: 2 }}>Grade</Text>
+                        <TouchableOpacity style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }} onPress={() => setSubjects([...subjects, { subject: '', grade: '' }])}>
+                            <Text style={{}}>+</Text>
+                        </TouchableOpacity>
                     </View>
                     {subjects.map((subject, index) => (
                         <SubjectRow key={index} subjects={subjects} onDelete={() => {
@@ -311,14 +326,14 @@ export default function Register() {
                         }} onSubjectChange={(value: any) => {
                             setSubjects(() => subjects[index].subject = value)
                         }} onGradeChange={(value: any) => {
-                            setSubjects((subjects) => [...subjects, { subject: value, grade: value}])
+                            setSubjects((subjects) => [...subjects, { subject: value, grade: value }])
                         }} />
                     ))}
 
-                    <Text>Preference Subject (3 Limited)</Text>
+                    <Text style={{ marginTop: 10 }}>Preference Subject (3 Limited)</Text>
                     <TextInput style={styles.input} onChangeText={value => {
                         // value.length > 0 ? setPreSubjects(()=>[...preSubjects, value]) : null
-                        value.length > 0 ? setPreSubjects((v)=> preSubjects[0] = v) : null
+                        value.length > 0 ? setPreSubjects((v) => preSubjects[0] = v) : null
                     }} />
                     <TextInput style={styles.input} onChangeText={value => {
                         value.length > 0 ? setPreSubjects([...preSubjects, value]) : null
@@ -327,12 +342,12 @@ export default function Register() {
                         value.length > 0 ? setPreSubjects([...preSubjects, value]) : null
                     }} />
 
-                    <TouchableOpacity disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
                         // Send to DB
                         console.log(preSubjects)
                         console.log('success create')
                     }} >
-                        <Text>Create Account</Text>
+                        <Text style={styles.buttonText}>Create Account</Text>
                     </TouchableOpacity>
                 </> : null}
         </View>
@@ -348,7 +363,25 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         width: 200,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        textAlign: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1,
+    },
+    tutorIntroduction: {
+        padding: 10,
+        margin: 10,
+        borderRadius: 10,
+        width: 250,
+        height: 200,
+        backgroundColor: 'white',
+        textAlign: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1,
     },
     subjects: {
         padding: 10,
@@ -377,5 +410,34 @@ const styles = StyleSheet.create({
     checkbox: {
         padding: 10,
         textDecoration: 'none'
+    },
+    title: {
+        fontSize: 30,
+        padding: 10
+    },
+
+    button: {
+        backgroundColor: "#007AFF",
+        padding: 10,
+        margin: 10,
+        borderRadius: 10,
+        width: 200,
+
+    },
+    buttonText: {
+        color: 'white',
+        textAlign: 'center'
+    },
+    disabledButton: {
+        backgroundColor: '#222222'
+    },
+    fileSelector: {
+        padding: 5,
+        borderWidth: 1,
+        borderColor: '#AAAAFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: 300
     }
+
 })

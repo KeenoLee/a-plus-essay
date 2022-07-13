@@ -16,7 +16,8 @@ export default function SubjectRow(props: any) {
                 props.onSubjectChange
             }} />
             <TextInput style={styles.subjectGrade} onChangeText={()=>props.onGradeChange} />
-            <Button title='-' onPress={props.onDelete} />
+            <TouchableOpacity style={styles.editRow} onPress={props.onDelete}><Text>-</Text></TouchableOpacity>
+            
         </View>
     )
 }
@@ -25,25 +26,40 @@ const styles = StyleSheet.create({
     subject: {
         padding: 10,
         margin: 10,
-        marginLeft: 50,
+        marginLeft: 40,
         borderRadius: 10,
         // width: 150,
-        flex: 0.7,
+        flex: 7,
         backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1,  
     },
     subjectGrade: {
         padding: 10,
         margin: 10,
         borderRadius: 10,
         // width: 50,
-        flex: 0.2,
+        flex: 2,
         backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1,  
     },
     editRow: {
-        padding: 10,
-        margin: 10,
-        marginRight: 50,
+        // padding: 10,
+        // margin: 10,
+        marginRight: 20,
         fontSize: 20,
-        flex: 0.1
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // borderWidth: 1,
+        // borderColor: 'black', 
+        // borderRadius: 30, 
+        // width: 17, 
+        // height: 30
     },
 })
