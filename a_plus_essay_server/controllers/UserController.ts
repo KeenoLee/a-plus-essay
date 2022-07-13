@@ -122,11 +122,17 @@ export class UserController {
     //TODO:
     loginWithPassword = async (req: Request, res: Response) => {
         let { email, password } = req.body;
+        const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!email) {
             res.status(400).json({ error: "missing email" })
             return;
         };
+
+        if (reg.test(email) === false) {
+            res.status(400).json({ error: "Invalid email address" });
+            return;
+        }
 
         if (!password) {
             res.status(400).json({ error: "missing password" })
