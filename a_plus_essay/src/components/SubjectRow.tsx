@@ -7,26 +7,16 @@ import { TextInput } from "react-native-gesture-handler"
 export default function SubjectRow(props: any) {
     useEffect(()=>{
         console.log('props id: ', props.key)
-        console.log('props subject: ', props.subject)
-
+        console.log('props subject: ', props.subjects)
+        
     })
     return (
         <View key={props.key} style={{ flexDirection: 'row' }}>
-            <TextInput style={styles.subject} onChangeText={value => {
-                // setSubject([...props.subject, value])
+            <TextInput style={styles.subject} onChangeText={() => {
+                props.onSubjectChange
             }} />
-            <TextInput style={styles.subjectGrade} />
-
-            {/* TODO*********** */}
-            {/* <Button title='-' onPress={()=>{props.subject.map((_,i)=> (props.subject.filter(i !== props.id)))}} /> */}
-            {/* <Button title='-' onPress={()=>props.subject.filter((_,i)=>{
-                console.log('props id: ', props.key)
-                console.log('i: ', i)
-                return props.key!==i
-                })} /> */}
-            {/* <TouchableOpacity onPress={() => { }}>
-                <Text style={styles.editRow}>-</Text>
-            </TouchableOpacity> */}
+            <TextInput style={styles.subjectGrade} onChangeText={()=>props.onGradeChange} />
+            <Button title='-' onPress={props.onDelete} />
         </View>
     )
 }
