@@ -6,12 +6,18 @@ export class UserController {
     constructor(private userService: UserService) {
         this.userService = userService;
     }
-    // verifying the info of registering student account
-    createStudent = async (req: Request, res: Response) => {
+    // verifying the info of registering account
+    createUser = async (req: Request, res: Response) => {
+        const isTutor: boolean = req.body.isTutor;
         const nickname: string = req.body.nickname;
         const email: string = req.body.email;
         const password: string = req.body.password;
         const rePassword: string = req.body.rePassword;
+
+        if (isTutor === undefined) {
+            res.status(400).json({ error: "Please state your role, student or tutor" });
+            return;
+        };
 
         if (!nickname) {
             res.status(400).json({ error: "nickname is missed" });
@@ -23,9 +29,9 @@ export class UserController {
             return;
         };
 
-        const emailRegistration = await this.userService.checkEmailRegistration(email);
-        if (emailRegistration.length > 0) {
-            res.status(400).json({ error: "This email address has been registered. Please register with another email address" })
+        const emailDuplication = await this.userService.checkEmailDuplication(email);
+        if (emailDuplication.length > 0) {
+            res.status(400).json({ error: "This email address has been registered. Please register with another email address." })
             return;
         };
 
@@ -39,22 +45,87 @@ export class UserController {
             return;
         };
 
-        this.userService.createStudent(nickname, email, password);
+        const id = await this.userService.createUser({ isTutor, nickname, email, password });
+        return id;
+    }
+
+    createTutor = async (req: Request, res: Response) => {
+        const isTutor: boolean = req.body.isTutor;
+        const regID = this.createUser;
+        let { ................} = req.body;
+
+        if (isTutor === false && regID.length > 0) {
+            res.json({ success: true });
+            return;
+        };
+
+        if no transcript ......
+
+        if no studentCard ......
+
+        if (phoneNumber === undefined) {
+            res.status(400).json({ error: "Phone number is missed" })
+            return;
+        };
+
+        const phoneNumberDuplication = await this.userService.checkPhoneNumberDuplication(phoneNumber);
+        if (phoneNumberDuplication.length > 0) {
+            res.status(400).json({ error: "This phone number has been registered. Please register with another phone number." })
+            return;
+        };
+
+        if (isWhatsapp === undefined && isSignal === undefined) {
+            res.status(400).json({ error: "Please choose one instant messenger" })
+            return;
+        };
+
+        if (!major) {
+            res.status(400).json({ error: "The major is missed" })
+            return;
+        }
+
+        const id = await this.userService.createTutor(
+            {
+                isVerified,
+                transcript,
+                studentCard,
+                phoneNumber,
+                isWhatsapp,
+                isSignal,
+                school,
+                major_id,
+                rating,
+                selfIntro,
+            }
+        );
         res.json({ success: true });
         return;
     }
+
     // createTutor = async () => { }
     //TODO:
     loginPassword = async (req: Request, res: Response) => {
-        try {
-            //@ts-ignore
-            res.json({ message: 'testing' })
-        } catch (err) {
-            console.error('userControllerError', err)
-            //@ts-ignore
-            res.status(500).json({ message: "internal server error" })
+        let email: string = req.body;
+        let password: string = req.body;
+
+        if (!email) {
+            res.status(400).json({ error: "missing email" })
+            return;
         }
+
+        if (!password) {
+            res.status(400).json({ error: "missing password" })
+            return;
+        }
+
+        const result = await this.userService.identityVerification({ email, password });
+        if (result) {
+            res.json({ success: true });
+        } else res.status(400).json({ error: "incorrect password" });
+        return;
     }
+
+
     loginGoogle = async () => { }
     loginFacebook = async () => { }
     logout = async () => { }
