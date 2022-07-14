@@ -1,15 +1,17 @@
 import * as React from 'react'
 import { View, Text,StyleSheet } from 'react-native'
 
+
 export default function TutorBox() {
 
     return (
+        
             <View style={styles.tutorBox}>
                 <View style={{flex: 7.5}}>
                     <Text style={{ fontWeight: 'bold', fontSize: 20}}>Beeno</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{flex: 7}}>Order Completed: </Text>
-                        <Text style={{flex:3}}>50</Text>
+                        <Text style={{flex: 3}}>50</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
