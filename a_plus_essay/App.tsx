@@ -34,6 +34,9 @@ import Status from './src/pages/Status';
 import ChatMain from './src/pages/ChatMain';
 import Register from './src/components/Register';
 import SelectTutor from './src/components/SelectTutor';
+import TutorInformation from './src/components/TutorInformation';
+import OrderMatched from './src/components/OrderMatched';
+import OrderSubmission from './backup/OrderSubmission';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -91,9 +94,12 @@ const Tabs = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Register">
+      <Stack.Navigator initialRouteName="Order Submission">
         {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
         {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
+        <Stack.Screen name="Order Submission" component={OrderSubmission} />
+        <Stack.Screen name="Thank You" component={OrderMatched} />
+        <Stack.Screen name="Tutor Information" component={TutorInformation} />
         <Stack.Screen name="Select Tutor" component={SelectTutor} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Chats" component={ChatMain} />
