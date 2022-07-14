@@ -8,12 +8,10 @@ export class UserController {
     }
     // verifying the info of registering account
     createUser = async (req: Request, res: Response) => {
-        const isTutor: boolean = req.body.isTutor;
-        const nickname: string = req.body.nickname;
-        const email: string = req.body.email;
-        const password: string = req.body.password;
-        const rePassword: string = req.body.rePassword;
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // let oAuth:boolean = false;
+        let { isTutor, nickname, email, password, rePassword, oAuth } = req.body;
+        if (oAuth !== true) { oAuth = false };
 
         if (isTutor === undefined) {
             res.status(400).json({ error: "Please state your role, student or tutor" });
@@ -21,12 +19,12 @@ export class UserController {
         };
 
         if (!nickname) {
-            res.status(400).json({ error: "nickname is missed" });
+            res.status(400).json({ error: "Nickname is missed" });
             return;
         };
 
         if (!email) {
-            res.status(400).json({ error: "email address is missed" });
+            res.status(400).json({ error: "Email address is missed" });
             return;
         };
 
@@ -36,20 +34,27 @@ export class UserController {
         }
 
         const emailDuplication = await this.userService.checkEmailDuplication(email);
-        if (emailDuplication.length > 0) {
+        if (emailDuplication) {
             res.status(400).json({ error: "This email address has been registered. Please register with another email address." })
             return;
         };
 
-        if (!password) {
-            res.status(400).json({ error: "password is missed" });
+        if ((oAuth === false) && !password) {
+            res.status(400).json({ error: "Password is missed" });
             return;
         };
 
-        if (password !== rePassword) {
+        if ((oAuth === false) && !rePassword) {
+            res.status(400).json({ error: "Password is not entered in the field of repeat password" });
+            return;
+        };
+
+        if ((oAuth === false) && (password !== rePassword)) {
             res.status(400).json({ error: "Password does not match. Please enter the same password in the fields of password and repeat password" });
             return;
         };
+
+        if (oAuth === true) { password = null };
 
         const id = await this.userService.createUser({ isTutor, nickname, email, password });
         if (isTutor === false) {
@@ -75,7 +80,7 @@ export class UserController {
         };
 
         const phoneNumberDuplication = await this.userService.checkPhoneNumberDuplication(phoneNumber);
-        if (phoneNumberDuplication.length > 0) {
+        if (phoneNumberDuplication) {
             res.status(400).json({ error: "This phone number has been registered. Please register with another phone number." })
             return;
         };
@@ -125,7 +130,7 @@ export class UserController {
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!email) {
-            res.status(400).json({ error: "missing email" })
+            res.status(400).json({ error: "Missing email" })
             return;
         };
 
@@ -135,21 +140,90 @@ export class UserController {
         }
 
         if (!password) {
-            res.status(400).json({ error: "missing password" })
+            res.status(400).json({ error: "Missing password" })
             return;
         };
 
-        const correctPassword = await this.userService.identityVerification({ email, password });
+        const correctPassword = await this.userService.loginVerification({ email, password });
         if (correctPassword) {
             res.json({ success: true });
-        } else res.status(400).json({ error: "incorrect password" });
+        } else res.status(400).json({ error: "Incorrect password" });
         return;
     }
 
+    loginWithFacebook = async (req: Request, res: Response) => {
+        try {
+            if (!req.body.accessToken) {
+                res.status(401).json({ msg: "Wrong Access Token!" });
+                return;
+            }
+            const { accessToken } = req.body;
+            const fetchResponse =??????????? await fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`);
+            const result = await fetchResponse.json();
+            if (result.error) {
+                res.status(401).json({ msg: "Wrong Access Token!" });
+                return;
+            }
+            let user = (await this.userService.checkEmailDuplication(result.email));
 
-    loginGoogle = async () => { }
-    loginFacebook = async () => { }
-    logout = async () => { }
-    resetPassword = async () => { }
+            // Redirect the user to registration
+            if (!user) {
+                res.json({ email: result.email, oAuth: true });
+                return;
+            }
+
+            const payload = { id: user };
+            const token = jwtSimple.encode(payload, jwt.jwtSecret);
+            res.json({
+                token: token
+            });
+            return;
+        } catch (e: any) {
+            res.status(500).json({ msg: e.toString() })
+            return;
+        }
+    }
+
+    // loginGoogle = async () => { }
+    // logout = async () => { }
+    resetPassword = async (req: Request, res: Response) => {
+        let { email, newPassword, reNewPassword } = req.body;
+        const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email) {
+            res.status(400).json({ error: "Missing email" })
+            return;
+        };
+
+        if (reg.test(email) === false) {
+            res.status(400).json({ error: "Invalid email address" });
+            return;
+        };
+
+        const emailRegistration = await this.userService.checkEmailDuplication(email);
+        if (!emailRegistration) {
+            res.status(400).json({ error: "This email address has not been registered in the system" })
+            return;
+        };
+
+        if (!newPassword) {
+            res.status(400).json({ error: "Missing new password" })
+            return;
+        };
+
+        if (!reNewPassword) {
+            res.status(400).json({ error: "New password is not entered in the field of repeat password" });
+            return;
+        };
+
+        if (newPassword !== reNewPassword) {
+            res.status(400).json({ error: "New password does not match. Please enter the same new password in the fields of password and repeat password" });
+            return;
+        };
+
+        const userId = await this.userService.resetPassword({ email, newPassword });
+        res.json({ success: true });
+        return;
+    }
 
 }
