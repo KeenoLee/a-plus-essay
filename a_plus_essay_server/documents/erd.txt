@@ -2,15 +2,15 @@
 # or https://quick-erd.surge.sh
 #
 # Relationship Types
-#  -    - one to one
-#  -<   - one to many
-#  >-   - many to one
-#  >-<  - many to many
-#  -0   - one to zero or one
-#  0-   - zero or one to one
-#  0-0  - zero or one to zero or one
-#  -0<  - one to zero or many
-#  >0-  - zero or many to one
+# - - one to one
+# -< - one to many
+# >- - many to one
+# >-< - many to many
+# -0 - one to zero or one
+# 0- - zero or one to one
+# 0-0 - zero or one to zero or one
+# -0< - one to zero or many
+# >0- - zero or many to one
 #
 ////////////////////////////////////
 
@@ -19,17 +19,28 @@ tutor
 -----
 id integer PK FK - user.id
 is_verified boolean
-transcript varchar(127)
-student_card varchar(127)
+student_card varchar(127) null
 phone_number integer unique
-is_whatsapp boolean
-is_signal boolean
-school varchar(127) NULL
 major_id integer FK >0- major.id
 rating decimal(1,2) NULL
 self_intro text NULL
 ongoing_order_amount integer
 completed_order_amount integer
+
+
+school
+------
+id integer pk
+tutor_id   integer fk >- tutor.id
+school   varchar(127)
+
+
+transcript
+-----
+id   integer pk
+tutor_id   integer   fk >- tutor.id
+transcript   varchar(127)
+
 
 
 preferred_subject
@@ -105,15 +116,18 @@ order
 id integer PK
 student_id integer FK >0- user.id
 tutor_id integer NULL FK >0- user.id
-matched_time timestamp NULL
 title varchar(63)
+grade   integer
 description text
-required_note text NULL
+guideline   varchar(127) null
+note   varchar(127) null
 budget integer
+matched_time timestamp NULL
 completed_time timestamp NULL
 paid_time timestamp NULL
 tutor_submission_deadline date
 student_submission_deadline date
+created_at   timestamp
 
 
 candidate
