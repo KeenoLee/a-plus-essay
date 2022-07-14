@@ -28,7 +28,7 @@ userRoutes.post("/signup/tutor", userController.createUser);
 userRoutes.post("/login/password", userController.loginWithPassword);
 // userRoutes.get("/login/google", userController.loginGoogle);
 // userRoutes.get("/login/facebook", userController.loginFacebook);
-// userRoutes.post("/logout", logout);
+userRoutes.post("/resetpassword", userController.resetPassword);
 
 app.get("/", (req: Request, res: Response) => {
     res.json({ message: 'hello world' })
