@@ -131,7 +131,6 @@ paid_by_student_time timestamp NULL
 paid_to_tutor_time timestamp NULL
 tutor_submission_deadline date
 student_submission_deadline date
-created_at timestamp
 
 
 guideline
