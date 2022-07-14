@@ -312,12 +312,18 @@ export default function Register() {
                         </TouchableOpacity>
                     </View>
                     {subjects.map((subject, index) => (
-                        <SubjectRow key={index} subjects={subjects} onDelete={() => {
-                            setSubjects(subjects.filter((_, i) => i !== index))
-                        }} onSubjectChange={(value: any) => {
-                            setSubjects(() => subjects[index].subject = value)
-                        }} onGradeChange={(value: any) => {
-                            setSubjects((subjects) => [...subjects, { subject: value, grade: value }])
+                        <SubjectRow key={index} index={index} subject={subject} onDelete={(index) => {
+                            const newSubjects = [...subjects]
+                            let filteredNewSubjects = newSubjects.filter((_, i) => i !== index)
+                            setSubjects(filteredNewSubjects)
+                        }} onSubjectChange={(text: any) => {
+                            const newSubjects = [...subjects]
+                            newSubjects[index].subject = text    
+                            setSubjects(newSubjects)
+                        }} onGradeChange={(text: any) => {
+                            const newSubjects = [...subjects]
+                            newSubjects[index].grade = text
+                            setSubjects(newSubjects)
                         }} />
                     ))}
 

@@ -3,21 +3,27 @@ import { useEffect } from 'react'
 import { TouchableOpacity, View, Text, StyleSheet, Button } from 'react-native'
 import { TextInput } from "react-native-gesture-handler"
 
+type Subject = {
+    subject: string,
+    grade: string,
+}
+interface SubjectRowProps {
+    index: number,
+    // key: number,
+    subject: Subject,
+    onSubjectChange: (text:string)=>void,
+    onGradeChange: (text:string)=>void,
+    onDelete: (index:number) => void
 
-export default function SubjectRow(props: any) {
-    useEffect(()=>{
-        console.log('props id: ', props.key)
-        console.log('props subject: ', props.subjects)
-        
-    })
+}
+
+export default function SubjectRow({index, subject, onSubjectChange, onGradeChange, onDelete}: SubjectRowProps) {
+
     return (
-        <View key={props.key} style={{ flexDirection: 'row' }}>
-            <TextInput style={styles.subject} onChangeText={() => {
-                props.onSubjectChange
-            }} />
-            <TextInput style={styles.subjectGrade} onChangeText={()=>props.onGradeChange} />
-            <TouchableOpacity style={styles.editRow} onPress={props.onDelete}><Text>-</Text></TouchableOpacity>
-            
+        <View key={index} style={{ flexDirection: 'row' }}>
+            <TextInput style={styles.subject} onChangeText={(text)=>onSubjectChange(text)} value={subject.subject} />
+            <TextInput style={styles.subjectGrade} value={subject.grade} onChangeText={text=>onGradeChange(text)} />
+            <TouchableOpacity style={styles.editRow} onPress={()=>{ console.log('at delete button:', index); onDelete(index)}}><Text>-</Text></TouchableOpacity>
         </View>
     )
 }
