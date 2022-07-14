@@ -93,6 +93,8 @@ export default function App() {
       <Stack.Navigator initialRouteName="Register">
         {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
         {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
+
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Chats" component={ChatMain} />
         <Stack.Screen name="Message" component={Notification} />
