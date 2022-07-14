@@ -8,8 +8,10 @@ export class UserController {
     }
     // verifying the info of registering account
     createUser = async (req: Request, res: Response) => {
-        let { isTutor, nickname, email, password, rePassword } = req.body;
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // let oAuth:boolean = false;
+        let { isTutor, nickname, email, password, rePassword, oAuth } = req.body;
+        if (oAuth !== true) { oAuth = false };
 
         if (isTutor === undefined) {
             res.status(400).json({ error: "Please state your role, student or tutor" });
@@ -37,20 +39,22 @@ export class UserController {
             return;
         };
 
-        if (!password) {
+        if ((oAuth === false) && !password) {
             res.status(400).json({ error: "Password is missed" });
             return;
         };
 
-        if (!rePassword) {
+        if ((oAuth === false) && !rePassword) {
             res.status(400).json({ error: "Password is not entered in the field of repeat password" });
             return;
         };
 
-        if (password !== rePassword) {
+        if ((oAuth === false) && (password !== rePassword)) {
             res.status(400).json({ error: "Password does not match. Please enter the same password in the fields of password and repeat password" });
             return;
         };
+
+        if (oAuth === true) { password = null };
 
         const id = await this.userService.createUser({ isTutor, nickname, email, password });
         if (isTutor === false) {
@@ -147,9 +151,40 @@ export class UserController {
         return;
     }
 
+    loginWithFacebook = async (req: Request, res: Response) => {
+        try {
+            if (!req.body.accessToken) {
+                res.status(401).json({ msg: "Wrong Access Token!" });
+                return;
+            }
+            const { accessToken } = req.body;
+            const fetchResponse =??????????? await fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`);
+            const result = await fetchResponse.json();
+            if (result.error) {
+                res.status(401).json({ msg: "Wrong Access Token!" });
+                return;
+            }
+            let user = (await this.userService.checkEmailDuplication(result.email));
 
-    loginGoogle = async () => { }
-    loginFacebook = async () => { }
+            // Redirect the user to registration
+            if (!user) {
+                res.json({ email: result.email, oAuth: true });
+                return;
+            }
+
+            const payload = { id: user };
+            const token = jwtSimple.encode(payload, jwt.jwtSecret);
+            res.json({
+                token: token
+            });
+            return;
+        } catch (e: any) {
+            res.status(500).json({ msg: e.toString() })
+            return;
+        }
+    }
+
+    // loginGoogle = async () => { }
     // logout = async () => { }
     resetPassword = async (req: Request, res: Response) => {
         let { email, newPassword, reNewPassword } = req.body;

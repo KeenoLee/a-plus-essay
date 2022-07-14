@@ -31,13 +31,13 @@ export class UserService {
     };
 
     async checkEmailDuplication(email: string) {
-        const result: number = await this.knex.select("id").from("user").where("email", email).first();
-        return result;
+        const userId: number = await this.knex.select("id").from("user").where("email", email).first();
+        return userId;
     }
 
     async checkPhoneNumberDuplication(phoneNumber: number) {
-        const result: number = await this.knex.select("id").from("uses").where("phone_number", phoneNumber).first();
-        return result;
+        const userId: number = await this.knex.select("id").from("user").where("phone_number", phoneNumber).first();
+        return userId;
     }
 
     async createUser(user: User) {
@@ -48,7 +48,7 @@ export class UserService {
             is_tutor: user.isTutor,
             nickname: user.nickname,
             email: user.email,
-            hashed_password: hashedPassword,
+            hashed_password: hashedPassword || null,
             created_at: date.toLocaleString(),
             updated_at: null
         }).into("user")
