@@ -45,6 +45,7 @@ export default function Register() {
     const [page, setPage] = useState({ step: 1 })
     const [disableNext, setDisableNext] = useState(false)
 
+    // Checkbox
     const [role, setRole] = useState<RadioButtonProps[]>(roleData)
     const [contact, setContact] = useState<RadioButtonProps[]>(contactData)
 
@@ -178,8 +179,6 @@ export default function Register() {
 
     // Check Page Four (School Life 2)
     useEffect(() => {
-        console.log('subjects: ', subjects)
-        console.log('preSubjects: ', preSubjects)
         if (page.step !== 4) {
             return
         }
@@ -419,7 +418,6 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         width: 200,
-
     },
     buttonText: {
         color: 'white',
