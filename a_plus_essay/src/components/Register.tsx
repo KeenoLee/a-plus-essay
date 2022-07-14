@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Button, Text, Image } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
-import { Formik, Field, Form } from 'formik';
-import { StackActions, useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import RegisterSuccess from "./RegisterSuccess";
+// import { Formik, Field, Form } from 'formik';
+// import { StackActions, useNavigation } from "@react-navigation/native";
+// import { createStackNavigator } from "@react-navigation/stack";
+// import RegisterSuccess from "./RegisterSuccess";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow from "./SubjectRow";
 
 
@@ -75,12 +75,17 @@ export default function Register() {
     // Checking Page Three
 
     // Page Four Information (School Life 2)
-    const [subjects, setSubjects] = useState([])
+    const [subjects, setSubjects] = useState([{
+        subject: '',
+        grade: ''
+    }])
     const [preSubjects, setPreSubjects] = useState([])
-    let mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
-    useEffect(()=>{
-        mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
-    },[subjects])
+    // let mapSubjectRow = subjects.map((subject,i)=> <SubjectRow key={i} subject={subject}/>)
+    // let mapSubjectRow
+    // useEffect(()=>{
+    // mapSubjectRow
+    // mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
+    // },[subjects])
 
     const openGallery = (type: string) => {
         launchImageLibrary({
@@ -176,6 +181,8 @@ export default function Register() {
 
     // Check Page Four (School Life 2)
     useEffect(() => {
+        console.log('subjects: ', subjects)
+        console.log('preSubjects: ', preSubjects)
         if (page.step !== 4) {
             return
         }
@@ -288,58 +295,30 @@ export default function Register() {
                         <Text>Next</Text>
                     </TouchableOpacity>
                 </> : null}
-
+                
+            {/* TODO: Subjects & Preference Subjects */}
             {page.step === 4 ?
                 <>
                     <Text>School Life</Text>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ flex: 0.7, marginLeft: 55, alignItems: 'center'}}>Subject</Text>
+                        <Text style={{ flex: 0.7, marginLeft: 55, alignItems: 'center' }}>Subject</Text>
                         <Text style={{ flex: 0.2, alignItems: 'center' }}>Grade</Text>
-                        <Button title='+' onPress={()=>setSubjects([...subjects, ''])} />
-                        {/* <TouchableOpacity onPress={()=>setSubjects([...subjects, ''])}>
-                            <Text style={{ flex: 0.1, marginRight: 50, fontSize: 20}}>+</Text>
-                        </TouchableOpacity> */}
+                        <Button title='+' onPress={() => setSubjects([...subjects, { subject: '', grade: '' }])} />
                     </View>
-                    {mapSubjectRow}
-
-                    {/* <View style={{ flexDirection: 'row' }}>
-                        <TextInput style={styles.subjects} onChangeText={value => {
-                            setSubjects([...subjects, value])
+                    {subjects.map((subject, index) => (
+                        <SubjectRow key={index} subjects={subjects} onDelete={() => {
+                            setSubjects(subjects.filter((_, i) => i !== index))
+                        }} onSubjectChange={(value: any) => {
+                            setSubjects(() => subjects[index].subject = value)
+                        }} onGradeChange={(value: any) => {
+                            setSubjects((subjects) => [...subjects, { subject: value, grade: value}])
                         }} />
-                        <TextInput style={styles.subjectsGrade} />
-                        <TouchableOpacity onPress={() => {}}>
-                            <Text style={styles.editRow}>+</Text>
-                        </TouchableOpacity>
-                    </View> */}
-                    {/* <SubjectRow subject={subject}/> */}
-                    {/* <View style={{ flexDirection: 'row' }}>
-                        <TextInput style={styles.subjects} onChangeText={value => {
-                            setSubject([...subject, value])
-                        }} />
-                        <TextInput style={styles.subjectsGrade} />
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <TextInput style={styles.subjects} onChangeText={value => {
-                            setSubject([...subject, value])
-                        }} />
-                        <TextInput style={styles.subjectsGrade} />
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <TextInput style={styles.subjects} onChangeText={value => {
-                            setSubject([...subject, value])
-                        }} />
-                        <TextInput style={styles.subjectsGrade} />
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <TextInput style={styles.subjects} onChangeText={value => {
-                            setSubject([...subject, value])
-                        }} />
-                        <TextInput style={styles.subjectsGrade} />
-                    </View> */}
+                    ))}
 
                     <Text>Preference Subject (3 Limited)</Text>
                     <TextInput style={styles.input} onChangeText={value => {
-                        value.length > 0 ? setPreSubjects([...preSubjects, value]) : null
+                        // value.length > 0 ? setPreSubjects(()=>[...preSubjects, value]) : null
+                        value.length > 0 ? setPreSubjects((v)=> preSubjects[0] = v) : null
                     }} />
                     <TextInput style={styles.input} onChangeText={value => {
                         value.length > 0 ? setPreSubjects([...preSubjects, value]) : null
