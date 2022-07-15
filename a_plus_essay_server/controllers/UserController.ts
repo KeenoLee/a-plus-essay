@@ -2,6 +2,9 @@ import { Request, Response } from 'express'
 import { UserService } from "../services/UserService";
 import { Bearer } from 'permit';
 import jwtSimple from 'jwt-simple';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '../.env' });
 
 export class UserController {
     //TODO:
