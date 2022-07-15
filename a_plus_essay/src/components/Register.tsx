@@ -10,7 +10,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
-import { CheckIcon, Menu, Select, VStack } from 'native-base';
+import { Select, VStack } from 'native-base';
 
 
 
@@ -29,7 +29,6 @@ const roleData: RadioButtonProps[] = [{
     borderColor: 'rgb(51,130,251)',
     color: 'rgb(51,130,251)'
 }]
-
 const passwordLength = 7
 const mobileNumberLength = 8
 function shorterFilename(filename: string) {
@@ -42,8 +41,6 @@ const genUniqueKey = () => {
     let key = Math.floor(Math.random() * 100000).toString()
     return key
 }
-
-
 type NativeImage = {
     uri: string,
     filename: string
@@ -57,20 +54,40 @@ type StudentCardImage = {
     uri: string,
     filename: string
 }
+const disableStyle = {
+    backgroundColor: "grey",
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+    width: 200,
+}
+const nonDisableStyle = {
+    backgroundColor: "#007AFF",
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+    width: 200,
+}
 export default function Register() {
+    // Page Switching
     const [page, setPage] = useState({ step: 1 })
-    const [disableNext, setDisableNext] = useState(false)
+    const [disableNext, setDisableNext] = useState(true)
+    const [nextButtonStyle, setNextButtonStyle] = useState(
+        disableStyle
+    )
 
-    // Checkbox
-    const [role, setRole] = useState<RadioButtonProps[]>(roleData)
 
     // Page One Information (Create new account)
+    const [role, setRole] = useState<RadioButtonProps[]>(roleData)
     const [nickname, setNickname] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [firmPassword, setFirmPassword] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
     const [isTutor, setIsTutor] = useState(false)
+    function onPressRole(roleData: RadioButtonProps[]) {
+        setRole(roleData);
+    }
 
     // Checking Page One
     const [passwordLengthEnough, setPasswordLengthEnough] = useState(false)
@@ -83,39 +100,6 @@ export default function Register() {
     const [transcriptFiles, setTranscriptFiles] = useState<NativeFile[]>([])
     const [studentCardImage, setStudentCardImage] = useState<StudentCardImage | null>()
     const [position, setPosition] = useState("Upload");
-
-
-    // Checking Page Two
-
-    // Page Three Information (School Life 1)
-    const [schoolLife, setSchoolLife] = useState({
-        school: '',
-        major: '',
-        tutorIntroduction: ''
-    })
-
-    // Checking Page Three
-
-    // Page Four Information (School Life 2)
-    const [subjects, setSubjects] = useState([{
-        key: genUniqueKey(),
-        subject: '',
-        grade: '',
-        isChecked: false,
-    }])
-
-    function onCheckBox(isChecked: boolean, index: number) {
-        setSubjects(state => state.map((subject: Subject, i: number) => {
-            if (i === index) {
-                return {
-                    ...subject,
-                    isChecked: isChecked
-                }
-            }
-            return subject
-        }))
-    }
-
     const addTranscriptImage = () => {
         openGallery(file => {
             setTranscriptImages((files) => [...files, file])
@@ -125,7 +109,6 @@ export default function Register() {
     const addStudentCardImage = () => {
         openGallery(file => {
             setStudentCardImage(() => file)
-            // setStudentCard(() => file)
         })
     }
 
@@ -158,34 +141,69 @@ export default function Register() {
             console.log(error)
         }
     }
-    // useEffect(()=>{console.log('effect: ', transcriptFiles)},[transcriptFiles])
-    function onPressRole(roleData: RadioButtonProps[]) {
-        setRole(roleData);
+
+    // Checking Page Two
+
+    // Page Three Information (School Life 1)
+    const [schoolLife, setSchoolLife] = useState({
+        school: '',
+        major: '',
+        tutorIntroduction: ''
+    })
+
+    // Checking Page Three
+
+    // Page Four Information (School Life 2)
+    const [subjects, setSubjects] = useState([{
+        key: genUniqueKey(),
+        subject: '',
+        grade: '',
+        isChecked: false,
+    }])
+    function onCheckBox(isChecked: boolean, index: number) {
+        setSubjects(state => state.map((subject: Subject, i: number) => {
+            if (i === index) {
+                return {
+                    ...subject,
+                    isChecked: isChecked
+                }
+            }
+            return subject
+        }))
     }
+
+
+    // useEffect(()=>{console.log('effect: ', transcriptFiles)},[transcriptFiles])
+
 
     // Check Page One (Create an account)
     useEffect(() => {
         if (page.step !== 1) {
             return
         }
-        // Todo: fetch server to check email
+        // Todo: fetch server to check email unique
         true ? setEmailUnique(true) : null
         password.length > passwordLength ? setPasswordLengthEnough(true) : setPasswordLengthEnough(false)
         firmPassword === password ? setPasswordMatch(true) : setPasswordMatch(false)
         mobileNumber.length === mobileNumberLength && !isNaN(+mobileNumber) ? setMobileValid(true) : setMobileValid(false)
-        emailUnique && passwordLengthEnough && passwordMatch && mobileValid ? setDisableNext(false) : null
+
+        if (emailUnique && passwordLengthEnough && passwordMatch && mobileValid) {
+            setDisableNext(false)
+            setNextButtonStyle(nonDisableStyle)
+        }
         // }, [nickname, email, password, firmPassword, mobileNumber])
-    }, [])
+    })
 
     // Check Page Two (Academic Information)
-    // useEffect(() => {
-    //     if (page.step !== 2) {
-    //         return
-    //     }
-    //     if (transcriptUri && studentCardUri) {
-    //         setDisableNext(false)
-    //     }
-    // }, [transcriptUri, studentCardUri])
+    useEffect(() => {
+        if (page.step !== 2) {
+            return
+        }
+        if ((transcriptFiles.length > 0 || transcriptImages.length > 0) && studentCardImage) {
+            setDisableNext(false)
+            setNextButtonStyle(nonDisableStyle)
+        }
+    }, [transcriptFiles, studentCardImage])
 
     // Check Page Three (School Life 1)
     useEffect(() => {
@@ -194,13 +212,24 @@ export default function Register() {
         }
         if (schoolLife.school && schoolLife.major) {
             setDisableNext(false)
+            setNextButtonStyle(nonDisableStyle)
         }
     }, [schoolLife])
-
     // Check Page Four (School Life 2)
+    function countPreSubject() {
+        let count = 0
+        subjects.map(subject => subject.isChecked === true ? count++ : null)
+        return count
+    }
     useEffect(() => {
         if (page.step !== 4) {
             return
+        }
+        if (countPreSubject() > 0) {
+            setDisableNext(false)
+            setNextButtonStyle(nonDisableStyle)
+        } else {
+            setNextButtonStyle(disableStyle)
         }
     }, [subjects])
 
@@ -225,7 +254,7 @@ export default function Register() {
                 </> : null}
             {!isTutor && page.step === 1 &&
                 <TouchableOpacity
-                    style={styles.button}
+                    style={nextButtonStyle}
                     disabled={!nickname && !email && !password && !firmPassword}>
                     <Text style={styles.buttonText}>Create Account</Text>
                 </TouchableOpacity>
@@ -234,9 +263,10 @@ export default function Register() {
             {isTutor && page.step === 1 &&
                 <>
                     <TextInput style={styles.input} textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
-                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
+                        setDisableNext(true)
+                        setNextButtonStyle(disableStyle)
                         setPage({ step: 2 })
-                        // setDisableNext(true)
                     }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
@@ -287,7 +317,7 @@ export default function Register() {
                     </View>
                     <View style={{ padding: 10, marginBottom: 50 }}>
                         <View style={styles.fileSelector}>
-                            <Text style={{flex: 6}}>Student Card</Text>
+                            <Text style={{ flex: 6 }}>Student Card</Text>
                             {studentCardImage ?
                                 (
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 4.5, paddingRight: 10 }}>
@@ -302,13 +332,14 @@ export default function Register() {
                                         <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
                                     </TouchableOpacity>
                                 )
-                                }
+                            }
                         </View>
                     </View>
 
-                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
+                        setDisableNext(true)
+                        setNextButtonStyle(disableStyle)
                         setPage({ step: 3 })
-                        // setDisableNext(true)
                     }} >
                         <Text style={styles.buttonText} >Next</Text>
                     </TouchableOpacity>
@@ -330,9 +361,10 @@ export default function Register() {
                         tutorIntroduction: value
                     })} />
 
-                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
+                        setDisableNext(true)
+                        setNextButtonStyle(disableStyle)
                         setPage({ step: 4 })
-                        // setDisableNext(true)
                     }} >
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
@@ -384,7 +416,7 @@ export default function Register() {
                         />
                     ))}
 
-                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
                         // Send to DB
                         console.log('success create')
                     }} >
