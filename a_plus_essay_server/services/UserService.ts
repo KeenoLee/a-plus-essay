@@ -23,7 +23,7 @@ type Tutor = {
     preferredSubjects: string,
 };
 
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 export class UserService {
 

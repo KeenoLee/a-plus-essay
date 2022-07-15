@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { Bearer } from 'permit';
 import jwtSimple from 'jwt-simple';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: './.env' });
 
 const permit = new Bearer({
     query: "access_token"
