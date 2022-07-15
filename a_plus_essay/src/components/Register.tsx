@@ -175,7 +175,6 @@ export default function Register() {
 
     // useEffect(()=>{console.log('effect: ', transcriptFiles)},[transcriptFiles])
 
-
     // Check Page One (Create an account)
     useEffect(() => {
         if (page.step !== 1) {
@@ -190,6 +189,9 @@ export default function Register() {
         if (emailUnique && passwordLengthEnough && passwordMatch && mobileValid) {
             setDisableNext(false)
             setNextButtonStyle(nonDisableStyle)
+        } else {
+            setDisableNext(true)
+            setNextButtonStyle(disableStyle) 
         }
         // }, [nickname, email, password, firmPassword, mobileNumber])
     })
@@ -202,6 +204,9 @@ export default function Register() {
         if ((transcriptFiles.length > 0 || transcriptImages.length > 0) && studentCardImage) {
             setDisableNext(false)
             setNextButtonStyle(nonDisableStyle)
+        } else {
+            setDisableNext(true)
+            setNextButtonStyle(disableStyle) 
         }
     }, [transcriptFiles, studentCardImage])
 
@@ -213,6 +218,9 @@ export default function Register() {
         if (schoolLife.school && schoolLife.major) {
             setDisableNext(false)
             setNextButtonStyle(nonDisableStyle)
+        } else {
+            setDisableNext(true)
+            setNextButtonStyle(disableStyle) 
         }
     }, [schoolLife])
     // Check Page Four (School Life 2)
@@ -229,6 +237,7 @@ export default function Register() {
             setDisableNext(false)
             setNextButtonStyle(nonDisableStyle)
         } else {
+            setDisableNext(true)
             setNextButtonStyle(disableStyle)
         }
     }, [subjects])
@@ -250,6 +259,7 @@ export default function Register() {
                     <TextInput style={styles.input} textContentType='emailAddress' placeholder="Email address" onChangeText={(email) => setEmail(email)} />
                     <TextInput style={styles.input} textContentType='password' placeholder="Password" onChangeText={(password) => setPassword(password)} />
                     <TextInput style={styles.input} textContentType='password' placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
+                    <TextInput style={styles.input} textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
             {!isTutor && page.step === 1 &&
@@ -262,7 +272,6 @@ export default function Register() {
             {/* Submit Page 1 */}
             {isTutor && page.step === 1 &&
                 <>
-                    <TextInput style={styles.input} textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
                         setDisableNext(true)
                         setNextButtonStyle(disableStyle)
