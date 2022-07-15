@@ -19,7 +19,7 @@ type Tutor = {
     major: number,
     selfIntro?: string,
     subjects: string,
-    scores: string,
+    score: string,
     preferredSubjects: string,
 };
 
@@ -63,67 +63,67 @@ export class UserService {
 
     async createTutor(tutor: Tutor) {
         const date = new Date();
-        let majorId: number = await this.knex.select("id").from("major").where("major", tutor.major).first();
-        if (!majorId) {
-            majorId = await this.knex.insert({ major: tutor.major }).into("major").returning("id");
-        };
+        let tutorId: number;
 
         this.knex.transaction(async knex => {
+            let majorId: number = await knex.select("id").from("major").where("major", tutor.major).first();
+            if (!majorId) {
+                majorId = await knex.insert({ major: tutor.major }).into("major").returning("id");
+            };
+
             await knex.insert({
                 id: (await knex.select('id').from("user").where("email", tutor.email)),
                 is_verified: false,
-                // transcript: ???????,
-                // student_card: ???????,                
-                school: tutor.school,
-                majors_id: majorId,
+                // student_card: ???????,               
+                major_id: majorId,
                 rating: null,
                 self_intro: tutor.selfIntro || null,
                 ongoing_order_amount: 0,
                 completed_order_amount: 0,
                 created_at: date.toLocaleString(),
                 updated_at: null
-            }).into("tutor")
-                .returning("id");
-        })
-        // const tutorId: number = await this.knex.insert({
-        //     id: (await )
-        //     is_verified: false,
-        //     // transcript: ???????,
-        //     // student_card: ???????,
-        //     phone_number: tutor.phoneNumber,
-        //     is_whatsapp: tutor.isWhatsapp,
-        //     is_signal: tutor.isSignal,
-        //     school: tutor.school,
-        //     majors_id: majorId,
-        //     rating: null,
-        //     self_intro: tutor.selfIntro || null,
-        //     ongoing_order_amount: 0,
-        //     completed_order_amount: 0,
-        //     created_at: date.toLocaleString(),
-        //     updated_at: null
-        // }).into("tutor")
-        //     .returning("id");
+            }).into("tutor");
 
-        let subjectId: number = await this.knex.select("id").from("subject").where("subject_name", tutor.subjects).first();
-        if (!subjectId) {
-            subjectId = await this.knex.insert({
-                subject_name: tutor.subjects,
+
+            await knex.insert({
+                tutor_id: tutorId,
+                school: tutor.school,
                 created_at: date.toLocaleString(),
                 updated_at: null
-            }).into("subject").returning("id");
-        };
-        await this.knex.insert({
-            tutor_id: tutorId,
-            subject_id: subjectId,
-            score: tutor.score
-        }).into("transcript_subject");
+            }).into("school");
 
-        await this.knex.insert({
-            tutor_id: tutorId,
-            subject_id: subjectId
-        }).into("preferred_subject");
 
-        return tutorId;
+            await knex.insert({
+                tutor_id: tutorId,
+                // filename: ???????,
+                created_at: date.toLocaleString(),
+                updated_at: null
+            }).into("transcript");
+
+
+            let subjectId: number = await knex.select("id").from("subject").where("subject_name", tutor.subjects).first();
+            if (!subjectId) {
+                subjectId = await knex.insert({
+                    subject_name: tutor.subjects,
+                    created_at: date.toLocaleString(),
+                    updated_at: null
+                }).into("subject").returning("id");
+            };
+
+            await knex.insert({
+                tutor_id: tutorId,
+                subject_id: subjectId,
+                score: tutor.score
+            }).into("transcript_subject");
+
+            await knex.insert({
+                tutor_id: tutorId,
+                subject_id: subjectId
+            }).into("preferred_subject");
+
+            return;
+        })
+        return;
     };
 
     async loginVerification(account: { email: string, password: string }) {

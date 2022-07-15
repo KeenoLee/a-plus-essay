@@ -56,6 +56,17 @@ export class UserController {
 
         if (oAuth === true) { password = null };
 
+        if (phoneNumber === undefined || phoneNumber.length !== 8) {
+            res.status(400).json({ error: "Invalid phone number" })
+            return;
+        };
+
+        const phoneNumberDuplication = await this.userService.checkPhoneNumberDuplication(phoneNumber);
+        if (phoneNumberDuplication) {
+            res.status(400).json({ error: "This phone number has been registered. Please register with another phone number." })
+            return;
+        };
+
         const jwtToken = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
 
         if (isTutor === false) {
@@ -69,27 +80,10 @@ export class UserController {
 
     createTutor = async (req: Request, res: Response) => {
 
-        let { transcript, studentCard, school, major, selfIntro, subjects, scores, preferredSubjects } = req.body;
-
+        let { email, transcript, studentCard, school, major, selfIntro, subjects, score, preferredSubjects } = req.body;
 
         // if no transcript, .......
         // if no studentCard, .......
-
-        if (phoneNumber === undefined || phoneNumber.length !== 8) {
-            res.status(400).json({ error: "Invalid phone number" })
-            return;
-        };
-
-        const phoneNumberDuplication = await this.userService.checkPhoneNumberDuplication(phoneNumber);
-        if (phoneNumberDuplication) {
-            res.status(400).json({ error: "This phone number has been registered. Please register with another phone number." })
-            return;
-        };
-
-        if (isWhatsapp === undefined && isSignal === undefined) {
-            res.status(400).json({ error: "Instant messenger selection is missed" })
-            return;
-        };
 
         if (!school) {
             res.status(400).json({ error: "The major is missed" })
@@ -101,23 +95,21 @@ export class UserController {
             return;
         };
 
-        if (!subjects || !grades || !preferredSubjects) {
+        if (!subjects || !score || !preferredSubjects) {
             res.status(400).json({ error: "Subject or grade or preferred subject is missed" });
             return;
         };
 
-        const id = await this.userService.createTutor(
+        await this.userService.createTutor(
             {
+                email,
                 transcript,
                 studentCard,
-                phoneNumber,
-                isWhatsapp,
-                isSignal,
                 school,
                 major,
                 selfIntro,
                 subjects,
-                grades,
+                score,
                 preferredSubjects
             }
         );
