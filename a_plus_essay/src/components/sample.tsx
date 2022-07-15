@@ -6,6 +6,7 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 
 function formatDate(date: Date) {
     let newDate = date.toLocaleString('zh-hk', {hour12: false})
+    console.log(newDate)
     let [formatDate, formatTime] = newDate.split(' ')
     let [day, month, year] = formatDate.split('/')
     day = ('0' + day).substring(day.length - 1, day.length + 1)
@@ -72,12 +73,12 @@ export default function OrderSubmission() {
                     </TouchableOpacity>
 
                 </View>
-                <View>
+                {/* <View>
                     <Text>Actual Deadline</Text>
                     <TouchableOpacity onPress={() => setOpenDatePicker(true)}>
                         <Text>Choose</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
             </View>
             {/* {datePicker && <DatePicker date={date} onDateChange={setDate} />} */}
             {/* <Button title="Choose Date" onPress={() => setOpenDatePicker(true)} /> */}
