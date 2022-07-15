@@ -4,7 +4,8 @@ import { UserController } from './controllers/UserController'
 import { OrderService } from './services/OrderService'
 import { OrderController } from './controllers/OrderController'
 import Knex from "knex";
-import config from "./knexfile"
+import config from "./knexfile";
+import { guard } from './guard';
 
 export const knex = Knex(config[process.env.NODE_ENV || "development"]);
 const userService = new UserService(knex);
@@ -28,7 +29,7 @@ userRoutes.post("/signup/tutor", userController.createUser);
 userRoutes.post("/login/password", userController.loginWithPassword);
 // userRoutes.get("/login/google", userController.loginGoogle);
 userRoutes.get("/login/facebook", userController.loginWithFacebook);
-userRoutes.post("/resetpassword", userController.resetPassword);
+userRoutes.post("/resetpassword", guard, userController.resetPassword);
 
 app.get("/", (req: Request, res: Response) => {
     res.json({ message: 'hello world' })

@@ -1,0 +1,50 @@
+import { View, Text } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import DocumentPicker, { DirectoryPickerResponse, DocumentPickerResponse } from 'react-native-document-picker'
+import { Button, Stack } from 'native-base'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
+type File = {
+    uri: string,
+    filename: string,
+    filetype: string | null
+}
+
+export default function FilePicker() {
+    const [fileData, setFileData] = useState<File[]>([])
+
+    const handleFilePicker = async () => {
+        try {
+            const pickerResult = await DocumentPicker.pick({
+                presentationStyle: "fullScreen",
+                copyTo: "cachesDirectory",
+                allowMultiSelection: true,
+            })
+            // console.log(pickerResult)
+            let result = {
+                uri: pickerResult[0].uri,
+                filename: pickerResult[0].name,
+                filetype: pickerResult[0].type
+            }
+            setFileData([...fileData, result])
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+    useEffect(() => {
+        console.log('useeffect', fileData)
+    }, [fileData])
+    return (
+        <Stack>
+            <Button onPress={() => handleFilePicker()} leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
+                UploadTesting
+            </Button>
+            {fileData.length > 0 ? (
+                <Text>
+                    Filename: {fileData[0].filename}
+                </Text>
+            ) : null}
+        </Stack>
+    )
+}
