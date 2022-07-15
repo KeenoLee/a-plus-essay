@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button} from "native-base";
+import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button, Icon, CloseIcon, IconButton } from "native-base";
 import DateTimePicker from './DateTimePicker';
-// import DateTimePicker from '@react-native-community/datetimepicker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function OrderSubmission() {
     const [formValue, SetFormValue] = useState('')
@@ -26,19 +26,30 @@ export default function OrderSubmission() {
             </HStack>
             <Stack space={4}>
                 <FormControl.Label>Project Description </FormControl.Label>
-                <TextArea h={24} placeholder="Text Area Placeholder" w="75%" maxW="300" autoCompleteType={undefined} />
+                <TextArea h={24} placeholder="Please specify your project requirement (Optional)" w="100%" maxW="300" autoCompleteType={undefined} />
             </Stack>
             <HStack>
+                <FormControl.Label>Guideline</FormControl.Label>
+                    <Button leftIcon={<Ionicons name="cloud-upload-outline" color="white"/>}>
+                        Upload
+                    </Button>
+            </HStack>
+            <HStack>
+                <FormControl.Label>Lecture Notes</FormControl.Label>
+                <Button leftIcon={<Ionicons name="cloud-upload-outline" color="white"/>}>
+                        Upload
+                </Button>
+            </HStack>
+            <HStack>
                 <FormControl.Label>Desired Deadline</FormControl.Label>
-                <FormControl w="20">
-                    <DateTimePicker/>
-                     {/* <Input variant="outline" placeholder="Date" /> */}
+                <FormControl w="24">
+                    <DateTimePicker />
                 </FormControl>
             </HStack>
             <HStack>
                 <FormControl.Label>Actual Deadline</FormControl.Label>
-                <FormControl w="20">
-                    <Input variant="outline" placeholder="Date" />
+                <FormControl w="24">
+                    <DateTimePicker />
                 </FormControl>
             </HStack>
             <HStack justifyContent="space-around">

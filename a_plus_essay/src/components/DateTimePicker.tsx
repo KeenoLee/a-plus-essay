@@ -1,57 +1,24 @@
-// import { View, Text } from 'react-native'
-// import React, { useState } from 'react'
-// import DateTimePicker from '@react-native-community/datetimepicker'
-// import { Button } from 'native-base';
-
-// export default function DateTimePicker() {
-//     const [date, setDate] = useState(new Date(1598051730000));
-//     const [mode, setMode] = useState('date');
-//     const [show, setShow] = useState(false);
-
-//     const onChange = (event: any, selectedDate: any) => {
-//         const currentDate = selectedDate;
-//         setShow(false);
-//         setDate(currentDate);
-//     };
-
-//     const showMode = (currentMode: React.SetStateAction<string>) => {
-//         setShow(true);
-//         setMode(currentMode);
-//     };
-
-//     const showDatepicker = () => {
-//         showMode('date');
-//     };
-
-//     const showTimepicker = () => {
-//         showMode('time');
-//     };
-
-//     return (
-//         <View>
-//             <View>
-//                 <Button onPress={showDatepicker}/>
-//             </View>
-//             <View>
-//                 <Button onPress={showTimepicker}/>
-//             </View>
-//             <Text>selected: {date.toLocaleString()}</Text>
-//             {show && (
-//                 <DateTimePicker
-//                     testID="dateTimePicker"
-//                     value={date}
-//                     mode={mode}
-//                     is24Hour={true}
-//                     onChange={onChange}
-//                 />
-//             )}
-//         </View>
-//     )
-// }
-
+import { Button, HStack } from 'native-base'
 import React, { useState } from 'react'
-import { Button } from 'react-native'
+import { Text } from 'react-native'
 import DatePicker from 'react-native-date-picker'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+export function formatDate(date: Date) {
+    let newDate = date.toLocaleString('zh-hk', { hour12: false })
+    // console.log('newDate', newDate)
+    let [formatDate, formatTime] = newDate.split(' ')
+    // console.log('FormatDate & Time', formatDate, formatTime)
+    let [day, month, year] = formatDate.split('/')
+    // console.log('OD/OM/OY', day, month, year)
+    day = ('0' + day).substring(day.length - 1, day.length + 1)
+    month = ('0' + month).substring(month.length - 1, month.length + 1)
+    // console.log('D/M/Y', day, month, year)
+    let time = formatTime.substring(0, 5)
+    // console.log('time',time)
+    let result = day + '/' + month + '/' + year + ' ' + time
+    return result
+}
 
 export default function DateTimePicker() {
     const [date, setDate] = useState(new Date())
@@ -59,19 +26,22 @@ export default function DateTimePicker() {
 
     return (
         <>
-            <Button title="Open" onPress={() => setOpen(true)} />
-            <DatePicker
-                modal
-                open={open}
-                date={date}
-                onConfirm={(date: React.SetStateAction<Date>) => {
-                    setOpen(false)
-                    setDate(date)
-                }}
-                onCancel={() => {
-                    setOpen(false)
-                }}
-            />
+            <HStack w="100%">
+                <Button size="sm" onPress={() => setOpen(true)} >Select Date</Button>
+                <DatePicker
+                    modal
+                    open={open}
+                    date={date}
+                    onConfirm={(date: Date) => {
+                        setOpen(false)
+                        setDate(date)
+                    }}
+                    onCancel={() => {
+                        setOpen(false)
+                    }}
+                />
+                <Text>{formatDate(date)}</Text>
+            </HStack>
         </>
     )
 }
