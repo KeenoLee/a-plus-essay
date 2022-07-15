@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, View, Text, TextInput, StyleSheet, Image, Alert } from "react-native";
+import { Button, View, Text, TextInput, StyleSheet, Image } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 // import { Formik, Field, Form } from 'formik';
@@ -9,7 +9,8 @@ import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from "./SubjectRow";
-import { NativeBaseProvider, Checkbox } from 'native-base';
+import DocumentPicker from 'react-native-document-picker'
+import { CheckIcon, Menu, Select, VStack } from 'native-base';
 
 
 
@@ -43,9 +44,16 @@ const genUniqueKey = () => {
 }
 
 
-type NativeFile = {
-    uri: string, filename: string
+type NativeImage = {
+    uri: string,
+    filename: string
 }
+type NativeFile = {
+    uri: string,
+    filename: string,
+    type: string | null
+}
+
 export default function Register() {
     const [page, setPage] = useState({ step: 1 })
     const [disableNext, setDisableNext] = useState(false)
@@ -68,9 +76,15 @@ export default function Register() {
     const [mobileValid, setMobileValid] = useState(false)
 
     // Page Two Information (Academic Information)
+    const [transcriptImages, setTranscriptImages] = useState<NativeImage[]>([])
     const [transcriptFiles, setTranscriptFiles] = useState<NativeFile[]>([])
-    const [studentCardUri, setStudentCardUri] = useState({})
-    const [studentCardName, setStudentCardName] = useState('')
+    const [studentCardImage, setStudentCardImage] = useState({
+        uri: null,
+        filename: null
+    })
+
+    const [position, setPosition] = useState("Upload");
+
 
     // Checking Page Two
 
@@ -92,8 +106,8 @@ export default function Register() {
     }])
 
     function onCheckBox(isChecked: boolean, index: number) {
-        setSubjects(state => state.map((subject:Subject, i:number) => {
-            if(i === index){
+        setSubjects(state => state.map((subject: Subject, i: number) => {
+            if (i === index) {
                 return {
                     ...subject,
                     isChecked: isChecked
@@ -103,17 +117,19 @@ export default function Register() {
         }))
     }
 
-    useEffect( () => {
-        console.log(subjects);
-    },[subjects])
-
-    const addTranscript = () => {
+    const addTranscriptImage = () => {
         openGallery(file => {
-            setTranscriptFiles((files) => [...files, file])
+            setTranscriptImages((files) => [...files, file])
         })
     }
 
-    const openGallery = (cb: (file: { uri: string, filename: string }) => void) => {
+    const addStudentCardImage = () => {
+        openGallery(file => {
+            // setStudentCard(() => file)
+        })
+    }
+
+    const openGallery = (callback: (file: { uri: string, filename: string }) => void) => {
         launchImageLibrary({
             mediaType: 'photo',
             // includeBase64: true
@@ -126,18 +142,26 @@ export default function Register() {
                 let uri = res.assets?.[0].uri
                 let filename = res.assets?.[0].fileName
                 if (uri && filename) {
-                    cb({ uri, filename })
+                    callback({ uri, filename })
                 }
+                console.log('file is not found')
+                return
             }
         })
     }
 
-
-
+    const addTranscriptFile = async () => {
+        try {
+            const { uri, name, type } = await DocumentPicker.pickSingle()
+            setTranscriptFiles([...transcriptFiles, { uri, filename: name, type }])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    // useEffect(()=>{console.log('effect: ', transcriptFiles)},[transcriptFiles])
     function onPressRole(roleData: RadioButtonProps[]) {
         setRole(roleData);
     }
-
 
     // Check Page One (Create an account)
     useEffect(() => {
@@ -151,7 +175,7 @@ export default function Register() {
         mobileNumber.length === mobileNumberLength && !isNaN(+mobileNumber) ? setMobileValid(true) : setMobileValid(false)
         emailUnique && passwordLengthEnough && passwordMatch && mobileValid ? setDisableNext(false) : null
         // }, [nickname, email, password, firmPassword, mobileNumber])
-    },[])
+    }, [])
 
     // Check Page Two (Academic Information)
     // useEffect(() => {
@@ -220,31 +244,61 @@ export default function Register() {
             }
             {page.step === 2 ?
                 <>
-                    {/* <Text style={styles.title}>Academic Infomation</Text>
+                    <Text style={styles.title}>Academic Infomation</Text>
                     <View style={{ padding: 10 }}>
                         <View style={styles.fileSelector}>
                             <Text>Transcript</Text>
-                            <TouchableOpacity onPress={() => openGallery('transcript')}>
-                                <Text>Choose Photo</Text>
-                            </TouchableOpacity>
+                            <VStack style={{ marginRight: 10, }} space={6} alignSelf="flex-start" w="30%">
+                                <Select
+                                    selectedValue={position}
+                                    mx={{ base: -0.5, md: "Image" }}
+                                    onValueChange={nextValue => setPosition(nextValue)}
+                                    accessibilityLabel="Upload Image or file"
+                                >
+                                    <Select.Item label="Upload" value="Upload" disabled />
+                                    <Select.Item label="Image" value="Image" onPress={() => addTranscriptImage()} />
+                                    <Select.Item label="File" value="File" onPress={() => addTranscriptFile()} />
+                                </Select>
+                            </VStack>
+                        </View>
+
+                        <View>
 
                         </View>
-                        <View style={{ height: 25 }}>
-                            {transcriptName && <Text>{transcriptName}</Text>}
+
+                        <View style={{ height: 100 }}>
+                            {transcriptFiles && transcriptFiles.map((file, index) => (
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Text key={index}>{shorterFilename(file.filename)}</Text>
+                                    <TouchableOpacity style={{ marginRight: 180 }} onPress={() => { setTranscriptFiles(files => files.filter((_, i) => i !== index)) }}>
+                                        <Text style={{color: 'grey'}}>x</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                            {transcriptImages && transcriptImages.map((image, index) => (
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Text key={index}>{shorterFilename(image.filename)}</Text>
+                                    <TouchableOpacity style={{ marginRight: 180 }} onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
+                                    <Text style={{color: 'grey'}}>x</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
                         </View>
+
+
                     </View>
-                    <View style={{ padding: 10 }}>
+                    <View style={{ padding: 10, marginBottom: 50 }}>
                         <View style={styles.fileSelector}>
                             <Text>Student Card</Text>
-                            <TouchableOpacity onPress={() => openGallery('studentCard')}>
+                            <TouchableOpacity onPress={() => addStudentCardImage()}>
                                 <Text>Choose Photo</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={{ height: 25 }}>
-
-                            {studentCardName && <Text>{studentCardName}</Text>}
-                        </View>
-                    </View> */}
+                        {studentCardImage && <Text>{studentCardImage.filename}</Text>}
+                        {/* <View style={{ height: 25 }}>
+                            {studentCardImage && <Text>{studentCardImage.filename}</Text>}
+                        </View> */}
+                    </View>
 
                     {/* FOR TESTING */}
                     {/* <Image source={studentCardUri} style={{ height: 100, width: 100 }} /> */}
@@ -296,34 +350,34 @@ export default function Register() {
                     </View>
                     {subjects.map((subject, index) => (
 
-                        <SubjectRow 
-                            key={subject.key} 
-                            index={index} 
-                            subject={subject} 
+                        <SubjectRow
+                            key={subject.key}
+                            index={index}
+                            subject={subject}
                             onDelete={(index) => {
                                 const newSubjects = [...subjects]
                                 let filteredNewSubjects = newSubjects.filter((_, i) => i !== index)
                                 setSubjects(filteredNewSubjects)
-                            }} 
+                            }}
                             onSubjectChange={(text: string) => {
                                 const newSubjects = [...subjects]
                                 newSubjects[index].subject = text
                                 setSubjects(newSubjects)
-                            }} 
+                            }}
                             onGradeChange={(text: string) => {
                                 const newSubjects = [...subjects]
                                 newSubjects[index].grade = text
                                 setSubjects(newSubjects)
-                            }} 
+                            }}
                             // 點解呢個又得！！！？
-                            onCheckBox={(isChecked: boolean)=>onCheckBox(isChecked, index)}    
-                            // 點解呢個唔得！！！！！！？
-                            // onCheckBox={(isChecked: boolean) => {
-                            //     const newSubjects = [...subjects]
-                            //     newSubjects[index].isChecked = isChecked
-                            //     setSubjects(newSubjects)
-                            // }｝
-                                 
+                            onCheckBox={(isChecked: boolean) => onCheckBox(isChecked, index)}
+                        // 點解呢個唔得！！！！！！？
+                        // onCheckBox={(isChecked: boolean) => {
+                        //     const newSubjects = [...subjects]
+                        //     newSubjects[index].isChecked = isChecked
+                        //     setSubjects(newSubjects)
+                        // }｝
+
                         />
                     ))}
 
@@ -420,7 +474,8 @@ const styles = StyleSheet.create({
         borderColor: '#AAAAFF',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: 300
+        alignItems: 'center',
+        width: 300,
+        height: 50
     }
-
 })
