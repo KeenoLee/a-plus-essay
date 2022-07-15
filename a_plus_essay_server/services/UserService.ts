@@ -23,7 +23,7 @@ type Tutor = {
     preferredSubjects: string,
 };
 
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 export class UserService {
 
@@ -126,15 +126,20 @@ export class UserService {
         return;
     };
 
-    async loginVerification(account: { email: string, password: string }) {
-        const hashedPassword: string = await this.knex.select("hashed_password").from("user").where("email", account.email).first();
-        const isMatched = await checkPassword(account.password, hashedPassword);
-        return isMatched;
+    async loginWithPassword(account: { email: string, password: string }) {
+        const userInfo = await this.knex.select('id', 'nickname', 'is_tutor', 'hashed_password').from("user").where("email", account.email).first();
+        const correctPassword = await checkPassword(account.password, userInfo.hashedPassword);
+        if (!correctPassword) {
+            return { success: false };
+        };
+
+        let token = jwtSimple.encode({ id: userInfo.id, nickname: userInfo.nickname, isTutor: userInfo.is_tutor }, process.env.jwtSecret!);
+        return { success: true, token: token };
     }
 
-    async resetPassword(account: { email: string, newPassword: string }) {
+    async resetPassword(account: { id: number, email: string, newPassword: string }) {
         const hashedPassword = hashPassword(account.newPassword);
-        const userId: number = await this.knex("user").update("hashed_password", account.newPassword, ["id"]).where("email", account.email).first();
+        const userId: number = await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first();
         return userId;
     }
 }
