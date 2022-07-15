@@ -1,7 +1,5 @@
 import { Knex } from "knex";
 import { hashPassword, checkPassword } from "../utils/hash";
-import jwtSimple from 'jwt-simple';
-import dotenv from 'dotenv';
 
 type User = {
     isTutor: boolean,
@@ -23,7 +21,6 @@ type Tutor = {
     preferredSubjects: string,
 };
 
-dotenv.config();
 
 export class UserService {
 
@@ -43,7 +40,8 @@ export class UserService {
     }
 
     async createUser(user: User) {
-        const hashedPassword = hashPassword(user.password);
+        let hashedPassword;
+        if (user.password !== null) { hashedPassword = hashPassword(user.password) };
         const date = new Date();
         const userInfo = await this.knex.insert({
             is_admin: false,
@@ -55,10 +53,9 @@ export class UserService {
             created_at: date.toLocaleString(),
             updated_at: null
         }).into("user")
-            .returning(['id', 'nickname', 'is_tutor']);
+            .returning(['id', 'nickname', 'is_tutor']).first();
 
-        let token = jwtSimple.encode(userInfo, process.env.jwtSecret!);
-        return token;
+        return userInfo;
     }
 
     async createTutor(tutor: Tutor) {
@@ -126,15 +123,19 @@ export class UserService {
         return;
     };
 
-    async loginVerification(account: { email: string, password: string }) {
-        const hashedPassword: string = await this.knex.select("hashed_password").from("user").where("email", account.email).first();
-        const isMatched = await checkPassword(account.password, hashedPassword);
-        return isMatched;
+    async loginWithPassword(account: { email: string, password: string }) {
+        const userInfo = await this.knex.select('id', 'nickname', 'is_tutor', 'hashed_password').from("user").where("email", account.email).first();
+        const correctPassword = await checkPassword(account.password, userInfo.hashed_password);
+        if (!correctPassword) {
+            return { success: false };
+        };
+        delete userInfo.hashed_password;
+        return { success: true, userInfo: userInfo };
     }
 
-    async resetPassword(account: { email: string, newPassword: string }) {
+    async resetPassword(account: { id: number, newPassword: string }) {
         const hashedPassword = hashPassword(account.newPassword);
-        const userId: number = await this.knex("user").update("hashed_password", account.newPassword, ["id"]).where("email", account.email).first();
+        const userId: number = await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first();
         return userId;
     }
 }
