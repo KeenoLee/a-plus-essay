@@ -142,7 +142,7 @@ export class UserController {
             return;
         };
 
-        const isLoggedIn = await this.userService.loginVerification({ email, password });
+        const isLoggedIn = await this.userService.loginWithPassword({ email, password });
         if (isLoggedIn.success === true) {
             res.json({ success: true, token: isLoggedIn.token });
         } else res.status(400).json({ error: "Incorrect password" });

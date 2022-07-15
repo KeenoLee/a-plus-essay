@@ -126,7 +126,7 @@ export class UserService {
         return;
     };
 
-    async loginVerification(account: { email: string, password: string }) {
+    async loginWithPassword(account: { email: string, password: string }) {
         const userInfo = await this.knex.select('id', 'nickname', 'is_tutor', 'hashed_password').from("user").where("email", account.email).first();
         const correctPassword = await checkPassword(account.password, userInfo.hashedPassword);
         if (!correctPassword) {
