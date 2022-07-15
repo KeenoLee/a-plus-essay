@@ -22,7 +22,7 @@ export function registerStudent(nickname: string, email: string, password: strin
     return async (dispatch: any) => {
         try {
 
-            const res = await fetch(`${process.env.BACKEND_URL}/login`, {
+            const res = await fetch(`${process.env.BACKEND_URL}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

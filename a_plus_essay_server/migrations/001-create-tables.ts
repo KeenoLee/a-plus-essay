@@ -5,10 +5,11 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable('user', table => {
       table.increments('id')
       table.boolean('is_admin').notNullable().defaultTo(false)
-      table.boolean('is_tutor').notNullable().defaultTo(false)
+      table.boolean('is_tutor').notNullable()
       table.string('nickname', 31).notNullable()
       table.string('email', 127).notNullable().unique()
       table.string('hashed_password', 60).nullable()
+      table.integer('phone_number').notNullable().unique()
       table.timestamps(false, true)
     })
   }
@@ -25,17 +26,12 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable('tutor', table => {
       table.increments('id')
       table.boolean('is_verified').notNullable().defaultTo(false)
-      table.string('transcript', 127).notNullable()
-      table.string('student_card', 127).notNullable()
-      table.integer('phone_number').notNullable().unique()
-      table.boolean('is_whatsapp').notNullable()
-      table.boolean('is_signal').notNullable()
-      table.string('school', 127).nullable()
+      table.string('student_card', 127).nullable()
       table.integer('major_id').unsigned().notNullable().references('major.id')
-      table.decimal('rating', 3, 2).nullable()
+      table.decimal('rating', 2, 1).nullable()
       table.text('self_intro').nullable()
-      table.integer('ongoing_order_amount').notNullable().defaultTo(0)
-      table.integer('completed_order_amount').notNullable().defaultTo(0)
+      table.integer('ongoing_order_amount').notNullable()
+      table.integer('completed_order_amount').notNullable()
       table.timestamps(false, true)
     })
   }
@@ -48,18 +44,36 @@ export async function up(knex: Knex): Promise<void> {
     })
   }
 
+  if (!(await knex.schema.hasTable('transcript'))) {
+    await knex.schema.createTable('transcript', table => {
+      table.increments('id')
+      table.integer('tutor_id').unsigned().notNullable().references('tutor.id')
+      table.string('filename', 127).notNullable()
+      table.timestamps(false, true)
+    })
+  }
+
+  if (!(await knex.schema.hasTable('preferred_subject'))) {
+    await knex.schema.createTable('preferred_subject', table => {
+      table.increments('id')
+      table.integer('tutor_id').unsigned().notNullable().references('tutor.id')
+      table.integer('subject_id').unsigned().notNullable().references('subject.id')
+    })
+  }
+
   if (!(await knex.schema.hasTable('order'))) {
     await knex.schema.createTable('order', table => {
       table.increments('id')
       table.integer('student_id').unsigned().notNullable().references('user.id')
       table.integer('tutor_id').unsigned().nullable().references('user.id')
-      table.timestamp('matched_time').nullable()
       table.string('title', 63).notNullable()
+      table.string('grade', 63).notNullable()
       table.text('description').notNullable()
-      table.text('required_note').nullable()
       table.integer('budget').notNullable()
+      table.timestamp('matched_time').nullable()
       table.timestamp('completed_time').nullable()
-      table.timestamp('paid_time').nullable()
+      table.timestamp('paid_by_student_time').nullable()
+      table.timestamp('paid_to_tutor_time').nullable()
       table.date('tutor_submission_deadline').notNullable()
       table.date('student_submission_deadline').notNullable()
       table.timestamps(false, true)
@@ -71,16 +85,16 @@ export async function up(knex: Knex): Promise<void> {
       table.increments('id')
       table.integer('tutor_id').unsigned().notNullable().references('tutor.id')
       table.integer('subject_id').unsigned().notNullable().references('subject.id')
-      table.string('grade', 20).notNullable()
+      table.string('score', 20).notNullable()
       table.timestamps(false, true)
     })
   }
 
-  if (!(await knex.schema.hasTable('preferred_subject'))) {
-    await knex.schema.createTable('preferred_subject', table => {
+  if (!(await knex.schema.hasTable('school'))) {
+    await knex.schema.createTable('school', table => {
       table.increments('id')
       table.integer('tutor_id').unsigned().notNullable().references('tutor.id')
-      table.integer('subject_id').unsigned().notNullable().references('subject.id')
+      table.string('school', 127).notNullable()
       table.timestamps(false, true)
     })
   }
@@ -88,9 +102,9 @@ export async function up(knex: Knex): Promise<void> {
   if (!(await knex.schema.hasTable('comment'))) {
     await knex.schema.createTable('comment', table => {
       table.increments('id')
-      table.text('comment').notNullable()
       table.integer('student_id').unsigned().notNullable().references('user.id')
       table.integer('tutor_id').unsigned().notNullable().references('tutor.id')
+      table.text('comment').notNullable()
       table.timestamps(false, true)
     })
   }
@@ -98,7 +112,7 @@ export async function up(knex: Knex): Promise<void> {
   if (!(await knex.schema.hasTable('sample'))) {
     await knex.schema.createTable('sample', table => {
       table.increments('id')
-      table.string('sample', 127).notNullable()
+      table.text('sample').notNullable()
       table.integer('tutor_id').unsigned().notNullable().references('tutor.id')
       table.timestamps(false, true)
     })
@@ -110,16 +124,42 @@ export async function up(knex: Knex): Promise<void> {
       table.integer('order_id').unsigned().notNullable().references('order.id')
       table.boolean('sent_by_tutor').notNullable()
       table.text('message').notNullable()
-      table.string('file_name', 127).nullable()
       table.timestamps(false, true)
     })
   }
 
-  if (!(await knex.schema.hasTable('orders_subject'))) {
-    await knex.schema.createTable('orders_subject', table => {
+  if (!(await knex.schema.hasTable('file'))) {
+    await knex.schema.createTable('file', table => {
+      table.increments('id')
+      table.integer('order_id').unsigned().notNullable().references('order.id')
+      table.string('filename', 127).notNullable()
+      table.timestamps(false, true)
+    })
+  }
+
+  if (!(await knex.schema.hasTable('order_subject'))) {
+    await knex.schema.createTable('order_subject', table => {
       table.increments('id')
       table.integer('order_id').unsigned().notNullable().references('order.id')
       table.integer('subject_id').unsigned().notNullable().references('subject.id')
+    })
+  }
+
+  if (!(await knex.schema.hasTable('guideline'))) {
+    await knex.schema.createTable('guideline', table => {
+      table.increments('id')
+      table.integer('order_id').unsigned().notNullable().references('order.id')
+      table.string('filename', 127).notNullable()
+      table.timestamps(false, true)
+    })
+  }
+
+  if (!(await knex.schema.hasTable('note'))) {
+    await knex.schema.createTable('note', table => {
+      table.increments('id')
+      table.integer('order_id').unsigned().notNullable().references('order.id')
+      table.string('filename', 127).notNullable()
+      table.timestamps(false, true)
     })
   }
 
@@ -139,13 +179,18 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.dropTableIfExists('candidate')
-  await knex.schema.dropTableIfExists('orders_subject')
+  await knex.schema.dropTableIfExists('note')
+  await knex.schema.dropTableIfExists('guideline')
+  await knex.schema.dropTableIfExists('order_subject')
+  await knex.schema.dropTableIfExists('file')
   await knex.schema.dropTableIfExists('chat_message')
   await knex.schema.dropTableIfExists('sample')
   await knex.schema.dropTableIfExists('comment')
-  await knex.schema.dropTableIfExists('preferred_subject')
+  await knex.schema.dropTableIfExists('school')
   await knex.schema.dropTableIfExists('transcript_subject')
   await knex.schema.dropTableIfExists('order')
+  await knex.schema.dropTableIfExists('preferred_subject')
+  await knex.schema.dropTableIfExists('transcript')
   await knex.schema.dropTableIfExists('subject')
   await knex.schema.dropTableIfExists('tutor')
   await knex.schema.dropTableIfExists('major')
