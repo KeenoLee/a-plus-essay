@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { UserService } from "../services/UserService";
+import { Bearer } from 'permit';
+import jwtSimple from 'jwt-simple';
 
 export class UserController {
     //TODO:
@@ -137,9 +139,9 @@ export class UserController {
             return;
         };
 
-        const correctPassword = await this.userService.loginVerification({ email, password });
-        if (correctPassword) {
-            res.json({ success: true });
+        const isLoggedIn = await this.userService.loginVerification({ email, password });
+        if (isLoggedIn.success === true) {
+            res.json({ success: true, token: isLoggedIn.token });
         } else res.status(400).json({ error: "Incorrect password" });
         return;
     }
@@ -182,6 +184,11 @@ export class UserController {
     resetPassword = async (req: Request, res: Response) => {
         let { email, newPassword, reNewPassword } = req.body;
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const permit = new Bearer({
+            query: "access_token"
+        });
+        const token = permit.check(req);
+        const payload = jwtSimple.decode(token, process.env.jwtSecret!);
 
         if (!email) {
             res.status(400).json({ error: "Missing email" })
@@ -214,9 +221,9 @@ export class UserController {
             return;
         };
 
-        const userId = await this.userService.resetPassword({ email, newPassword });
+        const id = payload.id;
+        const userId = await this.userService.resetPassword({ id, email, newPassword });
         res.json({ success: true });
         return;
     }
-
 }
