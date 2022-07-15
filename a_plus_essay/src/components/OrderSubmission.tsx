@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button, Icon, CloseIcon, IconButton } from "native-base";
 import DateTimePicker from './DateTimePicker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FilePicker from './FilePicker';
 
 export default function OrderSubmission() {
     const [formValue, SetFormValue] = useState('')
@@ -55,6 +56,7 @@ export default function OrderSubmission() {
             <HStack justifyContent="space-around">
                 <Button>Confirm</Button>
                 <Button>Cancel</Button>
+                <FilePicker/>
             </HStack>
         </VStack>
     )
