@@ -7,6 +7,7 @@ type User = {
     nickname: string,
     email: string,
     password: string,
+    phoneNumber: number
 };
 
 type Tutor = {
@@ -19,7 +20,7 @@ type Tutor = {
     major: number,
     selfIntro?: string,
     subjects: string,
-    grades: string,
+    score: string,
     preferredSubjects: string,
 };
 
@@ -49,6 +50,7 @@ export class UserService {
             nickname: user.nickname,
             email: user.email,
             hashed_password: hashedPassword || null,
+            phone_number: user.phoneNumber,
             created_at: date.toLocaleString(),
             updated_at: null
         }).into("user")
@@ -67,7 +69,6 @@ export class UserService {
             is_verified: false,
             // transcript: ???????,
             // student_card: ???????,
-            phone_number: tutor.phoneNumber,
             is_whatsapp: tutor.isWhatsapp,
             is_signal: tutor.isSignal,
             school: tutor.school,
@@ -92,7 +93,7 @@ export class UserService {
         await this.knex.insert({
             tutor_id: tutorId,
             subject_id: subjectId,
-            grade: tutor.grades
+            score: tutor.score
         }).into("transcript_subject");
 
         await this.knex.insert({
