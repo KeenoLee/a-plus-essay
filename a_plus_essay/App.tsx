@@ -33,8 +33,11 @@ import Notification from './src/pages/Notification';
 import Status from './src/pages/Status';
 import ChatMain from './src/pages/ChatMain';
 import Register from './src/components/Register';
-import SelectTutor from './src/components/SelectTutor';
+import HomeScreen from './src/components/HomeScreen';
+// import SelectTutor from './src/components/SelectTutor';
 
+import { NativeBaseProvider } from 'native-base';
+import OrderSubmission from './src/components/OrderSubmission';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -90,17 +93,21 @@ const Tabs = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Register">
-        {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-        {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
-        <Stack.Screen name="Select Tutor" component={SelectTutor} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Chats" component={ChatMain} />
-        <Stack.Screen name="Message" component={Notification} />
-        <Stack.Screen name="Status" component={Status} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    //NavtiveBaseProvider must be top layer
+    <NativeBaseProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="">
+          <Stack.Screen name="Home" component={OrderSubmission} />
+          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+          <Stack.Screen name="A Plus Company" component={Tabs} />
+          {/* <Stack.Screen name="Select Tutor" component={SelectTutor} /> */}
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Chats" component={ChatMain} />
+          <Stack.Screen name="Message" component={Notification} />
+          <Stack.Screen name="Status" component={Status} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </NativeBaseProvider>
   )
 }
 

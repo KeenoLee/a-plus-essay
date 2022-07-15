@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^6.2.0",
     "@react-navigation/bottom-tabs": "^6.3.2",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
@@ -22,6 +23,7 @@
     "dotenv": "^16.0.1",
     "formik": "^2.2.9",
     "material-design-icons": "^3.0.1",
+    "native-base": "^3.4.9",
     "react": "^18.2.0",
     "react-native": "0.69.1",
     "react-native-gesture-handler": "^2.5.0",
@@ -30,6 +32,7 @@
     "react-native-radio-buttons-group": "^2.2.11",
     "react-native-safe-area-context": "^4.3.1",
     "react-native-screens": "^3.15.0",
+    "react-native-svg": "^12.3.0",
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
