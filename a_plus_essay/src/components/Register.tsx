@@ -53,7 +53,10 @@ type NativeFile = {
     filename: string,
     type: string | null
 }
-
+type StudentCardImage = {
+    uri: string,
+    filename: string
+}
 export default function Register() {
     const [page, setPage] = useState({ step: 1 })
     const [disableNext, setDisableNext] = useState(false)
@@ -78,11 +81,7 @@ export default function Register() {
     // Page Two Information (Academic Information)
     const [transcriptImages, setTranscriptImages] = useState<NativeImage[]>([])
     const [transcriptFiles, setTranscriptFiles] = useState<NativeFile[]>([])
-    const [studentCardImage, setStudentCardImage] = useState({
-        uri: null,
-        filename: null
-    })
-
+    const [studentCardImage, setStudentCardImage] = useState<StudentCardImage | null>()
     const [position, setPosition] = useState("Upload");
 
 
@@ -125,6 +124,7 @@ export default function Register() {
 
     const addStudentCardImage = () => {
         openGallery(file => {
+            setStudentCardImage(() => file)
             // setStudentCard(() => file)
         })
     }
@@ -262,46 +262,49 @@ export default function Register() {
                             </VStack>
                         </View>
 
-                        <View>
-
-                        </View>
-
                         <View style={{ height: 100 }}>
                             {transcriptFiles && transcriptFiles.map((file, index) => (
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Text key={index}>{shorterFilename(file.filename)}</Text>
                                     <TouchableOpacity style={{ marginRight: 180 }} onPress={() => { setTranscriptFiles(files => files.filter((_, i) => i !== index)) }}>
-                                        <Text style={{color: 'grey'}}>x</Text>
+                                        <Text style={{ color: 'grey' }}>x</Text>
                                     </TouchableOpacity>
                                 </View>
                             ))}
                             {transcriptImages && transcriptImages.map((image, index) => (
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Text key={index}>{shorterFilename(image.filename)}</Text>
-                                    <TouchableOpacity style={{ marginRight: 180 }} onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
-                                    <Text style={{color: 'grey'}}>x</Text>
-                                    </TouchableOpacity>
+                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 5 }}>
+                                        <Text>{shorterFilename(image.filename)}</Text>
+                                        <TouchableOpacity onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
+                                            <Text style={{ color: 'grey' }}>x</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ flex: 5 }}></View>
                                 </View>
                             ))}
                         </View>
 
-
                     </View>
                     <View style={{ padding: 10, marginBottom: 50 }}>
                         <View style={styles.fileSelector}>
-                            <Text>Student Card</Text>
-                            <TouchableOpacity onPress={() => addStudentCardImage()}>
-                                <Text>Choose Photo</Text>
-                            </TouchableOpacity>
+                            <Text style={{flex: 6}}>Student Card</Text>
+                            {studentCardImage ?
+                                (
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 4.5, paddingRight: 10 }}>
+                                        <Text>{shorterFilename(studentCardImage.filename)}</Text>
+                                        <TouchableOpacity onPress={() => { setStudentCardImage(() => null); }}>
+                                            <Text style={{ color: 'grey' }}>x</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                ) :
+                                (
+                                    <TouchableOpacity onPress={() => addStudentCardImage()}>
+                                        <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                                    </TouchableOpacity>
+                                )
+                                }
                         </View>
-                        {studentCardImage && <Text>{studentCardImage.filename}</Text>}
-                        {/* <View style={{ height: 25 }}>
-                            {studentCardImage && <Text>{studentCardImage.filename}</Text>}
-                        </View> */}
                     </View>
-
-                    {/* FOR TESTING */}
-                    {/* <Image source={studentCardUri} style={{ height: 100, width: 100 }} /> */}
 
                     <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
                         setPage({ step: 3 })
