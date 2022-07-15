@@ -10,7 +10,7 @@ export class UserController {
     createUser = async (req: Request, res: Response) => {
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         // let oAuth:boolean = false;
-        let { isTutor, nickname, email, password, rePassword, oAuth } = req.body;
+        let { isTutor, nickname, email, password, rePassword, phoneNumber, oAuth } = req.body;
         if (oAuth !== true) { oAuth = false };
 
         if (isTutor === undefined) {
@@ -56,9 +56,10 @@ export class UserController {
 
         if (oAuth === true) { password = null };
 
-        const id = await this.userService.createUser({ isTutor, nickname, email, password });
+        const jwtToken = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
+
         if (isTutor === false) {
-            res.json({ success: true });
+            res.json({ success: true, token: jwtToken });
             return;
         };
 
@@ -68,7 +69,7 @@ export class UserController {
 
     createTutor = async (req: Request, res: Response) => {
 
-        let { transcript, studentCard, phoneNumber, isWhatsapp, isSignal, school, major, selfIntro, subjects, grades, preferredSubjects } = req.body;
+        let { transcript, studentCard, school, major, selfIntro, subjects, scores, preferredSubjects } = req.body;
 
 
         // if no transcript, .......

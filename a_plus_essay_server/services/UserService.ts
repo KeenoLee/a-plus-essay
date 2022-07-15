@@ -1,27 +1,29 @@
-
 import { Knex } from "knex";
 import { hashPassword, checkPassword } from "../utils/hash";
+import jwtSimple from 'jwt-simple';
+import dotenv from 'dotenv';
 
 type User = {
     isTutor: boolean,
     nickname: string,
     email: string,
     password: string,
+    phoneNumber: number,
 };
 
 type Tutor = {
+    email: string,
     transcript: string,
     studentCard: string,
-    phoneNumber: number,
-    isWhatsapp: boolean,
-    isSignal: boolean,
     school: string,
     major: number,
     selfIntro?: string,
     subjects: string,
-    grades: string,
+    scores: string,
     preferredSubjects: string,
 };
+
+dotenv.config();
 
 export class UserService {
 
@@ -43,17 +45,20 @@ export class UserService {
     async createUser(user: User) {
         const hashedPassword = hashPassword(user.password);
         const date = new Date();
-        const id: number = await this.knex.insert({
+        const userInfo = await this.knex.insert({
             is_admin: false,
             is_tutor: user.isTutor,
             nickname: user.nickname,
             email: user.email,
             hashed_password: hashedPassword || null,
+            phone_number: user.phoneNumber,
             created_at: date.toLocaleString(),
             updated_at: null
         }).into("user")
-            .returning("id");
-        return id;
+            .returning(['id', 'nickname', 'is_tutor']);
+
+        let token = jwtSimple.encode(userInfo, process.env.jwtSecret!);
+        return token;
     }
 
     async createTutor(tutor: Tutor) {
@@ -62,24 +67,42 @@ export class UserService {
         if (!majorId) {
             majorId = await this.knex.insert({ major: tutor.major }).into("major").returning("id");
         };
-        const tutorId: number = await this.knex.insert({
-            // users_id: foreign key to users.id,
-            is_verified: false,
-            // transcript: ???????,
-            // student_card: ???????,
-            phone_number: tutor.phoneNumber,
-            is_whatsapp: tutor.isWhatsapp,
-            is_signal: tutor.isSignal,
-            school: tutor.school,
-            majors_id: majorId,
-            rating: null,
-            self_intro: tutor.selfIntro || null,
-            ongoing_order_amount: 0,
-            completed_order_amount: 0,
-            created_at: date.toLocaleString(),
-            updated_at: null
-        }).into("tutor")
-            .returning("id");
+
+        this.knex.transaction(async knex => {
+            await knex.insert({
+                id: (await knex.select('id').from("user").where("email", tutor.email)),
+                is_verified: false,
+                // transcript: ???????,
+                // student_card: ???????,                
+                school: tutor.school,
+                majors_id: majorId,
+                rating: null,
+                self_intro: tutor.selfIntro || null,
+                ongoing_order_amount: 0,
+                completed_order_amount: 0,
+                created_at: date.toLocaleString(),
+                updated_at: null
+            }).into("tutor")
+                .returning("id");
+        })
+        // const tutorId: number = await this.knex.insert({
+        //     id: (await )
+        //     is_verified: false,
+        //     // transcript: ???????,
+        //     // student_card: ???????,
+        //     phone_number: tutor.phoneNumber,
+        //     is_whatsapp: tutor.isWhatsapp,
+        //     is_signal: tutor.isSignal,
+        //     school: tutor.school,
+        //     majors_id: majorId,
+        //     rating: null,
+        //     self_intro: tutor.selfIntro || null,
+        //     ongoing_order_amount: 0,
+        //     completed_order_amount: 0,
+        //     created_at: date.toLocaleString(),
+        //     updated_at: null
+        // }).into("tutor")
+        //     .returning("id");
 
         let subjectId: number = await this.knex.select("id").from("subject").where("subject_name", tutor.subjects).first();
         if (!subjectId) {
