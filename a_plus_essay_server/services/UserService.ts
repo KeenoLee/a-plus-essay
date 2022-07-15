@@ -7,6 +7,7 @@ type User = {
     nickname: string,
     email: string,
     password: string,
+    phoneNumber: number
 };
 
 type Tutor = {
@@ -19,7 +20,7 @@ type Tutor = {
     major: number,
     selfIntro?: string,
     subjects: string,
-    grades: string,
+    score: string,
     preferredSubjects: string,
 };
 
@@ -31,13 +32,13 @@ export class UserService {
     };
 
     async checkEmailDuplication(email: string) {
-        const result = await this.knex.select("id").from("user").where("email", email);
-        return result;
+        const userId: number = await this.knex.select("id").from("user").where("email", email).first();
+        return userId;
     }
 
     async checkPhoneNumberDuplication(phoneNumber: number) {
-        const result = await this.knex.select("id").from("uses").where("phone_number", phoneNumber);
-        return result;
+        const userId: number = await this.knex.select("id").from("user").where("phone_number", phoneNumber).first();
+        return userId;
     }
 
     async createUser(user: User) {
@@ -48,7 +49,8 @@ export class UserService {
             is_tutor: user.isTutor,
             nickname: user.nickname,
             email: user.email,
-            hashed_password: hashedPassword,
+            hashed_password: hashedPassword || null,
+            phone_number: user.phoneNumber,
             created_at: date.toLocaleString(),
             updated_at: null
         }).into("user")
@@ -58,8 +60,8 @@ export class UserService {
 
     async createTutor(tutor: Tutor) {
         const date = new Date();
-        let majorId: number[] = await this.knex.select("id").from("major").where("major", tutor.major);
-        if (majorId.length === 0) {
+        let majorId: number = await this.knex.select("id").from("major").where("major", tutor.major).first();
+        if (!majorId) {
             majorId = await this.knex.insert({ major: tutor.major }).into("major").returning("id");
         };
         const tutorId: number = await this.knex.insert({
@@ -67,11 +69,10 @@ export class UserService {
             is_verified: false,
             // transcript: ???????,
             // student_card: ???????,
-            phone_number: tutor.phoneNumber,
             is_whatsapp: tutor.isWhatsapp,
             is_signal: tutor.isSignal,
             school: tutor.school,
-            majors_id: majorId[0],
+            majors_id: majorId,
             rating: null,
             self_intro: tutor.selfIntro || null,
             ongoing_order_amount: 0,
@@ -81,8 +82,8 @@ export class UserService {
         }).into("tutor")
             .returning("id");
 
-        let subjectId: number[] = await this.knex.select("id").from("subject").where("subject_name", tutor.subjects);
-        if (subjectId.length === 0) {
+        let subjectId: number = await this.knex.select("id").from("subject").where("subject_name", tutor.subjects).first();
+        if (!subjectId) {
             subjectId = await this.knex.insert({
                 subject_name: tutor.subjects,
                 created_at: date.toLocaleString(),
@@ -91,8 +92,8 @@ export class UserService {
         };
         await this.knex.insert({
             tutor_id: tutorId,
-            subject_id: subjectId[0],
-            grade: tutor.grades
+            subject_id: subjectId,
+            score: tutor.score
         }).into("transcript_subject");
 
         await this.knex.insert({
@@ -103,9 +104,15 @@ export class UserService {
         return tutorId;
     };
 
-    async identityVerification(identity: { email: string, password: string }) {
-        const hashedPassword: string[] = await this.knex.select("hashed_password").from("user").where("email", identity.email);
-        const isMatched = await checkPassword(identity.password, hashedPassword[0]);
+    async loginVerification(account: { email: string, password: string }) {
+        const hashedPassword: string = await this.knex.select("hashed_password").from("user").where("email", account.email).first();
+        const isMatched = await checkPassword(account.password, hashedPassword);
         return isMatched;
+    }
+
+    async resetPassword(account: { email: string, newPassword: string }) {
+        const hashedPassword = hashPassword(account.newPassword);
+        const userId: number = await this.knex("user").update("hashed_password", account.newPassword, ["id"]).where("email", account.email).first();
+        return userId;
     }
 }
