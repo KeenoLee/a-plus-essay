@@ -115,7 +115,7 @@ export class UserService {
         await this.knex.insert({
             tutor_id: tutorId,
             subject_id: subjectId,
-            grade: tutor.grades
+            score: tutor.score
         }).into("transcript_subject");
 
         await this.knex.insert({
