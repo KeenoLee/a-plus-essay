@@ -39,6 +39,7 @@ import OrderMatched from './src/components/OrderMatched';
 // import OrderSubmission from './backup/OrderSubmission';
 
 import { NativeBaseProvider } from 'native-base';
+import OrderSubmission from './src/components/OrderSubmission';
 // import OrderSubmission from './src/components/OrderSubmission';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -95,20 +96,22 @@ const Tabs = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Register">
-        {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-        {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
-        {/* <Stack.Screen name="Order Submission" component={OrderSubmission} /> */}
-        <Stack.Screen name="Thank You" component={OrderMatched} />
-        <Stack.Screen name="Tutor Information" component={TutorInformation} />
-        <Stack.Screen name="Select Tutor" component={SelectTutor} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Chats" component={ChatMain} />
-        <Stack.Screen name="Message" component={Notification} />
-        <Stack.Screen name="Status" component={Status} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Order Submission">
+          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+          {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
+          <Stack.Screen name="Order Submission" component={OrderSubmission} />
+          <Stack.Screen name="Thank You" component={OrderMatched} />
+          <Stack.Screen name="Tutor Information" component={TutorInformation} />
+          <Stack.Screen name="Select Tutor" component={SelectTutor} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Chats" component={ChatMain} />
+          <Stack.Screen name="Message" component={Notification} />
+          <Stack.Screen name="Status" component={Status} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </NativeBaseProvider>
   )
 }
 
