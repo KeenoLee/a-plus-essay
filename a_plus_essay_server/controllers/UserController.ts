@@ -10,7 +10,7 @@ export class UserController {
     createUser = async (req: Request, res: Response) => {
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         // let oAuth:boolean = false;
-        let { isTutor, nickname, email, password, rePassword, oAuth } = req.body;
+        let { isTutor, nickname, email, password, rePassword, phoneNumber, oAuth } = req.body;
         if (oAuth !== true) { oAuth = false };
 
         if (isTutor === undefined) {
@@ -56,24 +56,6 @@ export class UserController {
 
         if (oAuth === true) { password = null };
 
-        const id = await this.userService.createUser({ isTutor, nickname, email, password });
-        if (isTutor === false) {
-            res.json({ success: true });
-            return;
-        };
-
-        this.createTutor;
-        return;
-    }
-
-    createTutor = async (req: Request, res: Response) => {
-
-        let { transcript, studentCard, phoneNumber, isWhatsapp, isSignal, school, major, selfIntro, subjects, grades, preferredSubjects } = req.body;
-
-
-        // if no transcript, .......
-        // if no studentCard, .......
-
         if (phoneNumber === undefined || phoneNumber.length !== 8) {
             res.status(400).json({ error: "Invalid phone number" })
             return;
@@ -85,10 +67,23 @@ export class UserController {
             return;
         };
 
-        if (isWhatsapp === undefined && isSignal === undefined) {
-            res.status(400).json({ error: "Instant messenger selection is missed" })
+        const jwtToken = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
+
+        if (isTutor === false) {
+            res.json({ success: true, token: jwtToken });
             return;
         };
+
+        this.createTutor;
+        return;
+    }
+
+    createTutor = async (req: Request, res: Response) => {
+
+        let { email, transcript, studentCard, school, major, selfIntro, subjects, score, preferredSubjects } = req.body;
+
+        // if no transcript, .......
+        // if no studentCard, .......
 
         if (!school) {
             res.status(400).json({ error: "The major is missed" })
@@ -100,23 +95,21 @@ export class UserController {
             return;
         };
 
-        if (!subjects || !grades || !preferredSubjects) {
+        if (!subjects || !score || !preferredSubjects) {
             res.status(400).json({ error: "Subject or grade or preferred subject is missed" });
             return;
         };
 
-        const id = await this.userService.createTutor(
+        await this.userService.createTutor(
             {
+                email,
                 transcript,
                 studentCard,
-                phoneNumber,
-                isWhatsapp,
-                isSignal,
                 school,
                 major,
                 selfIntro,
                 subjects,
-                grades,
+                score,
                 preferredSubjects
             }
         );
