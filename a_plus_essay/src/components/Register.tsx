@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, View, Text, TextInput, StyleSheet, Image } from "react-native";
+import { Button, View, Text, TextInput, StyleSheet, Image, Alert } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 // import { Formik, Field, Form } from 'formik';
@@ -8,7 +8,9 @@ import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 // import RegisterSuccess from "./RegisterSuccess";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { launchImageLibrary } from 'react-native-image-picker';
-import SubjectRow from "./SubjectRow";
+import SubjectRow, { Subject } from "./SubjectRow";
+import { NativeBaseProvider, Checkbox } from 'native-base';
+
 
 
 
@@ -16,22 +18,17 @@ const roleData: RadioButtonProps[] = [{
     id: '1',
     label: 'Student',
     value: 'student',
-    selected: true
+    selected: true,
+    borderColor: 'rgb(51,130,251)',
+    color: 'rgb(51,130,251)'
 }, {
     id: '2',
     label: 'Tutor',
-    value: 'tutor'
+    value: 'tutor',
+    borderColor: 'rgb(51,130,251)',
+    color: 'rgb(51,130,251)'
 }]
-const contactData: RadioButtonProps[] = [{
-    id: '1',
-    label: 'Whatsapp',
-    value: 'whatsapp',
-    selected: true
-}, {
-    id: '2',
-    label: 'Signal',
-    value: 'signal'
-}]
+
 const passwordLength = 7
 const mobileNumberLength = 8
 function shorterFilename(filename: string) {
@@ -40,14 +37,21 @@ function shorterFilename(filename: string) {
     }
     return filename
 }
+const genUniqueKey = () => {
+    let key = Math.floor(Math.random() * 100000).toString()
+    return key
+}
 
+
+type NativeFile = {
+    uri: string, filename: string
+}
 export default function Register() {
     const [page, setPage] = useState({ step: 1 })
     const [disableNext, setDisableNext] = useState(false)
 
     // Checkbox
     const [role, setRole] = useState<RadioButtonProps[]>(roleData)
-    const [contact, setContact] = useState<RadioButtonProps[]>(contactData)
 
     // Page One Information (Create new account)
     const [nickname, setNickname] = useState('')
@@ -56,7 +60,6 @@ export default function Register() {
     const [firmPassword, setFirmPassword] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
     const [isTutor, setIsTutor] = useState(false)
-    const [isSignal, setIsSignal] = useState(false)
 
     // Checking Page One
     const [passwordLengthEnough, setPasswordLengthEnough] = useState(false)
@@ -65,36 +68,52 @@ export default function Register() {
     const [mobileValid, setMobileValid] = useState(false)
 
     // Page Two Information (Academic Information)
-    const [transcriptUri, setTranscriptUri] = useState(null)
-    const [studentCardUri, setStudentCardUri] = useState(null)
-    const [transcriptName, setTranscriptName] = useState('')
+    const [transcriptFiles, setTranscriptFiles] = useState<NativeFile[]>([])
+    const [studentCardUri, setStudentCardUri] = useState({})
     const [studentCardName, setStudentCardName] = useState('')
 
     // Checking Page Two
 
     // Page Three Information (School Life 1)
     const [schoolLife, setSchoolLife] = useState({
-        school: null,
-        major: null,
-        tutorIntroduction: null
+        school: '',
+        major: '',
+        tutorIntroduction: ''
     })
 
     // Checking Page Three
 
     // Page Four Information (School Life 2)
     const [subjects, setSubjects] = useState([{
+        key: genUniqueKey(),
         subject: '',
-        grade: ''
+        grade: '',
+        isChecked: false,
     }])
-    const [preSubjects, setPreSubjects] = useState([])
-    // let mapSubjectRow = subjects.map((subject,i)=> <SubjectRow key={i} subject={subject}/>)
-    // let mapSubjectRow
-    // useEffect(()=>{
-    // mapSubjectRow
-    // mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
-    // },[subjects])
 
-    const openGallery = (type: string) => {
+    function onCheckBox(isChecked: boolean, index: number) {
+        setSubjects(state => state.map((subject:Subject, i:number) => {
+            if(i === index){
+                return {
+                    ...subject,
+                    isChecked: isChecked
+                }
+            }
+            return subject
+        }))
+    }
+
+    useEffect( () => {
+        console.log(subjects);
+    },[subjects])
+
+    const addTranscript = () => {
+        openGallery(file => {
+            setTranscriptFiles((files) => [...files, file])
+        })
+    }
+
+    const openGallery = (cb: (file: { uri: string, filename: string }) => void) => {
         launchImageLibrary({
             mediaType: 'photo',
             // includeBase64: true
@@ -103,29 +122,22 @@ export default function Register() {
                 console.log('user cancelled image picker')
             } else if (res.errorMessage) {
                 console.log('Error: ', res.errorMessage)
-            } else if (type === 'transcript') {
-                const file = { uri: res.assets[0].uri }
-                const filename = res.assets[0].fileName
-                setTranscriptUri(() => file)
-                setTranscriptName(() => shorterFilename(filename))
-            } else if (type === 'studentCard') {
-                const file = { uri: res.assets[0].uri }
-                const filename = res.assets[0].fileName
-                setStudentCardUri(() => file)
-                setStudentCardName(() => shorterFilename(filename))
+            } else {
+                let uri = res.assets?.[0].uri
+                let filename = res.assets?.[0].fileName
+                if (uri && filename) {
+                    cb({ uri, filename })
+                }
             }
-            return
         })
     }
+
 
 
     function onPressRole(roleData: RadioButtonProps[]) {
         setRole(roleData);
     }
 
-    function onPressContact(contactData: RadioButtonProps[]) {
-        setContact(contactData)
-    }
 
     // Check Page One (Create an account)
     useEffect(() => {
@@ -133,39 +145,23 @@ export default function Register() {
             return
         }
         // Todo: fetch server to check email
-        if (true) {
-            setEmailUnique(true)
-        }
-        if (password.length > passwordLength) {
-            setPasswordLengthEnough(true)
-        } else {
-            setPasswordLengthEnough(false)
-        }
-        if (firmPassword === password) {
-            setPasswordMatch(true)
-        } else {
-            setPasswordMatch(false)
-        }
-        if (mobileNumber.length === mobileNumberLength && !isNaN(+mobileNumber)) {
-            setMobileValid(true)
-        } else {
-            setMobileValid(false)
-        }
-        if (emailUnique && passwordLengthEnough && passwordMatch && mobileValid) {
-            setDisableNext(false)
-        }
+        true ? setEmailUnique(true) : null
+        password.length > passwordLength ? setPasswordLengthEnough(true) : setPasswordLengthEnough(false)
+        firmPassword === password ? setPasswordMatch(true) : setPasswordMatch(false)
+        mobileNumber.length === mobileNumberLength && !isNaN(+mobileNumber) ? setMobileValid(true) : setMobileValid(false)
+        emailUnique && passwordLengthEnough && passwordMatch && mobileValid ? setDisableNext(false) : null
         // }, [nickname, email, password, firmPassword, mobileNumber])
-    })
+    },[])
 
     // Check Page Two (Academic Information)
-    useEffect(() => {
-        if (page.step !== 2) {
-            return
-        }
-        if (transcriptUri && studentCardUri) {
-            setDisableNext(false)
-        }
-    }, [transcriptUri, studentCardUri])
+    // useEffect(() => {
+    //     if (page.step !== 2) {
+    //         return
+    //     }
+    //     if (transcriptUri && studentCardUri) {
+    //         setDisableNext(false)
+    //     }
+    // }, [transcriptUri, studentCardUri])
 
     // Check Page Three (School Life 1)
     useEffect(() => {
@@ -182,10 +178,7 @@ export default function Register() {
         if (page.step !== 4) {
             return
         }
-        if (preSubjects.length >= 1) {
-            setDisableNext(false)
-        }
-    }, [subjects, preSubjects])
+    }, [subjects])
 
     return (
         <View style={styles.form}>
@@ -209,9 +202,6 @@ export default function Register() {
             {!isTutor && page.step === 1 &&
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => {
-                        setContact
-                    }}
                     disabled={!nickname && !email && !password && !firmPassword}>
                     <Text style={styles.buttonText}>Create Account</Text>
                 </TouchableOpacity>
@@ -219,14 +209,6 @@ export default function Register() {
             {/* Submit Page 1 */}
             {isTutor && page.step === 1 &&
                 <>
-                    <RadioGroup
-                        containerStyle={{ flexDirection: 'row' }}
-                        radioButtons={contact}
-                        onPress={() => {
-                            onPressContact
-                            setIsSignal(!isSignal)
-                        }}
-                    />
                     <TextInput style={styles.input} textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
                         setPage({ step: 2 })
@@ -238,7 +220,7 @@ export default function Register() {
             }
             {page.step === 2 ?
                 <>
-                    <Text style={styles.title}>Academic Infomation</Text>
+                    {/* <Text style={styles.title}>Academic Infomation</Text>
                     <View style={{ padding: 10 }}>
                         <View style={styles.fileSelector}>
                             <Text>Transcript</Text>
@@ -262,7 +244,7 @@ export default function Register() {
 
                             {studentCardName && <Text>{studentCardName}</Text>}
                         </View>
-                    </View>
+                    </View> */}
 
                     {/* FOR TESTING */}
                     {/* <Image source={studentCardUri} style={{ height: 100, width: 100 }} /> */}
@@ -306,41 +288,47 @@ export default function Register() {
                     <View style={{ flexDirection: 'row', width: 300 }}>
                         <Text style={{ flex: 7 }}>Subject</Text>
                         <Text style={{ flex: 2 }}>Grade</Text>
-                        <TouchableOpacity style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }} onPress={() => setSubjects([...subjects, { subject: '', grade: '' }])}>
+                        <TouchableOpacity
+                            style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
+                            onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', grade: '', isChecked: false, key: genUniqueKey() }]) }}>
                             <Text style={{}}>+</Text>
                         </TouchableOpacity>
                     </View>
                     {subjects.map((subject, index) => (
-                        <SubjectRow key={index} index={index} subject={subject} onDelete={(index) => {
-                            const newSubjects = [...subjects]
-                            let filteredNewSubjects = newSubjects.filter((_, i) => i !== index)
-                            setSubjects(filteredNewSubjects)
-                        }} onSubjectChange={(text: any) => {
-                            const newSubjects = [...subjects]
-                            newSubjects[index].subject = text    
-                            setSubjects(newSubjects)
-                        }} onGradeChange={(text: any) => {
-                            const newSubjects = [...subjects]
-                            newSubjects[index].grade = text
-                            setSubjects(newSubjects)
-                        }} />
-                    ))}
 
-                    <Text style={{ marginTop: 10 }}>Preference Subject (3 Limited)</Text>
-                    <TextInput style={styles.input} onChangeText={value => {
-                        // value.length > 0 ? setPreSubjects(()=>[...preSubjects, value]) : null
-                        value.length > 0 ? setPreSubjects((v) => preSubjects[0] = v) : null
-                    }} />
-                    <TextInput style={styles.input} onChangeText={value => {
-                        value.length > 0 ? setPreSubjects([...preSubjects, value]) : null
-                    }} />
-                    <TextInput style={styles.input} onChangeText={value => {
-                        value.length > 0 ? setPreSubjects([...preSubjects, value]) : null
-                    }} />
+                        <SubjectRow 
+                            key={subject.key} 
+                            index={index} 
+                            subject={subject} 
+                            onDelete={(index) => {
+                                const newSubjects = [...subjects]
+                                let filteredNewSubjects = newSubjects.filter((_, i) => i !== index)
+                                setSubjects(filteredNewSubjects)
+                            }} 
+                            onSubjectChange={(text: string) => {
+                                const newSubjects = [...subjects]
+                                newSubjects[index].subject = text
+                                setSubjects(newSubjects)
+                            }} 
+                            onGradeChange={(text: string) => {
+                                const newSubjects = [...subjects]
+                                newSubjects[index].grade = text
+                                setSubjects(newSubjects)
+                            }} 
+                            // 點解呢個又得！！！？
+                            onCheckBox={(isChecked: boolean)=>onCheckBox(isChecked, index)}    
+                            // 點解呢個唔得！！！！！！？
+                            // onCheckBox={(isChecked: boolean) => {
+                            //     const newSubjects = [...subjects]
+                            //     newSubjects[index].isChecked = isChecked
+                            //     setSubjects(newSubjects)
+                            // }｝
+                                 
+                        />
+                    ))}
 
                     <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
                         // Send to DB
-                        console.log(preSubjects)
                         console.log('success create')
                     }} >
                         <Text style={styles.buttonText}>Create Account</Text>
