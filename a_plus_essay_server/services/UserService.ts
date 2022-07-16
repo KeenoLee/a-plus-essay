@@ -31,13 +31,19 @@ export class UserService {
 
     async checkEmailDuplication(email: string) {
         const userId: number = await this.knex.select("id").from("user").where("email", email).first();
-        return userId;
+        console.log('boolean: ', userId)
+        if (userId === undefined) {
+            return false
+        }
+        return true;
     }
 
     async checkPhoneNumberDuplication(phoneNumber: number) {
         const userId: number = await this.knex.select("id").from("user").where("phone_number", phoneNumber).first();
-        return userId;
-    }
+        if (userId === undefined) {
+            return false
+        }
+        return true;    }
 
     async createUser(user: User) {
         let hashedPassword;
@@ -50,11 +56,10 @@ export class UserService {
             email: user.email,
             hashed_password: hashedPassword || null,
             phone_number: user.phoneNumber,
-            created_at: date.toLocaleString(),
-            updated_at: null
+            created_at: date,
+            updated_at: date
         }).into("user")
-            .returning(['id', 'nickname', 'is_tutor']).first();
-
+            .returning(['id', 'nickname', 'is_tutor']);
         return userInfo;
     }
 
@@ -77,8 +82,8 @@ export class UserService {
                 self_intro: tutor.selfIntro || null,
                 ongoing_order_amount: 0,
                 completed_order_amount: 0,
-                created_at: date.toLocaleString(),
-                updated_at: null
+                created_at: date,
+                updated_at: date
             }).into("tutor");
 
 
