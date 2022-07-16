@@ -222,4 +222,22 @@ export class UserController {
         res.json({ success: true });
         return;
     }
+
+    checkEmailAndPhoneDuplication = async (req: Request, res: Response) => {
+        const {email, phoneNumber} = req.body
+        const emailDuplication = await this.userService.checkEmailDuplication(email);
+        console.log('hv email? ', emailDuplication)
+        if (emailDuplication) {
+            res.status(400).json({ error: "This email address has been registered. Please register with another email address." })
+            return;
+        };
+        const phoneNumberDuplication = await this.userService.checkPhoneNumberDuplication(phoneNumber);
+        console.log('hv phone? ', phoneNumberDuplication)
+        if (phoneNumberDuplication) {
+            res.status(400).json({ error: "This phone number has been registered. Please register with another phone number." })
+            return;
+        };
+        res.json({ success: true })
+        return
+    }
 }
