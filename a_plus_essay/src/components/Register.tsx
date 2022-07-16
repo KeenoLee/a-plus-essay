@@ -11,6 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
+import SuccessRegister from "./SuccessRegister";
 
 
 
@@ -191,7 +192,7 @@ export default function Register() {
             setNextButtonStyle(nonDisableStyle)
         } else {
             setDisableNext(true)
-            setNextButtonStyle(disableStyle) 
+            setNextButtonStyle(disableStyle)
         }
         // }, [nickname, email, password, firmPassword, mobileNumber])
     })
@@ -206,7 +207,7 @@ export default function Register() {
             setNextButtonStyle(nonDisableStyle)
         } else {
             setDisableNext(true)
-            setNextButtonStyle(disableStyle) 
+            setNextButtonStyle(disableStyle)
         }
     }, [transcriptFiles, studentCardImage])
 
@@ -220,7 +221,7 @@ export default function Register() {
             setNextButtonStyle(nonDisableStyle)
         } else {
             setDisableNext(true)
-            setNextButtonStyle(disableStyle) 
+            setNextButtonStyle(disableStyle)
         }
     }, [schoolLife])
     // Check Page Four (School Life 2)
@@ -259,7 +260,7 @@ export default function Register() {
                     <TextInput style={styles.input} textContentType='emailAddress' placeholder="Email address" onChangeText={(email) => setEmail(email)} />
                     <TextInput style={styles.input} textContentType='password' placeholder="Password" onChangeText={(password) => setPassword(password)} />
                     <TextInput style={styles.input} textContentType='password' placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
-                    <TextInput style={styles.input} textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
+                    <TextInput style={styles.input} keyboardType='number-pad' textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
             {!isTutor && page.step === 1 &&
@@ -428,10 +429,16 @@ export default function Register() {
                     <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
                         // Send to DB
                         console.log('success create')
+                        setDisableNext(true)
+                        setNextButtonStyle(disableStyle)
+                        setPage({ step: 5 })
                     }} >
                         <Text style={styles.buttonText}>Create Account</Text>
                     </TouchableOpacity>
                 </> : null}
+            {page.step === 5 ?
+                <SuccessRegister /> : null
+            }
         </View>
     )
 }
