@@ -11,7 +11,7 @@ module.exports = override(
         '@babel/plugin-syntax-jsx',
     ),
     // addWebpackAlias({
-    //     react: require.resolve('./node_modules/react'),
+    //     'react-native-ble': require.resolve('./empty/index.js'),
     // }),
     addWebpackPlugin(
         new webpack.DefinePlugin({
