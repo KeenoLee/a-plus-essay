@@ -31,15 +31,11 @@ export default function OrderSubmission() {
             </Stack>
             <HStack>
                 <FormControl.Label>Guideline</FormControl.Label>
-                    <Button leftIcon={<Ionicons name="cloud-upload-outline" color="white"/>}>
-                        Upload
-                    </Button>
+                <FilePicker />
             </HStack>
             <HStack>
                 <FormControl.Label>Lecture Notes</FormControl.Label>
-                <Button leftIcon={<Ionicons name="cloud-upload-outline" color="white"/>}>
-                        Upload
-                </Button>
+                <FilePicker />
             </HStack>
             <HStack>
                 <FormControl.Label>Desired Deadline</FormControl.Label>
@@ -56,7 +52,6 @@ export default function OrderSubmission() {
             <HStack justifyContent="space-around">
                 <Button>Confirm</Button>
                 <Button>Cancel</Button>
-                <FilePicker/>
             </HStack>
         </VStack>
     )
