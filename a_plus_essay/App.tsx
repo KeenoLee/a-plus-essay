@@ -36,8 +36,12 @@ import Register from './src/components/Register';
 import SelectTutor from './src/components/SelectTutor';
 import TutorInformation from './src/components/TutorInformation';
 import OrderMatched from './src/components/OrderMatched';
-import OrderSubmission from './backup/OrderSubmission';
+// import OrderSubmission from './backup/OrderSubmission';
 
+import { NativeBaseProvider } from 'native-base';
+import OrderSubmission from './src/components/OrderSubmission';
+import SuccessRegister from './src/components/SuccessRegister';
+// import OrderSubmission from './src/components/OrderSubmission';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +59,7 @@ const Tabs = () => {
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Chats" component={ChatMain}
+      <Tab.Screen name="Chats" component={ChatList}
         options={{
           tabBarLabel: 'Chats',
           tabBarIcon: ({ focused, color, size }) => (
@@ -93,20 +97,24 @@ const Tabs = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Chats">
-        {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-        {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
-        {/* <Stack.Screen name="Order Submission" component={OrderSubmission} /> */}
-        <Stack.Screen name="Thank You" component={OrderMatched} />
-        <Stack.Screen name="Tutor Information" component={TutorInformation} />
-        <Stack.Screen name="Select Tutor" component={SelectTutor} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Chats" component={ChatList} />
-        <Stack.Screen name="Message" component={Notification} />
-        <Stack.Screen name="Status" component={Status} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Order Submission">
+          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+          {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
+          {/* <Stack.Screen name="123" component={exsample} /> */}
+          <Stack.Screen name="Success Register" component={SuccessRegister} />
+          <Stack.Screen name="Order Submission" component={OrderSubmission} />
+          <Stack.Screen name="Thank You" component={OrderMatched} />
+          <Stack.Screen name="Tutor Information" component={TutorInformation} />
+          <Stack.Screen name="Select Tutor" component={SelectTutor} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Chats" component={ChatList} />
+          <Stack.Screen name="Message" component={Notification} />
+          <Stack.Screen name="Status" component={Status} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </NativeBaseProvider>
   )
 }
 

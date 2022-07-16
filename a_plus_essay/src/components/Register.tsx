@@ -8,7 +8,11 @@ import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 // import RegisterSuccess from "./RegisterSuccess";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { launchImageLibrary } from 'react-native-image-picker';
-import SubjectRow from "./SubjectRow";
+import SubjectRow, { Subject } from "./SubjectRow";
+import DocumentPicker from 'react-native-document-picker'
+import { Select, VStack } from 'native-base';
+import SuccessRegister from "./SuccessRegister";
+
 
 
 
@@ -16,21 +20,15 @@ const roleData: RadioButtonProps[] = [{
     id: '1',
     label: 'Student',
     value: 'student',
-    selected: true
+    selected: true,
+    borderColor: 'rgb(51,130,251)',
+    color: 'rgb(51,130,251)'
 }, {
     id: '2',
     label: 'Tutor',
-    value: 'tutor'
-}]
-const contactData: RadioButtonProps[] = [{
-    id: '1',
-    label: 'Whatsapp',
-    value: 'whatsapp',
-    selected: true
-}, {
-    id: '2',
-    label: 'Signal',
-    value: 'signal'
+    value: 'tutor',
+    borderColor: 'rgb(51,130,251)',
+    color: 'rgb(51,130,251)'
 }]
 const passwordLength = 7
 const mobileNumberLength = 8
@@ -40,23 +38,57 @@ function shorterFilename(filename: string) {
     }
     return filename
 }
-
+const genUniqueKey = () => {
+    let key = Math.floor(Math.random() * 100000).toString()
+    return key
+}
+type NativeImage = {
+    uri: string,
+    filename: string
+}
+type NativeFile = {
+    uri: string,
+    filename: string,
+    type: string | null
+}
+type StudentCardImage = {
+    uri: string,
+    filename: string
+}
+const disableStyle = {
+    backgroundColor: "grey",
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+    width: 200,
+}
+const nonDisableStyle = {
+    backgroundColor: "#007AFF",
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+    width: 200,
+}
 export default function Register() {
+    // Page Switching
     const [page, setPage] = useState({ step: 1 })
-    const [disableNext, setDisableNext] = useState(false)
+    const [disableNext, setDisableNext] = useState(true)
+    const [nextButtonStyle, setNextButtonStyle] = useState(
+        disableStyle
+    )
 
-    // Checkbox
-    const [role, setRole] = useState<RadioButtonProps[]>(roleData)
-    const [contact, setContact] = useState<RadioButtonProps[]>(contactData)
 
     // Page One Information (Create new account)
+    const [role, setRole] = useState<RadioButtonProps[]>(roleData)
     const [nickname, setNickname] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [firmPassword, setFirmPassword] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
     const [isTutor, setIsTutor] = useState(false)
-    const [isSignal, setIsSignal] = useState(false)
+    function onPressRole(roleData: RadioButtonProps[]) {
+        setRole(roleData);
+    }
 
     // Checking Page One
     const [passwordLengthEnough, setPasswordLengthEnough] = useState(false)
@@ -65,36 +97,23 @@ export default function Register() {
     const [mobileValid, setMobileValid] = useState(false)
 
     // Page Two Information (Academic Information)
-    const [transcriptUri, setTranscriptUri] = useState(null)
-    const [studentCardUri, setStudentCardUri] = useState(null)
-    const [transcriptName, setTranscriptName] = useState('')
-    const [studentCardName, setStudentCardName] = useState('')
+    const [transcriptImages, setTranscriptImages] = useState<NativeImage[]>([])
+    const [transcriptFiles, setTranscriptFiles] = useState<NativeFile[]>([])
+    const [studentCardImage, setStudentCardImage] = useState<StudentCardImage | null>()
+    const [position, setPosition] = useState("Upload");
+    const addTranscriptImage = () => {
+        openGallery(file => {
+            setTranscriptImages((files) => [...files, file])
+        })
+    }
 
-    // Checking Page Two
+    const addStudentCardImage = () => {
+        openGallery(file => {
+            setStudentCardImage(() => file)
+        })
+    }
 
-    // Page Three Information (School Life 1)
-    const [schoolLife, setSchoolLife] = useState({
-        school: null,
-        major: null,
-        tutorIntroduction: null
-    })
-
-    // Checking Page Three
-
-    // Page Four Information (School Life 2)
-    const [subjects, setSubjects] = useState([{
-        subject: '',
-        grade: ''
-    }])
-    const [preSubjects, setPreSubjects] = useState([])
-    // let mapSubjectRow = subjects.map((subject,i)=> <SubjectRow key={i} subject={subject}/>)
-    // let mapSubjectRow
-    // useEffect(()=>{
-    // mapSubjectRow
-    // mapSubjectRow = subjects.map((_,i)=> <SubjectRow id={i}/>)
-    // },[subjects])
-
-    const openGallery = (type: string) => {
+    const openGallery = (callback: (file: { uri: string, filename: string }) => void) => {
         launchImageLibrary({
             mediaType: 'photo',
             // includeBase64: true
@@ -103,56 +122,77 @@ export default function Register() {
                 console.log('user cancelled image picker')
             } else if (res.errorMessage) {
                 console.log('Error: ', res.errorMessage)
-            } else if (type === 'transcript') {
-                const file = { uri: res.assets[0].uri }
-                const filename = res.assets[0].fileName
-                setTranscriptUri(() => file)
-                setTranscriptName(() => shorterFilename(filename))
-            } else if (type === 'studentCard') {
-                const file = { uri: res.assets[0].uri }
-                const filename = res.assets[0].fileName
-                setStudentCardUri(() => file)
-                setStudentCardName(() => shorterFilename(filename))
+            } else {
+                let uri = res.assets?.[0].uri
+                let filename = res.assets?.[0].fileName
+                if (uri && filename) {
+                    callback({ uri, filename })
+                }
+                console.log('file is not found')
+                return
             }
-            return
         })
     }
 
-
-    function onPressRole(roleData: RadioButtonProps[]) {
-        setRole(roleData);
+    const addTranscriptFile = async () => {
+        try {
+            const { uri, name, type } = await DocumentPicker.pickSingle()
+            setTranscriptFiles([...transcriptFiles, { uri, filename: name, type }])
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    function onPressContact(contactData: RadioButtonProps[]) {
-        setContact(contactData)
+    // Checking Page Two
+
+    // Page Three Information (School Life 1)
+    const [schoolLife, setSchoolLife] = useState({
+        school: '',
+        major: '',
+        tutorIntroduction: ''
+    })
+
+    // Checking Page Three
+
+    // Page Four Information (School Life 2)
+    const [subjects, setSubjects] = useState([{
+        key: genUniqueKey(),
+        subject: '',
+        grade: '',
+        isChecked: false,
+    }])
+    function onCheckBox(isChecked: boolean, index: number) {
+        setSubjects(state => state.map((subject: Subject, i: number) => {
+            if (i === index) {
+                return {
+                    ...subject,
+                    isChecked: isChecked
+                }
+            }
+            return subject
+        }))
     }
+
+
+    // useEffect(()=>{console.log('effect: ', transcriptFiles)},[transcriptFiles])
 
     // Check Page One (Create an account)
     useEffect(() => {
         if (page.step !== 1) {
             return
         }
-        // Todo: fetch server to check email
-        if (true) {
-            setEmailUnique(true)
-        }
-        if (password.length > passwordLength) {
-            setPasswordLengthEnough(true)
-        } else {
-            setPasswordLengthEnough(false)
-        }
-        if (firmPassword === password) {
-            setPasswordMatch(true)
-        } else {
-            setPasswordMatch(false)
-        }
-        if (mobileNumber.length === mobileNumberLength && !isNaN(+mobileNumber)) {
-            setMobileValid(true)
-        } else {
-            setMobileValid(false)
-        }
+        // Todo: fetch server to check email unique
+        true ? setEmailUnique(true) : null
+        password.length > passwordLength ? setPasswordLengthEnough(true) : setPasswordLengthEnough(false)
+        firmPassword === password ? setPasswordMatch(true) : setPasswordMatch(false)
+        mobileNumber.length === mobileNumberLength && !isNaN(+mobileNumber) ? setMobileValid(true) : setMobileValid(false)
+
         if (emailUnique && passwordLengthEnough && passwordMatch && mobileValid) {
             setDisableNext(false)
+            setNextButtonStyle(nonDisableStyle)
+        } else {
+            setDisableNext(true)
+            setNextButtonStyle(disableStyle)
         }
         // }, [nickname, email, password, firmPassword, mobileNumber])
     })
@@ -162,10 +202,14 @@ export default function Register() {
         if (page.step !== 2) {
             return
         }
-        if (transcriptUri && studentCardUri) {
+        if ((transcriptFiles.length > 0 || transcriptImages.length > 0) && studentCardImage) {
             setDisableNext(false)
+            setNextButtonStyle(nonDisableStyle)
+        } else {
+            setDisableNext(true)
+            setNextButtonStyle(disableStyle)
         }
-    }, [transcriptUri, studentCardUri])
+    }, [transcriptFiles, studentCardImage])
 
     // Check Page Three (School Life 1)
     useEffect(() => {
@@ -174,18 +218,30 @@ export default function Register() {
         }
         if (schoolLife.school && schoolLife.major) {
             setDisableNext(false)
+            setNextButtonStyle(nonDisableStyle)
+        } else {
+            setDisableNext(true)
+            setNextButtonStyle(disableStyle)
         }
     }, [schoolLife])
-
     // Check Page Four (School Life 2)
+    function countPreSubject() {
+        let count = 0
+        subjects.map(subject => subject.isChecked === true ? count++ : null)
+        return count
+    }
     useEffect(() => {
         if (page.step !== 4) {
             return
         }
-        if (preSubjects.length >= 1) {
+        if (countPreSubject() > 0) {
             setDisableNext(false)
+            setNextButtonStyle(nonDisableStyle)
+        } else {
+            setDisableNext(true)
+            setNextButtonStyle(disableStyle)
         }
-    }, [subjects, preSubjects])
+    }, [subjects])
 
     return (
         <View style={styles.form}>
@@ -204,14 +260,12 @@ export default function Register() {
                     <TextInput style={styles.input} textContentType='emailAddress' placeholder="Email address" onChangeText={(email) => setEmail(email)} />
                     <TextInput style={styles.input} textContentType='password' placeholder="Password" onChangeText={(password) => setPassword(password)} />
                     <TextInput style={styles.input} textContentType='password' placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
+                    <TextInput style={styles.input} keyboardType='number-pad' textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
             {!isTutor && page.step === 1 &&
                 <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => {
-                        setContact
-                    }}
+                    style={nextButtonStyle}
                     disabled={!nickname && !email && !password && !firmPassword}>
                     <Text style={styles.buttonText}>Create Account</Text>
                 </TouchableOpacity>
@@ -219,18 +273,10 @@ export default function Register() {
             {/* Submit Page 1 */}
             {isTutor && page.step === 1 &&
                 <>
-                    <RadioGroup
-                        containerStyle={{ flexDirection: 'row' }}
-                        radioButtons={contact}
-                        onPress={() => {
-                            onPressContact
-                            setIsSignal(!isSignal)
-                        }}
-                    />
-                    <TextInput style={styles.input} textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
-                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
+                        setDisableNext(true)
+                        setNextButtonStyle(disableStyle)
                         setPage({ step: 2 })
-                        // setDisableNext(true)
                     }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
@@ -242,34 +288,68 @@ export default function Register() {
                     <View style={{ padding: 10 }}>
                         <View style={styles.fileSelector}>
                             <Text>Transcript</Text>
-                            <TouchableOpacity onPress={() => openGallery('transcript')}>
-                                <Text>Choose Photo</Text>
-                            </TouchableOpacity>
+                            <VStack style={{ marginRight: 10, }} space={6} alignSelf="flex-start" w="30%">
+                                <Select
+                                    selectedValue={position}
+                                    mx={{ base: -0.5, md: "Image" }}
+                                    onValueChange={nextValue => setPosition(nextValue)}
+                                    accessibilityLabel="Upload Image or file"
+                                >
+                                    <Select.Item label="Upload" value="Upload" disabled />
+                                    <Select.Item label="Image" value="Image" onPress={() => addTranscriptImage()} />
+                                    <Select.Item label="File" value="File" onPress={() => addTranscriptFile()} />
+                                </Select>
+                            </VStack>
+                        </View>
 
+                        <View style={{ height: 100 }}>
+                            {transcriptFiles && transcriptFiles.map((file, index) => (
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Text key={index}>{shorterFilename(file.filename)}</Text>
+                                    <TouchableOpacity style={{ marginRight: 180 }} onPress={() => { setTranscriptFiles(files => files.filter((_, i) => i !== index)) }}>
+                                        <Text style={{ color: 'grey' }}>x</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                            {transcriptImages && transcriptImages.map((image, index) => (
+                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 5 }}>
+                                        <Text>{shorterFilename(image.filename)}</Text>
+                                        <TouchableOpacity onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
+                                            <Text style={{ color: 'grey' }}>x</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ flex: 5 }}></View>
+                                </View>
+                            ))}
                         </View>
-                        <View style={{ height: 25 }}>
-                            {transcriptName && <Text>{transcriptName}</Text>}
-                        </View>
+
                     </View>
-                    <View style={{ padding: 10 }}>
+                    <View style={{ padding: 10, marginBottom: 50 }}>
                         <View style={styles.fileSelector}>
-                            <Text>Student Card</Text>
-                            <TouchableOpacity onPress={() => openGallery('studentCard')}>
-                                <Text>Choose Photo</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ height: 25 }}>
-
-                            {studentCardName && <Text>{studentCardName}</Text>}
+                            <Text style={{ flex: 6 }}>Student Card</Text>
+                            {studentCardImage ?
+                                (
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 4.5, paddingRight: 10 }}>
+                                        <Text>{shorterFilename(studentCardImage.filename)}</Text>
+                                        <TouchableOpacity onPress={() => { setStudentCardImage(() => null); }}>
+                                            <Text style={{ color: 'grey' }}>x</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                ) :
+                                (
+                                    <TouchableOpacity onPress={() => addStudentCardImage()}>
+                                        <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                                    </TouchableOpacity>
+                                )
+                            }
                         </View>
                     </View>
 
-                    {/* FOR TESTING */}
-                    {/* <Image source={studentCardUri} style={{ height: 100, width: 100 }} /> */}
-
-                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
+                        setDisableNext(true)
+                        setNextButtonStyle(disableStyle)
                         setPage({ step: 3 })
-                        // setDisableNext(true)
                     }} >
                         <Text style={styles.buttonText} >Next</Text>
                     </TouchableOpacity>
@@ -291,9 +371,10 @@ export default function Register() {
                         tutorIntroduction: value
                     })} />
 
-                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
+                        setDisableNext(true)
+                        setNextButtonStyle(disableStyle)
                         setPage({ step: 4 })
-                        // setDisableNext(true)
                     }} >
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
@@ -306,46 +387,58 @@ export default function Register() {
                     <View style={{ flexDirection: 'row', width: 300 }}>
                         <Text style={{ flex: 7 }}>Subject</Text>
                         <Text style={{ flex: 2 }}>Grade</Text>
-                        <TouchableOpacity style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }} onPress={() => setSubjects([...subjects, { subject: '', grade: '' }])}>
+                        <TouchableOpacity
+                            style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
+                            onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', grade: '', isChecked: false, key: genUniqueKey() }]) }}>
                             <Text style={{}}>+</Text>
                         </TouchableOpacity>
                     </View>
                     {subjects.map((subject, index) => (
-                        <SubjectRow key={index} index={index} subject={subject} onDelete={(index) => {
-                            const newSubjects = [...subjects]
-                            let filteredNewSubjects = newSubjects.filter((_, i) => i !== index)
-                            setSubjects(filteredNewSubjects)
-                        }} onSubjectChange={(text: any) => {
-                            const newSubjects = [...subjects]
-                            newSubjects[index].subject = text    
-                            setSubjects(newSubjects)
-                        }} onGradeChange={(text: any) => {
-                            const newSubjects = [...subjects]
-                            newSubjects[index].grade = text
-                            setSubjects(newSubjects)
-                        }} />
+
+                        <SubjectRow
+                            key={subject.key}
+                            index={index}
+                            subject={subject}
+                            onDelete={(index) => {
+                                const newSubjects = [...subjects]
+                                let filteredNewSubjects = newSubjects.filter((_, i) => i !== index)
+                                setSubjects(filteredNewSubjects)
+                            }}
+                            onSubjectChange={(text: string) => {
+                                const newSubjects = [...subjects]
+                                newSubjects[index].subject = text
+                                setSubjects(newSubjects)
+                            }}
+                            onGradeChange={(text: string) => {
+                                const newSubjects = [...subjects]
+                                newSubjects[index].grade = text
+                                setSubjects(newSubjects)
+                            }}
+                            // 點解呢個又得！！！？
+                            onCheckBox={(isChecked: boolean) => onCheckBox(isChecked, index)}
+                        // 點解呢個唔得！！！！！！？
+                        // onCheckBox={(isChecked: boolean) => {
+                        //     const newSubjects = [...subjects]
+                        //     newSubjects[index].isChecked = isChecked
+                        //     setSubjects(newSubjects)
+                        // }｝
+
+                        />
                     ))}
 
-                    <Text style={{ marginTop: 10 }}>Preference Subject (3 Limited)</Text>
-                    <TextInput style={styles.input} onChangeText={value => {
-                        // value.length > 0 ? setPreSubjects(()=>[...preSubjects, value]) : null
-                        value.length > 0 ? setPreSubjects((v) => preSubjects[0] = v) : null
-                    }} />
-                    <TextInput style={styles.input} onChangeText={value => {
-                        value.length > 0 ? setPreSubjects([...preSubjects, value]) : null
-                    }} />
-                    <TextInput style={styles.input} onChangeText={value => {
-                        value.length > 0 ? setPreSubjects([...preSubjects, value]) : null
-                    }} />
-
-                    <TouchableOpacity style={styles.button} disabled={disableNext} onPress={() => {
+                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
                         // Send to DB
-                        console.log(preSubjects)
                         console.log('success create')
+                        setDisableNext(true)
+                        setNextButtonStyle(disableStyle)
+                        setPage({ step: 5 })
                     }} >
                         <Text style={styles.buttonText}>Create Account</Text>
                     </TouchableOpacity>
                 </> : null}
+            {page.step === 5 ?
+                <SuccessRegister /> : null
+            }
         </View>
     )
 }
@@ -432,7 +525,8 @@ const styles = StyleSheet.create({
         borderColor: '#AAAAFF',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: 300
+        alignItems: 'center',
+        width: 300,
+        height: 50
     }
-
 })
