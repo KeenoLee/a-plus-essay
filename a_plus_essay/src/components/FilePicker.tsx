@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import DocumentPicker, { DirectoryPickerResponse, DocumentPickerResponse } from 'react-native-document-picker'
+import DocumentPicker, { types } from 'react-native-document-picker'
 import { Button, Stack } from 'native-base'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -19,8 +19,9 @@ export default function FilePicker() {
                 presentationStyle: "fullScreen",
                 copyTo: "cachesDirectory",
                 allowMultiSelection: true,
+                // You can also limit the file type here 
+                // type: [types.doc, types.docx]
             })
-            // console.log(pickerResult)
             let result = {
                 uri: pickerResult[0].uri,
                 filename: pickerResult[0].name,
@@ -32,19 +33,25 @@ export default function FilePicker() {
             console.log(err)
         }
     }
-    useEffect(() => {
-        console.log('useeffect', fileData)
-    }, [fileData])
+    //Debug 
+    // useEffect(() => {
+    //     console.log('useeffect', fileData)
+    // }, [fileData])
+
     return (
         <Stack>
             <Button onPress={() => handleFilePicker()} leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
-                UploadTesting
+                Upload
             </Button>
-            {fileData.length > 0 ? (
-                <Text>
-                    Filename: {fileData[0].filename}
-                </Text>
-            ) : null}
+            {fileData.length > 0 
+                ? fileData.map((file, index) => {
+                    return (
+                        <View key={index}>
+                            <Text> Filename: {file.filename}</Text>
+                        </View>
+                    )
+                })
+            : null}
         </Stack>
     )
 }
