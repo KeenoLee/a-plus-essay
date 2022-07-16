@@ -24,9 +24,10 @@ app.use(express.json());
 app.use(userRoutes)
 app.use(orderRoutes)
 
-userRoutes.post("/signup/student", userController.createUser);
-userRoutes.post("/signup/tutor", userController.createUser);
+userRoutes.post("/register/student", userController.createUser);
+userRoutes.post("/register/tutor", userController.createUser);
 userRoutes.post("/login/password", userController.loginWithPassword);
+userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplication);
 // userRoutes.get("/login/google", userController.loginGoogle);
 userRoutes.get("/login/facebook", userController.loginWithFacebook);
 userRoutes.post("/resetpassword", guard, userController.resetPassword);
