@@ -56,8 +56,8 @@ export default function OrderSubmission() {
             <HStack justifyContent="space-around">
                 <Button>Confirm</Button>
                 <Button>Cancel</Button>
-                <FilePicker/>
             </HStack>
+                <FilePicker/>
         </VStack>
     )
 }
