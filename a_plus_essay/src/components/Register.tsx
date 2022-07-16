@@ -12,6 +12,7 @@ import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
+import { stringToHex } from "react-native-mmkv-storage/dist/src/utils";
 
 
 
@@ -68,6 +69,50 @@ const nonDisableStyle = {
     margin: 10,
     borderRadius: 10,
     width: 200,
+}
+interface RegisterData {
+    role: string
+    // nickname: string
+    // email: string
+    // password: string
+    // mobileNumber: string
+    school: string
+    major: string
+    tutorIntroduction?: string
+    subjects: Subject[]
+}
+interface UserData {
+    isTutor: boolean,
+    nickname: string,
+    email: string,
+    password: string,
+    rePassword: string,
+    phoneNumber: string,
+    oAuth: boolean
+}
+function checkIsTutor(role: RadioButtonProps[]): boolean | string {
+    const selectedRole = role.find(object => object.selected === true)
+    if (!selectedRole || !selectedRole.value) {
+        return 'role not found'
+    }
+    if (selectedRole.value === 'tutor') {
+        return true
+    }
+    return false
+}
+async function fetchUser(registerData: UserData) {
+
+    console.log('COMING ', registerData)
+    // const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/register/tutor`)
+    const res = await fetch(`http://localhost:8111/register/tutor`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registerData)
+    })
+    const result = await res.json()
+    console.log('RESULT: ', result)
 }
 export default function Register() {
     // Page Switching
@@ -173,14 +218,13 @@ export default function Register() {
         }))
     }
 
-
-    // useEffect(()=>{console.log('effect: ', transcriptFiles)},[transcriptFiles])
-
     // Check Page One (Create an account)
     useEffect(() => {
         if (page.step !== 1) {
             return
         }
+        console.log('role? ', role)
+        console.log(checkIsTutor(role))
         // Todo: fetch server to check email unique
         true ? setEmailUnique(true) : null
         password.length > passwordLength ? setPasswordLengthEnough(true) : setPasswordLengthEnough(false)
@@ -243,6 +287,12 @@ export default function Register() {
         }
     }, [subjects])
 
+    
+    // Fetch Server
+    useEffect(() => {
+
+    }, [])
+
     return (
         <View style={styles.form}>
             {page.step === 1 ?
@@ -263,25 +313,54 @@ export default function Register() {
                     <TextInput style={styles.input} keyboardType='number-pad' textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
+
             {!isTutor && page.step === 1 &&
                 <TouchableOpacity
                     style={nextButtonStyle}
-                    disabled={!nickname && !email && !password && !firmPassword}>
+                    disabled={disableNext}
+                    onPress={async () => {
+                        await fetchUser({
+                            isTutor: isTutor,
+                            nickname: nickname,
+                            email: email,
+                            password: password,
+                            rePassword: firmPassword,
+                            phoneNumber: mobileNumber,
+                            oAuth: false
+                        })
+                        setDisableNext(true)
+                        setPage({step: 5})
+                    }}>
                     <Text style={styles.buttonText}>Create Account</Text>
                 </TouchableOpacity>
             }
             {/* Submit Page 1 */}
             {isTutor && page.step === 1 &&
                 <>
-                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
-                        setDisableNext(true)
-                        setNextButtonStyle(disableStyle)
-                        setPage({ step: 2 })
-                    }}>
+                    <TouchableOpacity
+                        style={nextButtonStyle}
+                        disabled={disableNext}
+                        onPress={() => {
+                            fetchUser({
+                                isTutor: isTutor,
+                                nickname: nickname,
+                                email: email,
+                                password: password,
+                                rePassword: firmPassword,
+                                phoneNumber: mobileNumber,
+                                oAuth: false
+                            })
+                            setDisableNext(true)
+                            setNextButtonStyle(disableStyle)
+                            setPage({ step: 2 })
+                        }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
                 </>
             }
+
+
+
             {page.step === 2 ?
                 <>
                     <Text style={styles.title}>Academic Infomation</Text>
@@ -422,13 +501,23 @@ export default function Register() {
                         //     newSubjects[index].isChecked = isChecked
                         //     setSubjects(newSubjects)
                         // }｝
-
                         />
                     ))}
 
                     <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
                         // Send to DB
                         console.log('success create')
+                        // fetchRegister({
+                        //     role: checkRole(role),
+                        //     nickname: nickname,
+                        //     email: email,
+                        //     password: password,
+                        //     mobileNumber: mobileNumber,
+                        //     school: schoolLife.school,
+                        //     major: schoolLife.major,
+                        //     tutorIntroduction: schoolLife.tutorIntroduction,
+                        //     subjects: subjects
+                        // })
                         setDisableNext(true)
                         setNextButtonStyle(disableStyle)
                         setPage({ step: 5 })
