@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import * as React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import TutorBox from './TutorBox'
@@ -9,7 +9,7 @@ import TutorInformation from './TutorInformation'
 
 export default function SelectTutor() {
     // const TutorInformationStack = createStackNavigator()
-    
+
     return (
         <View style={styles.page}>
             {/* <NavigationContainer>
@@ -21,7 +21,7 @@ export default function SelectTutor() {
                 // styles.page.display
                 TutorInformation
             }
-                }>
+            }>
                 <TutorBox />
             </TouchableOpacity>
             <TutorBox />
@@ -34,7 +34,7 @@ export default function SelectTutor() {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ backgroundColor: 'rgb(214,148,172)', padding: 10, borderRadius: 10, width: 80 }}>
-                    <Text style={styles.buttonText}>Canel</Text>
+                    <Text style={styles.buttonText}>Cancel</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -47,6 +47,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     page: {
-        display: 'flex'
+        display: 'flex',
     }
 })

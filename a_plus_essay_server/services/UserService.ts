@@ -65,7 +65,28 @@ export class UserService {
 
     async createTutor(tutor: Tutor) {
         const date = new Date();
-        let tutorId: number;
+        let majorId: number = await this.knex.select("id").from("major").where("major", tutor.major).first();
+        if (!majorId) {
+            majorId = await this.knex.insert({ major: tutor.major }).into("major").returning("id");
+        };
+        const tutorId: number = await this.knex.insert({
+            // users_id: foreign key to users.id,
+            is_verified: false,
+            // transcript: ???????,
+            // student_card: ???????,
+            // is_whatsapp: tutor.isWhatsapp,
+            // is_signal: tutor.isSignal,
+            school: tutor.school,
+            majors_id: majorId,
+            rating: null,
+            score: "A",
+            self_intro: tutor.selfIntro || null,
+            ongoing_order_amount: 0,
+            completed_order_amount: 0,
+            created_at: date.toLocaleString(),
+            updated_at: null
+        }).into("tutor")
+            .returning("id");
 
         this.knex.transaction(async knex => {
             let majorId: number = await knex.select("id").from("major").where("major", tutor.major).first();

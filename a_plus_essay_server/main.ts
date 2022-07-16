@@ -1,4 +1,7 @@
 import express, { Request, Response } from 'express'
+import socketio from 'socket.io'
+import http from 'http'
+import cors from 'cors'
 import { UserService } from './services/UserService'
 import { UserController } from './controllers/UserController'
 import { OrderService } from './services/OrderService'
@@ -18,7 +21,17 @@ const app = express();
 const userRoutes = express.Router();
 const orderRoutes = express.Router();
 
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+let server = http.createServer(app)
+let io = new socketio.Server(server)
+// app.use(cors({ 'production' }))
+
+
+io.on("connection", socket => {
+    console.log("connected")
+})
+
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(userRoutes)
@@ -29,8 +42,8 @@ userRoutes.post("/register/tutor", userController.createUser);
 userRoutes.post("/login/password", userController.loginWithPassword);
 userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplication);
 // userRoutes.get("/login/google", userController.loginGoogle);
-userRoutes.get("/login/facebook", userController.loginWithFacebook);
-userRoutes.post("/resetpassword", guard, userController.resetPassword);
+// userRoutes.get("/login/facebook", userController.loginWithFacebook);
+// userRoutes.post("/resetpassword", userController.resetPassword);
 
 app.get("/", (req: Request, res: Response) => {
     res.json({ message: 'hello world' })
@@ -41,6 +54,6 @@ orderRoutes.get("/order/data", orderController.getOrderData)
 
 const PORT = 8111
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Listening to ${PORT}`)
 })
