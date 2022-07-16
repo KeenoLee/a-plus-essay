@@ -71,7 +71,7 @@ export class UserController {
         
         const userInfo = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
         const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
-
+        console.log('going to end...')
         if (isTutor === false) {
             res.json({ success: true, token: jwt });
             return;
@@ -79,11 +79,13 @@ export class UserController {
 
         this.createTutor;
         res.json({ success: true, token: jwt });
+        res.json({success: true})
         return;
     }
 
     createTutor = async (req: Request, res: Response) => {
         console.log('going to create tutor...')
+
         let { email, transcript, studentCard, school, major, selfIntro, subjects, score, preferredSubjects } = req.body;
 
         // if no transcript, .......
