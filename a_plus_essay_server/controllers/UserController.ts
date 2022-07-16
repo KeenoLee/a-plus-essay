@@ -14,7 +14,7 @@ export class UserController {
     // verifying the info of registering account
     createUser = async (req: Request, res: Response) => {
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        let { isTutor, nickname, email, password, rePassword, phoneNumber, oAuth } = req.body;
+        let { isTutor, nickname, email, password, rePassword, phoneNumber, isOAuth } = req.body;
 
         if (isTutor === undefined) {
             res.status(400).json({ error: "Please state your role, student or tutor" });
@@ -41,17 +41,17 @@ export class UserController {
             return;
         };
 
-        if (oAuth === false && !password) {
+        if (isOAuth === false && !password) {
             res.status(400).json({ error: "Password is missed" });
             return;
         };
 
-        if (oAuth === false && !rePassword) {
+        if (isOAuth === false && !rePassword) {
             res.status(400).json({ error: "Password is not entered in the field of repeat password" });
             return;
         };
 
-        if (oAuth === false && (password !== rePassword)) {
+        if (isOAuth === false && (password !== rePassword)) {
             res.status(400).json({ error: "Password does not match. Please enter the same password in the fields of password and repeat password" });
             return;
         };
@@ -67,7 +67,7 @@ export class UserController {
             return;
         };
 
-        if (oAuth === true) { password === null };
+        if (isOAuth === true) { password === null };
         
         const userInfo = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
         const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
