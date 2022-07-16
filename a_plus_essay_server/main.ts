@@ -7,7 +7,8 @@ import { UserController } from './controllers/UserController'
 import { OrderService } from './services/OrderService'
 import { OrderController } from './controllers/OrderController'
 import Knex from "knex";
-import config from "./knexfile"
+import config from "./knexfile";
+import { guard } from './guard';
 
 export const knex = Knex(config[process.env.NODE_ENV || "development"]);
 // const userService = new UserService(knex);
