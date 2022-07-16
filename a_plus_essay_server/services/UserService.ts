@@ -31,7 +31,11 @@ export class UserService {
 
     async checkEmailDuplication(email: string) {
         const userId: number = await this.knex.select("id").from("user").where("email", email).first();
-        return userId;
+        console.log('boolean: ', userId)
+        if (userId === undefined) {
+            return false
+        }
+        return true;
     }
 
     async checkPhoneNumberDuplication(phoneNumber: number) {
@@ -50,11 +54,10 @@ export class UserService {
             email: user.email,
             hashed_password: hashedPassword || null,
             phone_number: user.phoneNumber,
-            created_at: date.toLocaleString(),
-            updated_at: null
+            created_at: date,
+            updated_at: date
         }).into("user")
             .returning(['id', 'nickname', 'is_tutor']).first();
-
         return userInfo;
     }
 
