@@ -3,6 +3,8 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+
+//TODO: not finished yet
 function HomeHi() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
