@@ -40,7 +40,7 @@ import OrderMatched from './src/components/OrderMatched';
 
 import { NativeBaseProvider } from 'native-base';
 import OrderSubmission from './src/components/OrderSubmission';
-import exsample from './src/components/exsample';
+import SuccessRegister from './src/components/SuccessRegister';
 // import OrderSubmission from './src/components/OrderSubmission';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -103,6 +103,7 @@ export default function App() {
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
           {/* <Stack.Screen name="123" component={exsample} /> */}
+          <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
