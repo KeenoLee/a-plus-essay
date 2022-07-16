@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Text } from 'react-native'
 import DatePicker from 'react-native-date-picker'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+//TODO: use { format } from  'date-fns'
 export function formatDate(date: Date) {
     let newDate = date.toLocaleString('zh-hk', { hour12: false })
     // console.log('newDate', newDate)

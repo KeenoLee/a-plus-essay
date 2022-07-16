@@ -27,12 +27,12 @@ export default class Chatroom extends Component<IChatroomProps, IChatroomState> 
     constructor(props: IChatroomProps) {
         super(props);
         this.state = {
-            chatMessage: "hi"
+            chatMessage: ""
         }
     }
 
     componentDidMount() {
-        this.socket = io("http://192.168.168.103:8111")
+        this.socket = io("http://192.168.80.91:8111")
     }
 
     submitChatMessage() {
