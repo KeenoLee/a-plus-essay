@@ -74,6 +74,7 @@ export class UserService {
             school: tutor.school,
             majors_id: majorId,
             rating: null,
+            score: "A",
             self_intro: tutor.selfIntro || null,
             ongoing_order_amount: 0,
             completed_order_amount: 0,

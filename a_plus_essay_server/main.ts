@@ -1,4 +1,7 @@
 import express, { Request, Response } from 'express'
+import socketio from 'socket.io'
+import http from 'http'
+import cors from 'cors'
 import { UserService } from './services/UserService'
 import { UserController } from './controllers/UserController'
 import { OrderService } from './services/OrderService'
@@ -7,8 +10,8 @@ import Knex from "knex";
 import config from "./knexfile"
 
 export const knex = Knex(config[process.env.NODE_ENV || "development"]);
-const userService = new UserService(knex);
-const userController = new UserController(userService);
+// const userService = new UserService(knex);
+// const userController = new UserController(userService);
 const orderService = new OrderService(knex);
 const orderController = new OrderController(orderService);
 
@@ -17,18 +20,28 @@ const app = express();
 const userRoutes = express.Router();
 const orderRoutes = express.Router();
 
+let server = http.createServer(app)
+let io = new socketio.Server(server)
+// app.use(cors({ 'production' }))
+
+
+io.on("connection", socket => {
+    console.log("connected")
+})
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(userRoutes)
 app.use(orderRoutes)
 
-userRoutes.post("/signup/student", userController.createUser);
-userRoutes.post("/signup/tutor", userController.createUser);
-userRoutes.post("/login/password", userController.loginWithPassword);
+// userRoutes.post("/signup/student", userController.createUser);
+// userRoutes.post("/signup/tutor", userController.createUser);
+// userRoutes.post("/login/password", userController.loginWithPassword);
 // userRoutes.get("/login/google", userController.loginGoogle);
-userRoutes.get("/login/facebook", userController.loginWithFacebook);
-userRoutes.post("/resetpassword", userController.resetPassword);
+// userRoutes.get("/login/facebook", userController.loginWithFacebook);
+// userRoutes.post("/resetpassword", userController.resetPassword);
 
 app.get("/", (req: Request, res: Response) => {
     res.json({ message: 'hello world' })
@@ -39,6 +52,6 @@ orderRoutes.get("/order/data", orderController.getOrderData)
 
 const PORT = 8111
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Listening to ${PORT}`)
 })

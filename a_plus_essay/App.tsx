@@ -31,7 +31,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from './src/pages/Home'
 import Notification from './src/pages/Notification';
 import Status from './src/pages/Status';
-import ChatMain from './src/pages/ChatMain';
+import ChatList from './src/pages/ChatList';
 import Register from './src/components/Register';
 import SelectTutor from './src/components/SelectTutor';
 import TutorInformation from './src/components/TutorInformation';
@@ -94,7 +94,7 @@ const Tabs = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Register">
+      <Stack.Navigator initialRouteName="Chats">
         {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
         {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
         {/* <Stack.Screen name="Order Submission" component={OrderSubmission} /> */}
@@ -102,7 +102,7 @@ export default function App() {
         <Stack.Screen name="Tutor Information" component={TutorInformation} />
         <Stack.Screen name="Select Tutor" component={SelectTutor} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Chats" component={ChatMain} />
+        <Stack.Screen name="Chats" component={ChatList} />
         <Stack.Screen name="Message" component={Notification} />
         <Stack.Screen name="Status" component={Status} />
       </Stack.Navigator>
