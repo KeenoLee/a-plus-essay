@@ -28,19 +28,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import Register from './src/components/Register';
 // import LoadingScreen from './src/components/LoadingScreen';
-import Home from './src/pages/Home'
-import Notification from './src/pages/Notification';
-import Status from './src/pages/Status';
-import ChatList from './src/pages/ChatList';
-import Register from './src/components/Register';
-import SelectTutor from './src/components/SelectTutor';
-import TutorInformation from './src/components/TutorInformation';
-import OrderMatched from './src/components/OrderMatched';
+import Home from './pages/Home'
+import Notification from './pages/Notification';
+import Status from './pages/Status';
+import ChatList from './pages/ChatList';
+import Register from './components/Register';
+import SelectTutor from './components/SelectTutor';
+import TutorInformation from './components/TutorInformation';
+import OrderMatched from './components/OrderMatched';
 // import OrderSubmission from './backup/OrderSubmission';
 
 import { NativeBaseProvider } from 'native-base';
-import OrderSubmission from './src/components/OrderSubmission';
-import SuccessRegister from './src/components/SuccessRegister';
+import OrderSubmission from './components/OrderSubmission';
+import SuccessRegister from './components/SuccessRegister';
 // import OrderSubmission from './src/components/OrderSubmission';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
