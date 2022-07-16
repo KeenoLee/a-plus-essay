@@ -35,7 +35,6 @@ export class UserController {
             res.status(400).json({ error: "Invalid email address" });
             return;
         }
-
         const emailDuplication = await this.userService.checkEmailDuplication(email);
         if (emailDuplication) {
             res.status(400).json({ error: "This email address has been registered. Please register with another email address." })
@@ -69,7 +68,7 @@ export class UserController {
         };
 
         if (oAuth === true) { password === null };
-
+        
         const userInfo = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
         const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
 
@@ -84,7 +83,7 @@ export class UserController {
     }
 
     createTutor = async (req: Request, res: Response) => {
-
+        console.log('going to create tutor...')
         let { email, transcript, studentCard, school, major, selfIntro, subjects, score, preferredSubjects } = req.body;
 
         // if no transcript, .......
