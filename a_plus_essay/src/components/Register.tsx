@@ -82,7 +82,7 @@ interface StudentData {
     password: string,
     rePassword: string,
     phoneNumber: string,
-    oAuth: boolean
+    isOAuth: boolean
 }
 interface CheckTutorDuplicate {
     email: string,
@@ -96,7 +96,7 @@ interface TutorData {
     password: string,
     rePassword: string,
     phoneNumber: string,
-    oAuth: boolean
+    isOAuth: boolean
     transcript: TranscriptImage[],
     studentCard: StudentCardImage,
     school: string,
@@ -110,7 +110,7 @@ interface TutorData {
 //     // const StreamData = await RNFetchBlob.fs.readStream(uri, 'base64')
 //     // const base64Data = await ImgToBase64.getBase64String(uri)
 //     // console.log('SAFSD64 ', StreamData)
-    
+
 //     console.log('bASE^4 ', base64Data)
 //     return base64Data
 // }
@@ -172,6 +172,9 @@ async function fetchTutor(registerData: TutorData) {
 }
 
 export default function Register() {
+    // For Test ONLY: Should be passed as props
+    const [isOAuth, setIsOAuth] = useState(true)
+
     // Page Switching
     const [page, setPage] = useState({ step: 1 })
     const [disableNext, setDisableNext] = useState(true)
@@ -318,14 +321,14 @@ export default function Register() {
             return
         }
         if (transcriptImages.length > 0 && studentCardImage) {
-        // if ((transcriptFiles.length > 0 || transcriptImages.length > 0) && studentCardImage) {
+            // if ((transcriptFiles.length > 0 || transcriptImages.length > 0) && studentCardImage) {
             setDisableNext(false)
             setNextButtonStyle(nonDisableStyle)
         } else {
             setDisableNext(true)
             setNextButtonStyle(disableStyle)
         }
-    // }, [transcriptFiles, studentCardImage])
+        // }, [transcriptFiles, studentCardImage])
     }, [studentCardImage])
 
     // Check Page Three (School Life 1)
@@ -368,7 +371,8 @@ export default function Register() {
 
     return (
         <View style={styles.form}>
-            {page.step === 1 ?
+
+            {page.step === 1 && !isOAuth ?
                 <>
                     <Text style={styles.title}>Create New Account</Text>
                     <RadioGroup
@@ -387,6 +391,28 @@ export default function Register() {
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
 
+            
+
+            {page.step === 1 && isOAuth ?
+                <>
+                    {isTutor? <Text style={styles.title}>Become a Tutor</Text> : <Text style={styles.title}>Become a Student</Text>}
+                    {/* <Text style={styles.title}>Create New Account</Text> */}
+                    <RadioGroup
+                        containerStyle={{ flexDirection: 'row', color: 'blue' }}
+                        radioButtons={role}
+                        onPress={() => {
+                            onPressRole
+                            setIsTutor(!isTutor)
+                        }}
+                    />
+                    <TextInput style={styles.input} placeholder="Nickname" onChangeText={(nickname) => setNickname(nickname)} />
+                    <TextInput style={styles.input} textContentType='emailAddress' value='oauth email' />
+                    <TextInput style={styles.input} keyboardType='number-pad' textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
+                    {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
+                </>
+                : null
+            }
+
             {!isTutor && page.step === 1 &&
                 <TouchableOpacity
                     style={nextButtonStyle}
@@ -400,7 +426,7 @@ export default function Register() {
                             password: password,
                             rePassword: firmPassword,
                             phoneNumber: mobileNumber,
-                            oAuth: false
+                            isOAuth: false
                         })
                         console.log('RESULT: ', result)
                         if (result.error) {
@@ -464,8 +490,8 @@ export default function Register() {
                                 </Select>
                             </VStack> */}
                             <TouchableOpacity onPress={() => addTranscriptImage()}>
-                                        <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
-                                    </TouchableOpacity>
+                                <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{ height: 100 }}>
@@ -603,7 +629,7 @@ export default function Register() {
                             password: password,
                             rePassword: firmPassword,
                             phoneNumber: mobileNumber,
-                            oAuth: false,
+                            isOAuth: false,
                             transcript: transcriptImages,
                             studentCard: studentCardImage!,
                             school: schoolLife.school,
