@@ -41,7 +41,7 @@ export default function FilePicker() {
     return (
         <Stack>
             <Button onPress={() => handleFilePicker()} leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
-                UploadTesting
+                Upload
             </Button>
             {fileData.length > 0 
                 ? fileData.map((file, index) => {
