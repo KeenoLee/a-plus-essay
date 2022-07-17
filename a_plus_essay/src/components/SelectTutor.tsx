@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import * as React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import TutorBox from './TutorBox'
@@ -8,6 +8,12 @@ import TutorInformation from './TutorInformation'
 // import { createStackNavigator } from '@react-navigation/stack'
 
 export default function SelectTutor() {
+    const [tutors, setTutors] = useState([])
+
+    useCallback(async () => {
+        const matchedTutors = await fetch('http://localhost:8111/matched-tutors')
+        
+    }, [])
     // const TutorInformationStack = createStackNavigator()
 
     return (
