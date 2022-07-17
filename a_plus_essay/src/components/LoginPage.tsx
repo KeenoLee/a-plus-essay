@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 interface UserInfo {
     email: string,
     password: string
@@ -22,6 +24,7 @@ async function fetchLogin(userInfo: UserInfo) {
 export default function LoginPage() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
     return (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
             <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={email => setUsername(email)} />
@@ -35,8 +38,10 @@ export default function LoginPage() {
 
             <TouchableOpacity style={styles.button} onPress={async () => {
                 const result = await fetchLogin({ email: username, password: password })
-                result.error ? Alert.alert('Error' ,result.error) : Alert.alert('Success' ,result)
-
+                result.error ?
+                    Alert.alert('Error', result.error) :
+                    Alert.alert('Success', result)
+                    // Navigate to Home Page here
             }} >
                 <Text style={{ textAlign: 'center', color: 'white' }}>Sign in</Text>
             </TouchableOpacity>

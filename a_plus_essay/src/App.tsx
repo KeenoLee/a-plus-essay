@@ -47,8 +47,8 @@ import LoginPage from './components/LoginPage';
 type RootStackParamList = {
   Welcome: undefined
   ChatList: undefined
-  SuccessRegister: undefined
-  OrderSubmission: undefined
+  'Success Register': undefined
+  'Order Submission': undefined
   'Thank You': undefined
   'Tutor Information': undefined
   'Select Tutor': undefined
@@ -115,15 +115,15 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome">
+        <Stack.Navigator initialRouteName="Order Submission">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
           <Stack.Screen name="Welcome" component={LoginPage}/>
             {/* {(props)=> <LoginPage navigation={props}/>} */}
           {/* </Stack.Screen> */}
           <Stack.Screen name="ChatList" component={ChatList}/>
-          <Stack.Screen name="SuccessRegister" component={SuccessRegister} />
-          <Stack.Screen name="OrderSubmission" component={OrderSubmission} />
+          <Stack.Screen name="Success Register" component={SuccessRegister} />
+          <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
