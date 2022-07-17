@@ -43,18 +43,18 @@ export class UserService {
         if (userId === undefined) {
             return false
         }
-        return true;    }
+        return true;
+    }
 
     async createUser(user: User) {
-        let hashedPassword;
-        if (user.password !== null) { hashedPassword = hashPassword(user.password) };
+        const hashedPassword = hashPassword(user.password);
         const date = new Date();
         const userInfo = await this.knex.insert({
             is_admin: false,
             is_tutor: user.isTutor,
             nickname: user.nickname,
             email: user.email,
-            hashed_password: hashedPassword || null,
+            hashed_password: hashedPassword,
             phone_number: user.phoneNumber,
             created_at: date,
             updated_at: date
@@ -73,9 +73,7 @@ export class UserService {
             // users_id: foreign key to users.id,
             is_verified: false,
             // transcript: ???????,
-            // student_card: ???????,
-            // is_whatsapp: tutor.isWhatsapp,
-            // is_signal: tutor.isSignal,
+            // student_card: ???????,            
             school: tutor.school,
             majors_id: majorId,
             rating: null,
@@ -94,8 +92,8 @@ export class UserService {
                 majorId = await knex.insert({ major: tutor.major }).into("major").returning("id");
             };
 
-            await knex.insert({
-                id: (await knex.select('id').from("user").where("email", tutor.email)),
+            const tutorId: number = await knex.insert({
+                id: (await knex.select('id').from("user").where("email", tutor.email).first()),
                 is_verified: false,
                 // student_card: ???????,               
                 major_id: majorId,
@@ -105,7 +103,7 @@ export class UserService {
                 completed_order_amount: 0,
                 created_at: date,
                 updated_at: date
-            }).into("tutor");
+            }).into("tutor").returning("id");
 
 
             await knex.insert({
@@ -157,6 +155,27 @@ export class UserService {
         };
         delete userInfo.hashed_password;
         return { success: true, userInfo: userInfo };
+    }
+
+    async loginByOAuth(email: string) {
+        const userInfo = await this.knex.select('id', 'nickname', 'is_tutor').from("user").where("email", email).first();
+        return userInfo;
+    }
+
+    async registerByOAuth(input: { isTutor: boolean, nickname: string, email: string }) {
+        const date = new Date();
+        const userInfo = await this.knex.insert({
+            is_admin: false,
+            is_tutor: input.isTutor,
+            nickname: input.nickname,
+            email: input.email,
+            hashed_password: null,
+            phone_number: null,
+            created_at: date,
+            updated_at: date
+        }).into("user")
+            .returning(['id', 'nickname', 'is_tutor']);
+        return userInfo;
     }
 
     async resetPassword(account: { id: number, newPassword: string }) {
