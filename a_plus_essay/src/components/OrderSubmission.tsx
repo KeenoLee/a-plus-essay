@@ -103,11 +103,11 @@ export default function OrderSubmission() {
             <Stack>
                 <FormControl>
                     <FormControl.Label>Project Title</FormControl.Label>
-                    <Input variant="underlined" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, title: value })} />
+                    <Input variant="underlined" autoCapitalize="none" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, title: value })} />
                 </FormControl>
                 <FormControl>
                     <FormControl.Label>Subject</FormControl.Label>
-                    <Input variant="underlined" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, subject: value })} />
+                    <Input variant="underlined" autoCapitalize="none" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, subject: value })} />
                 </FormControl>
             </Stack>
             <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
@@ -126,7 +126,7 @@ export default function OrderSubmission() {
             </View>
             <Stack space={4}>
                 <FormControl.Label>Project Description </FormControl.Label>
-                <TextArea h={24} placeholder="Please specify your project requirement (Optional)" w="100%" maxW="300" autoCompleteType={undefined} onChangeText={value => setOrderValue({ ...orderValue, description: value })} />
+                <TextArea autoCapitalize="none" h={24} placeholder="Please specify your project requirement (Optional)" w="100%" maxW="300" autoCompleteType={undefined} onChangeText={value => setOrderValue({ ...orderValue, description: value })} />
             </Stack>
             <HStack style={{ justifyContent: 'space-between', alignItems: 'center', height: 80 }}>
                 <FormControl.Label style={{ flex: 2, justifyContent: 'center' }}>Guideline</FormControl.Label>
