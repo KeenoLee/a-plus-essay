@@ -101,10 +101,10 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Register">
+        <Stack.Navigator initialRouteName="ChatList">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
-          <Stack.Screen name="Welcome" component={LoginPage} />
+          <Stack.Screen name="ChatList" component={ChatList}/>
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
