@@ -9,10 +9,10 @@ interface Note {
     base64: string
 }
 export interface OrderItem {
-    id: number;
-    students_id: number;
-    tutors_id?: number;
-    is_matched: Boolean;
+
+    studentId: number;
+    tutorId?: number;
+    isMatched?: Boolean;
     title: string;
     subject: string;
     grade: string;
