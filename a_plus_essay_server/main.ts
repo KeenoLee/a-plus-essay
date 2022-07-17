@@ -50,8 +50,8 @@ userRoutes.post("/register/tutor", userController.createUser);
 userRoutes.post("/login/password", userController.loginWithPassword);
 userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplication);
 // userRoutes.get("/login/google", userController.loginGoogle);
-// userRoutes.get("/login/facebook", userController.loginWithFacebook);
-// userRoutes.post("/resetpassword", userController.resetPassword);
+userRoutes.get("/login/facebook", userController.loginWithFacebook);
+userRoutes.post("/resetpassword", userController.resetPassword);
 
 app.get("/", (req: Request, res: Response) => {
     res.json({ message: 'hello world' })
