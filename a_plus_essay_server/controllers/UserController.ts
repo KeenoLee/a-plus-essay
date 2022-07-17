@@ -14,7 +14,7 @@ export class UserController {
     // verifying the info of registering account
     createUser = async (req: Request, res: Response) => {
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        let { isTutor, nickname, email, password, rePassword, phoneNumber, isOAuth } = req.body;
+        let { isTutor, nickname, email, password, rePassword, phoneNumber } = req.body;
 
         if (isTutor === undefined) {
             res.status(400).json({ error: "Please state your role, student or tutor" });
@@ -41,17 +41,17 @@ export class UserController {
             return;
         };
 
-        if (isOAuth === false && !password) {
+        if (!password) {
             res.status(400).json({ error: "Password is missed" });
             return;
         };
 
-        if (isOAuth === false && !rePassword) {
+        if (!rePassword) {
             res.status(400).json({ error: "Password is not entered in the field of repeat password" });
             return;
         };
 
-        if (isOAuth === false && (password !== rePassword)) {
+        if (password !== rePassword) {
             res.status(400).json({ error: "Password does not match. Please enter the same password in the fields of password and repeat password" });
             return;
         };
@@ -67,8 +67,6 @@ export class UserController {
             return;
         };
 
-        if (isOAuth === true) { password === null };
-        
         const userInfo = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
         const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
         console.log('going to end...')
@@ -79,7 +77,11 @@ export class UserController {
 
         this.createTutor;
         res.json({ success: true, token: jwt });
+<<<<<<< HEAD
         // res.json({success: true})
+=======
+        // res.json({ success: true })
+>>>>>>> ca9ffde4e12ff5e0d689ae7ed54ea9662683325b
         return;
     }
 
@@ -153,24 +155,58 @@ export class UserController {
     }
 
     loginWithFacebook = async (req: Request, res: Response) => {
+        let { isTutor, nickname, email, phoneNumber, accessToken } = req.body;
         try {
-            if (!req.body.accessToken) {
+            if (!accessToken) {
                 res.status(401).json({ msg: "Wrong Access Token!" });
                 return;
             }
-            const { accessToken } = req.body;
-            const fetchResponse = await fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`);
+            const fetchResponse = await fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,email`);
             const result = await fetchResponse.json();
             if (result.error) {
-                res.status(401).json({ msg: "Wrong Access Token!" });
+                res.status(401).json({ error: "Wrong Access Token!" });
+                return;
+            };
+
+            if (!result.email || !email) {
+                res.status(400).json({ error: "No email is obtained from facebook oauth." })
+                return;
+            };
+
+            let user = (await this.userService.checkEmailDuplication(email));
+
+            // login with facebook
+            if (user) {
+                const userInfo = await this.userService.loginByOAuth(email)
+                const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+                console.log('going to end...');
+                res.json({ success: true, token: jwt });
                 return;
             }
-            let user = (await this.userService.checkEmailDuplication(result.email));
 
-            // Create a new user if the user does not exist
-            if (!user) {
-                this.createUser;
-            }
+            // if no user, continue the registration process
+            if (isTutor === undefined) {
+                res.status(400).json({ error: "Please state your role, student or tutor" });
+                return;
+            };
+
+            if (!nickname) {
+                res.status(400).json({ error: "Nickname is missed" });
+                return;
+            };
+
+            const userInfo = await this.userService.registerByOAuth({ isTutor, nickname, email });
+            const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+            console.log('going to end...')
+            if (isTutor === false) {
+                res.json({ success: true, token: jwt });
+                return;
+            };
+
+            this.createTutor;
+            res.json({ success: true, token: jwt });
+            // res.json({ success: true })
+            return;
         } catch (e: any) {
             res.status(500).json({ msg: e.toString() })
             return;
@@ -226,7 +262,7 @@ export class UserController {
     }
 
     checkEmailAndPhoneDuplication = async (req: Request, res: Response) => {
-        const {email, phoneNumber} = req.body
+        const { email, phoneNumber } = req.body
         const emailDuplication = await this.userService.checkEmailDuplication(email);
         console.log('hv email? ', emailDuplication)
         if (emailDuplication) {
