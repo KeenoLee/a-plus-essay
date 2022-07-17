@@ -13,6 +13,7 @@ import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import base64 from 'react-native-base64'
+import { registerStudent } from "../redux/student/actions";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -31,6 +32,7 @@ const roleData: RadioButtonProps[] = [{
     borderColor: 'rgb(51,130,251)',
     color: 'rgb(51,130,251)'
 }]
+const reg: RegExp = /^[0-9\b]+$/
 const passwordLength = 7
 const mobileNumberLength = 8
 function shorterFilename(filename: string) {
@@ -387,7 +389,7 @@ export default function Register() {
                     <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={(email) => setEmail(email)} />
                     <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Password" onChangeText={(password) => setPassword(password)} />
                     <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
-                    <TextInput style={styles.input} keyboardType='numeric' textContentType='telephoneNumber' placeholder='Mobile Number' maxLength={8} onChangeText={mobileNumber => {setMobileNumber(mobileNumber); setInput((text)=>text.replace(/[^0-9]/g, ''))}} />
+                    <TextInput style={styles.input} keyboardType='numeric' textContentType='telephoneNumber' placeholder='Mobile Number' maxLength={8} onChangeText={mobileNumber => {setMobileNumber(mobileNumber); setInput(text => reg.test(mobileNumber)? '': text)}} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
 

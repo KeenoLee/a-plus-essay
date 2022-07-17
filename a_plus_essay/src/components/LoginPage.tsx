@@ -1,14 +1,31 @@
 import React, { useState } from "react"
-import { Image, StyleSheet, Text, TextInput, View } from "react-native"
+import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
+interface UserInfo {
+    email: string,
+    password: string
+}
+async function fetchLogin(userInfo: UserInfo) {
+    console.log('going to fetch login...')
+    const res = await fetch('http://localhost:8111/login/password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userInfo)
+    })
+    const result = await res.json()
+    console.log(result)
+    return result
+}
 
 export default function LoginPage() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     return (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
-            <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={(email) => setUsername(email)} />
-            <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Password" onChangeText={(password) => setPassword(password)} />
+            <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={email => setUsername(email)} />
+            <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Password" onChangeText={password => setPassword(password)} />
 
             <View style={{ alignSelf: 'flex-end' }}>
                 <TouchableOpacity style={{ flexDirection: 'row', padding: 10 }}>
@@ -16,7 +33,11 @@ export default function LoginPage() {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={async () => {
+                const result = await fetchLogin({ email: username, password: password })
+                result.error ? Alert.alert('Error' ,result.error) : Alert.alert('Success' ,result)
+
+            }} >
                 <Text style={{ textAlign: 'center', color: 'white' }}>Sign in</Text>
             </TouchableOpacity>
 
