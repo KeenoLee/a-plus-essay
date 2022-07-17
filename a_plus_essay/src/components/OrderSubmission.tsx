@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FilePicker from './FilePicker';
 import { format } from 'date-fns'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Alert } from 'react-native';
 interface Guideline {
     filename: string,
     base64Data: string
@@ -214,7 +215,11 @@ export default function OrderSubmission() {
                 </FormControl>
             </HStack>
             <HStack justifyContent="space-evenly">
-                <Button>Confirm</Button>
+                <Button onPress={async ()=>{
+                    const result = await fetchOrder(orderValue)
+                    console.log('result of creating order' ,result)
+                    result.error? Alert.alert('Error', result.error) : Alert.alert('Success', result)
+                }}>Confirm</Button>
                 <Button>Cancel</Button>
             </HStack>
         </VStack>
