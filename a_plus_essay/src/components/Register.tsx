@@ -173,7 +173,7 @@ async function fetchTutor(registerData: TutorData) {
 
 export default function Register() {
     // For Test ONLY: Should be passed as props
-    const [isOAuth, setIsOAuth] = useState(true)
+    const [isOAuth, setIsOAuth] = useState(false)
 
     // Page Switching
     const [page, setPage] = useState({ step: 1 })
