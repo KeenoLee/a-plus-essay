@@ -77,11 +77,7 @@ export class UserController {
 
         this.createTutor;
         res.json({ success: true, token: jwt });
-<<<<<<< HEAD
-        // res.json({success: true})
-=======
         // res.json({ success: true })
->>>>>>> ca9ffde4e12ff5e0d689ae7ed54ea9662683325b
         return;
     }
 
