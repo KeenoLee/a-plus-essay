@@ -115,7 +115,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Order Submission">
+        <Stack.Navigator initialRouteName="Select Tutor">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
           <Stack.Screen name="Welcome" component={LoginPage}/>

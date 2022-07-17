@@ -10,7 +10,7 @@ export default function TutorInformation() {
 
 
             <View style={styles.container}>
-                <Text style={{ ...inlinePadding(5, 5, 15, 15), fontWeight: 'bold', fontSize: 20, fontFamily: 'montserrat' }}>Beeno</Text>
+                <Text style={{ ...inlinePadding(5, 5, 15, 15), fontWeight: 'bold', fontSize: 20, }}>Beeno</Text>
 
                 <View style={{ ...inlinePadding(5, 5, 15, 15), flexDirection: 'row' }}>
                     <Text style={{ flex: 4 }}>Order Completed: </Text>
