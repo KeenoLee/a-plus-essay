@@ -63,8 +63,9 @@ export class OrderController {
             return;
         };
 
-        await this.orderService.submitOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
-
+        const orderId = await this.orderService.submitOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
+        res.json({ success: true });
+        return;
     }
 
     getOrderData = async (req: Request, res: Response) => {
