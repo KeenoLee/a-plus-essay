@@ -44,7 +44,21 @@ import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
 // import OrderSubmission from './src/components/OrderSubmission';
-const Stack = createStackNavigator();
+type RootStackParamList = {
+  Welcome: undefined
+  ChatList: undefined
+  SuccessRegister: undefined
+  OrderSubmission: undefined
+  'Thank You': undefined
+  'Tutor Information': undefined
+  'Select Tutor': undefined
+  Register: undefined
+  Chats: undefined
+  Message: undefined
+  Status: undefined
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
@@ -105,9 +119,11 @@ export default function App() {
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
           <Stack.Screen name="Welcome" component={LoginPage}/>
+            {/* {(props)=> <LoginPage navigation={props}/>} */}
+          {/* </Stack.Screen> */}
           <Stack.Screen name="ChatList" component={ChatList}/>
-          <Stack.Screen name="Success Register" component={SuccessRegister} />
-          <Stack.Screen name="Order Submission" component={OrderSubmission} />
+          <Stack.Screen name="SuccessRegister" component={SuccessRegister} />
+          <Stack.Screen name="OrderSubmission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
