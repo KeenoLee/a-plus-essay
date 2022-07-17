@@ -164,8 +164,8 @@ export class UserController {
                 return;
             };
 
-            if (!result.email || !email) {
-                res.status(400).json({ error: "No email is obtained from facebook oauth." })
+            if (!result.email) {
+                res.status(400).json({ error: "Email is not available from facebook oauth." })
                 return;
             };
 
@@ -191,6 +191,7 @@ export class UserController {
                 return;
             };
 
+            // register with facebook
             const userInfo = await this.userService.registerByOAuth({ isTutor, nickname, email });
             const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
             console.log('going to end...')
@@ -209,7 +210,74 @@ export class UserController {
         }
     }
 
-    // loginGoogle = async () => { }
+    loginWithGoogle = async (req: Request, res: Response) => {
+        let { isTutor, nickname, email, phoneNumber, accessToken } = req.body;
+
+        try {
+            if (!accessToken) {
+                res.status(401).json({ msg: "Wrong Access Token!" });
+                return;
+            }
+
+            const fetchResponse = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo`, {
+                method: "get",
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            });
+
+            const result = await fetchResponse.json();
+            if (result.error) {
+                res.status(401).json({ error: "Wrong Access Token!" });
+                return;
+            };
+
+            if (!result.email) {
+                res.status(400).json({ error: "Email is not available from google oauth." })
+                return;
+            };
+
+            let user = (await this.userService.checkEmailDuplication(email));
+
+            // login with google
+            if (user) {
+                const userInfo = await this.userService.loginByOAuth(email)
+                const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+                console.log('going to end...');
+                res.json({ success: true, token: jwt });
+                return;
+            }
+
+            // if no user, continue the registration process
+            if (isTutor === undefined) {
+                res.status(400).json({ error: "Please state your role, student or tutor" });
+                return;
+            };
+
+            if (!nickname) {
+                res.status(400).json({ error: "Nickname is missed" });
+                return;
+            };
+
+            // register with google
+            const userInfo = await this.userService.registerByOAuth({ isTutor, nickname, email });
+            const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+            console.log('going to end...')
+            if (isTutor === false) {
+                res.json({ success: true, token: jwt });
+                return;
+            };
+
+            this.createTutor;
+            res.json({ success: true, token: jwt });
+            // res.json({ success: true })
+            return;
+        } catch (e: any) {
+            res.status(500).json({ msg: e.toString() })
+            return;
+        }
+    }
+
     // logout = async () => { }
     resetPassword = async (req: Request, res: Response) => {
         let { email, newPassword, reNewPassword } = req.body;
