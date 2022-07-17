@@ -11,8 +11,8 @@ import config from "./knexfile";
 import { guard } from './guard';
 
 export const knex = Knex(config[process.env.NODE_ENV || "development"]);
-// const userService = new UserService(knex);
-// const userController = new UserController(userService);
+const userService = new UserService(knex);
+const userController = new UserController(userService);
 const orderService = new OrderService(knex);
 const orderController = new OrderController(orderService);
 
@@ -40,13 +40,10 @@ app.use(express.json());
 app.use(userRoutes)
 app.use(orderRoutes)
 
-// userRoutes.post("/signup/student", userController.createUser);
-// userRoutes.post("/signup/tutor", userController.createUser);
-// userRoutes.post("/login/password", userController.loginWithPassword);
-// userRoutes.post("/register/student", userController.createUser);
-// userRoutes.post("/register/tutor", userController.createUser);
-// userRoutes.post("/login/password", userController.loginWithPassword);
-// userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplication);
+userRoutes.post("/register/student", userController.createUser);
+userRoutes.post("/register/tutor", userController.createUser);
+userRoutes.post("/login/password", userController.loginWithPassword);
+userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplication);
 // userRoutes.get("/login/google", userController.loginGoogle);
 // userRoutes.get("/login/facebook", userController.loginWithFacebook);
 // userRoutes.post("/resetpassword", userController.resetPassword);

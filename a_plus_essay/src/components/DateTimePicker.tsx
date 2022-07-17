@@ -19,8 +19,12 @@ export function formatDate(date: Date) {
     let result = day + '/' + month + '/' + year + ' ' + time
     return result
 }
+interface Props {
+    onChange: (value: Date) => void
 
-export default function DateTimePicker() {
+    
+}
+export default function DateTimePicker({onChange}: Props) {
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
 
@@ -34,11 +38,12 @@ export default function DateTimePicker() {
                     date={date}
                     onConfirm={(date: Date) => {
                         setOpen(false)
-                        setDate(date)
+                        onChange(date)
                     }}
                     onCancel={() => {
                         setOpen(false)
                     }}
+
                 />
                 <Text>{formatDate(date)}</Text>
             </HStack>

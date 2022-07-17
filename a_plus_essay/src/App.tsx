@@ -41,6 +41,8 @@ import OrderMatched from './components/OrderMatched';
 import { NativeBaseProvider } from 'native-base';
 import OrderSubmission from './components/OrderSubmission';
 import SuccessRegister from './components/SuccessRegister';
+import LoadingScreen from './components/LoadingScreen';
+import LoginPage from './components/LoginPage';
 // import OrderSubmission from './src/components/OrderSubmission';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -102,7 +104,6 @@ export default function App() {
         <Stack.Navigator initialRouteName="Chats">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
-          {/* <Stack.Screen name="123" component={exsample} /> */}
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
@@ -115,6 +116,41 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
+
+    // <NativeBaseProvider>
+    //   <NavigationContainer>
+    //     {/* Check Authentication in loading page */}
+    //     <Stack.Navigator initialRouteName="Loading">
+    //       <Stack.Screen name="Loading" component={LoadingScreen} />
+
+    //       <Stack.Screen name="A Plus Company" component={Tabs} />
+    //       <Stack.Screen name="Message" component={Notification} />
+    //       <Stack.Screen name="Status" component={Status} />
+
+    //       {/* Stack to Login Page if Authentication is not found */}
+    //       <Stack.Screen name="Welcome" component={LoginPage} />
+    //       <Stack.Screen name="Register" component={Register} />
+    //       <Stack.Screen name="Success Register" component={SuccessRegister} />
+
+    //       {/* Stack to Home if Authentication is found */}
+    //       <Stack.Screen name="A Plus Company" component={Home} />
+
+    //       {/* Pages for Students */}
+    //       <Stack.Screen name="Order Submission" component={OrderSubmission} />
+    //       <Stack.Screen name="Thank You" component={OrderMatched} />
+    //       <Stack.Screen name="Tutor Information" component={TutorInformation} />
+    //       <Stack.Screen name="Select Tutor" component={SelectTutor} />
+
+    //       {/* Pages for Tutor */}
+    //       {/* TODO: Reply to randomly allocated orders */}
+
+    //       {/* Pages for both Students and Tutors */}
+    //       <Stack.Screen name="Chats" component={ChatList} />
+    //     </Stack.Navigator>
+    //   </NavigationContainer>
+    // </NativeBaseProvider>
+
+
   )
 }
 
