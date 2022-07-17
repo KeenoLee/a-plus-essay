@@ -383,10 +383,10 @@ export default function Register() {
                             setIsTutor(!isTutor)
                         }}
                     />
-                    <TextInput style={styles.input} placeholder="Nickname" onChangeText={(nickname) => setNickname(nickname)} />
-                    <TextInput style={styles.input} textContentType='emailAddress' placeholder="Email address" onChangeText={(email) => setEmail(email)} />
-                    <TextInput style={styles.input} textContentType='password' placeholder="Password" onChangeText={(password) => setPassword(password)} />
-                    <TextInput style={styles.input} textContentType='password' placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
+                    <TextInput style={styles.input} placeholder="Nickname" autoCapitalize="none" onChangeText={(nickname) => setNickname(nickname)} />
+                    <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={(email) => setEmail(email)} />
+                    <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Password" onChangeText={(password) => setPassword(password)} />
+                    <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
                     <TextInput style={styles.input} keyboardType='number-pad' textContentType='telephoneNumber' placeholder='Mobile Number' onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
