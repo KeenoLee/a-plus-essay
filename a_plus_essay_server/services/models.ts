@@ -1,10 +1,12 @@
 
 interface Guideline {
-    guideline: string
+    filename: string
+    base64: string
 }
 
 interface Note {
-    note: string
+    filename: string
+    base64: string
 }
 export interface OrderItem {
     id: number;
@@ -12,13 +14,15 @@ export interface OrderItem {
     tutors_id?: number;
     is_matched: Boolean;
     title: string;
+    subject: string;
+    grade: string;
     description: string;
-    guideline: Guideline[] // base64
-    note: Note[]; // base64
+    guidelines: Guideline[] // base64
+    notes: Note[]; // base64
     budget: number;
     completed?: Date | null;
     paid?: Date | null;
-    student_submission_deadline: Date;
-    tutor_submission_deadline: Date;
+    studentDeadline: Date;
+    tutorDeadline: Date;
 }
 
