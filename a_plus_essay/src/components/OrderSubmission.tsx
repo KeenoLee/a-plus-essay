@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button, Icon, CloseIcon, IconButton, View } from "native-base";
 import DateTimePicker from './DateTimePicker';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -18,6 +18,7 @@ interface Note {
 interface OrderValue {
     title: string
     subject: string
+    grade: string
     budget: number | string
     description: string | null
     guidelines: Guideline[]
@@ -49,6 +50,7 @@ export default function OrderSubmission() {
     const [orderValue, setOrderValue] = useState<OrderValue>({
         title: '',
         subject: '',
+        grade: '',
         budget: '',
         description: null,
         guidelines: [],
@@ -108,12 +110,20 @@ export default function OrderSubmission() {
                     <Input variant="underlined" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, subject: value })} />
                 </FormControl>
             </Stack>
-            <HStack>
-                <FormControl.Label>Budget</FormControl.Label>
-                <FormControl w="20" style={{ marginLeft: 10 }}>
-                    <Input variant="outline" placeholder="$" onChangeText={value => setOrderValue({ ...orderValue, budget: parseInt(value) })} />
-                </FormControl>
-            </HStack>
+            <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                <HStack>
+                    <FormControl.Label>Budget</FormControl.Label>
+                    <FormControl w="20" style={{ marginLeft: 10 }}>
+                        <Input variant="outline" placeholder="$" onChangeText={value => setOrderValue({ ...orderValue, budget: parseInt(value) })} />
+                    </FormControl>
+                </HStack>
+                <HStack>
+                    <FormControl.Label>Grade</FormControl.Label>
+                    <FormControl w="20" style={{ marginLeft: 10 }}>
+                        <Input variant="outline" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, grade: value })} />
+                    </FormControl>
+                </HStack>
+            </View>
             <Stack space={4}>
                 <FormControl.Label>Project Description </FormControl.Label>
                 <TextArea h={24} placeholder="Please specify your project requirement (Optional)" w="100%" maxW="300" autoCompleteType={undefined} onChangeText={value => setOrderValue({ ...orderValue, description: value })} />
@@ -124,7 +134,7 @@ export default function OrderSubmission() {
 
                 <View style={{ flex: 4 }}>
                     {orderValue.guidelines.map((guideline, index) => (
-                        <View key={index} style={{ flexDirection:'row', justifyContent: 'space-between', paddingHorizontal: 25 }}>
+                        <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 25 }}>
                             <Text style={{ textAlign: 'center' }}>
                                 {shorterFilename(guideline.filename)}
                             </Text>
@@ -154,7 +164,7 @@ export default function OrderSubmission() {
                 <FormControl.Label style={{ flex: 2, justifyContent: 'center' }}>Lecture Notes</FormControl.Label>
                 <View style={{ flex: 4 }}>
                     {orderValue.notes.map((note, index) => (
-                        <View key={index} style={{ flexDirection:'row', justifyContent: 'space-between', paddingHorizontal: 25 }}>
+                        <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 25 }}>
                             <Text style={{ textAlign: 'center' }}>
                                 {shorterFilename(note.filename)}
                             </Text>
