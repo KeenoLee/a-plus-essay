@@ -4,16 +4,37 @@ import DateTimePicker from './DateTimePicker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FilePicker from './FilePicker';
 import { format } from 'date-fns'
+interface Guideline {
+    guideline: string
+}
 
+interface Note {
+    note: string
+}
 interface OrderValue {
     title: string
     subject: string
-    budget: string
+    budget: number | string
     description: string | null
-    guideline: string | null
-    note: string | null
+    guideline: Guideline[] | null
+    note: Note[] | null
     tutorDeadline: Date | null
     studentDeadline: Date | null
+}
+
+async function fetchOrder(order: OrderValue) {
+    const res = await fetch('http://localhost:8111/order-submission', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    })
+    const result = await res.json()
+    if (result.error) {
+        return result
+    }
+    return 'success'
 }
 export default function OrderSubmission() {
     const [orderValue, setOrderValue] = useState<OrderValue>({
@@ -42,7 +63,7 @@ export default function OrderSubmission() {
             <HStack>
                 <FormControl.Label>Budget</FormControl.Label>
                 <FormControl w="20" style={{marginLeft: 10}}>
-                    <Input variant="outline" placeholder="$" onChangeText={value => setOrderValue({ ...orderValue, budget: value })} />
+                    <Input variant="outline" placeholder="$" onChangeText={value => setOrderValue({ ...orderValue, budget: parseInt(value) })} />
                 </FormControl>
             </HStack>
             <Stack space={4}>
@@ -86,7 +107,7 @@ export default function OrderSubmission() {
                     <Text style={{ flex: 3, textAlign:'center' }}>{format(orderValue.studentDeadline, 'yyyy-MM-dd HH:mm')}</Text> :
                     <Text style={{ flex: 3 }}></Text>}
             </HStack>
-            <HStack justifyContent="space-around">
+            <HStack justifyContent="space-evenly">
                 <Button>Confirm</Button>
                 <Button>Cancel</Button>
             </HStack>
