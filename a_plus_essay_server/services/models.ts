@@ -1,3 +1,11 @@
+
+interface Guideline {
+    guideline: string
+}
+
+interface Note {
+    note: string
+}
 export interface OrderItem {
     id: number;
     students_id: number;
@@ -5,7 +13,8 @@ export interface OrderItem {
     is_matched: Boolean;
     title: string;
     description: string;
-    required_note?: any;
+    guideline: Guideline[] // base64
+    note: Note[]; // base64
     budget: number;
     completed?: Date | null;
     paid?: Date | null;
