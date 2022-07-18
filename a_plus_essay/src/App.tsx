@@ -45,13 +45,9 @@ import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
 
 import OrderStatus from './pages/OrderStatus';
-// import OrderSubmission from './src/components/OrderSubmission';
-<<<<<<< HEAD
-export type RootStackParamList = {
-=======
 
-type RootStackParamList = {
->>>>>>> 5a3d8f8435f905f979e4db42a84896ad95e52219
+// import OrderSubmission from './src/components/OrderSubmission';
+export type RootStackParamList = {
   Welcome: undefined
   ChatList: undefined
   'Success Register': undefined
@@ -125,19 +121,12 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-<<<<<<< HEAD
         <Stack.Navigator initialRouteName="Welcome">
-          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          <Stack.Screen name="A Plus Company" component={Tabs} />
-          <Stack.Screen name="Welcome" component={LoginPage}/>
-            {/* {(props)=> <LoginPage navigation={props}/>} */}
-=======
-        <Stack.Navigator initialRouteName="HomeScreen">
+
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           <Stack.Screen name="HomeScreen" component={Tabs} />
           <Stack.Screen name="Welcome" component={LoginPage} />
           {/* {(props)=> <LoginPage navigation={props}/>} */}
->>>>>>> 5a3d8f8435f905f979e4db42a84896ad95e52219
           {/* </Stack.Screen> */}
           <Stack.Screen name="ChatList" component={ChatList} />
           <Stack.Screen name="Success Register" component={SuccessRegister} />
@@ -148,12 +137,6 @@ export default function App() {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Chats" component={Chatroom} />
           <Stack.Screen name="Message" component={Notification} />
-<<<<<<< HEAD
-          <Stack.Screen name="Status" component={Status} />
-          {/* <Stack.Screen name="A Plus Company" component={Home} /> */}
-
-=======
->>>>>>> 5a3d8f8435f905f979e4db42a84896ad95e52219
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
