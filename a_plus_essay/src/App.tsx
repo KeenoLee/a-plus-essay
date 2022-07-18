@@ -30,7 +30,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // import LoadingScreen from './src/components/LoadingScreen';
 import Home from './pages/Home'
 import Notification from './pages/Notification';
-import Status from './pages/Status';
 import ChatList from './pages/ChatList';
 import Register from './components/Register';
 import SelectTutor from './components/SelectTutor';
@@ -43,8 +42,16 @@ import OrderSubmission from './components/OrderSubmission';
 import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
+import Chatroom from './components/Chatroom';
+
+import OrderStatus from './pages/OrderStatus';
 // import OrderSubmission from './src/components/OrderSubmission';
+<<<<<<< HEAD
 export type RootStackParamList = {
+=======
+
+type RootStackParamList = {
+>>>>>>> 5a3d8f8435f905f979e4db42a84896ad95e52219
   Welcome: undefined
   ChatList: undefined
   'Success Register': undefined
@@ -52,6 +59,7 @@ export type RootStackParamList = {
   'Thank You': undefined
   'Tutor Information': undefined
   'Select Tutor': undefined
+  HomeScreen: undefined
   Register: undefined
   Chats: undefined
   Message: undefined
@@ -67,7 +75,8 @@ const Tabs = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'white',
-        tabBarStyle: { backgroundColor: '#BBD3CF' }
+        tabBarStyle: { backgroundColor: '#BBD3CF' },
+        headerShown: false
       }}>
       <Tab.Screen name="Home" component={Home}
         options={{
@@ -76,6 +85,14 @@ const Tabs = () => {
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
           ),
         }} />
+      <Tab.Screen name="Order Status" component={OrderStatus}
+        options={{
+          tabBarLabel: 'Order',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name="hourglass" color={color} size={focused ? 30 : size} />
+          ),
+        }}
+      />
       <Tab.Screen name="Chats" component={ChatList}
         options={{
           tabBarLabel: 'Chats',
@@ -83,21 +100,13 @@ const Tabs = () => {
             <Ionicons name="chatbubbles" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Message" component={Notification}
+      <Tab.Screen name="Account" component={Notification}
         options={{
-          tabBarLabel: 'Notifications',
+          tabBarLabel: 'Account',
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="notifications" color={color} size={focused ? 30 : size} />
+            <Ionicons name="person-circle" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Status" component={Status}
-        options={{
-          tabBarLabel: 'Status',
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="hourglass" color={color} size={focused ? 30 : size} />
-          ),
-        }}
-      />
     </Tab.Navigator>
   )
 }
@@ -116,24 +125,35 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
+<<<<<<< HEAD
         <Stack.Navigator initialRouteName="Welcome">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           <Stack.Screen name="A Plus Company" component={Tabs} />
           <Stack.Screen name="Welcome" component={LoginPage}/>
             {/* {(props)=> <LoginPage navigation={props}/>} */}
+=======
+        <Stack.Navigator initialRouteName="HomeScreen">
+          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+          <Stack.Screen name="HomeScreen" component={Tabs} />
+          <Stack.Screen name="Welcome" component={LoginPage} />
+          {/* {(props)=> <LoginPage navigation={props}/>} */}
+>>>>>>> 5a3d8f8435f905f979e4db42a84896ad95e52219
           {/* </Stack.Screen> */}
-          <Stack.Screen name="ChatList" component={ChatList}/>
+          <Stack.Screen name="ChatList" component={ChatList} />
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
           <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="Chats" component={ChatList} />
+          <Stack.Screen name="Chats" component={Chatroom} />
           <Stack.Screen name="Message" component={Notification} />
+<<<<<<< HEAD
           <Stack.Screen name="Status" component={Status} />
           {/* <Stack.Screen name="A Plus Company" component={Home} /> */}
 
+=======
+>>>>>>> 5a3d8f8435f905f979e4db42a84896ad95e52219
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

@@ -10,6 +10,7 @@ module.exports = override(
         // '@babel/plugin-proposal-class-properties', // <~ needed for react-native-calendars
         '@babel/plugin-syntax-jsx',
     ),
+    // Add not-supported-by-web files
     // addWebpackAlias({
     //     'react-native-ble': require.resolve('./empty/index.js'),
     // }),
@@ -22,5 +23,6 @@ module.exports = override(
         path.resolve(__dirname, 'src'),
         path.resolve(__dirname, 'node_modules/react-native-radio-buttons-group'),
         path.resolve(__dirname, 'node_modules/react-native-vector-icons'),
+        path.resolve(__dirname, 'node_modules/date-fns'),
     ]),
 );
