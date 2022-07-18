@@ -37,7 +37,7 @@ import TutorInformation from './components/TutorInformation';
 import OrderMatched from './components/OrderMatched';
 // import OrderSubmission from './backup/OrderSubmission';
 
-import { NativeBaseProvider } from 'native-base';
+import { Center, NativeBaseProvider, Fab, Box } from 'native-base';
 import OrderSubmission from './components/OrderSubmission';
 import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
@@ -63,6 +63,20 @@ type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
+// Floating Action Button (FAB)
+
+const Fabtn = () => {
+  return <Center >
+    <Box w="50" shadow="2" rounded="lg" >
+      <Fab _pressed={{
+        backgroundColor: "teal.800"
+      }}
+        renderInPortal={true} shadow={2} right={9} marginBottom={90} backgroundColor="teal.700" icon={<Ionicons name="notifications" color="white" size={18} />} />
+    </Box>
+  </Center>;
+}
+
+// Bottom Tab navigation
 const Tabs = () => {
   return (
     <Tab.Navigator
@@ -134,6 +148,7 @@ export default function App() {
           <Stack.Screen name="Chats" component={ChatList} />
           <Stack.Screen name="Message" component={Notification} />
         </Stack.Navigator>
+        <Fabtn />
       </NavigationContainer>
     </NativeBaseProvider>
 
