@@ -37,7 +37,7 @@ import TutorInformation from './components/TutorInformation';
 import OrderMatched from './components/OrderMatched';
 // import OrderSubmission from './backup/OrderSubmission';
 
-import { NativeBaseProvider } from 'native-base';
+import { Center, NativeBaseProvider, Fab, Box } from 'native-base';
 import OrderSubmission from './components/OrderSubmission';
 import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
@@ -45,9 +45,10 @@ import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
 
 import OrderStatus from './pages/OrderStatus';
+import { HomeDrawer } from './components/Drawer';
 // import OrderSubmission from './src/components/OrderSubmission';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Welcome: undefined
   ChatList: undefined
   'Success Register': undefined
@@ -60,11 +61,26 @@ type RootStackParamList = {
   Chats: undefined
   Message: undefined
   Status: undefined
+  'A Plus Company': undefined
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
+// Floating Action Button (FAB)
+
+const Fabtn = () => {
+  return <Center >
+    <Box w="50" shadow="2" rounded="lg" >
+      <Fab _pressed={{
+        backgroundColor: "teal.800"
+      }}
+        renderInPortal={true} shadow={2} right={9} marginBottom={90} backgroundColor="teal.700" icon={<Ionicons name="notifications" color="white" size={18} />} />
+    </Box>
+  </Center>;
+}
+
+// Bottom Tab navigation
 const Tabs = () => {
   return (
     <Tab.Navigator
@@ -127,6 +143,14 @@ export default function App() {
           {/* {(props)=> <LoginPage navigation={props}/>} */}
           {/* </Stack.Screen> */}
           <Stack.Screen name="ChatList" component={ChatList} />
+          <HomeDrawer />
+          {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
+          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+          {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
+          {/* <Stack.Screen name="Welcome" component={LoginPage} /> */}
+          {/* {(props)=> <LoginPage navigation={props}/>} */}
+          {/* </Stack.Screen> */}
+          {/* <Stack.Screen name="ChatList" component={ChatList}/>
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
@@ -134,8 +158,9 @@ export default function App() {
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Chats" component={Chatroom} />
-          <Stack.Screen name="Message" component={Notification} />
+  <Stack.Screen name="Message" component={Notification} />*/}
         </Stack.Navigator>
+        {/* <Fabtn/> */}
       </NavigationContainer>
     </NativeBaseProvider>
 

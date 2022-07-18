@@ -7,14 +7,11 @@ import FilePicker from './FilePicker';
 import { format } from 'date-fns'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Alert } from 'react-native';
-interface Guideline {
+import {dataURItoBlob} from '@beenotung/tslib/image'
+interface UserFile {
     filename: string,
     base64Data: string
-}
-
-interface Note {
-    filename: string,
-    base64Data: string
+    file: File
 }
 interface OrderValue {
     title: string
@@ -22,8 +19,8 @@ interface OrderValue {
     grade: string
     budget: number | string
     description: string | null
-    guidelines: Guideline[]
-    notes: Note[]
+    guidelines: UserFile[]
+    notes: UserFile[]
     tutorDeadline: Date | null
     studentDeadline: Date | null
 }
@@ -36,9 +33,9 @@ function shorterFilename(filename: string) {
 async function fetchOrder(order: OrderValue) {
     const res = await fetch('http://localhost:8111/order-submission', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        // headers: {
+        //     'Content-Type': 'application/json'
+        // },
         body: JSON.stringify(order)
     })
     const result = await res.json()
@@ -78,7 +75,7 @@ export default function OrderSubmission() {
 
         })
     }
-    const openGallery = (callback: (file: { filename: string, base64Data: string }) => void) => {
+    const openGallery = (callback: (file: UserFile) => void) => {
         launchImageLibrary({
             mediaType: 'photo',
             includeBase64: true
@@ -90,8 +87,11 @@ export default function OrderSubmission() {
             } else {
                 let filename = res.assets?.[0].fileName
                 let base64Data = res.assets?.[0].base64
+                console.log(base64Data)
                 if (filename && base64Data) {
-                    callback({ filename, base64Data })
+                    let blob = dataURItoBlob(base64Data)
+                    let file = new File([blob], 'photo', {type: blob.type, lastModified: Date.now()})  // Binary
+                    callback({ filename, base64Data, file })
                     return
                 }
                 console.log('file is not found')
