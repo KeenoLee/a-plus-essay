@@ -9,7 +9,7 @@ import App from './src/App';
 import { name as appName } from './app.json';
 import { enableFreeze } from 'react-native-screens';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { store } from './src/redux/store';
 import React from 'react'
 
 function RNRedux() {

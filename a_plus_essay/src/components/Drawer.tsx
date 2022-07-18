@@ -3,7 +3,7 @@ import React from 'react'
 
 import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import OrderSubmission from './OrderSubmission';
-import welcome from '../pages/Welcome';
+import Welcome from '../pages/Welcome';
 import Register from './Register';
 import FAQ from '../pages/FAQ';
 import Rules from '../pages/Rules';
@@ -36,7 +36,7 @@ export function HomeDrawer() {
             <Drawer.Screen name="FAQ" component={FAQ} />
             <Drawer.Screen name="Contact Us" component={ContactUs} />
             <Drawer.Screen name="Order Submission" component={OrderSubmission} />
-            <Drawer.Screen name="Logout" component={welcome} />
+            <Drawer.Screen name="Logout" component={Welcome} />
         </Drawer.Navigator>
     );
 }
