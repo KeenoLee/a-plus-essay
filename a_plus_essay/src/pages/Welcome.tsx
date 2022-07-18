@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function welcome() {
+export default function Welcome() {
   return (
     <View>
-      <Text>welcome</Text>
+      <Text>Welcome</Text>
     </View>
   )
 }

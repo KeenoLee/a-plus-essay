@@ -1,8 +1,8 @@
-import { authReducer, AuthState } from "./src/redux/auth/reducer";
+import { authReducer, AuthState } from "./auth/reducer";
 import { combineReducers, legacy_createStore as createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import { studentReducer, StudentState } from "./src/redux/student/reducer";
-import { tutorReducer, TutorState } from "./src/redux/tutor/reducer";
+import { studentReducer, StudentState } from "./student/reducer";
+import { tutorReducer, TutorState } from "./tutor/reducer";
 
 export interface RootState {
     auth: AuthState
