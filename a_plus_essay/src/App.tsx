@@ -45,6 +45,7 @@ import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
 
 import OrderStatus from './pages/OrderStatus';
+import { MyDrawer } from './components/Drawer';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 type RootStackParamList = {
@@ -135,13 +136,14 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="HomeScreen" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}>
+        <MyDrawer/>
+        {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          <Stack.Screen name="HomeScreen" component={Tabs} />
-          <Stack.Screen name="Welcome" component={LoginPage} />
+          {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
+          {/* <Stack.Screen name="Welcome" component={LoginPage} /> */}
           {/* {(props)=> <LoginPage navigation={props}/>} */}
           {/* </Stack.Screen> */}
-          <Stack.Screen name="ChatList" component={ChatList}/>
+          {/* <Stack.Screen name="ChatList" component={ChatList}/>
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
@@ -151,7 +153,7 @@ export default function App() {
           <Stack.Screen name="Chats" component={Chatroom} />
           <Stack.Screen name="Message" component={Notification} />
         </Stack.Navigator>
-        <Fabtn/>
+        <Fabtn/> */}
       </NavigationContainer>
     </NativeBaseProvider>
 
