@@ -44,6 +44,7 @@ import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
 // import OrderSubmission from './src/components/OrderSubmission';
+
 type RootStackParamList = {
   Welcome: undefined
   ChatList: undefined
@@ -52,6 +53,7 @@ type RootStackParamList = {
   'Thank You': undefined
   'Tutor Information': undefined
   'Select Tutor': undefined
+  HomeScreen: undefined
   Register: undefined
   Chats: undefined
   Message: undefined
@@ -82,21 +84,21 @@ const Tabs = () => {
             <Ionicons name="chatbubbles" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Message" component={Notification}
+      <Tab.Screen name="Order Status" component={Status}
         options={{
-          tabBarLabel: 'Notifications',
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="notifications" color={color} size={focused ? 30 : size} />
-          ),
-        }} />
-      <Tab.Screen name="Status" component={Status}
-        options={{
-          tabBarLabel: 'Status',
+          tabBarLabel: 'Order',
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name="hourglass" color={color} size={focused ? 30 : size} />
           ),
         }}
       />
+      <Tab.Screen name="Account" component={Notification}
+        options={{
+          tabBarLabel: 'Account',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name="person-circle" color={color} size={focused ? 30 : size} />
+          ),
+        }} />
     </Tab.Navigator>
   )
 }
@@ -115,13 +117,13 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Select Tutor">
+        <Stack.Navigator initialRouteName="HomeScreen">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
-          <Stack.Screen name="Welcome" component={LoginPage}/>
-            {/* {(props)=> <LoginPage navigation={props}/>} */}
+          <Stack.Screen name="HomeScreen" component={Tabs} />
+          <Stack.Screen name="Welcome" component={LoginPage} />
+          {/* {(props)=> <LoginPage navigation={props}/>} */}
           {/* </Stack.Screen> */}
-          <Stack.Screen name="ChatList" component={ChatList}/>
+          <Stack.Screen name="ChatList" component={ChatList} />
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
