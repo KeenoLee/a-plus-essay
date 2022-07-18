@@ -45,10 +45,10 @@ import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
 
 import OrderStatus from './pages/OrderStatus';
-import { MyDrawer } from './components/Drawer';
+import { HomeDrawer } from './components/Drawer';
 // import OrderSubmission from './src/components/OrderSubmission';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Welcome: undefined
   ChatList: undefined
   'Success Register': undefined
@@ -136,14 +136,14 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <MyDrawer/>
+        <HomeDrawer />
         {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
-          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
-          {/* <Stack.Screen name="Welcome" component={LoginPage} /> */}
-          {/* {(props)=> <LoginPage navigation={props}/>} */}
-          {/* </Stack.Screen> */}
-          {/* <Stack.Screen name="ChatList" component={ChatList}/>
+        {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+        {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
+        {/* <Stack.Screen name="Welcome" component={LoginPage} /> */}
+        {/* {(props)=> <LoginPage navigation={props}/>} */}
+        {/* </Stack.Screen> */}
+        {/* <Stack.Screen name="ChatList" component={ChatList}/>
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
