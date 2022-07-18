@@ -30,7 +30,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // import LoadingScreen from './src/components/LoadingScreen';
 import Home from './pages/Home'
 import Notification from './pages/Notification';
-import Status from './pages/Status';
 import ChatList from './pages/ChatList';
 import Register from './components/Register';
 import SelectTutor from './components/SelectTutor';
@@ -43,6 +42,7 @@ import OrderSubmission from './components/OrderSubmission';
 import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
+import OrderStatus from './pages/OrderStatus';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 type RootStackParamList = {
@@ -85,7 +85,7 @@ const Tabs = () => {
             <Ionicons name="chatbubbles" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Order Status" component={Status}
+      <Tab.Screen name="Order Status" component={OrderStatus}
         options={{
           tabBarLabel: 'Order',
           tabBarIcon: ({ focused, color, size }) => (
@@ -133,7 +133,6 @@ export default function App() {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Chats" component={ChatList} />
           <Stack.Screen name="Message" component={Notification} />
-          <Stack.Screen name="Status" component={Status} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
