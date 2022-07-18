@@ -143,7 +143,7 @@ export default function App() {
           {/* {(props)=> <LoginPage navigation={props}/>} */}
           {/* </Stack.Screen> */}
           <Stack.Screen name="ChatList" component={ChatList} />
-          <HomeDrawer />
+          {/* <HomeDrawer /> */}
           {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
@@ -157,8 +157,8 @@ export default function App() {
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
           <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="Message" component={Notification} />*/}
           <Stack.Screen name="Chats" component={Chatroom} />
-  <Stack.Screen name="Message" component={Notification} />*/}
         </Stack.Navigator>
         {/* <Fabtn/> */}
       </NavigationContainer>
