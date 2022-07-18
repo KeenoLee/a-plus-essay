@@ -120,7 +120,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="HomeScreen">
+        <Stack.Navigator initialRouteName="Chats">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           <Stack.Screen name="HomeScreen" component={Tabs} />
           <Stack.Screen name="Welcome" component={LoginPage} />
