@@ -9,7 +9,7 @@ export class OrderService {
         return data
     }
 
-    async submitOrder(order: OrderItem) {
+    async createOrder(order: OrderItem) {
         await this.knex.transaction(async knex => {
             const orderId: number = await knex.insert({
                 student_id: order.studentId,

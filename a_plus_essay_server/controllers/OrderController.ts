@@ -18,6 +18,7 @@ export class OrderController {
 
     createOrder = async (req: Request, res: Response) => {
         let { title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline } = req.body;
+        console.log('order data: ', title, subject, budget, grade, description, tutorDeadline, studentDeadline)
         const token: string = permit.check(req);
 
         if (!token) {
@@ -63,7 +64,7 @@ export class OrderController {
             return;
         };
 
-        const orderId = await this.orderService.submitOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
+        const orderId = await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
         res.json({ success: true });
         return;
     }
