@@ -19,6 +19,38 @@ export async function seed(knex: Knex): Promise<void> {
             title: 'this is title',
             grade: 'bachelor year 3',
             description: 'this is description',
+            budget: 7000,
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-07-26T14:00:00.000Z",
+            tutor_submission_deadline: "2022-07-28T14:00:00.000Z"
+        }
+    ]);
+    await knex("order").insert([
+        {
+            student_id: studentId,
+            tutor_id: tutorId,
+            matched_time: null,
+            title: 'this is title2',
+            grade: 'bachelor year 3',
+            description: 'this is description',
+            budget: 6000,
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-07-27T14:00:00.000Z",
+            tutor_submission_deadline: "2022-07-28T14:00:00.000Z"
+        }
+    ]);
+    await knex("order").insert([
+        {
+            student_id: studentId,
+            tutor_id: tutorId,
+            matched_time: null,
+            title: 'this is title3',
+            grade: 'bachelor year 3',
+            description: 'this is description',
             budget: 8000,
             completed_time: null,
             paid_by_student_time: null,

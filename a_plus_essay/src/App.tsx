@@ -137,14 +137,22 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Select Tutor" screenOptions={{ headerStyle: { backgroundColor: '#ccfbf1' }, headerShown: true }}>
+        <Stack.Navigator initialRouteName="Chats">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          {/* <Stack.Screen>
-            <HomeDrawer />
-          </Stack.Screen> */}
-          <Stack.Screen name="Home Drawer" component={HomeDrawer} />
           <Stack.Screen name="HomeScreen" component={Tabs} />
           <Stack.Screen name="Welcome" component={LoginPage} />
+          {/* {(props)=> <LoginPage navigation={props}/>} */}
+          {/* </Stack.Screen> */}
+          <Stack.Screen name="ChatList" component={ChatList} />
+          {/* <HomeDrawer /> */}
+          {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
+          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+          {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
+          {/* <Stack.Screen name="Welcome" component={LoginPage} /> */}
+          {/* {(props)=> <LoginPage navigation={props}/>} */}
+          {/* </Stack.Screen> */}
+          {/* <Stack.Screen name="ChatList" component={ChatList}/>
+          <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           {/* {(props) => <LoginPage navigation={props} />}
           </Stack.Screen> */}
@@ -154,10 +162,10 @@ export default function App() {
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
           <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="Chats" component={Chatroom} />
           <Stack.Screen name="Message" component={Notification} />
-          {/* <Fabtn /> */}
+          <Stack.Screen name="Chats" component={Chatroom} />
         </Stack.Navigator>
+        {/* <Fabtn/> */}
       </NavigationContainer>
     </NativeBaseProvider >
 
