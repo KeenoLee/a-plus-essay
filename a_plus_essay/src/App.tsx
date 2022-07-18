@@ -49,6 +49,7 @@ import { HomeDrawer } from './components/Drawer';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 export type RootStackParamList = {
+  'Home Drawer': undefined
   Welcome: undefined
   ChatList: undefined
   'Success Register': undefined
@@ -81,7 +82,7 @@ const Fabtn = () => {
 }
 
 // Bottom Tab navigation
-const Tabs = () => {
+export const Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -136,26 +137,29 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <HomeDrawer />
-        {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
-        {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-        {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
-        {/* <Stack.Screen name="Welcome" component={LoginPage} /> */}
-        {/* {(props)=> <LoginPage navigation={props}/>} */}
-        {/* </Stack.Screen> */}
-        {/* <Stack.Screen name="ChatList" component={ChatList}/>
-          <Stack.Screen name="Success Register" component={SuccessRegister} />
+        <Stack.Navigator initialRouteName="Select Tutor" screenOptions={{ headerStyle: { backgroundColor: '#ccfbf1' }, headerShown: true }}>
+          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+          {/* <Stack.Screen>
+            <HomeDrawer />
+          </Stack.Screen> */}
+          <Stack.Screen name="Home Drawer" component={HomeDrawer} />
+          <Stack.Screen name="HomeScreen" component={Tabs} />
+          <Stack.Screen name="Welcome" component={LoginPage} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
+          {/* {(props) => <LoginPage navigation={props} />}
+          </Stack.Screen> */}
+          <Stack.Screen name="ChatList" component={ChatList} />
+          <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Chats" component={Chatroom} />
           <Stack.Screen name="Message" component={Notification} />
+          {/* <Fabtn /> */}
         </Stack.Navigator>
-        <Fabtn/> */}
       </NavigationContainer>
-    </NativeBaseProvider>
+    </NativeBaseProvider >
 
     // <NativeBaseProvider>
     //   <NavigationContainer>

@@ -11,9 +11,9 @@ import ContactUs from '../pages/ContactUs';
 import LoginPage from './LoginPage'
 import HomeScreen from './HomeScreen';
 import { useNavigation } from '@react-navigation/native';
+import { Tabs } from '../App';
 
 const Drawer = createDrawerNavigator();
-
 
 export function HomeDrawer() {
     const navigation = useNavigation()
@@ -25,11 +25,9 @@ export function HomeDrawer() {
                 drawerStyle: {
                     // width: 500,
                 },
-
-                
             }}
         >
-            <Drawer.Screen  name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Home" component={HomeScreen} />
             <Drawer.Screen name="Login" component={LoginPage} />
             <Drawer.Screen name="Sign up" component={Register} />
             <Drawer.Screen name="Rules" component={Rules} />
