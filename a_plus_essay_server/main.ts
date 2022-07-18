@@ -34,7 +34,8 @@ let io = new socketio.Server(server, {
 io.on("connection", socket => {
     console.log("socket.io is connected")
     socket.on("chat message", msg => {
-        console.log(msg);
+        console.log('chat message:', msg);
+        io.emit("chat message", msg)
     })
 })
 
