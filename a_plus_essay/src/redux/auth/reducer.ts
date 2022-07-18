@@ -2,7 +2,12 @@ import { AuthActions, loginSuccess } from "./actions"
 import jwt_decode from 'jwt-decode'
 
 export interface AuthState {
-    user?: JWTPayload
+    user?: {
+        userId: number,
+        nickname: string,
+        isAdmin: boolean,
+        isTutor: boolean
+    }
     error?: string
     // userId: string | null
     // role: string | null
@@ -11,6 +16,7 @@ export interface AuthState {
 export type JWTPayload = {
     id: number,
     nickname: string,
+    is_admin: boolean,
     is_tutor: boolean,
 }
 const initialState: AuthState = {}
@@ -21,7 +27,6 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
     // if (action.token) {
         // const payload: JWTPayload = jwt_decode(action.token)
     // }
-
     if (action.type === '@@auth/LOGIN_SUCCESS') {
         // Only this action has 'token'
         const payload: JWTPayload = jwt_decode(action.token)
@@ -29,9 +34,10 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
         return {
             ...state,
             user: {
-                id: payload.id,
+                userId: payload.id,
                 nickname: payload.nickname,
-                is_tutor: payload.is_tutor
+                isAdmin: payload.is_admin,
+                isTutor: payload.is_tutor
             }
         }
     }

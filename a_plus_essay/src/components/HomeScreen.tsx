@@ -1,7 +1,10 @@
 import * as React from "react";
 import { VStack, Center, Text } from 'native-base';
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 export default function Home() {
+    const userInfo = useSelector((state: RootState) => state.auth.user)
 
     return (
         <VStack space={5} alignItems="flex-end">
