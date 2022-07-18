@@ -1,14 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
 import { BottomSheetAndroid } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionPresets';
 import * as React from 'react'
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function TutorInformation() {
-
+export default function TutorInformation({tutors}: any) {
+    console.log('tutors from "select tutor": ', tutors)
     return (
         <View style={{}}>
-
-
             <View style={styles.container}>
                 <Text style={{ ...inlinePadding(5, 5, 15, 15), fontWeight: 'bold', fontSize: 20, }}>Beeno</Text>
 
