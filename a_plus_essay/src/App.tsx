@@ -43,6 +43,8 @@ import OrderSubmission from './components/OrderSubmission';
 import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
+import Chatroom from './components/Chatroom';
+
 // import OrderSubmission from './src/components/OrderSubmission';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -110,7 +112,7 @@ export default function App() {
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
           <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="Chats" component={ChatList} />
+          <Stack.Screen name="Chats" component={Chatroom} />
           <Stack.Screen name="Message" component={Notification} />
           <Stack.Screen name="Status" component={Status} />
         </Stack.Navigator>
