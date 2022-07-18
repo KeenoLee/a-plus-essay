@@ -7,7 +7,9 @@ import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navig
 import { RootStackParamList } from "../App";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { fetchLogin } from "../redux/auth/actions";
-import { RootState, store } from "../../store";
+import { RootState, store } from "../redux/store";
+import { ThunkDispatch } from "redux-thunk";
+import { AppDispatch } from "../redux/dispatch";
 interface UserInfo {
     email: string,
     password: string
@@ -31,17 +33,15 @@ type Props = NativeStackScreenProps<RootStackParamList>
 export default function LoginPage({ navigation }: Props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const state = useSelector((state: RootState) => state)
     // const auth = useSelector((state: RootState) => state.auth)
     // const user = useSelector((state: RootState) => state.auth.user)
-    console.log('state from store: ', state)
+    useEffect(()=>{
+        console.log('state from store: ', state)
+    },[state])
     // console.log('auth of state from store: ', auth)
     // console.log('user of auth from store: ', user)
-    useEffect(() => {
-        // dispatch(fetchLogin({email: username, password: password}))
-        // console.log(dispatch(fetchLogin({ type: '@@auth/LOGIN_SUCCESS',email: username, password: password})))
-    }, [dispatch])
     // const navigation = useNavigation()
     return (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
@@ -57,9 +57,9 @@ export default function LoginPage({ navigation }: Props) {
             <TouchableOpacity style={styles.button} onPress={async () => {
                 // const result = await fetchLogin({ email: username, password: password })
                 // const result = dispatch({ type: '@@auth/LOGIN_SUCCESS', email: username, password: password })
-                const result = dispatch(fetchLogin({ type: '@@auth/LOGIN_SUCCESS', email: username, password: password }))
+                dispatch(fetchLogin({ email: username, password: password }))
                     // .unwrap()
-                console.log('result from dispatch a thunk action: ', result)
+
                 // result.error ?
                 //     Alert.alert('Error', result.error) :
                 //     navigation.navigate('HomeScreen')
