@@ -1,12 +1,16 @@
 import React, { useState } from "react"
 import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/core";
+import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from "../App";
 interface UserInfo {
     email: string,
     password: string
 }
+type Props = NativeStackScreenProps<RootStackParamList>
+
 async function fetchLogin(userInfo: UserInfo) {
     console.log('going to fetch login...')
     const res = await fetch('http://localhost:8111/login/password', {
@@ -21,10 +25,10 @@ async function fetchLogin(userInfo: UserInfo) {
     return result
 }
 
-export default function LoginPage() {
+export default function LoginPage({ navigation }: Props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-
+    // const navigation = useNavigation()
     return (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
             <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={email => setUsername(email)} />
@@ -40,15 +44,18 @@ export default function LoginPage() {
                 const result = await fetchLogin({ email: username, password: password })
                 result.error ?
                     Alert.alert('Error', result.error) :
-                    Alert.alert('Success', result)
-                    // Navigate to Home Page here
+                    navigation.navigate('A Plus Company')
+                    // Alert.alert('Success', result)
+                // Navigate to Home Page here
             }} >
                 <Text style={{ textAlign: 'center', color: 'white' }}>Sign in</Text>
             </TouchableOpacity>
 
             <View style={{ flexDirection: 'row', margin: 20 }}>
                 <Text>Don't have an account? </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>{
+                    navigation.navigate('Register')
+                }}>
                     <Text style={{ color: "#007AFF" }}>Sign Up</Text>
                 </TouchableOpacity>
             </View>

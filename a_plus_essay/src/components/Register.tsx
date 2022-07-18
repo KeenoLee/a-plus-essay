@@ -12,7 +12,6 @@ import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
-import base64 from 'react-native-base64'
 import { registerStudent } from "../redux/student/actions";
 // import RNFetchBlob from 'rn-fetch-blob'
 
@@ -389,15 +388,15 @@ export default function Register() {
                     <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={(email) => setEmail(email)} />
                     <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Password" onChangeText={(password) => setPassword(password)} />
                     <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
-                    <TextInput style={styles.input} keyboardType='numeric' textContentType='telephoneNumber' placeholder='Mobile Number' maxLength={8} onChangeText={mobileNumber => {setMobileNumber(mobileNumber); setInput(text => reg.test(mobileNumber)? '': text)}} />
+                    <TextInput style={styles.input} keyboardType='numeric' textContentType='telephoneNumber' placeholder='Mobile Number' maxLength={8} onChangeText={mobileNumber => { setMobileNumber(mobileNumber); setInput(text => reg.test(mobileNumber) ? '' : text) }} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
                 </> : null}
 
-            
+
 
             {page.step === 1 && isOAuth ?
                 <>
-                    {isTutor? <Text style={styles.title}>Become a Tutor</Text> : <Text style={styles.title}>Become a Student</Text>}
+                    {isTutor ? <Text style={styles.title}>Become a Tutor</Text> : <Text style={styles.title}>Become a Student</Text>}
                     {/* <Text style={styles.title}>Create New Account</Text> */}
                     <RadioGroup
                         containerStyle={{ flexDirection: 'row', color: 'blue' }}

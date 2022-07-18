@@ -22,14 +22,20 @@ const userRoutes = express.Router();
 const orderRoutes = express.Router();
 
 let server = http.createServer(app)
-let io = new socketio.Server(server)
+let io = new socketio.Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ["GET", "POST"]
+    }
+})
 // app.use(cors({ 'production' }))
 
 
 io.on("connection", socket => {
     console.log("socket.io is connected")
     socket.on("chat message", msg => {
-        console.log(msg);
+        console.log('chat message:', msg);
+        io.emit("chat message", msg)
     })
 })
 
@@ -55,6 +61,7 @@ app.get("/", (req: Request, res: Response) => {
 
 
 orderRoutes.get("/order/data", orderController.getOrderData)
+userRoutes.post("/order-submission", orderController.createOrder)
 
 const PORT = 8111
 
