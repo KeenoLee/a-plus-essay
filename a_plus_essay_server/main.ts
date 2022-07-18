@@ -39,9 +39,10 @@ io.on("connection", socket => {
     })
 })
 
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({limit: '200mb'}));
+app.use(express.urlencoded({limit: '200mb', extended: true}));
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
 
 app.use(userRoutes)
 app.use(orderRoutes)
@@ -50,7 +51,7 @@ userRoutes.post("/register/student", userController.createUser);
 userRoutes.post("/register/tutor", userController.createUser);
 userRoutes.post("/login/password", userController.loginWithPassword);
 userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplication);
-// userRoutes.get("/login/google", userController.loginGoogle);
+userRoutes.get("/login/google", userController.loginWithGoogle);
 userRoutes.get("/login/facebook", userController.loginWithFacebook);
 userRoutes.post("/resetpassword", userController.resetPassword);
 

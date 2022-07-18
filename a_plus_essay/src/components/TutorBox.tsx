@@ -8,18 +8,18 @@ export default function TutorBox() {
         
             <View style={styles.tutorBox}>
                 <View style={{flex: 7.5}}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 20}}>Beeno</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Beeno</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{flex: 7}}>Order Completed: </Text>
-                        <Text style={{flex: 3}}>50</Text>
+                        <Text style={{flex: 7, fontSize: 12, paddingVertical: 2}}>Order Completed: </Text>
+                        <Text style={{flex: 3, fontSize: 12, paddingVertical: 2}}>50</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                        <Text style={{flex:7}}>Rating: </Text>
-                        <Text style={{flex:3}}>5 Stars</Text>
+                        <Text style={{flex:7, fontSize: 12, paddingVertical: 2}}>Rating: </Text>
+                        <Text style={{flex:3, fontSize: 12, paddingVertical: 2}}>5 Stars</Text>
                     </View>
-                    <Text>Tutor Introduction: </Text>
-                    <Text style={{backgroundColor: 'white', marginLeft: 10, padding: 5}}>I am the best!</Text>
+                    <Text style={{ fontSize: 12, paddingVertical: 2}}>Tutor Introduction: </Text>
+                    <Text style={{backgroundColor: 'white', marginLeft: 10, padding: 5, marginTop: 2}}>I LOVE IONIC!</Text>
                 </View>
                 <View style={{ alignItems: 'center', flex: 2.5 }}>
                     <Text style={{backgroundColor: 'rgb(192,210,207)', padding: 5, fontWeight: 'bold'}}>$ Price</Text>

@@ -30,7 +30,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // import LoadingScreen from './src/components/LoadingScreen';
 import Home from './pages/Home'
 import Notification from './pages/Notification';
-import Status from './pages/Status';
 import ChatList from './pages/ChatList';
 import Register from './components/Register';
 import SelectTutor from './components/SelectTutor';
@@ -45,8 +44,25 @@ import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
 
+import OrderStatus from './pages/OrderStatus';
 // import OrderSubmission from './src/components/OrderSubmission';
-const Stack = createStackNavigator();
+
+type RootStackParamList = {
+  Welcome: undefined
+  ChatList: undefined
+  'Success Register': undefined
+  'Order Submission': undefined
+  'Thank You': undefined
+  'Tutor Information': undefined
+  'Select Tutor': undefined
+  HomeScreen: undefined
+  Register: undefined
+  Chats: undefined
+  Message: undefined
+  Status: undefined
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
@@ -54,7 +70,8 @@ const Tabs = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'white',
-        tabBarStyle: { backgroundColor: '#BBD3CF' }
+        tabBarStyle: { backgroundColor: '#BBD3CF' },
+        headerShown: false
       }}>
       <Tab.Screen name="Home" component={Home}
         options={{
@@ -63,6 +80,14 @@ const Tabs = () => {
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
           ),
         }} />
+      <Tab.Screen name="Order Status" component={OrderStatus}
+        options={{
+          tabBarLabel: 'Order',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name="hourglass" color={color} size={focused ? 30 : size} />
+          ),
+        }}
+      />
       <Tab.Screen name="Chats" component={ChatList}
         options={{
           tabBarLabel: 'Chats',
@@ -70,21 +95,13 @@ const Tabs = () => {
             <Ionicons name="chatbubbles" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Message" component={Notification}
+      <Tab.Screen name="Account" component={Notification}
         options={{
-          tabBarLabel: 'Notifications',
+          tabBarLabel: 'Account',
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="notifications" color={color} size={focused ? 30 : size} />
+            <Ionicons name="person-circle" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Status" component={Status}
-        options={{
-          tabBarLabel: 'Status',
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="hourglass" color={color} size={focused ? 30 : size} />
-          ),
-        }}
-      />
     </Tab.Navigator>
   )
 }
@@ -103,9 +120,13 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Chats">
+        <Stack.Navigator initialRouteName="HomeScreen">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
+          <Stack.Screen name="HomeScreen" component={Tabs} />
+          <Stack.Screen name="Welcome" component={LoginPage} />
+          {/* {(props)=> <LoginPage navigation={props}/>} */}
+          {/* </Stack.Screen> */}
+          <Stack.Screen name="ChatList" component={ChatList} />
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
@@ -114,7 +135,6 @@ export default function App() {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Chats" component={Chatroom} />
           <Stack.Screen name="Message" component={Notification} />
-          <Stack.Screen name="Status" component={Status} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

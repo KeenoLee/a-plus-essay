@@ -35,8 +35,8 @@ export default function SubjectRow({ index, subject, onSubjectChange, onGradeCha
         <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity style={styles.editRow} onPress={() => { console.log('at delete button:', index); onDelete(index) }}><Text>-</Text></TouchableOpacity>
 
-            <TextInput style={styles.subject} onChangeText={(text) => onSubjectChange(text)} value={subject.subject} />
-            <TextInput style={styles.subjectGrade} value={subject.grade} onChangeText={text => onGradeChange(text)} />
+            <TextInput autoCapitalize="none" style={styles.subject} onChangeText={(text) => onSubjectChange(text)} value={subject.subject} />
+            <TextInput autoCapitalize="none" style={styles.subjectGrade} value={subject.grade} onChangeText={text => onGradeChange(text)} />
             <Checkbox value='' aria-label='subject' size='sm' 
                 style={{ marginRight: 30 }} 
                 isChecked={subject.isChecked} 
