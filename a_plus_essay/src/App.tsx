@@ -68,7 +68,8 @@ const Tabs = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'white',
-        tabBarStyle: { backgroundColor: '#BBD3CF' }
+        tabBarStyle: { backgroundColor: '#BBD3CF' },
+        headerShown: false
       }}>
       <Tab.Screen name="Home" component={Home}
         options={{
