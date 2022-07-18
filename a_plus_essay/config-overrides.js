@@ -13,6 +13,7 @@ module.exports = override(
     // Add not-supported-by-web files
     // addWebpackAlias({
     //     'react-native-ble': require.resolve('./empty/index.js'),
+    // 'react-native-image-picker': require.resolve('./node_modules/source-map-loader/dist/cjs.js'),
     // }),
     addWebpackPlugin(
         new webpack.DefinePlugin({
@@ -24,5 +25,6 @@ module.exports = override(
         path.resolve(__dirname, 'node_modules/react-native-radio-buttons-group'),
         path.resolve(__dirname, 'node_modules/react-native-vector-icons'),
         path.resolve(__dirname, 'node_modules/date-fns'),
+        path.resolve(__dirname, 'node_modules/react-native-image-picker'),
     ]),
 );
