@@ -5,6 +5,7 @@
   "compilerOptions": {
     "strict": true,
     "jsx": "react-jsx",
+    "lib": ["DOM"],
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
     /* Completeness */

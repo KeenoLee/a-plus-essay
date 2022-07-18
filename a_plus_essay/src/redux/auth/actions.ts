@@ -1,14 +1,20 @@
-import dotenv from 'dotenv'
+import { Dispatch } from 'react'
+import { AnyAction } from 'redux'
+import { ThunkAction, ThunkDispatch } from 'redux-thunk'
+import { AuthState } from './reducer'
 
-dotenv.config()
 
-function loginSuccess() {
+export function loginSuccess(token: string) {
+    console.log('in "loginSuccess" action')
     return {
-        type: '@@auth/LOGIN_SUCCESS' as const
+        type: '@@auth/LOGIN_SUCCESS' as const,
+        token
     }
 }
 
 function loginAsStudent() {
+    console.log('in "loginAsStudent" action')
+
     return {
         type: '@@auth/LOGIN_AS_STUDENT' as const
     }
@@ -45,16 +51,27 @@ ReturnType<typeof loginAsTutor> |
 ReturnType<typeof loginAsAdmin> |
 ReturnType<typeof loginFailed> |
 ReturnType<typeof logoutSuccess>
-
-export function login(username: string, password: string) {
-    return async (dispatch: any) => {
-        const res = await fetch(`${process.env.BACKEND_URL}/login`, {
+interface UserInfo {
+    // type: string,
+    email: string,
+    password: string
+}
+export function fetchLogin(userInfo: UserInfo) {
+    return async (dispatch: Dispatch<AuthActions>) => {
+        const res = await fetch(`http://localhost:8111/login/password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({username, password})
+            body: JSON.stringify(userInfo)
         })
         const result = await res.json()
+        if (!result.error) {
+            const token = result.token
+            console.log('token in thunk action: ', token)
+            dispatch(loginSuccess(token))
+        }
+        // console.log('result in thunk: ', result)
+        // return result
     }
 }

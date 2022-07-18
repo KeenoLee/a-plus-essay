@@ -61,6 +61,7 @@ app.get("/", (req: Request, res: Response) => {
 
 
 orderRoutes.get("/order/data", orderController.getOrderData)
+userRoutes.post("/order-submission", orderController.createOrder)
 
 const PORT = 8111
 
