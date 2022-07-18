@@ -44,7 +44,7 @@ import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
 // import OrderSubmission from './src/components/OrderSubmission';
-type RootStackParamList = {
+export type RootStackParamList = {
   Welcome: undefined
   ChatList: undefined
   'Success Register': undefined
@@ -56,6 +56,7 @@ type RootStackParamList = {
   Chats: undefined
   Message: undefined
   Status: undefined
+  'A Plus Company': undefined
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -115,9 +116,9 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Select Tutor">
+        <Stack.Navigator initialRouteName="Welcome">
           {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          {/* <Stack.Screen name="A Plus Company" component={Tabs} /> */}
+          <Stack.Screen name="A Plus Company" component={Tabs} />
           <Stack.Screen name="Welcome" component={LoginPage}/>
             {/* {(props)=> <LoginPage navigation={props}/>} */}
           {/* </Stack.Screen> */}
@@ -131,6 +132,8 @@ export default function App() {
           <Stack.Screen name="Chats" component={ChatList} />
           <Stack.Screen name="Message" component={Notification} />
           <Stack.Screen name="Status" component={Status} />
+          {/* <Stack.Screen name="A Plus Company" component={Home} /> */}
+
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
