@@ -5,13 +5,11 @@ import { studentReducer, StudentState } from "./src/redux/student/reducer";
 import { tutorReducer, TutorState } from "./src/redux/tutor/reducer";
 
 export interface RootState {
-    student: StudentState
-    tutor: TutorState
+    auth: AuthState
 }
 
 const rootReducer = combineReducers({
-    student: studentReducer,
-    tutor: tutorReducer
+    auth: authReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

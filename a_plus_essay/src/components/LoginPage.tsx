@@ -1,33 +1,47 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { NavigationContainer } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/core";
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from "../App";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { fetchLogin } from "../redux/auth/actions";
+import { RootState, store } from "../../store";
 interface UserInfo {
     email: string,
     password: string
 }
 type Props = NativeStackScreenProps<RootStackParamList>
 
-async function fetchLogin(userInfo: UserInfo) {
-    console.log('going to fetch login...')
-    const res = await fetch('http://localhost:8111/login/password', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userInfo)
-    })
-    const result = await res.json()
-    console.log(result)
-    return result
-}
+// async function fetchLogin(userInfo: UserInfo) {
+//     console.log('going to fetch login...')
+//     const res = await fetch('http://localhost:8111/login/password', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(userInfo)
+//     })
+//     const result = await res.json()
+//     console.log(result)
+//     return result
+// }
 
 export default function LoginPage({ navigation }: Props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const dispatch = useDispatch()
+    const state = useSelector((state: RootState) => state)
+    // const auth = useSelector((state: RootState) => state.auth)
+    // const user = useSelector((state: RootState) => state.auth.user)
+    console.log('state from store: ', state)
+    // console.log('auth of state from store: ', auth)
+    // console.log('user of auth from store: ', user)
+    useEffect(() => {
+        // dispatch(fetchLogin({email: username, password: password}))
+        // console.log(dispatch(fetchLogin({ type: '@@auth/LOGIN_SUCCESS',email: username, password: password})))
+    }, [dispatch])
     // const navigation = useNavigation()
     return (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
@@ -41,11 +55,15 @@ export default function LoginPage({ navigation }: Props) {
             </View>
 
             <TouchableOpacity style={styles.button} onPress={async () => {
-                const result = await fetchLogin({ email: username, password: password })
-                result.error ?
-                    Alert.alert('Error', result.error) :
-                    navigation.navigate('A Plus Company')
-                    // Alert.alert('Success', result)
+                // const result = await fetchLogin({ email: username, password: password })
+                // const result = dispatch({ type: '@@auth/LOGIN_SUCCESS', email: username, password: password })
+                const result = dispatch(fetchLogin({ type: '@@auth/LOGIN_SUCCESS', email: username, password: password }))
+                    // .unwrap()
+                console.log('result from dispatch a thunk action: ', result)
+                // result.error ?
+                //     Alert.alert('Error', result.error) :
+                //     navigation.navigate('HomeScreen')
+                // Alert.alert('Success', result)
                 // Navigate to Home Page here
             }} >
                 <Text style={{ textAlign: 'center', color: 'white' }}>Sign in</Text>
@@ -53,7 +71,7 @@ export default function LoginPage({ navigation }: Props) {
 
             <View style={{ flexDirection: 'row', margin: 20 }}>
                 <Text>Don't have an account? </Text>
-                <TouchableOpacity onPress={()=>{
+                <TouchableOpacity onPress={() => {
                     navigation.navigate('Register')
                 }}>
                     <Text style={{ color: "#007AFF" }}>Sign Up</Text>
