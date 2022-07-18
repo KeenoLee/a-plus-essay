@@ -1,4 +1,7 @@
 import { Dispatch } from 'react'
+import { AnyAction } from 'redux'
+import { ThunkAction, ThunkDispatch } from 'redux-thunk'
+import { AuthState } from './reducer'
 
 
 export function loginSuccess(token: string) {
@@ -53,9 +56,8 @@ interface UserInfo {
     email: string,
     password: string
 }
-
 export function fetchLogin(userInfo: UserInfo) {
-    return async (dispatch: Dispatch<AuthActions>): Promise<void> => {
+    return async (dispatch: Dispatch<AuthActions>) => {
         const res = await fetch(`http://localhost:8111/login/password`, {
             method: 'POST',
             headers: {

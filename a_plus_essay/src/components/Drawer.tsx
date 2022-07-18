@@ -25,9 +25,11 @@ export function HomeDrawer() {
                 drawerStyle: {
                     // width: 500,
                 },
+
+                
             }}
-            >
-            <Drawer.Screen name="Home" component={HomeScreen} />
+        >
+            <Drawer.Screen  name="Home" component={HomeScreen} />
             <Drawer.Screen name="Login" component={LoginPage} />
             <Drawer.Screen name="Sign up" component={Register} />
             <Drawer.Screen name="Rules" component={Rules} />
