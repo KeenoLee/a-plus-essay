@@ -78,13 +78,6 @@ const Tabs = () => {
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Chats" component={ChatList}
-        options={{
-          tabBarLabel: 'Chats',
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="chatbubbles" color={color} size={focused ? 30 : size} />
-          ),
-        }} />
       <Tab.Screen name="Order Status" component={OrderStatus}
         options={{
           tabBarLabel: 'Order',
@@ -93,6 +86,13 @@ const Tabs = () => {
           ),
         }}
       />
+      <Tab.Screen name="Chats" component={ChatList}
+        options={{
+          tabBarLabel: 'Chats',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name="chatbubbles" color={color} size={focused ? 30 : size} />
+          ),
+        }} />
       <Tab.Screen name="Account" component={Notification}
         options={{
           tabBarLabel: 'Account',
