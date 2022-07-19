@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList>
 
 // async function fetchLogin(userInfo: UserInfo) {
 //     console.log('going to fetch login...')
-//     const res = await fetch('http://localhost:8111/login/password', {
+//     const res = await fetch('/login/password', {
 //         method: 'POST',
 //         headers: {
 //             'Content-Type': 'application/json'

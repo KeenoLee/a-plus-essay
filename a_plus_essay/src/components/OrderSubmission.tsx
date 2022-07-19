@@ -11,6 +11,7 @@ import { dataURItoBlob } from '@beenotung/tslib/image'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { env } from '../env/env';
 interface UserFile {
     filename: string,
     base64Data: string
@@ -34,7 +35,7 @@ function shorterFilename(filename: string) {
     return filename
 }
 async function fetchOrder(order: OrderValue) {
-    const res = await fetch('http://localhost:8111/order-submission', {
+    const res = await fetch(`${env.BACKEND_URL}/order-submission`, {
         method: 'POST',
         // headers: {
         //     'Content-Type': 'application/json'
