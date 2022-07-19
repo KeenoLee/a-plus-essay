@@ -142,7 +142,7 @@ export function HomeStack() {
       {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
       <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
       {/* <Stack.Screen name="Home Drawer" component={HomeDrawer} options={{ headerShown: false }} /> */}
-      <Stack.Screen name="Welcome" component={LoginPage} />
+      <Stack.Screen name="Welcome" component={LoginPage} options={{ headerShown: false}}/>
       {/* {(props)=> <LoginPage navigation={props}/>} */}
       {/* </Stack.Screen> */}
       <Stack.Screen name="ChatList" component={ChatList} />

@@ -42,7 +42,7 @@ export function HomeDrawer() {
             <Drawer.Screen name="FAQ" component={FAQ} />
             <Drawer.Screen name="Contact Us" component={ContactUs} />
             <Drawer.Screen name="Order Submission" component={OrderSubmission} />
-            <Drawer.Screen name="Logout" component={HomeStack} />
+            <Drawer.Screen name="Logout" component={LoginPage} />
         </Drawer.Navigator>
     );
 }
