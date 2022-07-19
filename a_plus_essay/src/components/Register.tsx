@@ -13,6 +13,7 @@ import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import { registerStudent } from "../redux/student/actions";
+import { env } from "../env/env";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -127,7 +128,7 @@ function checkIsTutor(role: RadioButtonProps[]): boolean | string {
 }
 async function fetchStudent(registerData: StudentData) {
     // const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/register/tutor`)
-    const res = await fetch(`http://localhost:8111/register/student`, {
+    const res = await fetch(`${env.BACKEND_URL}/register/student`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -142,7 +143,7 @@ async function fetchStudent(registerData: StudentData) {
 }
 
 async function checkTutorEmailAndPhone(data: CheckTutorDuplicate) {
-    const res = await fetch(`http://localhost:8111/checkemailandphone`, {
+    const res = await fetch(`${env.BACKEND_URL}/checkemailandphone`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -157,7 +158,7 @@ async function checkTutorEmailAndPhone(data: CheckTutorDuplicate) {
     return 'success'
 }
 async function fetchTutor(registerData: TutorData) {
-    const res = await fetch(`http://localhost:8111/register/tutor`, {
+    const res = await fetch(`${env.BACKEND_URL}/register/tutor`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
