@@ -234,9 +234,9 @@ export default function OrderSubmission() {
                 {Alert.alert(
                 'Unauthorized',
                 'Please login to submit order!',
-                // [
-                //     { text: 'OK', onPress: () => { navigation.navigate('Welcome') }},
-                // ]
+                [
+                    { text: 'OK', onPress: () => { navigation.navigate('Login') }},
+                ]
                 )}
             </View>
             // <Button onPress={()=>{}} />
