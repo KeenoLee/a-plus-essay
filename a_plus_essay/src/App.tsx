@@ -156,7 +156,6 @@ export default function App() {
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           {/* {(props) => <LoginPage navigation={props} />}
           </Stack.Screen> */}
-          <Stack.Screen name="ChatList" component={ChatList} />
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Thank You" component={OrderMatched} />
           <Stack.Screen name="Tutor Information" component={TutorInformation} />
