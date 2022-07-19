@@ -3,7 +3,16 @@ interface Guideline {
     filename: string
     base64: string
 }
-
+export type SubjectFromDB = {
+    id: number,
+    subject_name: string
+}
+export type Subject = {
+    key: string,
+    subject: string,
+    score: string,
+    isChecked: boolean
+}
 interface Note {
     filename: string
     base64: string
