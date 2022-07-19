@@ -33,7 +33,7 @@ export default function SuccessRegister() {
                 width: 250,
                 borderRadius: 15,
             }} onPress={()=>{
-                navigation.navigate('A Plus Company')
+                navigation.navigate('A Plus Essay')
             }}>
                 <Text style={{
                     textAlign: 'center',

@@ -73,7 +73,7 @@ export default function LoginPage({ navigation }: Props) {
             <View style={{ flexDirection: 'row', margin: 20 }}>
                 <Text>Don't have an account? </Text>
                 <TouchableOpacity onPress={() => {
-                    navigation.navigate('Register')
+                    navigation.navigate('Sign up')
                 }}>
                     <Text style={{ color: "#007AFF" }}>Sign Up</Text>
                 </TouchableOpacity>

@@ -10,7 +10,7 @@ import { Alert } from 'react-native';
 import { dataURItoBlob } from '@beenotung/tslib/image'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
 interface UserFile {
     filename: string,
@@ -239,7 +239,5 @@ export default function OrderSubmission() {
                 ]
                 )}
             </View>
-            // <Button onPress={()=>{}} />
-        // <Text>Authentication is Allowed</Text>
     )
 }
