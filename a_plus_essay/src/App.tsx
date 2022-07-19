@@ -47,6 +47,7 @@ import Chatroom from './components/Chatroom';
 import OrderStatus from './pages/OrderStatus';
 import { HomeDrawer } from './components/HomeDrawer';
 import HomeScreen from './components/HomeScreen';
+import Account from './components/Account';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 export type RootStackParamList = {
@@ -91,7 +92,9 @@ export const Tabs = () => {
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
         headerShown: false
-      }}>
+      }}
+        initialRouteName="Account"
+      >
       <Tab.Screen name="Home" component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
@@ -114,7 +117,7 @@ export const Tabs = () => {
             <Ionicons name="chatbubbles" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Account" component={Notification}
+      <Tab.Screen name="Account" component={Account}
         options={{
           tabBarLabel: 'Account',
           tabBarIcon: ({ focused, color, size }) => (
@@ -163,7 +166,7 @@ export function HomeStack() {
       <Stack.Screen name="Thank You" component={OrderMatched} />
       <Stack.Screen name="Tutor Information" component={TutorInformation} />
       <Stack.Screen name="Select Tutor" component={SelectTutor} />
-      <Stack.Screen name="Register" component={Register} />
+      {/* <Stack.Screen name="Register" component={Register} /> */}
       <Stack.Screen name="Message" component={Notification} />
       <Stack.Screen name="Chats" component={Chatroom} />
       {/* <Fabtn/> */}
