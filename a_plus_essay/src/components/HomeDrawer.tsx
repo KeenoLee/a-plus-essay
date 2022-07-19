@@ -35,14 +35,14 @@ export function HomeDrawer() {
         >
             <Drawer.Screen name="A Plus Essay" component={HomeStack}  />
             {/* <Drawer.Screen name='App' component={App} /> */}
-            <Drawer.Screen name="Home" component={HomeScreen} />
+            {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
             <Drawer.Screen name="Login" component={LoginPage} />
             <Drawer.Screen name="Sign up" component={Register} />
             <Drawer.Screen name="Rules" component={Rules} />
             <Drawer.Screen name="FAQ" component={FAQ} />
             <Drawer.Screen name="Contact Us" component={ContactUs} />
             <Drawer.Screen name="Order Submission" component={OrderSubmission} />
-            <Drawer.Screen name="Logout" component={Welcome} />
+            <Drawer.Screen name="Logout" component={HomeStack} />
         </Drawer.Navigator>
     );
 }
