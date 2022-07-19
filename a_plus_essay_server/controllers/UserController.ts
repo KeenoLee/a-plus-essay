@@ -289,7 +289,14 @@ export class UserController {
             query: "access_token"
         });
         const token = permit.check(req);
+        if (!token) {
+            return res.status(401).json({ error: "permission denied" });
+        }
+
         const payload = jwtSimple.decode(token, process.env.jwtSecret!);
+        if (!payload) {
+            return res.status(401).json({ error: "Invalid JWT" });;
+        }
 
         if (!email) {
             res.status(400).json({ error: "Missing email" })
