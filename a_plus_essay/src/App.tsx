@@ -46,6 +46,7 @@ import Chatroom from './components/Chatroom';
 
 import OrderStatus from './pages/OrderStatus';
 import { HomeDrawer } from './components/HomeDrawer';
+import HomeScreen from './components/HomeScreen';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 export type RootStackParamList = {
@@ -91,7 +92,7 @@ export const Tabs = () => {
         tabBarStyle: { backgroundColor: '#BBD3CF' },
         headerShown: false
       }}>
-      <Tab.Screen name="Home" component={Home}
+      <Tab.Screen name="Home" component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color, size }) => (
