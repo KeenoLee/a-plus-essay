@@ -8,7 +8,6 @@ import { OrderService } from './services/OrderService'
 import { OrderController } from './controllers/OrderController'
 import Knex from "knex";
 import config from "./knexfile";
-import { guard } from './guard';
 
 export const knex = Knex(config[process.env.NODE_ENV || "development"]);
 const userService = new UserService(knex);
@@ -39,8 +38,8 @@ io.on("connection", socket => {
     })
 })
 
-app.use(express.json({limit: '200mb'}));
-app.use(express.urlencoded({limit: '200mb', extended: true}));
+app.use(express.json({ limit: '200mb' }));
+app.use(express.urlencoded({ limit: '200mb', extended: true }));
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
 
