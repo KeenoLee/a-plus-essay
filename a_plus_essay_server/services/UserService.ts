@@ -149,7 +149,7 @@ export class UserService {
     };
 
     async loginWithPassword(account: { email: string, password: string }) {
-        const userInfo = await this.knex.select('id', 'nickname', 'is_tutor', 'hashed_password').from("user").where("email", account.email).first();
+        const userInfo = await this.knex.select('id', 'nickname', 'is_admin', 'is_tutor', 'hashed_password').from("user").where("email", account.email).first();
         console.log('userInfo: ', userInfo)
         const correctPassword = await checkPassword(account.password, userInfo.hashed_password);
         console.log('correctPassword: ', correctPassword)

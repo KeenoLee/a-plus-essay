@@ -3,6 +3,7 @@ import { UserService } from "../services/UserService";
 import { Bearer } from 'permit';
 import jwtSimple from 'jwt-simple';
 import dotenv from 'dotenv';
+import jwt_decode from 'jwt-decode'
 
 dotenv.config({ path: '../.env' });
 
@@ -142,8 +143,10 @@ export class UserController {
         };
 
         const isLoggedIn = await this.userService.loginWithPassword({ email, password });
+        console.log('isLoggedIn: ', isLoggedIn)
         const jwt = jwtSimple.encode(isLoggedIn.userInfo, process.env.jwtSecret!);
-
+        console.log('JWT: ', jwt)
+        console.log('decoded: ', jwt_decode(jwt))
         if (isLoggedIn.success === true) {
             res.json({ success: true, token: jwt });
         } else res.status(400).json({ error: "Incorrect password" });
