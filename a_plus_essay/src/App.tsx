@@ -44,7 +44,7 @@ import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
 
-import OrderStatus from './pages/OrderStatus';
+import OrderStatus from './pages/OrderStatus/OrderStatus';
 import { HomeDrawer } from './components/HomeDrawer';
 import HomeScreen from './components/HomeScreen';
 import Account from './components/Account';
@@ -127,20 +127,20 @@ export const Tabs = () => {
     </Tab.Navigator>
   )
 }
-// const RegisterStack = createStackNavigator()
+const RegisterStack = createStackNavigator()
 
-// function RegisterStacks() {
-//   return (
-//     <RegisterStack.Navigator>
-//       <RegisterStack.Screen name='RegisterSuccess' component={Register} />
-//       <RegisterStack.Screen name='TutorAcademic' component={Register} />
-//     </RegisterStack.Navigator>
-//   )
-// }
+function RegisterStacks() {
+  return (
+    <RegisterStack.Navigator>
+      <RegisterStack.Screen name='RegisterSuccess' component={Register} />
+      <RegisterStack.Screen name='TutorAcademic' component={Register} />
+    </RegisterStack.Navigator>
+  )
+}
 
 export function HomeStack() {
   return (
-    <Stack.Navigator >
+    <Stack.Navigator>
       {/* <NavigationContainer> */}
       {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
       <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
@@ -148,7 +148,7 @@ export function HomeStack() {
       <Stack.Screen name="Welcome" component={LoginPage} options={{ headerShown: false}}/>
       {/* {(props)=> <LoginPage navigation={props}/>} */}
       {/* </Stack.Screen> */}
-      <Stack.Screen name="ChatList" component={ChatList} />
+      <Stack.Screen name="ChatList" component={ChatList} options={{headerShown: false}}/>
       {/* <HomeDrawer /> */}
       {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
       {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
