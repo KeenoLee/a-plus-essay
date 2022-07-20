@@ -20,7 +20,7 @@ teal.300
 teal.400
 #2dd4bf
 
-teal.500
+teal.500 // normal button 
 #14b8a6
 
 teal.600
@@ -34,3 +34,7 @@ teal.800
 
 teal.900
 #134e4a
+
+disabled button
+#a8a29e
+
