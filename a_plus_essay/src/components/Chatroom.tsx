@@ -8,6 +8,7 @@ import { Button, Center, Divider, Heading, Select, Stack, VStack } from 'native-
 import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input as InputN } from 'native-base'
+import { env } from '../env/env';
 
 // import { Header } from '@react-navigation/native-stack'
 
@@ -47,7 +48,7 @@ export default class Chatroom extends Component<IChatroomProps, IChatroomState> 
     }
 
     componentDidMount() {
-        this.socket = io("http://192.168.168.103:8111")
+        this.socket = io(`${env.BACKEND_IP}`)
         this.socket.on("chat message", (msg: string) => {
             this.setState({ chatMessages: [...this.state.chatMessages, msg] })
         })

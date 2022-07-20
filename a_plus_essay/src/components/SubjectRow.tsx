@@ -8,7 +8,7 @@ import { TextInput } from "react-native-gesture-handler"
 export type Subject = {
     key: string,
     subject: string,
-    grade: string,
+    score: string,
     isChecked: boolean
 }
 interface SubjectRowProps {
@@ -17,13 +17,13 @@ interface SubjectRowProps {
     subject: Subject,
     // preSubject: string,
     onSubjectChange: (text: string) => void,
-    onGradeChange: (text: string) => void,
+    onScoreChange: (text: string) => void,
     onDelete: (index: number) => void
     onCheckBox: (isChecked: boolean, index:number) => void
 }
 
 
-export default function SubjectRow({ index, subject, onSubjectChange, onGradeChange, onDelete, onCheckBox }: SubjectRowProps) {
+export default function SubjectRow({ index, subject, onSubjectChange, onScoreChange, onDelete, onCheckBox }: SubjectRowProps) {
     // const preSubjectData: RadioButtonProps[] = [{
     //     id: '1',
     //     value: subject.subject,
@@ -36,7 +36,7 @@ export default function SubjectRow({ index, subject, onSubjectChange, onGradeCha
             <TouchableOpacity style={styles.editRow} onPress={() => { console.log('at delete button:', index); onDelete(index) }}><Text>-</Text></TouchableOpacity>
 
             <TextInput autoCapitalize="none" style={styles.subject} onChangeText={(text) => onSubjectChange(text)} value={subject.subject} />
-            <TextInput autoCapitalize="none" style={styles.subjectGrade} value={subject.grade} onChangeText={text => onGradeChange(text)} />
+            <TextInput autoCapitalize="none" style={styles.subjectScore} value={subject.score} onChangeText={text => onScoreChange(text)} />
             <Checkbox value='' aria-label='subject' size='sm' 
                 style={{ marginRight: 30 }} 
                 isChecked={subject.isChecked} 
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 1,
     },
-    subjectGrade: {
+    subjectScore: {
         padding: 10,
         margin: 10,
         borderRadius: 10,

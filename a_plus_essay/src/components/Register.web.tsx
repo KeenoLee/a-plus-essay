@@ -13,6 +13,7 @@ import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import { stringToHex } from "react-native-mmkv-storage/dist/src/utils";
+import { env } from "../env/env";
 
 
 
@@ -104,7 +105,7 @@ async function fetchUser(registerData: UserData) {
 
     console.log('COMING ', registerData)
     // const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/register/tutor`)
-    const res = await fetch(`http://localhost:8111/register/tutor`, {
+    const res = await fetch(`${env.BACKEND_URL}/register/tutor`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
