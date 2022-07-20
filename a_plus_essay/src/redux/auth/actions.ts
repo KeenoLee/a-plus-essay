@@ -12,17 +12,19 @@ export function loginSuccess(token: string) {
     }
 }
 
-function loginAsStudent() {
+function loginAsStudent(token: string) {
     console.log('in "loginAsStudent" action')
 
     return {
-        type: '@@auth/LOGIN_AS_STUDENT' as const
+        type: '@@auth/LOGIN_AS_STUDENT' as const,
+        token
     }
 }
 
-function loginAsTutor() {
+function loginAsTutor(token: string) {
     return {
-        type: '@@auth/LOGIN_AS_TUTOR' as const
+        type: '@@auth/LOGIN_AS_TUTOR' as const,
+        token
     }
 }
 

@@ -44,8 +44,10 @@ import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
 
-import OrderStatus from './pages/OrderStatus';
-import { HomeDrawer } from './components/Drawer';
+import OrderStatus from './pages/OrderStatus/OrderStatus';
+import { HomeDrawer } from './components/HomeDrawer';
+import HomeScreen from './components/HomeScreen';
+import Account from './components/Account';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 export type RootStackParamList = {
@@ -57,7 +59,7 @@ export type RootStackParamList = {
   'Thank You': undefined
   'Tutor Information': undefined
   'Select Tutor': undefined
-  HomeScreen: undefined
+  Tabs: undefined
   Register: undefined
   Chats: undefined
   Message: undefined
@@ -84,13 +86,16 @@ const Fabtn = () => {
 // Bottom Tab navigation
 export const Tabs = () => {
   return (
+
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
         headerShown: false
-      }}>
-      <Tab.Screen name="Home" component={Home}
+      }}
+        initialRouteName="Account"
+      >
+      <Tab.Screen name="Home" component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color, size }) => (
@@ -112,7 +117,7 @@ export const Tabs = () => {
             <Ionicons name="chatbubbles" color={color} size={focused ? 30 : size} />
           ),
         }} />
-      <Tab.Screen name="Account" component={Notification}
+      <Tab.Screen name="Account" component={Account}
         options={{
           tabBarLabel: 'Account',
           tabBarIcon: ({ focused, color, size }) => (
@@ -122,52 +127,51 @@ export const Tabs = () => {
     </Tab.Navigator>
   )
 }
-// const RegisterStack = createStackNavigator()
+const RegisterStack = createStackNavigator()
 
-// function RegisterStacks() {
-//   return (
-//     <RegisterStack.Navigator>
-//       <RegisterStack.Screen name='RegisterSuccess' component={Register} />
-//       <RegisterStack.Screen name='TutorAcademic' component={Register} />
-//     </RegisterStack.Navigator>
-//   )
-// }
-
-export default function App() {
+function RegisterStacks() {
   return (
-    <NativeBaseProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Chats">
-          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          <Stack.Screen name="HomeScreen" component={Tabs} />
-          <Stack.Screen name="Welcome" component={LoginPage} />
-          {/* {(props)=> <LoginPage navigation={props}/>} */}
-          {/* </Stack.Screen> */}
-          <Stack.Screen name="ChatList" component={ChatList} />
-          {/* <HomeDrawer /> */}
-          {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
-          {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
-          {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
-          {/* <Stack.Screen name="Welcome" component={LoginPage} /> */}
-          {/* {(props)=> <LoginPage navigation={props}/>} */}
-          {/* </Stack.Screen> */}
-          {/* <Stack.Screen name="ChatList" component={ChatList}/>
+    <RegisterStack.Navigator>
+      <RegisterStack.Screen name='RegisterSuccess' component={Register} />
+      <RegisterStack.Screen name='TutorAcademic' component={Register} />
+    </RegisterStack.Navigator>
+  )
+}
+
+export function HomeStack() {
+  return (
+    <Stack.Navigator>
+      {/* <NavigationContainer> */}
+      {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+      <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+      {/* <Stack.Screen name="Home Drawer" component={HomeDrawer} options={{ headerShown: false }} /> */}
+      <Stack.Screen name="Welcome" component={LoginPage} options={{ headerShown: false}}/>
+      {/* {(props)=> <LoginPage navigation={props}/>} */}
+      {/* </Stack.Screen> */}
+      <Stack.Screen name="ChatList" component={ChatList} options={{headerShown: false}}/>
+      {/* <HomeDrawer /> */}
+      {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
+      {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
+      {/* <Stack.Screen name="HomeScreen" component={Tabs} /> */}
+      {/* <Stack.Screen name="Welcome" component={LoginPage} /> */}
+      {/* {(props)=> <LoginPage navigation={props}/>} */}
+      {/* </Stack.Screen> */}
+      {/* <Stack.Screen name="ChatList" component={ChatList}/>
           <Stack.Screen name="Success Register" component={SuccessRegister} />
           <Stack.Screen name="Order Submission" component={OrderSubmission} />
           {/* {(props) => <LoginPage navigation={props} />}
           </Stack.Screen> */}
-          <Stack.Screen name="ChatList" component={ChatList} />
-          <Stack.Screen name="Success Register" component={SuccessRegister} />
-          <Stack.Screen name="Thank You" component={OrderMatched} />
-          <Stack.Screen name="Tutor Information" component={TutorInformation} />
-          <Stack.Screen name="Select Tutor" component={SelectTutor} />
-          <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="Message" component={Notification} />
-          <Stack.Screen name="Chats" component={Chatroom} />
-        </Stack.Navigator>
-        {/* <Fabtn/> */}
-      </NavigationContainer>
-    </NativeBaseProvider >
+      {/* <Stack.Screen name="ChatList" component={ChatList} /> */}
+      <Stack.Screen name="Success Register" component={SuccessRegister} />
+      <Stack.Screen name="Thank You" component={OrderMatched} />
+      <Stack.Screen name="Tutor Information" component={TutorInformation} />
+      <Stack.Screen name="Select Tutor" component={SelectTutor} />
+      {/* <Stack.Screen name="Register" component={Register} /> */}
+      <Stack.Screen name="Message" component={Notification} />
+      <Stack.Screen name="Chats" component={Chatroom} />
+      {/* <Fabtn/> */}
+      {/* </NavigationContainer> */}
+    </Stack.Navigator>
 
     // <NativeBaseProvider>
     //   <NavigationContainer>
@@ -204,6 +208,19 @@ export default function App() {
 
 
   )
+}
+
+export default function App() {
+  return (
+    <NativeBaseProvider>
+
+      <NavigationContainer>
+
+        <HomeDrawer />
+      </NavigationContainer>
+    </NativeBaseProvider >
+  )
+
 }
 
 const styles = StyleSheet.create({

@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList>
 
 // async function fetchLogin(userInfo: UserInfo) {
 //     console.log('going to fetch login...')
-//     const res = await fetch('http://localhost:8111/login/password', {
+//     const res = await fetch('/login/password', {
 //         method: 'POST',
 //         headers: {
 //             'Content-Type': 'application/json'
@@ -54,10 +54,11 @@ export default function LoginPage({ navigation }: Props) {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={async () => {
+            <TouchableOpacity style={styles.button} onPress={() => {
                 // const result = await fetchLogin({ email: username, password: password })
                 // const result = dispatch({ type: '@@auth/LOGIN_SUCCESS', email: username, password: password })
                 dispatch(fetchLogin({ email: username, password: password }))
+                navigation.navigate('A Plus Essay')
                     // .unwrap()
 
                 // result.error ?
@@ -72,7 +73,7 @@ export default function LoginPage({ navigation }: Props) {
             <View style={{ flexDirection: 'row', margin: 20 }}>
                 <Text>Don't have an account? </Text>
                 <TouchableOpacity onPress={() => {
-                    navigation.navigate('Register')
+                    navigation.navigate('Sign up')
                 }}>
                     <Text style={{ color: "#007AFF" }}>Sign Up</Text>
                 </TouchableOpacity>
