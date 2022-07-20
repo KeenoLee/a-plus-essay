@@ -1,0 +1,70 @@
+image: node:16.15-alpine
+
+stages:
+  # - test
+  - server-build
+  # - server-deploy
+
+variables:
+  POSTGRES_DB: aplusessay
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_HOST: postgres
+  SERVER_HOST: 52.76.109.40
+  SERVER_USER: aplusessay
+  WEB_SERVER_ROOT: /a_plus_essay_server
+  
+# test: 
+#   stage: test  
+#   services:
+#     - postgres:14.3-alpine
+#   artifacts:
+#     paths:
+#       - node_modules
+#   before_script:    
+#     - npm install  
+#   script:
+#     - npx jest --runInBand --forceExit
+
+server-build:
+  stage: server-build  
+  artifacts:
+    paths:
+      - $WEB_SERVER_ROOT/dist
+  before_script:
+    - cd $WEB_SERVER_ROOT
+    - yarn add
+  script:
+    - npx tsc -p .
+
+# server-deploy:
+#   stage: server-deploy
+#   only:
+#     - production
+#   image: ubuntu:22.04
+#   dependencies:
+#     - build
+#   before_script:
+#     - apt update    
+#     - apt install --yes git rsync openssh-client
+#     - mkdir -p ~/.ssh
+#     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+#     - chmod 600 ~/.ssh/id_rsa
+#     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
+#     - echo "Host badproject" >> ~/.ssh/config
+#     - echo "  Hostname $SERVER_HOST" >> ~/.ssh/config
+#     - echo "  User $SERVER_USER" >> ~/.ssh/config
+#     - echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+    
+#   script:
+#     - rsync -SavLP dist "badproject:~/emoji-mama/"    
+#     - ssh badproject "
+#         source ~/.nvm/nvm.sh &&
+#         cd ~/emoji-mama &&        
+#         git fetch &&
+#         git checkout $CI_COMMIT_SHA &&
+#         npm install --omit=dev &&
+#         cd dist &&
+#         npx knex migrate:latest &&        
+#         pm2 reload ~/emoji-mama/dist/routes.js
+#         "
