@@ -55,6 +55,7 @@ export default function LoginPage({ navigation }: Props) {
                 <TouchableOpacity style={styles.button} onPress={() => {
                     // const result = await fetchLogin({ email: username, password: password })
                     // const result = dispatch({ type: '@@auth/LOGIN_SUCCESS', email: username, password: password })
+                    // dispatch(fetchLogin({ email: username, password: password }))
                     dispatch(fetchLogin({ email: username, password: password }))
                     // .unwrap()
 
