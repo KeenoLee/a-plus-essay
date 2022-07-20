@@ -46,6 +46,10 @@ export class UserService {
         return true;
     }
 
+    async deleteUser(email: string) {
+        await this.knex("user").where("email", email).del();
+    }
+
     async createUser(user: User) {
         const hashedPassword = await hashPassword(user.password);
         console.log('hashedPassword: ', hashedPassword)
