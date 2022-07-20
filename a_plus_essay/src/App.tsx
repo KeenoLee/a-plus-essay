@@ -73,7 +73,7 @@ const Tab = createBottomTabNavigator();
 
 // Floating Action Button (FAB)
 
-const Fabtn = () => {
+export const Fabtn = () => {
   return <Center >
     <Box w="50" shadow="2" rounded="lg" >
       <Fab _pressed={{
@@ -106,8 +106,6 @@ export const Tabs = () => {
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
           ),
         }} />
-
-      
       <Tab.Screen name="Order Status" component={OrderStatus}
         options={{
           headerRight: () => (
@@ -229,7 +227,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Fabtn/>
+        {/* <Fabtn/> */}
         <HomeDrawer />
       </NavigationContainer>
     </NativeBaseProvider >
