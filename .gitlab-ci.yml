@@ -12,7 +12,7 @@ variables:
   POSTGRES_HOST: postgres
   SERVER_HOST: 52.76.109.40
   SERVER_USER: aplusessay
-  WEB_SERVER_ROOT: /a_plus_essay_server
+  WEB_SERVER_ROOT: ./a_plus_essay_server
   
 # test: 
 #   stage: test  
