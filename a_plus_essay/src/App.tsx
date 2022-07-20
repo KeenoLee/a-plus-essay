@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 
 // import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 // import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -48,6 +48,7 @@ import OrderStatus from './pages/OrderStatus/OrderStatus';
 import { HomeDrawer } from './components/HomeDrawer';
 import HomeScreen from './components/HomeScreen';
 import Account from './components/Account';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 export type RootStackParamList = {
@@ -72,7 +73,7 @@ const Tab = createBottomTabNavigator();
 
 // Floating Action Button (FAB)
 
-const Fabtn = () => {
+export const Fabtn = () => {
   return <Center >
     <Box w="50" shadow="2" rounded="lg" >
       <Fab _pressed={{
@@ -83,20 +84,23 @@ const Fabtn = () => {
   </Center>;
 }
 
+
 // Bottom Tab navigation
 export const Tabs = () => {
-  return (
+  const navigation = useNavigation();
 
+  return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
+        headerStyle: { backgroundColor: '#BBD3CF' },
         // headerShown: false
       }}
-        initialRouteName="Account"
-      >
+    >
       <Tab.Screen name="Home" component={HomeScreen}
         options={{
+          // headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
@@ -104,6 +108,16 @@ export const Tabs = () => {
         }} />
       <Tab.Screen name="Order Status" component={OrderStatus}
         options={{
+          headerRight: () => (
+            <View style={{ flexDirection: 'row', width: 50, justifyContent: 'space-between', marginRight: 15 }}>
+              <Ionicons name="funnel" color='grey' size={18} />
+              <Ionicons name="add-circle" color='grey' size={18} onPress={() => { navigation.navigate('Order Submission') }} />
+            </View>
+          ),
+        
+          // headerStyle: { backgroundColor: '#BBD3CF' },
+          headerTitleStyle: { fontWeight: 'bold' },
+          headerTitleAlign: 'left',
           tabBarLabel: 'Order',
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name="hourglass" color={color} size={focused ? 30 : size} />
@@ -145,10 +159,10 @@ export function HomeStack() {
       {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
       <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
       {/* <Stack.Screen name="Home Drawer" component={HomeDrawer} options={{ headerShown: false }} /> */}
-      <Stack.Screen name="Welcome" component={LoginPage} options={{ headerShown: false}}/>
+      <Stack.Screen name="Welcome" component={LoginPage} options={{ headerShown: false }} />
       {/* {(props)=> <LoginPage navigation={props}/>} */}
       {/* </Stack.Screen> */}
-      <Stack.Screen name="ChatList" component={ChatList} options={{headerShown: false}}/>
+      <Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} />
       {/* <HomeDrawer /> */}
       {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
       {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
@@ -205,17 +219,15 @@ export function HomeStack() {
     //     </Stack.Navigator>
     //   </NavigationContainer>
     // </NativeBaseProvider>
-
-
   )
 }
 
 export default function App() {
+
   return (
     <NativeBaseProvider>
-
       <NavigationContainer>
-
+        {/* <Fabtn/> */}
         <HomeDrawer />
       </NavigationContainer>
     </NativeBaseProvider >
