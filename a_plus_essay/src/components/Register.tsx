@@ -13,6 +13,7 @@ import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import { registerStudent } from "../redux/student/actions";
+import { env } from "../env/env";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -127,7 +128,7 @@ function checkIsTutor(role: RadioButtonProps[]): boolean | string {
 }
 async function fetchStudent(registerData: StudentData) {
     // const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/register/tutor`)
-    const res = await fetch(`http://localhost:8111/register/student`, {
+    const res = await fetch(`${env.BACKEND_URL}/register/student`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -142,7 +143,7 @@ async function fetchStudent(registerData: StudentData) {
 }
 
 async function checkTutorEmailAndPhone(data: CheckTutorDuplicate) {
-    const res = await fetch(`http://localhost:8111/checkemailandphone`, {
+    const res = await fetch(`${env.BACKEND_URL}/checkemailandphone`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -157,7 +158,7 @@ async function checkTutorEmailAndPhone(data: CheckTutorDuplicate) {
     return 'success'
 }
 async function fetchTutor(registerData: TutorData) {
-    const res = await fetch(`http://localhost:8111/register/tutor`, {
+    const res = await fetch(`${env.BACKEND_URL}/register/tutor`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -280,7 +281,7 @@ export default function Register() {
     const [subjects, setSubjects] = useState([{
         key: genUniqueKey(),
         subject: '',
-        grade: '',
+        score: '',
         isChecked: false,
     }])
     function onCheckBox(isChecked: boolean, index: number) {
@@ -367,7 +368,7 @@ export default function Register() {
 
     // Fetch Server
     useEffect(() => {
-
+        setIsTutor(()=>false)
     }, [])
 
     return (
@@ -579,10 +580,10 @@ export default function Register() {
                     <Text style={styles.title}>School Life</Text>
                     <View style={{ flexDirection: 'row', width: 300 }}>
                         <Text style={{ flex: 7 }}>Subject</Text>
-                        <Text style={{ flex: 2 }}>Grade</Text>
+                        <Text style={{ flex: 2 }}>Score</Text>
                         <TouchableOpacity
                             style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
-                            onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', grade: '', isChecked: false, key: genUniqueKey() }]) }}>
+                            onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}>
                             <Text style={{}}>+</Text>
                         </TouchableOpacity>
                     </View>
@@ -602,9 +603,9 @@ export default function Register() {
                                 newSubjects[index].subject = text
                                 setSubjects(newSubjects)
                             }}
-                            onGradeChange={(text: string) => {
+                            onScoreChange={(text: string) => {
                                 const newSubjects = [...subjects]
-                                newSubjects[index].grade = text
+                                newSubjects[index].score = text
                                 setSubjects(newSubjects)
                             }}
                             // 點解呢個又得！！！？
@@ -697,14 +698,7 @@ const styles = StyleSheet.create({
         flex: 0.7,
         backgroundColor: 'white',
     },
-    subjectsGrade: {
-        padding: 10,
-        margin: 10,
-        borderRadius: 10,
-        // width: 50,
-        flex: 0.2,
-        backgroundColor: 'white',
-    },
+
     editRow: {
         padding: 10,
         margin: 10,

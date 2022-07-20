@@ -3,6 +3,8 @@ import { UserService } from "../services/UserService";
 import { Bearer } from 'permit';
 import jwtSimple from 'jwt-simple';
 import dotenv from 'dotenv';
+import jwt_decode from 'jwt-decode'
+import { Subject } from '../services/models';
 
 dotenv.config({ path: '../.env' });
 
@@ -75,16 +77,16 @@ export class UserController {
             return;
         };
 
-        this.createTutor;
+        this.createTutor(req, res, userInfo[0].id);
         res.json({ success: true, token: jwt });
         // res.json({ success: true })
         return;
     }
 
-    createTutor = async (req: Request, res: Response) => {
+    createTutor = async (req: Request, res: Response, userId: number) => {
         console.log('going to create tutor...')
 
-        let { email, transcript, studentCard, school, major, selfIntro, subjects, score, preferredSubjects } = req.body;
+        let { email, transcript, studentCard, school, major, selfIntro, subjects } = req.body;
 
         // if no transcript, .......
         // if no studentCard, .......
@@ -100,15 +102,19 @@ export class UserController {
             res.status(400).json({ error: "The major is missed" })
             return;
         };
+        console.log('req.body: ', req.body)
+        let preferredSubjects: string[] = []
+        subjects.map((subject: Subject) => (subject.isChecked ? preferredSubjects.push(subject.subject) : null))
 
-        if (!subjects || !score || !preferredSubjects) {
+        if (subjects.length === 0 || preferredSubjects.length === 0) {
             await this.userService.deleteUser(email);
-            res.status(400).json({ error: "Subject or grade or preferred subject is missed" });
+            res.status(400).json({ error: "Subject or score or preferred subject is missed" });
             return;
         };
 
         await this.userService.createTutor(
             {
+                userId,
                 email,
                 transcript,
                 studentCard,
@@ -116,7 +122,6 @@ export class UserController {
                 major,
                 selfIntro,
                 subjects,
-                score,
                 preferredSubjects
             }
         );
@@ -145,8 +150,10 @@ export class UserController {
         };
 
         const isLoggedIn = await this.userService.loginWithPassword({ email, password });
+        console.log('isLoggedIn: ', isLoggedIn)
         const jwt = jwtSimple.encode(isLoggedIn.userInfo, process.env.jwtSecret!);
-
+        console.log('JWT: ', jwt)
+        console.log('decoded: ', jwt_decode(jwt))
         if (isLoggedIn.success === true) {
             res.json({ success: true, token: jwt });
         } else res.status(400).json({ error: "Incorrect password" });
