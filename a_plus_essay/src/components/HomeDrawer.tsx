@@ -44,6 +44,7 @@ export function HomeDrawer() {
             <Drawer.Screen name="A Plus Essay" component={Tabs} options={{ headerShown: false }} />
             {/* <Drawer.Screen name='App' component={App} /> */}
             {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
+            {/* <Drawer.Screen name="Login" component={LoginPage} options={{ title: ""}}/> */}
             <Drawer.Screen name="Login" component={LoginPage} />
             <Drawer.Screen name="Sign up" component={Register} />
             <Drawer.Screen name="Rules" component={Rules} />
