@@ -22,6 +22,10 @@ export type MainTabParamList = {
     Completed: undefined,
 }
 
+//TODO: Sorting Function
+
+//TODO: Add button link to orderSubmission
+
 export function TopTabNavigator() {
     return (
         <MainTab.Navigator
