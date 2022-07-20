@@ -13,6 +13,7 @@ import HomeScreen from './HomeScreen';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import App, { HomeStack, Tabs } from '../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import ChatRoom from './Chatroom'
 
 const Drawer = createDrawerNavigator();
 
@@ -42,6 +43,7 @@ export function HomeDrawer() {
             <Drawer.Screen name="FAQ" component={FAQ} />
             <Drawer.Screen name="Contact Us" component={ContactUs} />
             <Drawer.Screen name="Order Submission" component={OrderSubmission} />
+            <Drawer.Screen name="Chat Room" component={ChatRoom} />
             <Drawer.Screen name="Logout" component={LoginPage} />
         </Drawer.Navigator>
     );

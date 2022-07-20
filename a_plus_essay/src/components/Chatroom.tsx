@@ -14,7 +14,7 @@ import { env } from '../env/env';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 100 : 0
 // export default function Chatroom() {
-//     const socket = io("http://192.168.168.103:8111")
+//     const socket = io("http://192.168.168.94:8111")
 //     return (
 //         <View>
 //             <Text>Chatroom</Text>
