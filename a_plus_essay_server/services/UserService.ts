@@ -1,4 +1,5 @@
 import { Knex } from "knex";
+import { runInThisContext } from "vm";
 import { hashPassword, checkPassword } from "../utils/hash";
 import { Subject, SubjectFromDB } from "./models";
 
@@ -187,7 +188,7 @@ export class UserService {
     };
 
     async loginWithPassword(account: { email: string, password: string }) {
-        const userInfo = await this.knex.select('id', 'nickname', 'email', 'is_admin', 'is_tutor', 'phone_number', 'hashed_password').from("user").where("email", account.email).first();
+        const userInfo = await this.knex.select('*').from("user").where("email", account.email).first();
         console.log('userInfo: ', userInfo)
         const correctPassword = await checkPassword(account.password, userInfo.hashed_password);
         console.log('correctPassword: ', correctPassword)
@@ -195,6 +196,10 @@ export class UserService {
             return { success: false };
         };
         delete userInfo.hashed_password;
+        if (userInfo.is_tutor) {
+            const tutorInfo = await this.getTutorInfo(userInfo.id)
+            return { success: true, userInfo, tutorInfo }
+        }
         return { success: true, userInfo: userInfo };
     }
 
@@ -224,7 +229,16 @@ export class UserService {
         const userId: number = await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first();
         return userId;
     }
-    async getTutorInfo(userId: number) {
-        const tutorInfo = await this.knex.select('*').from('tutor').where('')
+    private async getTutorInfo(userId: number) {
+        if (!userId) {
+            return { error: 'user id not found' }
+        }
+        const tutor = await this.knex.select('*').from('tutor').where('id', userId).first()
+        delete tutor.major_id
+        const school = await this.knex.select('*').from('school').where('id', tutor.school_id).first()
+        delete tutor.school_id
+        const transcript = await this.knex.select('id','transcript_base64').from('transcript').where('tutor_id', userId)
+        console.log('TRANSCRIPT: ', transcript)
+        return [tutor, school, transcript]
     }
 }
