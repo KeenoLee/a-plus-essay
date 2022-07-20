@@ -83,6 +83,7 @@ const Fabtn = () => {
   </Center>;
 }
 
+
 // Bottom Tab navigation
 export const Tabs = () => {
   return (
@@ -91,19 +92,30 @@ export const Tabs = () => {
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
-        headerShown: false
+        // headerShown: false
       }}
         initialRouteName="Account"
       >
       <Tab.Screen name="Home" component={HomeScreen}
         options={{
+          headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
+            
           ),
         }} />
       <Tab.Screen name="Order Status" component={OrderStatus}
         options={{
+          headerRight: () => (
+            <View style={{flexDirection:'row' , width: 50, justifyContent: 'space-between' , marginRight:15}}>
+              <Ionicons name="funnel" color='grey' size={18}/>
+              <Ionicons name="add-circle" color='grey' size={18}/>
+            </View>
+          ),
+          headerStyle:{ backgroundColor: '#BBD3CF'},
+          headerTitleStyle:{ fontWeight: 'bold'},
+          headerTitleAlign: 'left',
           tabBarLabel: 'Order',
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name="hourglass" color={color} size={focused ? 30 : size} />
