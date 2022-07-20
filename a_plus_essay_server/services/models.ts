@@ -26,3 +26,23 @@ export interface OrderItem {
     tutorDeadline: Date;
 }
 
+export interface ChatMessage {
+    orderId: number;
+    sentByTutor: boolean;
+    message: string;
+}
+
+export interface NewMessageNotice {
+    orderId: number;
+    senderId: number;
+    message: string;
+    sent_time: string;
+}
+
+export interface ChatroomList {
+    id: number;
+    title: string;
+    last_message: string;
+    last_message_time: string;
+    // unread_count: number; //TODO
+}

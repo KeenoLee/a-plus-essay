@@ -156,3 +156,11 @@ charge integer
 accept_time timestamp NULL
 reject_time timestamp NULL
 expire_time timestamp
+
+
+user_read_message
+-
+id pk
+user_id fk >- user.id
+order_id integer FK >0- order.id
+last_message_id fk >- chat_message.id
