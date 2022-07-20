@@ -16,39 +16,22 @@ interface UserInfo {
 }
 type Props = NativeStackScreenProps<RootStackParamList>
 
-// async function fetchLogin(userInfo: UserInfo) {
-//     console.log('going to fetch login...')
-//     const res = await fetch('/login/password', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(userInfo)
-//     })
-//     const result = await res.json()
-//     console.log(result)
-//     return result
-// }
-
 export default function LoginPage({ navigation }: Props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [isVerified, setIsVerified] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
     const state = useSelector((state: RootState) => state)
-    console.log('state', state)
+    console.log('state!!!!STORE', state)
     // const auth = useSelector((state: RootState) => state.auth)
     // const user = useSelector((state: RootState) => state.auth.user)
-    useEffect(()=>{
+    useEffect(() => {
         console.log('state from store: ', state)
-        if(state.auth.user) {
+        if (state.auth.user) {
             setIsVerified(true)
             navigation.navigate('A Plus Essay')
         }
-    },[state])
-    // console.log('auth of state from store: ', auth)
-    // console.log('user of auth from store: ', user)
-    // const navigation = useNavigation()
+    }, [state])
     return (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
             <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={email => setUsername(email)} />
@@ -61,16 +44,11 @@ export default function LoginPage({ navigation }: Props) {
             </View>
 
             <TouchableOpacity style={styles.button} onPress={() => {
-                // const result = await fetchLogin({ email: username, password: password })
-                // const result = dispatch({ type: '@@auth/LOGIN_SUCCESS', email: username, password: password })
                 dispatch(fetchLogin({ email: username, password: password }))
-                    // .unwrap()
-
-                // result.error ?
-                //     Alert.alert('Error', result.error) :
-                //     navigation.navigate('HomeScreen')
-                // Alert.alert('Success', result)
-                // Navigate to Home Page here
+                // setTimeout(()=>{
+                //     console.log('going to dispatch...')
+                //     dispatch({type: '@@auth/LOGIN_FAILED'})
+                // },10000)
             }} >
                 <Text style={{ textAlign: 'center', color: 'white' }}>Sign in</Text>
             </TouchableOpacity>
@@ -103,7 +81,6 @@ export default function LoginPage({ navigation }: Props) {
 
             <TouchableOpacity style={{ justifyContent: 'center', borderColor: 'black', borderWidth: 1, maxWidth: '80%', width: 300, height: 35, borderRadius: 15, margin: 10 }}>
                 <View style={{}}>
-                    {/* <Image source={ } /> */}
                 </View>
                 <Text style={{ textAlign: 'center' }}>Sign in with Google</Text>
                 <View style={{}}></View>
