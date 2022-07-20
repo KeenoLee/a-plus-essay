@@ -33,7 +33,7 @@ server-build:
       - $WEB_SERVER_ROOT/dist
   before_script:
     - cd $WEB_SERVER_ROOT
-    - yarn add
+    - npm install
   script:
     - npx tsc -p .
 
