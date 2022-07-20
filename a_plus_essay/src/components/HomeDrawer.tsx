@@ -24,7 +24,7 @@ export function HomeDrawer() {
                 // headerLeft: ()=>null,
                 // headerRight: ()=><TouchableOpacity onPress={()=>navigation.toggleDrawer()}><Text>@</Text></TouchableOpacity>,
                 // drawerType: 'front',
-                drawerPosition: "right",
+                drawerPosition: "left",
                 drawerActiveTintColor: "#5eead4",
                 drawerStyle: {
                     // width: 500,
