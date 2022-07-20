@@ -92,19 +92,22 @@ export class UserController {
         // if no studentCard, .......
 
         if (!school) {
+            await this.userService.deleteUser(email);
             res.status(400).json({ error: "The major is missed" })
             return;
         };
 
         if (!major) {
+            await this.userService.deleteUser(email);
             res.status(400).json({ error: "The major is missed" })
             return;
         };
         console.log('req.body: ', req.body)
         let preferredSubjects: string[] = []
-        subjects.map((subject:Subject)=>(subject.isChecked?preferredSubjects.push(subject.subject):null))
+        subjects.map((subject: Subject) => (subject.isChecked ? preferredSubjects.push(subject.subject) : null))
 
         if (subjects.length === 0 || preferredSubjects.length === 0) {
+            await this.userService.deleteUser(email);
             res.status(400).json({ error: "Subject or score or preferred subject is missed" });
             return;
         };
