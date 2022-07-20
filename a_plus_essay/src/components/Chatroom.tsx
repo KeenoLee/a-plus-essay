@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TextInput, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import React, { Component } from 'react'
+import * as React from 'react'
+import { Component } from 'react'
 import io from 'socket.io-client'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
