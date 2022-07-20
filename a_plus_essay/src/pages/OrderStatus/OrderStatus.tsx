@@ -5,9 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import ChatList from '../ChatList';
 
 // Status Page 
 import PendingPage from './PendingPage';
@@ -15,8 +13,18 @@ import MatchingPage from './MatchingPage';
 import OngoingPage from './OngoingPage';
 import CompletedPage from './CompletedPage';
 
-const MainTab = createMaterialTopTabNavigator()
+const MainTab = createMaterialTopTabNavigator<MainTabParamList>()
 
+export type MainTabParamList = {
+    Pending: undefined,
+    Matching:undefined,
+    Ongoing: undefined,
+    Completed: undefined,
+}
+
+//TODO: Sorting Function
+
+//TODO: Add button link to orderSubmission
 
 export function TopTabNavigator() {
     return (
@@ -26,6 +34,7 @@ export function TopTabNavigator() {
                 tabBarActiveTintColor: 'black',
                 tabBarStyle: { backgroundColor: '#BBD3CF' },
                 tabBarLabelStyle: { fontSize: 10, fontWeight: 'bold' },
+                tabBarIndicatorStyle: {backgroundColor: 'white'}
             }}>
             <MainTab.Screen name="Pending" component={PendingPage} />
             <MainTab.Screen name="Matching" component={MatchingPage} />

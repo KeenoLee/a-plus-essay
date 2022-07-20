@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, View, Text, TextInput, StyleSheet, Alert } from "react-native";
+import { Button, View, Text, TextInput, StyleSheet, Alert, SafeAreaView } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 // import { Formik, Field, Form } from 'formik';
@@ -373,7 +373,7 @@ export default function Register() {
 
     return (
         <View style={styles.form}>
-
+            {/* <SafeAreaView> */}
             {page.step === 1 && !isOAuth ?
                 <>
                     <Text style={styles.title}>Create New Account</Text>
@@ -656,6 +656,7 @@ export default function Register() {
             {page.step === 5 ?
                 <SuccessRegister /> : null
             }
+            {/* </SafeAreaView> */}
         </View>
     )
 }
