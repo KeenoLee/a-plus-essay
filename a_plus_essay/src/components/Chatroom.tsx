@@ -30,7 +30,6 @@ interface IChatroomState {
     chatMessage: string;
     chatMessages: string[];
     file?: string;
-    // createAt: string;
 }
 
 export default class Chatroom extends Component<IChatroomProps, IChatroomState> {
@@ -70,9 +69,9 @@ export default class Chatroom extends Component<IChatroomProps, IChatroomState> 
         this.setState({ chatMessage: "" })
     }
 
-    // addTranscriptImage = () => {
-    //     openGallery(file => {
-    //         setTranscriptImages(files => [...files, file])
+    // addFile = () => {
+    //     this.openGallery(file => {
+    //         setState(file)
     //     })
     // }
 
@@ -129,9 +128,8 @@ export default class Chatroom extends Component<IChatroomProps, IChatroomState> 
                                 automaticallyAdjustContentInsets={true}
                             >
                                 {chatMessages}
+                                <View style={{ backgroundColor: 'transparent', width: 50, height: 300, }}></View>
                             </ScrollView>
-                            {/* <View style={styles.container}> */}
-                            {/* <View style={styles.inputContainer} > */}
                             {/* <VStack style={{ marginRight: 10, }} space={6} alignSelf="flex-start" w="30%">
                                 <Select
                                     selectedValue={position}
@@ -158,11 +156,8 @@ export default class Chatroom extends Component<IChatroomProps, IChatroomState> 
                                     }} />
                                 <Ionicons size={24} name="send" onPress={() => this.submitChatMessage()} />
 
-                                {/* <View style={styles.buttonContainer}></View> */}
                             </View>
                         </View>
-                        {/* </View> */}
-                        {/* </View> */}
                     </KeyboardAvoidingView>
                     {/* </TouchableWithoutFeedback> */}
                 </SafeAreaView>

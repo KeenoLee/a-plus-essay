@@ -3,10 +3,10 @@ import { hashPassword } from "../utils/hash"
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
-    if ((await knex.schema.hasTable('order'))) {
-        await knex('order').del()
-    }
+    await knex("user_read_message").del();
+    await knex("chat_message").del();
     await knex("subject").del();
+    await knex('order').del()
     await knex("sample").del();
     await knex("tutor").del();
     await knex("major").del();

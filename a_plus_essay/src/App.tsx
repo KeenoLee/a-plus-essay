@@ -162,7 +162,7 @@ export default function App() {
           <Stack.Screen name="Select Tutor" component={SelectTutor} />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Message" component={Notification} />
-          <Stack.Screen name="Chats" component={Chatroom} />
+          <Stack.Screen name="Chats" component={ChatList} />
         </Stack.Navigator>
         {/* <Fabtn/> */}
       </NavigationContainer>

@@ -21,7 +21,7 @@ export async function seed(knex: Knex): Promise<void> {
             description: 'this is description',
             budget: 7000,
             completed_time: null,
-            paid_by_student_time: null,
+            paid_by_student_time: "2020-07-26T14:00:00.000Z",
             paid_to_tutor_time: null,
             student_submission_deadline: "2022-07-26T14:00:00.000Z",
             tutor_submission_deadline: "2022-07-28T14:00:00.000Z"
@@ -37,7 +37,7 @@ export async function seed(knex: Knex): Promise<void> {
             description: 'this is description',
             budget: 6000,
             completed_time: null,
-            paid_by_student_time: null,
+            paid_by_student_time: "2022-07-28T14:00:00.000Z",
             paid_to_tutor_time: null,
             student_submission_deadline: "2022-07-27T14:00:00.000Z",
             tutor_submission_deadline: "2022-07-28T14:00:00.000Z"

@@ -2,132 +2,65 @@
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import React from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import Chatroom from '../components/Chatroom'
-import { Divider} from 'native-base';
+import { Divider } from 'native-base';
+import { then } from '@beenotung/tslib';
 
 
 const Stack = createStackNavigator();
 
+
+
+
 export default function ChatList() {
+
+  const [json, setJSON] = useState()
+
+  useEffect(() => {
+    fetch('http://192.168.168.103:8111/chat/list')
+      .then(res => res.json())
+      .then(setJSON)
+      .catch(error => console.error(error))
+  }, [])
+
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>10:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-        <View style={styles.innerContainer}>
-          <View style={styles.topRow}>
-            <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-            <Text style={styles.text}>09:42</Text>
-          </View>
-          <View style={styles.secondRow}>
-            <Text style={styles.lastSender}>Ken:</Text>
-            <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
-          </View>
-        </View>
-        <Divider style={styles.divider} />
-
+        {[1, 2, 3, 4].map(() =>
+          <Fragment key={Math.random()}>
+            <View style={styles.innerContainer}>
+              <View style={styles.topRow}>
+                <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
+                <Text style={styles.text}>09:42</Text>
+              </View>
+              <View style={styles.secondRow}>
+                <Text style={styles.lastSender}>Ken:</Text>
+                <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
+              </View>
+            </View>
+            <Divider style={styles.divider} />
+          </Fragment>
+        )}
       </ScrollView>
     </View>
   )
 }
+// function MyStack(headerName:string, componentName:React.FunctionComponent) {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen
+//         name={headerName}
+//         component={componentName}
+//         options={{
+//           headerTintColor: 'white',
+//           headerStyle: { backgroundColor: 'tomato' },
+//         }}
+//       />
+//     </Stack.Navigator>
+//   )
+// }
+
 
 const styles = StyleSheet.create({
   container: {
