@@ -63,6 +63,7 @@ userRoutes.get("/login/facebook", userController.loginWithFacebook);
 userRoutes.post("/resetpassword", userController.resetPassword);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
+chatRoutes.get("/chat/:order_id/message", chatController.getChatList);
 
 async function testing() {
     let chats = await chatService.getChatroomListById(); //use 53 if input ID

@@ -1,7 +1,7 @@
 // import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Alert, FlatList } from 'react-native'
 import React, { Fragment, useEffect, useState } from 'react'
 import Chatroom from '../components/Chatroom'
 import { Divider } from 'native-base';
@@ -13,45 +13,78 @@ import { RootState } from '../redux/store';
 const Stack = createStackNavigator();
 
 
+interface ChatRoom {
+  chatroom_id: number;
+  title: string;
+  nickname: string;
+  is_tutor: boolean;
+  last_message: string;
+  last_message_time: string;
+}
+interface ChatListProps {
+  chatRoom: ChatRoom
+}
 
 
-export default function ChatList() {
+const ChatList = (props: ChatListProps) => {
+  const { chatRoom } = props;
+
+
+
+  return (
+    // <View style={styles.container}>
+    //   <ScrollView>
+    <>
+      {/* {Array.isArray(json) && json.map((jsonItem: any) => */}
+      <View style={styles.innerContainer}>
+        <View style={styles.topRow}>
+          <Text style={styles.assignmentName}>{chatRoom.title}</Text>
+          <Text style={styles.timeFormat}>{format(new Date(chatRoom.last_message_time), 'KK:mm aaa')}</Text>
+        </View>
+        <View style={styles.secondRow}>
+          <Text style={styles.lastSender}>{'    ' + chatRoom.nickname + ': '}</Text>
+          <Text style={styles.text}>{chatRoom.last_message}</Text>
+        </View>
+        <Text>{'toDelete - id: ' + chatRoom.chatroom_id}</Text>
+      </View>
+      <Divider style={styles.divider} />
+    </>
+    // )}
+    //   </ScrollView>
+    // </View>
+  )
+}
+
+export default function ChatScreen() {
 
   const [json, setJSON] = useState([])
   const userInfo = useSelector((state: RootState) => state.auth.user)
 
   useEffect(() => {
+    console.log(userInfo)
     if (!userInfo) return Alert.alert('Unauthorized', 'Please login')
     fetch('http://192.168.168.103:8111/chat/list')
       .then(res => res.json())
       .then(setJSON)
       .catch(error => console.error(error))
-  }, ['/chat/list'])
+  }, [])
+
+
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {Array.isArray(json) && json.map((jsonItem: any) =>
-          <Fragment key={Math.random()}>
-            <View style={styles.innerContainer}>
-              <View style={styles.topRow}>
-                <Text style={styles.assignmentName}>{jsonItem.title}</Text>
-                <Text style={styles.timeFormat}>{format(new Date(jsonItem.last_message_time), 'KK:mm aaa')}</Text>
-              </View>
-              <View style={styles.secondRow}>
-                <Text style={styles.lastSender}>{'    ' + jsonItem.nickname + ': '}</Text>
-                <Text style={styles.text}>{jsonItem.last_message}</Text>
-              </View>
-              <Text>{'toDelete - id: ' + jsonItem.chatroom_id}</Text>
-            </View>
-            <Divider style={styles.divider} />
-          </Fragment>
-        )}
-      </ScrollView>
+      {/* <ScrollView> */}
+      <FlatList
+        data={json}
+        renderItem={({ item }) => <ChatList chatRoom={item} />}
+        keyExtractor={(item) => item.chatroom_id}
+      />
+      {/* </ScrollView> */}
     </View>
   )
+
 }
-// function MyStack(headerName:string, componentName:React.FunctionComponent) {
+// function ChatStack() {
 //   return (
 //     <Stack.Navigator>
 //       <Stack.Screen
