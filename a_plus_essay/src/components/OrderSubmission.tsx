@@ -106,7 +106,7 @@ export default function OrderSubmission() {
         })
     }
     return (
-        userInfo?.userId && !userInfo?.isAdmin && !userInfo?.isTutor ?
+        userInfo?.user_id && !userInfo?.is_admin && !userInfo?.is_tutor ?
             <VStack space={4} alignSelf="center" px="4" w={{ base: "100%" }}>
                 <Stack>
                     <FormControl>

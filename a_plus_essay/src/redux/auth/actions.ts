@@ -1,30 +1,23 @@
 import { Dispatch } from 'react'
 import { AnyAction } from 'redux'
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
-import { AuthState } from './reducer'
+import { SchoolInfo, TranscriptInfo, TutorInfo, UserInfo } from './type'
 
 
-export function loginSuccess(token: string) {
-    console.log('in "loginSuccess" action')
-    return {
-        type: '@@auth/LOGIN_SUCCESS' as const,
-        token
-    }
-}
-
-function loginAsStudent(token: string) {
+function loginAsStudent(userInfo: UserInfo) {
     console.log('in "loginAsStudent" action')
 
     return {
         type: '@@auth/LOGIN_AS_STUDENT' as const,
-        token
+        userInfo
     }
 }
 
-function loginAsTutor(token: string) {
+function loginAsTutor(userInfo: UserInfo, tutorInfo: Array<TutorInfo & SchoolInfo & TranscriptInfo[]>) {
     return {
         type: '@@auth/LOGIN_AS_TUTOR' as const,
-        token
+        userInfo,
+        tutorInfo
     }
 }
 
@@ -35,6 +28,7 @@ function loginAsAdmin() {
 }
 
 function loginFailed() {
+    console.log('in action...')
     return {
         type: '@@auth/LOGIN_FAILED' as const
     }
@@ -47,18 +41,13 @@ function logoutSuccess() {
 }
 
 export type AuthActions = 
-ReturnType<typeof loginSuccess> |
 ReturnType<typeof loginAsStudent> |
 ReturnType<typeof loginAsTutor> |
 ReturnType<typeof loginAsAdmin> |
 ReturnType<typeof loginFailed> |
 ReturnType<typeof logoutSuccess>
-interface UserInfo {
-    // type: string,
-    email: string,
-    password: string
-}
-export function fetchLogin(userInfo: UserInfo) {
+
+export function fetchLogin(userInfo: {email: string, password: string}) {
     return async (dispatch: Dispatch<AuthActions>) => {
         const res = await fetch(`http://localhost:8111/login/password`, {
             method: 'POST',
@@ -70,10 +59,22 @@ export function fetchLogin(userInfo: UserInfo) {
         const result = await res.json()
         if (!result.error) {
             const token = result.token
+            const userInfo = result.userInfo
             console.log('token in thunk action: ', token)
-            dispatch(loginSuccess(token))
+            console.log('userAuth: ', userInfo)
+            // dispatch(loginSuccess(token))
+            console.log('RESULT!@!', result.tutorInfo)
+            if (userInfo.is_tutor && result.tutorInfo) {
+                const tutorInfo = result.tutorInfo
+                console.log('TUTOR INFO: ', result.tutorInfo)
+                dispatch(loginAsTutor(userInfo, tutorInfo))
+                return
+            }
+            dispatch(loginAsStudent(userInfo))
+            return
         }
-        // console.log('result in thunk: ', result)
-        // return result
+        dispatch(loginFailed())
+        return
     }
 }
+
