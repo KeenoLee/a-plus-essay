@@ -30,7 +30,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // import LoadingScreen from './src/components/LoadingScreen';
 import Home from './pages/Home'
 import Notification from './pages/Notification';
-import ChatList from './pages/ChatList';
+import ChatScreen from './pages/ChatList';
 import Register from './components/Register';
 import SelectTutor from './components/SelectTutor';
 import TutorInformation from './components/TutorInformation';
@@ -126,7 +126,7 @@ export const Tabs = () => {
           ),
         }}
       />
-      <Tab.Screen name="Chats" component={ChatList}
+      <Tab.Screen name="Chats" component={ChatScreen}
         options={{
           tabBarLabel: 'Chats',
           tabBarIcon: ({ focused, color, size }) => (
