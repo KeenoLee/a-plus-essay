@@ -33,12 +33,18 @@ type Props = NativeStackScreenProps<RootStackParamList>
 export default function LoginPage({ navigation }: Props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isVerified, setIsVerified] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
     const state = useSelector((state: RootState) => state)
+    console.log('state', state)
     // const auth = useSelector((state: RootState) => state.auth)
     // const user = useSelector((state: RootState) => state.auth.user)
     useEffect(()=>{
         console.log('state from store: ', state)
+        if(state.auth.user) {
+            setIsVerified(true)
+            navigation.navigate('A Plus Essay')
+        }
     },[state])
     // console.log('auth of state from store: ', auth)
     // console.log('user of auth from store: ', user)
@@ -58,7 +64,6 @@ export default function LoginPage({ navigation }: Props) {
                 // const result = await fetchLogin({ email: username, password: password })
                 // const result = dispatch({ type: '@@auth/LOGIN_SUCCESS', email: username, password: password })
                 dispatch(fetchLogin({ email: username, password: password }))
-                navigation.navigate('A Plus Essay')
                     // .unwrap()
 
                 // result.error ?
