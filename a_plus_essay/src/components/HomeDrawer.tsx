@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import OrderSubmission from './OrderSubmission';
@@ -14,18 +14,25 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import App, { HomeStack, Tabs } from '../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ChatRoom from './Chatroom'
+import { useRoute } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 
 export function HomeDrawer() {
-    const navigation = useNavigation<any>()
+//    let loc = useLocationHook();
+
+    // const [ showsMenu, setShowsMenu ] = useState(true)
+
     return (
         <Drawer.Navigator
             screenOptions={{
+                headerStyle:{backgroundColor: '#BBD3CF'},
+                // headerShown:false,
+                // headerShown: showsMenu,
                 // headerLeft: ()=>null,
                 // headerRight: ()=><TouchableOpacity onPress={()=>navigation.toggleDrawer()}><Text>@</Text></TouchableOpacity>,
                 // drawerType: 'front',
-                drawerPosition: "left",
+                drawerPosition: "right",
                 drawerActiveTintColor: "#5eead4",
                 drawerStyle: {
                     // width: 500,
@@ -34,7 +41,7 @@ export function HomeDrawer() {
             // drawerContent={}
             // initialRouteName='Home Stack'
         >
-            <Drawer.Screen name="A Plus Essay" component={HomeStack}  />
+            <Drawer.Screen name="A Plus Essay" component={Tabs} options={{ headerShown: false }} />
             {/* <Drawer.Screen name='App' component={App} /> */}
             {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
             <Drawer.Screen name="Login" component={LoginPage} />

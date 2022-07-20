@@ -48,6 +48,7 @@ import OrderStatus from './pages/OrderStatus/OrderStatus';
 import { HomeDrawer } from './components/HomeDrawer';
 import HomeScreen from './components/HomeScreen';
 import Account from './components/Account';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 export type RootStackParamList = {
@@ -86,25 +87,27 @@ const Fabtn = () => {
 
 // Bottom Tab navigation
 export const Tabs = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
+        headerStyle: { backgroundColor: '#BBD3CF' },
         // headerShown: false
       }}
-      initialRouteName="Account"
     >
       <Tab.Screen name="Home" component={HomeScreen}
         options={{
-          headerShown: false,
+          // headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
-
           ),
         }} />
+
+      
       <Tab.Screen name="Order Status" component={OrderStatus}
         options={{
           headerRight: () => (
@@ -113,7 +116,8 @@ export const Tabs = () => {
               <Ionicons name="add-circle" color='grey' size={18} onPress={() => { navigation.navigate('Order Submission') }} />
             </View>
           ),
-          headerStyle: { backgroundColor: '#BBD3CF' },
+        
+          // headerStyle: { backgroundColor: '#BBD3CF' },
           headerTitleStyle: { fontWeight: 'bold' },
           headerTitleAlign: 'left',
           tabBarLabel: 'Order',
@@ -217,12 +221,11 @@ export function HomeStack() {
     //     </Stack.Navigator>
     //   </NavigationContainer>
     // </NativeBaseProvider>
-
-
   )
 }
 
 export default function App() {
+
   return (
     <NativeBaseProvider>
       <NavigationContainer>
