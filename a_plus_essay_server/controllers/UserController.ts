@@ -154,9 +154,16 @@ export class UserController {
         const jwt = jwtSimple.encode(isLoggedIn.userInfo, process.env.jwtSecret!);
         console.log('JWT: ', jwt)
         console.log('decoded: ', jwt_decode(jwt))
+
         if (isLoggedIn.success === true) {
-            res.json({ success: true, token: jwt });
-        } else res.status(400).json({ error: "Incorrect password" });
+            if (!isLoggedIn.tutorInfo) {
+                res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo });
+                return
+            }
+            res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo, tutorInfo: isLoggedIn.tutorInfo });
+            return
+        }
+        res.status(400).json({ error: "Incorrect password" });
         return;
     }
 

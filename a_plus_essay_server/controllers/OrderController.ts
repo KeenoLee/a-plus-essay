@@ -75,10 +75,22 @@ export class OrderController {
             const orderData = await this.orderService.getOrderDataByUser(userId);
             res.json({ data: orderData })
         } catch (err) {
-            console.error('userControllerError:', err)
+            console.error('orderControllerError:', err)
             res.status(500).json({ message: "internal server error" })
         }
-
     }
+
+    getChatMessage = async (req: Request, res: Response) => {
+        try {
+            const {userId, is_tutor} = req.body
+            
+            console.log('id in getChatMassage Contoller: ', userId, is_tutor)
+        } catch (err) {
+            console.error('orderControllerError: ', err)
+            res.status(500).json({ message: "internal server errror" })
+        }
+    }
+
+    
 
 }

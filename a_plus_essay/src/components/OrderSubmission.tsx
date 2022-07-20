@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import * as React from 'react'
+import { useState } from 'react'
 import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button, Icon, CloseIcon, IconButton, View } from "native-base";
 import DateTimePicker from './DateTimePicker';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -106,7 +107,7 @@ export default function OrderSubmission() {
         })
     }
     return (
-        userInfo?.userId && !userInfo?.isAdmin && !userInfo?.isTutor ?
+        userInfo?.user_id && !userInfo?.is_admin && !userInfo?.is_tutor ?
             <SafeAreaView>
             <VStack space={4} alignSelf="center" px="4" w={{ base: "100%" }}>
                 <Stack>
@@ -135,7 +136,7 @@ export default function OrderSubmission() {
                 </View>
                 <Stack space={4}>
                     <FormControl.Label>Project Description </FormControl.Label>
-                    <TextArea autoCapitalize="none" h={24} placeholder="Please specify your project requirement (Optional)" w="100%" maxW="300" autoCompleteType={undefined} onChangeText={value => setOrderValue({ ...orderValue, description: value })} />
+                    <TextArea autoCapitalize="none" h={24} placeholder="Please specify your project requirement (Optional)" w="100%" maxW="300" autoCompleteType={undefined} onChangeText={(value:string )=> setOrderValue({ ...orderValue, description: value })} />
                 </Stack>
                 <HStack style={{ justifyContent: 'space-between', alignItems: 'center', height: 80 }}>
                     <FormControl.Label style={{ flex: 2, justifyContent: 'center' }}>Guideline</FormControl.Label>

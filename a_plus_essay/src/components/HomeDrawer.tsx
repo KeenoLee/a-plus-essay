@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import * as React from 'react'
 
 import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import OrderSubmission from './OrderSubmission';
@@ -13,6 +13,7 @@ import HomeScreen from './HomeScreen';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import App, { HomeStack, Tabs } from '../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import SelectTutor from './SelectTutor';
 import ChatRoom from './Chatroom'
 import { useRoute } from '@react-navigation/native';
 
@@ -32,7 +33,7 @@ export function HomeDrawer() {
                 // headerLeft: ()=>null,
                 // headerRight: ()=><TouchableOpacity onPress={()=>navigation.toggleDrawer()}><Text>@</Text></TouchableOpacity>,
                 // drawerType: 'front',
-                drawerPosition: "right",
+                drawerPosition: "left",
                 drawerActiveTintColor: "#5eead4",
                 drawerStyle: {
                     // width: 500,
