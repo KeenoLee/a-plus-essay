@@ -178,7 +178,7 @@ export function HomeStack() {
       {/* <Stack.Screen name="ChatList" component={ChatList} /> */}
       <Stack.Screen name="Success Register" component={SuccessRegister} />
       <Stack.Screen name="Thank You" component={OrderMatched} />
-      <Stack.Screen name="Tutor Information" component={TutorInformation} />
+      <Stack.Screen name="Tutor Information" component={TutorInformation} options={{headerShown: false}} />
       <Stack.Screen name="Select Tutor" component={SelectTutor} />
       {/* <Stack.Screen name="Register" component={Register} /> */}
       <Stack.Screen name="Message" component={Notification} />

@@ -16,27 +16,13 @@ interface UserInfo {
 }
 type Props = NativeStackScreenProps<RootStackParamList>
 
-// async function fetchLogin(userInfo: UserInfo) {
-//     console.log('going to fetch login...')
-//     const res = await fetch('/login/password', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(userInfo)
-//     })
-//     const result = await res.json()
-//     console.log(result)
-//     return result
-// }
-
 export default function LoginPage({ navigation }: Props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [isVerified, setIsVerified] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
     const state = useSelector((state: RootState) => state)
-    console.log('state', state)
+    console.log('state!!!!STORE', state)
     // const auth = useSelector((state: RootState) => state.auth)
     // const user = useSelector((state: RootState) => state.auth.user)
     useEffect(() => {
@@ -59,6 +45,15 @@ export default function LoginPage({ navigation }: Props) {
                 <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={email => setUsername(email)} />
                 <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Password" onChangeText={password => setPassword(password)} />
 
+            <TouchableOpacity style={styles.button} onPress={() => {
+                dispatch(fetchLogin({ email: username, password: password }))
+                // setTimeout(()=>{
+                //     console.log('going to dispatch...')
+                //     dispatch({type: '@@auth/LOGIN_FAILED'})
+                // },10000)
+            }} >
+                <Text style={{ textAlign: 'center', color: 'white' }}>Sign in</Text>
+            </TouchableOpacity>
                 <View style={{ alignSelf: 'flex-end' }}>
                     <TouchableOpacity style={{ flexDirection: 'row', padding: 10 }}>
                         <Text style={{ color: "#14b8a6", fontWeight: 'bold', marginRight: 33 }}>Forgot Password?</Text>
