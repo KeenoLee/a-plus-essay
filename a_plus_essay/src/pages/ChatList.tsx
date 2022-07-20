@@ -1,12 +1,14 @@
 // import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native'
 import React, { Fragment, useEffect, useState } from 'react'
 import Chatroom from '../components/Chatroom'
 import { Divider } from 'native-base';
 import { then } from '@beenotung/tslib';
-
+import { format } from 'date-fns'
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 const Stack = createStackNavigator();
 
@@ -15,29 +17,32 @@ const Stack = createStackNavigator();
 
 export default function ChatList() {
 
-  const [json, setJSON] = useState()
+  const [json, setJSON] = useState([])
+  const userInfo = useSelector((state: RootState) => state.auth.user)
 
   useEffect(() => {
+    if (!userInfo) return Alert.alert('Unauthorized', 'Please login')
     fetch('http://192.168.168.103:8111/chat/list')
       .then(res => res.json())
       .then(setJSON)
       .catch(error => console.error(error))
-  }, [])
+  }, ['/chat/list'])
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        {[1, 2, 3, 4].map(() =>
+        {Array.isArray(json) && json.map((jsonItem: any) =>
           <Fragment key={Math.random()}>
             <View style={styles.innerContainer}>
               <View style={styles.topRow}>
-                <Text style={styles.assignmentName}>Financial Account ASM 1</Text>
-                <Text style={styles.text}>09:42</Text>
+                <Text style={styles.assignmentName}>{jsonItem.title}</Text>
+                <Text style={styles.timeFormat}>{format(new Date(jsonItem.last_message_time), 'KK:mm aaa')}</Text>
               </View>
               <View style={styles.secondRow}>
-                <Text style={styles.lastSender}>Ken:</Text>
-                <Text style={styles.text}>Okay Cool. I'll share to you soon</Text>
+                <Text style={styles.lastSender}>{'    ' + jsonItem.nickname + ': '}</Text>
+                <Text style={styles.text}>{jsonItem.last_message}</Text>
               </View>
+              <Text>{'toDelete - id: ' + jsonItem.chatroom_id}</Text>
             </View>
             <Divider style={styles.divider} />
           </Fragment>
@@ -89,6 +94,12 @@ const styles = StyleSheet.create({
   assignmentName: {
     fontSize: 18,
     fontWeight: '500',
+  },
+
+  timeFormat: {
+    fontSize: 13,
+    marginTop: 6,
+    color: 'grey'
   },
 
   text: {

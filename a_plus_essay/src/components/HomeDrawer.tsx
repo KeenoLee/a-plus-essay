@@ -31,9 +31,9 @@ export function HomeDrawer() {
                 },
             }}
             // drawerContent={}
-            // initialRouteName='Home Stack'
+            initialRouteName='Home Stack'
         >
-            <Drawer.Screen name="A Plus Essay" component={HomeStack}  />
+            <Drawer.Screen name="A Plus Essay" component={HomeStack} />
             {/* <Drawer.Screen name='App' component={App} /> */}
             {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
             <Drawer.Screen name="Login" component={LoginPage} />
