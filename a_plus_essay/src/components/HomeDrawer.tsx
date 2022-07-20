@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import * as React from 'react'
 
 import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import OrderSubmission from './OrderSubmission';
@@ -51,11 +51,7 @@ export function HomeDrawer() {
             <Drawer.Screen name="FAQ" component={FAQ} />
             <Drawer.Screen name="Contact Us" component={ContactUs} />
             <Drawer.Screen name="Order Submission" component={OrderSubmission} />
-<<<<<<< HEAD
-            <Drawer.Screen name="Select Tutor" component={SelectTutor} />
-=======
             <Drawer.Screen name="Chat Room" component={ChatRoom} />
->>>>>>> d3c71377501e25ae6a42ac20a435a2d997518a23
             <Drawer.Screen name="Logout" component={LoginPage} />
         </Drawer.Navigator>
     );
