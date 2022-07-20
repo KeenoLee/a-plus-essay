@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FilePicker from './FilePicker';
 import { format } from 'date-fns'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Alert } from 'react-native';
+import { Alert, SafeAreaView } from 'react-native';
 import { dataURItoBlob } from '@beenotung/tslib/image'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -107,6 +107,7 @@ export default function OrderSubmission() {
     }
     return (
         userInfo?.userId && !userInfo?.isAdmin && !userInfo?.isTutor ?
+            <SafeAreaView>
             <VStack space={4} alignSelf="center" px="4" w={{ base: "100%" }}>
                 <Stack>
                     <FormControl>
@@ -229,14 +230,15 @@ export default function OrderSubmission() {
                     }}>Confirm</Button>
                     <Button>Cancel</Button>
                 </HStack>
-            </VStack> :
+            </VStack> 
+            </SafeAreaView>:
             <View>
                 {Alert.alert(
-                'Unauthorized',
-                'Please login to submit order!',
-                [
-                    { text: 'OK', onPress: () => { navigation.navigate('Login') }},
-                ]
+                    'Unauthorized',
+                    'Please login to submit order!',
+                    [
+                        { text: 'OK', onPress: () => { navigation.navigate('Login') } },
+                    ]
                 )}
             </View>
     )
