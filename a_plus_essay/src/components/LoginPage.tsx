@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react"
+import * as React from "react"
+import { useEffect, useState } from "react"
 import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { NavigationContainer } from '@react-navigation/native';
@@ -45,15 +46,6 @@ export default function LoginPage({ navigation }: Props) {
                 <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={email => setUsername(email)} />
                 <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Password" onChangeText={password => setPassword(password)} />
 
-            <TouchableOpacity style={styles.button} onPress={() => {
-                dispatch(fetchLogin({ email: username, password: password }))
-                // setTimeout(()=>{
-                //     console.log('going to dispatch...')
-                //     dispatch({type: '@@auth/LOGIN_FAILED'})
-                // },10000)
-            }} >
-                <Text style={{ textAlign: 'center', color: 'white' }}>Sign in</Text>
-            </TouchableOpacity>
                 <View style={{ alignSelf: 'flex-end' }}>
                     <TouchableOpacity style={{ flexDirection: 'row', padding: 10 }}>
                         <Text style={{ color: "#14b8a6", fontWeight: 'bold', marginRight: 33 }}>Forgot Password?</Text>
