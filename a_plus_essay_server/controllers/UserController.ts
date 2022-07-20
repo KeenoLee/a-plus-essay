@@ -90,16 +90,19 @@ export class UserController {
         // if no studentCard, .......
 
         if (!school) {
+            await this.userService.deleteUser(email);
             res.status(400).json({ error: "The major is missed" })
             return;
         };
 
         if (!major) {
+            await this.userService.deleteUser(email);
             res.status(400).json({ error: "The major is missed" })
             return;
         };
 
         if (!subjects || !score || !preferredSubjects) {
+            await this.userService.deleteUser(email);
             res.status(400).json({ error: "Subject or grade or preferred subject is missed" });
             return;
         };
