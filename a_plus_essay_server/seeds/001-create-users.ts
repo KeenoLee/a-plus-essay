@@ -25,15 +25,15 @@ export async function seed(knex: Knex): Promise<void> {
     let tutorId = row[1].id
     let userId_student = row[2].id
 
-    const majorRow = await knex("major").insert([{ id: 1, major: 'dummy_major' }]).returning("id")
+    const majorId = (await knex("major").insert([{ id: 1, major: 'dummy_major' }]).returning("id"))[0].id
     const subjectId = await knex("subject").insert([{ id: 1, subject_name: 'dummy_subject' }]).returning("id")
-
-    let majorId = majorRow[0].id
-
+    const schoolId = (await knex("school").insert([{ school: 'Tecky University' }]).returning("id"))[0].id
+    
     await knex("tutor").insert([{
         id: tutorId,
         major_id: majorId,
         student_card_base64: 'student card base 64',
+        school_id: schoolId,
         rating: 5,
         self_intro: 'this is self intro',
         ongoing_order_amount: 0,
