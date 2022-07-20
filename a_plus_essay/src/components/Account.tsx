@@ -11,7 +11,7 @@ export default function Account() {
     const navigation = useNavigation()
     const [editProfile, setEditProfile] = useState()
     return (
-        userInfo?.userId ?
+        userInfo?.user_id ?
             <View>
                 <View>
                     <Text>Nickname</Text>
