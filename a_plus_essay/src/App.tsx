@@ -73,7 +73,7 @@ const Tab = createBottomTabNavigator();
 
 // Floating Action Button (FAB)
 
-const Fabtn = () => {
+export const Fabtn = () => {
   return <Center >
     <Box w="50" shadow="2" rounded="lg" >
       <Fab _pressed={{
@@ -106,8 +106,6 @@ export const Tabs = () => {
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
           ),
         }} />
-
-
       <Tab.Screen name="Order Status" component={OrderStatus}
         options={{
           headerRight: () => (
@@ -164,7 +162,7 @@ export function HomeStack() {
       <Stack.Screen name="Welcome" component={LoginPage} options={{ headerShown: false }} />
       {/* {(props)=> <LoginPage navigation={props}/>} */}
       {/* </Stack.Screen> */}
-      <Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} />
+      {/* <Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} /> */}
       {/* <HomeDrawer /> */}
       {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
       {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
@@ -180,7 +178,7 @@ export function HomeStack() {
       {/* <Stack.Screen name="ChatList" component={ChatList} /> */}
       <Stack.Screen name="Success Register" component={SuccessRegister} />
       <Stack.Screen name="Thank You" component={OrderMatched} />
-      <Stack.Screen name="Tutor Information" component={TutorInformation} />
+      <Stack.Screen name="Tutor Information" component={TutorInformation} options={{ headerShown: false }} />
       <Stack.Screen name="Select Tutor" component={SelectTutor} />
       {/* <Stack.Screen name="Register" component={Register} /> */}
       <Stack.Screen name="Message" component={Notification} />
@@ -229,7 +227,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Fabtn />
+        {/* <Fabtn/> */}
         <HomeDrawer />
       </NavigationContainer>
     </NativeBaseProvider >

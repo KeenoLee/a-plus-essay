@@ -1,5 +1,6 @@
 import { Alert } from 'react-native'
-import React, { useState } from 'react'
+import * as React from 'react'
+import { useState } from 'react'
 import { Box, HStack, IconButton, StatusBar, Text, View } from 'native-base';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -11,7 +12,7 @@ export default function Account() {
     const navigation = useNavigation()
     const [editProfile, setEditProfile] = useState()
     return (
-        userInfo?.userId ?
+        userInfo?.user_id ?
             <View>
                 <View>
                     <Text>Nickname</Text>
