@@ -51,7 +51,7 @@ async function fetchOrder(order: OrderValue) {
 }
 export default function OrderSubmission() {
     const navigation = useNavigation()
-    const userInfo = useSelector((state: RootState) => state.auth.user)
+    const state = useSelector((state: RootState) => state.auth)
     const [orderValue, setOrderValue] = useState<OrderValue>({
         title: '',
         subject: '',
@@ -107,7 +107,7 @@ export default function OrderSubmission() {
         })
     }
     return (
-        userInfo?.user_id && !userInfo?.is_admin && !userInfo?.is_tutor ?
+        state.user && !state.tutor ?
             <SafeAreaView>
             <VStack space={4} alignSelf="center" px="4" w={{ base: "100%" }}>
                 <Stack>
@@ -238,7 +238,8 @@ export default function OrderSubmission() {
                     'Unauthorized',
                     'Please login to submit order!',
                     [
-                        { text: 'OK', onPress: () => { navigation.navigate('Login') } },
+                        { text: 'Login', onPress: () => { navigation.navigate('Login') } },
+                        { text: 'Close', onPress: () => { null}}
                     ]
                 )}
             </View>
