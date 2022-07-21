@@ -71,11 +71,10 @@ export class UserService {
     }
 
     async createTutor(tutor: Tutor) {
-        // this.knex.transaction(async knex => {
-        let knex = this.knex
+        this.knex.transaction(async knex => {
+        // let knex = this.knex
         console.log('line69', tutor)
         console.log('tutorID line70', tutor.userId)
-        // let majorId: number = (await knex.select("id").from("major").where("major", tutor.major).first())?.id;
         let majorId;
         console.log('majorID:80 ', majorId)
         if (!(await knex.select("id").from("major").where("major", tutor.major).first())) {
@@ -286,7 +285,7 @@ export class UserService {
         // )
 
         return;
-        // })
+        })
         return;
     };
 
