@@ -71,8 +71,8 @@ export class UserService {
     }
 
     async createTutor(tutor: Tutor) {
-        this.knex.transaction(async knex => {
-
+        // this.knex.transaction(async knex => {
+        let knex = this.knex
             console.log('line69', tutor)
             console.log('tutorID line70', tutor.userId)
             // let majorId: number = (await knex.select("id").from("major").where("major", tutor.major).first())?.id;
@@ -86,10 +86,9 @@ export class UserService {
                 console.log('majorID:86 ',majorId)
             };
             console.log('going to insert into tutor...')
-            const schoolId = await knex.insert({
-                tutor_id: tutor.userId,
+            const schoolId = (await knex.insert({
                 school: tutor.school,
-            }).into("school").returning('id');
+            }).into("school").returning('id'))[0].id;
             console.log('school ID: ', schoolId)
             await knex.insert({
                 id: tutor.userId,
@@ -131,17 +130,17 @@ export class UserService {
                 tutor_id: tutor.userId,
                 transcript_base64: 'transcript',
                 // filename: ???????,
-
             }).into("transcript");
 
             // Find out subject that is already registered in DB
-            let subjectsFromDB: any = tutor.subjects.map(async (subject: Subject) => await knex.select("id", "subject_name").from("subject").where("subject_name", subject.subject));
+            let subjectsFromDB: any = tutor.subjects.map(async (subject: Subject) => (await knex.select("id", "subject_name").from("subject").where("subject_name", subject.subject).first()));
 
             console.log('subjectsFromDB: ', await subjectsFromDB)
 
 
             // let subjectId: number = await knex.select("id").from("subject").where("subject_name", tutor.subjects).first();
-            if (await subjectsFromDB.length === 0) {
+            if (!subjectsFromDB[0]) {
+                console.log('sub from db = 0! :) ')
                 tutor.subjects.map(async (subject) => (await knex.insert({
                     subject_name: subject,
 
@@ -159,7 +158,7 @@ export class UserService {
                     subjectFromDB.subject_name == subject.subject)
                 ))
                 console.log('157!!!', await unInsertedSubjects)
-
+                console.log('SUBdb id? ', subjectsFromDB[0])
                 await unInsertedSubjects.map(async (subjectFromDB: SubjectFromDB) => await knex.insert({
                     tutor_id: tutor.userId,
                     subject_id: subjectFromDB.id,
@@ -176,7 +175,7 @@ export class UserService {
             )
 
             return;
-        })
+        // })
         return;
     };
 
