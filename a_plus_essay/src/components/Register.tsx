@@ -665,15 +665,22 @@ export default function Register() {
             {
                 page.step === 4 ?
                     <>
+                        <Stack>
+                            <HStack alignItems="center">
+                                <Text>Subject</Text>
+                                <Text>Subject</Text>
+                            </HStack>
+                        </Stack>
                         <Text style={styles.title}>School Life</Text>
                         <View style={{ flexDirection: 'row', width: 300 }}>
                             <Text style={{ flex: 7 }}>Subject</Text>
                             <Text style={{ flex: 2 }}>Score</Text>
-                            <TouchableOpacity
-                                style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
-                                onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}>
-                                <Text style={{}}>+</Text>
-                            </TouchableOpacity>
+                            {/* <TouchableOpacity */}
+                            {/* // style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }} */}
+                            {/* // onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}> */}
+                            {/* <Text style={{}}>+</Text> */}
+                            {/* <Ionicons name="add-circle-outline" color='grey' size={18} />
+                            </TouchableOpacity> */}
                         </View>
                         {subjects.map((subject, index) => (
 
@@ -706,6 +713,12 @@ export default function Register() {
                             // }｝
                             />
                         ))}
+                        <TouchableOpacity
+                            // style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
+                            onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}>
+                            {/* <Text style={{}}>+</Text> */}
+                            <Ionicons name="add-circle-outline" color='#0f766e' size={30} />
+                        </TouchableOpacity>
 
                         <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={async () => {
                             // Send to DB
