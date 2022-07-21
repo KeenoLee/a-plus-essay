@@ -49,8 +49,7 @@ server-deploy:
     - ssh aplusessay "        
         cd ~/aplusessay &&        
         git fetch &&
-        git checkout $CI_COMMIT_SHA &&
-        rm -r -f a_plus_essay &&
+        git checkout $CI_COMMIT_SHA &&        
         cd ~/aplusessay/a_plus_essay_server &&
         npm install &&
         cd dist &&
