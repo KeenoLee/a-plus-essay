@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button, Icon, CloseIcon, IconButton, View } from "native-base";
+import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button, Icon, CloseIcon, IconButton, View, ScrollView } from "native-base";
 import DateTimePicker from './DateTimePicker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -30,8 +30,8 @@ interface OrderValue {
     studentDeadline: Date | null
 }
 function shorterFilename(filename: string) {
-    if (filename.length > 10) {
-        return filename.substring(0, 11) + '...'
+    if (filename.length > 16) {
+        return filename.substring(0, 17) + '...'
     }
     return filename
 }
@@ -107,74 +107,98 @@ export default function OrderSubmission() {
         })
     }
     return (
-        userInfo?.user_id && !userInfo?.is_admin && !userInfo?.is_tutor ?
-            <SafeAreaView>
-            <VStack space={4} alignSelf="center" px="4" w={{ base: "100%" }}>
-                <Stack>
-                    <FormControl>
-                        <FormControl.Label>Project Title</FormControl.Label>
-                        <Input variant="underlined" autoCapitalize="none" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, title: value })} />
-                    </FormControl>
-                    <FormControl>
-                        <FormControl.Label>Subject</FormControl.Label>
-                        <Input variant="underlined" autoCapitalize="none" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, subject: value })} />
-                    </FormControl>
-                </Stack>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                    <HStack>
-                        <FormControl.Label>Budget</FormControl.Label>
-                        <FormControl w="20" style={{ marginLeft: 10 }}>
-                            <Input variant="outline" placeholder="$" onChangeText={value => setOrderValue({ ...orderValue, budget: parseInt(value) })} />
+        // userInfo?.user_id && !userInfo?.is_admin && !userInfo?.is_tutor ?
+        <SafeAreaView>
+            <ScrollView>
+                <VStack mt="4" alignSelf="center" px="4" w={{ base: "100%" }}>
+                    <Stack space={4}>
+                        <FormControl>
+                            <FormControl.Label>Project Title :</FormControl.Label>
+                            <Input variant="underlined" autoCapitalize="none" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, title: value })} />
                         </FormControl>
-                    </HStack>
-                    <HStack>
-                        <FormControl.Label>Grade</FormControl.Label>
-                        <FormControl w="20" style={{ marginLeft: 10 }}>
-                            <Input variant="outline" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, grade: value })} />
+                        <FormControl>
+                            <FormControl.Label>Subject :</FormControl.Label>
+                            <Input variant="underlined" autoCapitalize="none" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, subject: value })} />
                         </FormControl>
+                    </Stack>
+                    <HStack space={4} mt="4" alignSelf="center">
+                        <HStack>
+                            <FormControl.Label>Budget :</FormControl.Label>
+                            <FormControl w="20" style={{ marginLeft: 10 }}>
+                                <Input variant="outline" placeholder="$" onChangeText={value => setOrderValue({ ...orderValue, budget: parseInt(value) })} />
+                            </FormControl>
+                        </HStack>
+                        <HStack>
+                            <FormControl.Label>Grade :</FormControl.Label>
+                            <FormControl w="20" style={{ marginLeft: 10 }}>
+                                <Input variant="outline" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, grade: value })} />
+                            </FormControl>
+                        </HStack>
                     </HStack>
-                </View>
-                <Stack space={4}>
-                    <FormControl.Label>Project Description </FormControl.Label>
-                    <TextArea autoCapitalize="none" h={24} placeholder="Please specify your project requirement (Optional)" w="100%" maxW="300" autoCompleteType={undefined} onChangeText={(value:string )=> setOrderValue({ ...orderValue, description: value })} />
-                </Stack>
-                <HStack style={{ justifyContent: 'space-between', alignItems: 'center', height: 80 }}>
-                    <FormControl.Label style={{ flex: 2, justifyContent: 'center' }}>Guideline</FormControl.Label>
-                    {/* <FilePicker /> */}
+                    <Stack mt="4" mb="4">
+                        <FormControl.Label>Project Description :</FormControl.Label>
+                    </Stack>
+                    <Stack alignItems="center">
+                        <TextArea autoCapitalize="none" h={24} placeholder="Please specify your project requirement (Optional)" w="100%" maxW="300" autoCompleteType={undefined} onChangeText={(value: string) => setOrderValue({ ...orderValue, description: value })} />
+                    </Stack>
 
-                    <View style={{ flex: 4 }}>
-                        {orderValue.guidelines.map((guideline, index) => (
-                            <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 25 }}>
-                                <Text style={{ textAlign: 'center' }}>
-                                    {shorterFilename(guideline.filename)}
-                                </Text>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setOrderValue(value => value = {
-                                            ...value,
-                                            guidelines: value.guidelines.filter((_, i) => i !== index)
-                                        })
-                                    }}
-                                >
-                                    <Text>
-                                        x
+                    <HStack justifyContent='space-between' alignItems='center' mt="4">
+                        <HStack>
+                            <FormControl.Label alignItems='center'>Guideline :</FormControl.Label>
+                            {/* <FilePicker /> */}
+                        </HStack>
+                        <HStack>
+                            <Button _pressed={{
+                                bgColor: "teal.600"
+                            }}
+                                size='sm' bgColor="teal.500"
+                                onPress={() => addGuideline()}
+                                leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
+                                Upload
+                            </Button>
+                        </HStack>
+                    </HStack>
+
+                    <Stack>
+                        <View>
+                            {orderValue.guidelines.map((guideline, index) => (
+                                <View key={index} style={{ flexDirection: 'row' }}>
+                                    <Text style={{ textAlign: 'center' }}>
+                                        {shorterFilename(guideline.filename)}
                                     </Text>
-                                </TouchableOpacity>
-                            </View>
-                        ))}
-                    </View>
-                    <View style={{ flex: 2 }}>
-                        <Button onPress={() => addGuideline()} leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
-                            Upload
-                        </Button>
-                    </View>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setOrderValue(value => value = {
+                                                ...value,
+                                                guidelines: value.guidelines.filter((_, i) => i !== index)
+                                            })
+                                        }}
+                                    >
+                                        <Ionicons name="close" color='grey' size={18} />
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </View>
+                    </Stack>
 
-                </HStack>
-                <HStack style={{ justifyContent: 'space-between', alignItems: 'center', height: 80 }}>
-                    <FormControl.Label style={{ flex: 2, justifyContent: 'center' }}>Lecture Notes</FormControl.Label>
-                    <View style={{ flex: 4 }}>
+                    <HStack justifyContent='space-between' alignItems='center' mt="4">
+                        <HStack>
+                            <FormControl.Label alignItems='center'>Lecture Notes :</FormControl.Label>
+                        </HStack>
+                        <HStack>
+                            <Button _pressed={{
+                                bgColor: "teal.600"
+                            }}
+                                size='sm' bgColor="teal.500"
+                                onPress={() => addNote()}
+                                leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
+                                Upload
+                            </Button>
+                        </HStack>
+                    </HStack>
+                    <Stack>
                         {orderValue.notes.map((note, index) => (
-                            <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 25 }}>
+                            <View key={index} style={{ flexDirection: 'row' }}>
                                 <Text style={{ textAlign: 'center' }}>
                                     {shorterFilename(note.filename)}
                                 </Text>
@@ -186,61 +210,56 @@ export default function OrderSubmission() {
                                         })
                                     }}
                                 >
-                                    <Text>
-                                        x
-                                    </Text>
+                                    <Ionicons name="close" color='grey' size={18} />
                                 </TouchableOpacity>
                             </View>
                         ))}
-                    </View>
-                    <View style={{ flex: 2 }}>
-                        <Button onPress={() => addNote()} leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
-                            Upload
-                        </Button>
-                    </View>
+                    </Stack>
 
-
-                </HStack>
-                <HStack style={{ justifyContent: 'space-between', alignItems: 'center', height: 50 }}>
-                    <FormControl.Label style={{ flex: 4 }}>Desired Deadline</FormControl.Label>
-                    {orderValue.tutorDeadline ?
-                        <Text style={{ flex: 3, textAlign: 'center' }}>{format(orderValue.tutorDeadline, 'yyyy-MM-dd HH:mm')}</Text> :
-                        <Text style={{ flex: 3 }}></Text>}
-                    <FormControl style={{ flex: 3 }}>
-                        <DateTimePicker
-                            onChange={(value: Date) => setOrderValue({ ...orderValue, tutorDeadline: value })}
-                        />
-                    </FormControl>
-                </HStack>
-                <HStack style={{ justifyContent: 'space-between', alignItems: 'center', height: 50 }}>
-                    <FormControl.Label style={{ flex: 4 }}>Actual Deadline</FormControl.Label>
-                    {orderValue.studentDeadline ?
-                        <Text style={{ flex: 3, textAlign: 'center' }}>{format(orderValue.studentDeadline, 'yyyy-MM-dd HH:mm')}</Text> :
-                        <Text style={{ flex: 3 }}></Text>}
-                    <FormControl style={{ flex: 3 }}>
-                        <DateTimePicker
-                            onChange={(value: Date) => setOrderValue({ ...orderValue, studentDeadline: value })}
-                        />
-                    </FormControl>
-                </HStack>
-                <HStack justifyContent="space-evenly">
-                    <Button onPress={async () => {
-                        const result = await fetchOrder(orderValue)
-                        console.log('result of creating order', result)
-                        result.error ? Alert.alert('Error', result.error) : Alert.alert('Success', result)
-                    }}>Confirm</Button>
-                    <Button>Cancel</Button>
-                </HStack>
-            </VStack> 
-            </SafeAreaView>:
-            <View>
-                {Alert.alert(
-                    'Unauthorized',
-                    'Please login to submit order!',
-                    [
-                        { text: 'OK', onPress: () => { navigation.navigate('Login') } },
-                    ]
-                )}
-            </View>
+                    <HStack justifyContent='space-between' alignItems='center' mt="4">
+                        <HStack>
+                            <FormControl.Label>Desired Deadline</FormControl.Label>
+                        </HStack>
+                        {orderValue.tutorDeadline ?
+                            <Text style={{ flex: 3, textAlign: 'center' }}>{format(orderValue.tutorDeadline, 'yyyy-MM-dd HH:mm')}</Text> :
+                            <Text style={{ flex: 3 }}></Text>}
+                        <FormControl style={{ flex: 3 }}>
+                            <DateTimePicker
+                                onChange={(value: Date) => setOrderValue({ ...orderValue, tutorDeadline: value })}
+                            />
+                        </FormControl>
+                    </HStack>
+                    <HStack justifyContent='space-between' alignItems='center' mt="4">
+                        <FormControl.Label style={{ flex: 4 }}>Actual Deadline</FormControl.Label>
+                        {orderValue.studentDeadline ?
+                            <Text style={{ flex: 3, textAlign: 'center' }}>{format(orderValue.studentDeadline, 'yyyy-MM-dd HH:mm')}</Text> :
+                            <Text style={{ flex: 3 }}></Text>}
+                        <FormControl style={{ flex: 3 }}>
+                            <DateTimePicker
+                                onChange={(value: Date) => setOrderValue({ ...orderValue, studentDeadline: value })}
+                            />
+                        </FormControl>
+                    </HStack>
+                    <HStack justifyContent="space-evenly">
+                        <Button onPress={async () => {
+                            const result = await fetchOrder(orderValue)
+                            console.log('result of creating order', result)
+                            result.error ? Alert.alert('Error', result.error) : Alert.alert('Success', result)
+                        }}>Confirm</Button>
+                        <Button>Cancel</Button>
+                    </HStack>
+                </VStack>
+            </ScrollView>
+        </SafeAreaView>
+        // :
+        // <View>
+        //     {Alert.alert(
+        //         'Unauthorized',
+        //         'Please login to submit order!',
+        //         [
+        //             { text: 'OK', onPress: () => { navigation.navigate('Login') } },
+        //         ]
+        //     )}
+        // </View>
     )
 }
