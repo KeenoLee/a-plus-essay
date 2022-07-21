@@ -14,6 +14,7 @@ import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import { registerStudent } from "../redux/student/actions";
 import { env } from "../env/env";
+import Ionicons from "react-native-vector-icons/Ionicons";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -23,21 +24,21 @@ const roleData: RadioButtonProps[] = [{
     label: 'Student',
     value: 'student',
     selected: true,
-    borderColor: 'rgb(51,130,251)',
-    color: 'rgb(51,130,251)'
+    borderColor: "#2dd4bf",
+    color: '#2dd4bf'
 }, {
     id: '2',
     label: 'Tutor',
     value: 'tutor',
-    borderColor: 'rgb(51,130,251)',
-    color: 'rgb(51,130,251)'
+    borderColor: "#2dd4bf",
+    color: '#2dd4bf'
 }]
 const reg: RegExp = /^[0-9\b]+$/
 const passwordLength = 7
 const mobileNumberLength = 8
 function shorterFilename(filename: string) {
-    if (filename.length > 10) {
-        return filename.substring(0, 11) + '...'
+    if (filename.length > 15) {
+        return filename.substring(0, 16) + '...'
     }
     return filename
 }
@@ -64,18 +65,18 @@ type StudentCardImage = {
     base64Data: string
 }
 const disableStyle = {
-    backgroundColor: "grey",
+    backgroundColor: "#a8a29e",
     padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    width: 200,
+    margin: 50,
+    borderRadius: 14,
+    width: 210,
 }
 const nonDisableStyle = {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#14b8a6",
     padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    width: 200,
+    margin: 50,
+    borderRadius: 14,
+    width: 210,
 }
 interface StudentData {
     isTutor: boolean,
@@ -403,7 +404,7 @@ export default function Register() {
                         <Text style={styles.title}>Create New Account</Text>
                     </TouchableOpacity>
                     <RadioGroup
-                        containerStyle={{ flexDirection: 'row', color: 'blue' }}
+                        containerStyle={{ flexDirection: 'row', marginHorizontal:70 ,justifyContent: 'space-evenly', width:"75%"}}
                         radioButtons={role}
                         onPress={() => {
                             onPressRole
@@ -705,11 +706,12 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderRadius: 10,
-        width: 200,
-        backgroundColor: 'white',
-        textAlign: 'center',
+        maxWidth: '80%',
+        width: 300,
+        backgroundColor: '#F6F6F9',
+        textAlign: 'left',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 1,
     },
@@ -748,32 +750,34 @@ const styles = StyleSheet.create({
         textDecoration: 'none'
     },
     title: {
+        marginVertical: 20,
+        fontWeight: '700',
         fontSize: 30,
-        padding: 10
     },
 
-    button: {
-        backgroundColor: "#007AFF",
-        padding: 10,
-        margin: 10,
-        borderRadius: 10,
-        width: 200,
-    },
+    // button: {
+    //     backgroundColor: "#007AFF",
+    //     padding: 10,
+    //     margin: 10,
+    //     borderRadius: 10,
+    //     width: 200,
+    // },
+
     buttonText: {
         color: 'white',
         textAlign: 'center'
     },
-    disabledButton: {
-        backgroundColor: '#222222'
-    },
+    // disabledButton: {
+    //     backgroundColor: '#222222'
+    // },
     fileSelector: {
-        padding: 5,
+        padding: 10,
         borderWidth: 1,
-        borderColor: '#AAAAFF',
+        borderColor: '#134e4a',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         width: 300,
-        height: 50
+        height: 40
     }
 })
