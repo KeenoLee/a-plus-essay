@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Button, View, Text, TextInput, StyleSheet, Alert, SafeAreaView } from "react-native";
 import * as React from 'react'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
@@ -16,6 +16,9 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { just } from "@beenotung/tslib";
 import { Box, FormControl, Input, Stack, VStack, TextArea, HStack, Icon, CloseIcon, IconButton } from "native-base";
+import { fetchLogin } from "../redux/auth/actions";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/dispatch";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -187,6 +190,7 @@ export default function Register() {
     const [disableNext, setDisableNext] = useState(true)
     const [nextButtonStyle, setNextButtonStyle] = useState(disableStyle)
     const [input, setInput] = useState('')
+    // const [submitStudent, setSubmitStudent] = useState(false)
 
     // Page One Information (Create new account)
     const [role, setRole] = useState<RadioButtonProps[]>(roleData)
@@ -301,6 +305,8 @@ export default function Register() {
         }))
     }
 
+    const dispatch = useDispatch<AppDispatch>()
+
     // Check Page One (Create an account)
     useEffect(() => {
         if (page.step !== 1) {
@@ -372,9 +378,35 @@ export default function Register() {
 
 
     // Fetch Server
+    // useCallback(async()=>{
+    //     console.log('going to callback')
+    //      if (submitStudent) {
+    //         console.log('going to feCH in callback')
+    //         const result = await fetchStudent({
+    //             isTutor: isTutor,
+    //             nickname: nickname,
+    //             email: email,
+    //             password: password,
+    //             rePassword: firmPassword,
+    //             phoneNumber: mobileNumber,
+    //             isOAuth: false
+    //         })
+    //         console.log('RESULT: ', result)
+    //         if (result.error) {
+    //             setDisableNext(true)
+    //             setNextButtonStyle(disableStyle)
+    //             Alert.alert('Error', result.error)
+    //         } else {
+    //             setDisableNext(true)
+    //             setNextButtonStyle(disableStyle)
+    //             setPage({ step: 5 })
+    //         }
+        // }
+    // },[submitStudent])
     useEffect(() => {
         setIsTutor(() => false)
     }, [])
+
 
     return (
         <View style={styles.form}>
@@ -454,8 +486,10 @@ export default function Register() {
                     <TouchableOpacity
                         style={nextButtonStyle}
                         disabled={disableNext}
-                        onPress={async () => {
+                        onPress={ async() => {
                             console.log('going to fetch')
+                            // setSubmitStudent(()=>!submitStudent)
+                            // console.log(submitStudent)
                             const result = await fetchStudent({
                                 isTutor: isTutor,
                                 nickname: nickname,
@@ -474,6 +508,7 @@ export default function Register() {
                                 setDisableNext(true)
                                 setNextButtonStyle(disableStyle)
                                 setPage({ step: 5 })
+                                dispatch(fetchLogin({email: email, password: password}))
                             }
                         }}>
                         <Text style={styles.buttonText}>Create Account</Text>
@@ -635,7 +670,7 @@ export default function Register() {
                                 <TextArea h={40} placeholder="" maxW="300" w="85%" onChangeText={(value: string) => setSchoolLife({
                                     ...schoolLife,
                                     tutorIntroduction: value
-                                })} />
+                                })} autoCompleteType={undefined} />
                             </Stack>
                         </Stack>
 
@@ -666,16 +701,10 @@ export default function Register() {
             {
                 page.step === 4 ?
                     <>
-                        <Stack>
-                            <HStack alignItems="center">
-                                <Text>Subject</Text>
-                                <Text>Subject</Text>
-                            </HStack>
-                        </Stack>
                         <Text style={styles.title}>School Life</Text>
-                        <View style={{ flexDirection: 'row', width: 300 }}>
-                            <Text style={{ flex: 7 }}>Subject</Text>
-                            <Text style={{ flex: 2 }}>Score</Text>
+                        <View style={{ flexDirection: 'row', width: "70%" , justifyContent: 'space-between'}}>
+                            <Text style={{}}>Subject</Text>
+                            <Text style={{}}>Score</Text>
                             {/* <TouchableOpacity */}
                             {/* // style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }} */}
                             {/* // onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}> */}
@@ -750,6 +779,7 @@ export default function Register() {
                                 setDisableNext(true)
                                 setNextButtonStyle(disableStyle)
                                 setPage({ step: 5 })
+                                dispatch(fetchLogin({email: email, password: password}))
                             }
                         }} >
                             <Text style={styles.buttonText}>Create Account</Text>
@@ -848,3 +878,5 @@ const styles = StyleSheet.create({
         height: 40
     }
 })
+
+
