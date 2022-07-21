@@ -47,7 +47,7 @@ server-deploy:
   script:
     - rsync -SavLP dist "aplusessay:~/aplusessay/a_plus_essay_server/dist"    
     - ssh aplusessay "        
-        cd ~ &&        
+        cd ~/aplusessay &&        
         git fetch &&
         git checkout $CI_COMMIT_SHA &&
         cd ~/aplusessay/a_plus_essay_server &&
