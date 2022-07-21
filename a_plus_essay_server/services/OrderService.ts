@@ -9,7 +9,8 @@ export class OrderService {
         return data
     }
 
-    async createOrder(order: OrderItem) {
+    async createOrder(order: OrderItem): Promise<Number | void> {
+        let id: number;
         await this.knex.transaction(async knex => {
             const orderId: number = (await knex.insert({
                 student_id: order.studentId,
@@ -26,7 +27,7 @@ export class OrderService {
                 student_submission_deadline: order.studentDeadline
             }).into("order").returning('id'))[0].id;
             console.log('orderId: ', orderId)
-            let subjectId: number = (await knex.select('id').from('subject').where('subject_name', order.subject).first()).id
+            let subjectId = (await knex.select('id').from('subject').where('subject_name', order.subject).first())?.id
             console.log('subjecetId: ', subjectId)
             if (!subjectId) {
                 subjectId = (await knex.insert({
@@ -40,8 +41,8 @@ export class OrderService {
             }).into('order_subject').returning('id'))[0].id;
             console.log('orderSubjectID!: ', orderSubjectId)
 
-            for(let guideline of order.guidelines) {
-                console.log('B64', guideline)
+            for (let guideline of order.guidelines) {
+                // console.log('B64', guideline)
                 await knex.insert({
                     order_id: orderId,
                     guideline_base64: guideline.base64Data
@@ -53,7 +54,7 @@ export class OrderService {
                     note_base64: note.base64Data
                 }).into('note')
             }
-
+            console.log('goin to return : ', orderId)
             // order.guidelines.map(async guideline => {
             //     await knex.insert({
             //         order_id: orderId,
@@ -62,10 +63,14 @@ export class OrderService {
             // })
 
             // order.notes.map(async note => {
-                
+
             // })
-            return orderId;
+            this.matchOrder(orderId)
+            return orderId
+            // id = orderId
+
         })
+        // return id;
     }
     async getChatMessage(userId: number, is_tutor: boolean) {
         try {
@@ -81,7 +86,7 @@ export class OrderService {
             // Sorting by date time asc
             files.push(orders.map(async (order) => (await this.knex.select('*').from('file').where('order_id', order.id).orderBy('created_time', 'asc'))))
             chatMessages.push(orders.map(async (order) => (await this.knex.select('*').from('chat_message').where('order_id', order.id).orderBy('created_time', 'asc'))))
-            
+
             // [order1:{
             //     files: []
             //     chatMessages: []
@@ -92,5 +97,18 @@ export class OrderService {
             console.log(error)
         }
 
+    }
+
+    async matchOrder(orderId: number) {
+        try {
+            const { orderSubejctId, subjectId } = (await this.knex.select('id', 'subject_id').from('order_subject').where('order_id', orderId))[0]
+            console.log('get from order_subject: ', orderSubejctId, subjectId)
+            const matchedSubjectTutorIds = await this.knex.select('tutor_id').from('preferred_subject').where('subject_id', subjectId)
+            console.log('matched ids: ', matchedSubjectTutorIds)
+            const { subejctName } = (await this.knex.select('subject_name').from('subject').where('id', subjectId))[0]
+            
+        } catch (error) {
+            console.log(error)
+        }
     }
 }

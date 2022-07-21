@@ -68,8 +68,9 @@ export class OrderController {
             return;
         };
         console.log('going to insert into db... ')
-        const orderId = await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
-        console.log('orderID: ', orderId)
+        await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
+        // console.log('orderID: ', orderId)
+        // await this.orderService.matchOrder(orderId)
         res.json({ success: true });
         return;
     }
@@ -95,6 +96,16 @@ export class OrderController {
             res.status(500).json({ message: "internal server errror" })
         }
     }
+
+    // matchOrder = async (req: Request, res: Response) => {
+    //     try {
+            
+            
+    //     } catch (error) {
+    //         console.log(error)
+
+    //     }
+    // }
 
     
 
