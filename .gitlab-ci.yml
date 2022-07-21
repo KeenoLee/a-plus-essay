@@ -11,7 +11,7 @@ variables:
   POSTGRES_HOST: postgres
   SERVER_HOST:  54.177.154.87
   SERVER_USER: ubuntu
-  WEB_SERVER_ROOT: ~/aplusessay/a_plus_essay_server
+  WEB_SERVER_ROOT: ~/a_plus_essay_server
 
 server-build:
   stage: server-build  
