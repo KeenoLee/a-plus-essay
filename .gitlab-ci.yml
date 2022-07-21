@@ -1,7 +1,6 @@
-image: node:16.15-alpine
+image: node:16.16-alpine
 
-stages:
-  # - test
+stages:  
   - server-build
   # - server-deploy
 
@@ -10,21 +9,9 @@ variables:
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_HOST: postgres
-  SERVER_HOST: 52.76.109.40
-  SERVER_USER: aplusessay
+  SERVER_HOST:  54.177.154.87
+  SERVER_USER: ubuntu
   WEB_SERVER_ROOT: ./a_plus_essay_server
-  
-# test: 
-#   stage: test  
-#   services:
-#     - postgres:14.3-alpine
-#   artifacts:
-#     paths:
-#       - node_modules
-#   before_script:    
-#     - npm install  
-#   script:
-#     - npx jest --runInBand --forceExit
 
 server-build:
   stage: server-build  
@@ -48,23 +35,25 @@ server-build:
 #     - apt update    
 #     - apt install --yes git rsync openssh-client
 #     - mkdir -p ~/.ssh
-#     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+#     - echo "$aplusessay_ssh_private_key" > ~/.ssh/id_rsa
 #     - chmod 600 ~/.ssh/id_rsa
 #     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
-#     - echo "Host badproject" >> ~/.ssh/config
+#     - echo "Host aplusessay" >> ~/.ssh/config
 #     - echo "  Hostname $SERVER_HOST" >> ~/.ssh/config
 #     - echo "  User $SERVER_USER" >> ~/.ssh/config
 #     - echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+#     - cd $WEB_SERVER_ROOT
     
 #   script:
-#     - rsync -SavLP dist "badproject:~/emoji-mama/"    
-#     - ssh badproject "
-#         source ~/.nvm/nvm.sh &&
-#         cd ~/emoji-mama &&        
+#     - rsync -SavLP dist "aplusessay:$WEB_SERVER_ROOT/dist"    
+#     - ssh aplusessay "
+#         # source ~/.nvm/nvm.sh &&
+#         cd ~ &&        
 #         git fetch &&
 #         git checkout $CI_COMMIT_SHA &&
+#         cd $WEB_SERVER_ROOT &&
 #         npm install --omit=dev &&
 #         cd dist &&
 #         npx knex migrate:latest &&        
-#         pm2 reload ~/emoji-mama/dist/routes.js
+#         pm2 start $WEB_SERVER_ROOT/dist/main.js || pm2 reload $WEB_SERVER_ROOT/dist/main.js
 #         "
