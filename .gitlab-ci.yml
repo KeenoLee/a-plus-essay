@@ -51,6 +51,7 @@ server-deploy:
         git fetch &&
         git checkout $CI_COMMIT_SHA &&        
         cd ~/aplusessay/a_plus_essay_server &&
+        npm install -g yarn &&
         yarn install &&
         cd dist &&
         npx knex migrate:latest &&        
