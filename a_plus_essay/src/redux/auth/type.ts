@@ -33,6 +33,7 @@ export interface AuthState {
     user?: UserInfo
     tutor?: Array<TutorInfo & SchoolInfo & TranscriptInfo[]>
     error?: string
+    token?: string
 }
 export type JWTStudentPayload = {
     id: number,

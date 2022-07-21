@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import jwtSimple from 'jwt-simple';
 import { Bearer } from 'permit';
 import dotenv from 'dotenv';
+import { isConstructorDeclaration } from "typescript";
 
 dotenv.config({ path: '../.env' });
 
@@ -17,17 +18,20 @@ export class OrderController {
     }
 
     createOrder = async (req: Request, res: Response) => {
+        console.log('start creating order... ', req)
         let { title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline } = req.body;
         console.log('order data: ', title, subject, budget, grade, description, tutorDeadline, studentDeadline)
         const token: string = permit.check(req);
-
+        console.log('TOKEN!: ', token)
         if (!token) {
             res.status(401).json({ error: "Not registered or logged in." })
             return;
         };
 
         const payload = jwtSimple.decode(token, process.env.jwtSecret!);
+        console.log('payload: ', payload)
         const studentId = payload.id;
+        console.log('student id: ', studentId)
 
         if (!title) {
             res.status(400).json({ error: "Project title is missed" });
@@ -63,8 +67,10 @@ export class OrderController {
             res.status(400).json({ error: "Student submission deadline is missed" });
             return;
         };
-
-        const orderId = await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
+        console.log('going to insert into db... ')
+        await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
+        // console.log('orderID: ', orderId)
+        // await this.orderService.matchOrder(orderId)
         res.json({ success: true });
         return;
     }
@@ -90,6 +96,16 @@ export class OrderController {
             res.status(500).json({ message: "internal server errror" })
         }
     }
+
+    // matchOrder = async (req: Request, res: Response) => {
+    //     try {
+            
+            
+    //     } catch (error) {
+    //         console.log(error)
+
+    //     }
+    // }
 
     
 

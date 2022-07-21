@@ -1,6 +1,6 @@
 interface Guideline {
     filename: string;
-    base64: string;
+    base64Data: string;
 }
 export type SubjectFromDB = {
     id: number;
@@ -14,7 +14,7 @@ export type Subject = {
 };
 interface Note {
     filename: string;
-    base64: string;
+    base64Data: string;
 }
 export interface OrderItem {
     studentId: number;

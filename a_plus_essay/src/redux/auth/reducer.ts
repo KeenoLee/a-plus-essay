@@ -1,5 +1,4 @@
 import { AuthActions } from "./actions"
-import jwt_decode from 'jwt-decode'
 import { AuthState, JWTStudentPayload, SchoolInfo, TranscriptInfo, TutorInfo } from "./type"
 
 const initialState: AuthState = {}
@@ -30,7 +29,13 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
             user: userInfo,
             tutor: [tutorInfo, schoolInfo, transcriptInfo]
         }
-
+    }
+    if (action.type === '@@auth/SAVE_TOKEN') {
+        console.log('TOKEN>:', action)
+        return {
+            ...state,
+            token: action.token
+        }
     }
     console.log('returning initialState... ', initialState)
     return initialState
