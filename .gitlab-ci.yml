@@ -30,7 +30,7 @@ server-deploy:
     - production
   image: ubuntu:22.04
   dependencies:
-    - build
+    - server-build
   before_script:
     - apt update    
     - apt install --yes git rsync openssh-client
@@ -46,8 +46,7 @@ server-deploy:
     
   script:
     - rsync -SavLP dist "aplusessay:~/aplusessay/a_plus_essay_server/dist"    
-    - ssh aplusessay "
-        # source ~/.nvm/nvm.sh &&
+    - ssh aplusessay "        
         cd ~ &&        
         git fetch &&
         git checkout $CI_COMMIT_SHA &&
