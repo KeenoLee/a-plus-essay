@@ -132,7 +132,7 @@ export default function OrderSubmission() {
                                     <FormControl.Label>Subject :</FormControl.Label>
                                     <Input variant="underlined" autoCapitalize="none" placeholder="" onChangeText={value => setOrderValue({ ...orderValue, subject: value })} />
                                 </FormControl>
-                            </Stack>
+                            </HStack>
                             <HStack space={4} mt="4" alignSelf="center">
                                 <HStack>
                                     <FormControl.Label>Budget :</FormControl.Label>
