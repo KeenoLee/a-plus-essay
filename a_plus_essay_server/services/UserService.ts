@@ -75,30 +75,33 @@ export class UserService {
 
             console.log('line69', tutor)
             console.log('tutorID line70', tutor.userId)
-            const date = new Date();
             // let majorId: number = (await knex.select("id").from("major").where("major", tutor.major).first())?.id;
             let majorId;
-            console.log('majorID:73 ', majorId)
-            if (!(await knex.select("id").from("major").where("major", tutor.major).first())?.id) {
+            console.log('majorID:80 ', majorId)
+            if (!(await knex.select("id").from("major").where("major", tutor.major).first())) {
                 majorId = (await knex.insert({ major: tutor.major }).into("major").returning("id"))[0].id
-                console.log('majorID:76 ', majorId)
+                console.log('majorID:83 ', majorId)
             } else {
                 majorId = (await knex.select("id").from("major").where("major", tutor.major).first())?.id
+                console.log('majorID:86 ',majorId)
             };
+            console.log('going to insert into tutor...')
+            const schoolId = await knex.insert({
+                tutor_id: tutor.userId,
+                school: tutor.school,
+            }).into("school").returning('id');
+            console.log('school ID: ', schoolId)
             await knex.insert({
                 id: tutor.userId,
-                // users_id: foreign key to users.id,
                 is_verified: false,
                 // transcript: ????,
+                school_id: schoolId,
                 student_card_base64: 'card',
-                // school: tutor.school,
                 major_id: majorId,
                 rating: null,
                 self_intro: tutor.selfIntro || null,
                 ongoing_order_amount: 0,
                 completed_order_amount: 0,
-                // created_at: Date.now(),
-                // updated_at: Date.now()
             }).into("tutor")
             console.log('going to transaction...')
             // let majorId: number = (await knex.select("id").from("major").where("major", tutor.major).first()).id;
@@ -117,29 +120,20 @@ export class UserService {
             //     self_intro: tutor.selfIntro || null,
             //     ongoing_order_amount: 0,
             //     completed_order_amount: 0,
-            //     // created_at: Date.now(),
-            //     // updated_at: Date.now()
             // }).into("tutor")
 
             console.log('tutorId: 117', tutor.userId)
             console.log('tutor.userId: ', tutor.userId)
-            await knex.insert({
-                tutor_id: tutor.userId,
-                school: tutor.school,
-                // created_at: Date.now(),
-                // updated_at: Date.now()
-            }).into("school");
+
 
 
             await knex.insert({
                 tutor_id: tutor.userId,
                 transcript_base64: 'transcript',
                 // filename: ???????,
-                // created_at: Date.now(),
-                // updated_at: Date.now()
+
             }).into("transcript");
 
-            // TODO................
             // Find out subject that is already registered in DB
             let subjectsFromDB: any = tutor.subjects.map(async (subject: Subject) => await knex.select("id", "subject_name").from("subject").where("subject_name", subject.subject));
 
@@ -150,8 +144,7 @@ export class UserService {
             if (await subjectsFromDB.length === 0) {
                 tutor.subjects.map(async (subject) => (await knex.insert({
                     subject_name: subject,
-                    // created_at: date.toLocaleString(),
-                    // updated_at: null
+
                 }).into("subject")))
             };
             console.log('146!!!')
