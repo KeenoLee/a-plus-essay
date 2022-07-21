@@ -77,9 +77,8 @@ export class UserController {
             return;
         };
 
-        this.createTutor(req, res, userInfo[0].id);
+        await this.createTutor(req, res, userInfo[0].id);
         res.json({ success: true, token: jwt });
-        // res.json({ success: true })
         return;
     }
 
@@ -111,7 +110,7 @@ export class UserController {
             res.status(400).json({ error: "Subject or score or preferred subject is missed" });
             return;
         };
-
+        console.log('controller line 113')
         await this.userService.createTutor(
             {
                 userId,
@@ -125,7 +124,7 @@ export class UserController {
                 preferredSubjects
             }
         );
-        res.json({ success: true });
+        // res.json({ success: true });
         return;
     }
 

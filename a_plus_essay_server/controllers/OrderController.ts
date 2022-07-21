@@ -83,7 +83,7 @@ export class OrderController {
     getChatMessage = async (req: Request, res: Response) => {
         try {
             const {userId, is_tutor} = req.body
-            
+            this.orderService.getChatMessage(userId, is_tutor)
             console.log('id in getChatMassage Contoller: ', userId, is_tutor)
         } catch (err) {
             console.error('orderControllerError: ', err)

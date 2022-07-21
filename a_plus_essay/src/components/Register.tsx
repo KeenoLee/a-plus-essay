@@ -12,8 +12,8 @@ import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
-import { registerStudent } from "../redux/student/actions";
 import { env } from "../env/env";
+import Ionicons from "react-native-vector-icons/Ionicons";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -23,21 +23,21 @@ const roleData: RadioButtonProps[] = [{
     label: 'Student',
     value: 'student',
     selected: true,
-    borderColor: 'rgb(51,130,251)',
-    color: 'rgb(51,130,251)'
+    borderColor: "#2dd4bf",
+    color: '#2dd4bf'
 }, {
     id: '2',
     label: 'Tutor',
     value: 'tutor',
-    borderColor: 'rgb(51,130,251)',
-    color: 'rgb(51,130,251)'
+    borderColor: "#2dd4bf",
+    color: '#2dd4bf'
 }]
 const reg: RegExp = /^[0-9\b]+$/
 const passwordLength = 7
 const mobileNumberLength = 8
 function shorterFilename(filename: string) {
-    if (filename.length > 10) {
-        return filename.substring(0, 11) + '...'
+    if (filename.length > 15) {
+        return filename.substring(0, 16) + '...'
     }
     return filename
 }
@@ -64,18 +64,18 @@ type StudentCardImage = {
     base64Data: string
 }
 const disableStyle = {
-    backgroundColor: "grey",
+    backgroundColor: "#a8a29e",
     padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    width: 200,
+    margin: 50,
+    borderRadius: 14,
+    width: 210,
 }
 const nonDisableStyle = {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#14b8a6",
     padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    width: 200,
+    margin: 50,
+    borderRadius: 14,
+    width: 210,
 }
 interface StudentData {
     isTutor: boolean,
@@ -166,7 +166,7 @@ async function fetchTutor(registerData: TutorData) {
         body: JSON.stringify(registerData)
     })
     const result = await res.json()
-    console.log(result)
+    console.log('RESULT in register: ', result)
     if (result.error) {
         return result
     }
@@ -368,7 +368,7 @@ export default function Register() {
 
     // Fetch Server
     useEffect(() => {
-        setIsTutor(()=>false)
+        setIsTutor(() => false)
     }, [])
 
     return (
@@ -376,9 +376,34 @@ export default function Register() {
             {/* <SafeAreaView> */}
             {page.step === 1 && !isOAuth ?
                 <>
-                    <Text style={styles.title}>Create New Account</Text>
+                    <TouchableOpacity onPress={async() => {
+                        // setPage({ step: 5 })
+                        console.log(`${(Math.random()*8)}`.split('.')[1].substring(0,8))
+                        const result = await fetchTutor({
+                            isTutor: true,
+                            nickname: 'nickname',
+                            email: `${(Math.random() * 6)}@gmail.com`,
+                            password: 'password',
+                            rePassword: 'password',
+                            phoneNumber: `${(Math.random()*8)}`.split('.')[1].substring(0,8),
+                            isOAuth: false,
+                            transcript: [...transcriptImages, { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }],
+                            studentCard: { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }!,
+                            school: 'schoolLife.school',
+                            major: 'schoolLife.major',
+                            selfIntro: 'schoolLife.tutorIntroduction',
+                            subjects: [
+                                { key: '1', subject: 'A', score: 'A', isChecked: true },
+                                { key: '2', subject: 'B', score: 'B', isChecked: true },
+                                { key: '3', subject: 'C', score: 'C', isChecked: false },
+                            ]
+                        })
+                        console.log('Hseudo-Result: ', result)
+                    }}>
+                        <Text style={styles.title}>Create New Account</Text>
+                    </TouchableOpacity>
                     <RadioGroup
-                        containerStyle={{ flexDirection: 'row', color: 'blue' }}
+                        containerStyle={{ flexDirection: 'row', marginHorizontal:70 ,justifyContent: 'space-evenly', width:"75%"}}
                         radioButtons={role}
                         onPress={() => {
                             onPressRole
@@ -391,31 +416,34 @@ export default function Register() {
                     <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Confirm Password" onChangeText={(firmPassword) => setFirmPassword(firmPassword)} />
                     <TextInput style={styles.input} keyboardType='numeric' textContentType='telephoneNumber' placeholder='Mobile Number' maxLength={8} onChangeText={mobileNumber => { setMobileNumber(mobileNumber); setInput(text => reg.test(mobileNumber) ? '' : text) }} />
                     {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
-                </> : null}
-
-
-
-            {page.step === 1 && isOAuth ?
-                <>
-                    {isTutor ? <Text style={styles.title}>Become a Tutor</Text> : <Text style={styles.title}>Become a Student</Text>}
-                    {/* <Text style={styles.title}>Create New Account</Text> */}
-                    <RadioGroup
-                        containerStyle={{ flexDirection: 'row', color: 'blue' }}
-                        radioButtons={role}
-                        onPress={() => {
-                            onPressRole
-                            setIsTutor(!isTutor)
-                        }}
-                    />
-                    <TextInput style={styles.input} placeholder="Nickname" autoCapitalize="none" onChangeText={(nickname) => setNickname(nickname)} />
-                    <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" value='oauth email' />
-                    <TextInput style={styles.input} keyboardType='numeric' textContentType='telephoneNumber' placeholder='Mobile Number' maxLength={8} onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
-                    {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
-                </>
-                : null
+                </> : null
             }
 
-            {!isTutor && page.step === 1 &&
+
+
+            {
+                page.step === 1 && isOAuth ?
+                    <>
+                        {isTutor ? <Text style={styles.title}>Become a Tutor</Text> : <Text style={styles.title}>Become a Student</Text>}
+                        {/* <Text style={styles.title}>Create New Account</Text> */}
+                        <RadioGroup
+                            containerStyle={{ flexDirection: 'row', color: 'blue' }}
+                            radioButtons={role}
+                            onPress={() => {
+                                onPressRole
+                                setIsTutor(!isTutor)
+                            }}
+                        />
+                        <TextInput style={styles.input} placeholder="Nickname" autoCapitalize="none" onChangeText={(nickname) => setNickname(nickname)} />
+                        <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" value='oauth email' />
+                        <TextInput style={styles.input} keyboardType='numeric' textContentType='telephoneNumber' placeholder='Mobile Number' maxLength={8} onChangeText={(mobileNumber) => setMobileNumber(mobileNumber)} />
+                        {/* {passwordNotMatch && <Text style={{color: 'red', fontSize: 10}}>Password not match</Text>} */}
+                    </>
+                    : null
+            }
+
+            {
+                !isTutor && page.step === 1 &&
                 <TouchableOpacity
                     style={nextButtonStyle}
                     disabled={disableNext}
@@ -445,7 +473,8 @@ export default function Register() {
                 </TouchableOpacity>
             }
             {/* Submit Page 1 */}
-            {isTutor && page.step === 1 &&
+            {
+                isTutor && page.step === 1 &&
                 <>
                     <TouchableOpacity
                         style={nextButtonStyle}
@@ -473,13 +502,14 @@ export default function Register() {
 
 
 
-            {page.step === 2 ?
-                <>
-                    <Text style={styles.title}>Academic Infomation</Text>
-                    <View style={{ padding: 10 }}>
-                        <View style={styles.fileSelector}>
-                            <Text>Transcript</Text>
-                            {/* <VStack style={{ marginRight: 10, }} space={6} alignSelf="flex-start" w="30%">
+            {
+                page.step === 2 ?
+                    <>
+                        <Text style={styles.title}>Academic Infomation</Text>
+                        <View style={{ padding: 10 }}>
+                            <View style={styles.fileSelector}>
+                                <Text>Transcript</Text>
+                                {/* <VStack style={{ marginRight: 10, }} space={6} alignSelf="flex-start" w="30%">
                                 <Select
                                     selectedValue={position}
                                     mx={{ base: -0.5, md: "Image" }}
@@ -491,13 +521,13 @@ export default function Register() {
                                     <Select.Item label="File" value="File" onPress={() => addTranscriptFile()} />
                                 </Select>
                             </VStack> */}
-                            <TouchableOpacity onPress={() => addTranscriptImage()}>
-                                <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
-                            </TouchableOpacity>
-                        </View>
+                                <TouchableOpacity onPress={() => addTranscriptImage()}>
+                                    <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                                </TouchableOpacity>
+                            </View>
 
-                        <View style={{ height: 100 }}>
-                            {/* {transcriptFiles && transcriptFiles.map((file, index) => (
+                            <View style={{ height: 100 }}>
+                                {/* {transcriptFiles && transcriptFiles.map((file, index) => (
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Text key={index}>{shorterFilename(file.filename)}</Text>
                                     <TouchableOpacity style={{ marginRight: 180 }} onPress={() => { setTranscriptFiles(files => files.filter((_, i) => i !== index)) }}>
@@ -505,159 +535,165 @@ export default function Register() {
                                     </TouchableOpacity>
                                 </View>
                             ))} */}
-                            {transcriptImages && transcriptImages.map((image, index) => (
-                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 5 }}>
-                                        <Text>{shorterFilename(image.filename)}</Text>
-                                        <TouchableOpacity onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
-                                            <Text style={{ color: 'grey' }}>x</Text>
-                                        </TouchableOpacity>
+                                {transcriptImages && transcriptImages.map((image, index) => (
+                                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 5 }}>
+                                            <Text>{shorterFilename(image.filename)}</Text>
+                                            <TouchableOpacity onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
+                                                <Text style={{ color: 'grey' }}>x</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={{ flex: 5 }}></View>
                                     </View>
-                                    <View style={{ flex: 5 }}></View>
-                                </View>
-                            ))}
+                                ))}
+                            </View>
+
+                        </View>
+                        <View style={{ padding: 10, marginBottom: 50 }}>
+                            <View style={styles.fileSelector}>
+                                <Text style={{ flex: 6 }}>Student Card</Text>
+                                {studentCardImage ?
+                                    (
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 4.5, paddingRight: 10 }}>
+                                            <Text>{shorterFilename(studentCardImage.filename)}</Text>
+                                            <TouchableOpacity onPress={() => { setStudentCardImage(() => null); }}>
+                                                <Text style={{ color: 'grey' }}>x</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ) :
+                                    (
+                                        <TouchableOpacity onPress={() => addStudentCardImage()}>
+                                            <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                                        </TouchableOpacity>
+                                    )
+                                }
+                            </View>
                         </View>
 
-                    </View>
-                    <View style={{ padding: 10, marginBottom: 50 }}>
-                        <View style={styles.fileSelector}>
-                            <Text style={{ flex: 6 }}>Student Card</Text>
-                            {studentCardImage ?
-                                (
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 4.5, paddingRight: 10 }}>
-                                        <Text>{shorterFilename(studentCardImage.filename)}</Text>
-                                        <TouchableOpacity onPress={() => { setStudentCardImage(() => null); }}>
-                                            <Text style={{ color: 'grey' }}>x</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                ) :
-                                (
-                                    <TouchableOpacity onPress={() => addStudentCardImage()}>
-                                        <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
-                                    </TouchableOpacity>
-                                )
-                            }
-                        </View>
-                    </View>
+                        <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
+                            setDisableNext(true)
+                            setNextButtonStyle(disableStyle)
+                            setPage({ step: 3 })
+                        }} >
+                            <Text style={styles.buttonText} >Next</Text>
+                        </TouchableOpacity>
+                    </> : null
+            }
 
-                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
-                        setDisableNext(true)
-                        setNextButtonStyle(disableStyle)
-                        setPage({ step: 3 })
-                    }} >
-                        <Text style={styles.buttonText} >Next</Text>
-                    </TouchableOpacity>
-                </> : null}
+            {
+                page.step === 3 ?
+                    <>
+                        <Text style={styles.title}>School Life</Text>
+                        <TextInput style={styles.input} placeholder="School" onChangeText={value => setSchoolLife({
+                            ...schoolLife,
+                            school: value
+                        })} />
+                        <TextInput style={styles.input} placeholder="Major" onChangeText={value => setSchoolLife({
+                            ...schoolLife,
+                            major: value
+                        })} />
+                        <TextInput style={styles.tutorIntroduction} autoCapitalize="none" multiline placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
+                            ...schoolLife,
+                            tutorIntroduction: value
+                        })} />
 
-            {page.step === 3 ?
-                <>
-                    <Text style={styles.title}>School Life</Text>
-                    <TextInput style={styles.input} placeholder="School" onChangeText={value => setSchoolLife({
-                        ...schoolLife,
-                        school: value
-                    })} />
-                    <TextInput style={styles.input} placeholder="Major" onChangeText={value => setSchoolLife({
-                        ...schoolLife,
-                        major: value
-                    })} />
-                    <TextInput style={styles.tutorIntroduction} autoCapitalize="none" multiline placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
-                        ...schoolLife,
-                        tutorIntroduction: value
-                    })} />
-
-                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
-                        setDisableNext(true)
-                        setNextButtonStyle(disableStyle)
-                        setPage({ step: 4 })
-                    }} >
-                        <Text style={styles.buttonText}>Next</Text>
-                    </TouchableOpacity>
-                </> : null}
+                        <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
+                            setDisableNext(true)
+                            setNextButtonStyle(disableStyle)
+                            setPage({ step: 4 })
+                        }} >
+                            <Text style={styles.buttonText}>Next</Text>
+                        </TouchableOpacity>
+                    </> : null
+            }
 
             {/* TODO: Subjects & Preference Subjects */}
-            {page.step === 4 ?
-                <>
-                    <Text style={styles.title}>School Life</Text>
-                    <View style={{ flexDirection: 'row', width: 300 }}>
-                        <Text style={{ flex: 7 }}>Subject</Text>
-                        <Text style={{ flex: 2 }}>Score</Text>
-                        <TouchableOpacity
-                            style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
-                            onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}>
-                            <Text style={{}}>+</Text>
+            {
+                page.step === 4 ?
+                    <>
+                        <Text style={styles.title}>School Life</Text>
+                        <View style={{ flexDirection: 'row', width: 300 }}>
+                            <Text style={{ flex: 7 }}>Subject</Text>
+                            <Text style={{ flex: 2 }}>Score</Text>
+                            <TouchableOpacity
+                                style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
+                                onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}>
+                                <Text style={{}}>+</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {subjects.map((subject, index) => (
+
+                            <SubjectRow
+                                key={subject.key}
+                                index={index}
+                                subject={subject}
+                                onDelete={(index) => {
+                                    const newSubjects = [...subjects]
+                                    let filteredNewSubjects = newSubjects.filter((_, i) => i !== index)
+                                    setSubjects(filteredNewSubjects)
+                                }}
+                                onSubjectChange={(text: string) => {
+                                    const newSubjects = [...subjects]
+                                    newSubjects[index].subject = text
+                                    setSubjects(newSubjects)
+                                }}
+                                onScoreChange={(text: string) => {
+                                    const newSubjects = [...subjects]
+                                    newSubjects[index].score = text
+                                    setSubjects(newSubjects)
+                                }}
+                                // 點解呢個又得！！！？
+                                onCheckBox={(isChecked: boolean) => onCheckBox(isChecked, index)}
+                            // 點解呢個唔得！！！！！！？
+                            // onCheckBox={(isChecked: boolean) => {
+                            //     const newSubjects = [...subjects]
+                            //     newSubjects[index].isChecked = isChecked
+                            //     setSubjects(newSubjects)
+                            // }｝
+                            />
+                        ))}
+
+                        <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={async () => {
+                            // Send to DB
+                            console.log('success create')
+                            // const transcriptArray = transcriptImages.concat(transcriptFiles)
+                            // PayloadTooLargeError: request entity too large
+                            const result = await fetchTutor({
+                                isTutor: isTutor,
+                                nickname: nickname,
+                                email: email,
+                                password: password,
+                                rePassword: firmPassword,
+                                phoneNumber: mobileNumber,
+                                isOAuth: false,
+                                transcript: transcriptImages,
+                                studentCard: studentCardImage!,
+                                school: schoolLife.school,
+                                major: schoolLife.major,
+                                selfIntro: schoolLife.tutorIntroduction,
+                                subjects: subjects
+                            })
+                            console.log('RESULT: ', result)
+                            if (result.error) {
+                                setDisableNext(true)
+                                setNextButtonStyle(disableStyle)
+                                Alert.alert('Error', result.error)
+                            } else {
+                                setDisableNext(true)
+                                setNextButtonStyle(disableStyle)
+                                setPage({ step: 5 })
+                            }
+                        }} >
+                            <Text style={styles.buttonText}>Create Account</Text>
                         </TouchableOpacity>
-                    </View>
-                    {subjects.map((subject, index) => (
-
-                        <SubjectRow
-                            key={subject.key}
-                            index={index}
-                            subject={subject}
-                            onDelete={(index) => {
-                                const newSubjects = [...subjects]
-                                let filteredNewSubjects = newSubjects.filter((_, i) => i !== index)
-                                setSubjects(filteredNewSubjects)
-                            }}
-                            onSubjectChange={(text: string) => {
-                                const newSubjects = [...subjects]
-                                newSubjects[index].subject = text
-                                setSubjects(newSubjects)
-                            }}
-                            onScoreChange={(text: string) => {
-                                const newSubjects = [...subjects]
-                                newSubjects[index].score = text
-                                setSubjects(newSubjects)
-                            }}
-                            // 點解呢個又得！！！？
-                            onCheckBox={(isChecked: boolean) => onCheckBox(isChecked, index)}
-                        // 點解呢個唔得！！！！！！？
-                        // onCheckBox={(isChecked: boolean) => {
-                        //     const newSubjects = [...subjects]
-                        //     newSubjects[index].isChecked = isChecked
-                        //     setSubjects(newSubjects)
-                        // }｝
-                        />
-                    ))}
-
-                    <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={async () => {
-                        // Send to DB
-                        console.log('success create')
-                        // const transcriptArray = transcriptImages.concat(transcriptFiles)
-                        // PayloadTooLargeError: request entity too large
-                        const result = await fetchTutor({
-                            isTutor: isTutor,
-                            nickname: nickname,
-                            email: email,
-                            password: password,
-                            rePassword: firmPassword,
-                            phoneNumber: mobileNumber,
-                            isOAuth: false,
-                            transcript: transcriptImages,
-                            studentCard: studentCardImage!,
-                            school: schoolLife.school,
-                            major: schoolLife.major,
-                            selfIntro: schoolLife.tutorIntroduction,
-                            subjects: subjects
-                        })
-                        console.log('RESULT: ', result)
-                        if (result.error) {
-                            setDisableNext(true)
-                            setNextButtonStyle(disableStyle)
-                            Alert.alert('Error', result.error)
-                        } else {
-                            setDisableNext(true)
-                            setNextButtonStyle(disableStyle)
-                            setPage({ step: 5 })
-                        }
-                    }} >
-                        <Text style={styles.buttonText}>Create Account</Text>
-                    </TouchableOpacity>
-                </> : null}
-            {page.step === 5 ?
-                <SuccessRegister /> : null
+                    </> : null
+            }
+            {
+                page.step === 5 ?
+                    <SuccessRegister /> : null
             }
             {/* </SafeAreaView> */}
-        </View>
+        </View >
     )
 }
 
@@ -669,11 +705,12 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderRadius: 10,
-        width: 200,
-        backgroundColor: 'white',
-        textAlign: 'center',
+        maxWidth: '80%',
+        width: 300,
+        backgroundColor: '#F6F6F9',
+        textAlign: 'left',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 1,
     },
@@ -712,32 +749,34 @@ const styles = StyleSheet.create({
         textDecoration: 'none'
     },
     title: {
+        marginVertical: 20,
+        fontWeight: '700',
         fontSize: 30,
-        padding: 10
     },
 
-    button: {
-        backgroundColor: "#007AFF",
-        padding: 10,
-        margin: 10,
-        borderRadius: 10,
-        width: 200,
-    },
+    // button: {
+    //     backgroundColor: "#007AFF",
+    //     padding: 10,
+    //     margin: 10,
+    //     borderRadius: 10,
+    //     width: 200,
+    // },
+
     buttonText: {
         color: 'white',
         textAlign: 'center'
     },
-    disabledButton: {
-        backgroundColor: '#222222'
-    },
+    // disabledButton: {
+    //     backgroundColor: '#222222'
+    // },
     fileSelector: {
-        padding: 5,
+        padding: 10,
         borderWidth: 1,
-        borderColor: '#AAAAFF',
+        borderColor: '#134e4a',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         width: 300,
-        height: 50
+        height: 40
     }
 })
