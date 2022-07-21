@@ -14,6 +14,8 @@ import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import { env } from "../env/env";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
+import { just } from "@beenotung/tslib";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -66,14 +68,14 @@ type StudentCardImage = {
 const disableStyle = {
     backgroundColor: "#a8a29e",
     padding: 10,
-    margin: 50,
+    margin: 40,
     borderRadius: 14,
     width: 210,
 }
 const nonDisableStyle = {
     backgroundColor: "#14b8a6",
     padding: 10,
-    margin: 50,
+    margin: 40,
     borderRadius: 14,
     width: 210,
 }
@@ -174,6 +176,9 @@ async function fetchTutor(registerData: TutorData) {
 }
 
 export default function Register() {
+
+    const navigation = useNavigation()
+
     // For Test ONLY: Should be passed as props
     const [isOAuth, setIsOAuth] = useState(false)
 
@@ -376,16 +381,16 @@ export default function Register() {
             {/* <SafeAreaView> */}
             {page.step === 1 && !isOAuth ?
                 <>
-                    <TouchableOpacity onPress={async() => {
+                    <TouchableOpacity onPress={async () => {
                         // setPage({ step: 5 })
-                        console.log(`${(Math.random()*8)}`.split('.')[1].substring(0,8))
+                        console.log(`${(Math.random() * 8)}`.split('.')[1].substring(0, 8))
                         const result = await fetchTutor({
                             isTutor: true,
                             nickname: 'nickname',
                             email: `${(Math.random() * 6)}@gmail.com`,
                             password: 'password',
                             rePassword: 'password',
-                            phoneNumber: `${(Math.random()*8)}`.split('.')[1].substring(0,8),
+                            phoneNumber: `${(Math.random() * 8)}`.split('.')[1].substring(0, 8),
                             isOAuth: false,
                             transcript: [...transcriptImages, { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }],
                             studentCard: { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }!,
@@ -403,7 +408,7 @@ export default function Register() {
                         <Text style={styles.title}>Create New Account</Text>
                     </TouchableOpacity>
                     <RadioGroup
-                        containerStyle={{ flexDirection: 'row', marginHorizontal:70 ,justifyContent: 'space-evenly', width:"75%"}}
+                        containerStyle={{ flexDirection: 'row', marginVertical: 10,justifyContent: 'space-evenly', width: "75%" }}
                         radioButtons={role}
                         onPress={() => {
                             onPressRole
@@ -444,33 +449,43 @@ export default function Register() {
 
             {
                 !isTutor && page.step === 1 &&
-                <TouchableOpacity
-                    style={nextButtonStyle}
-                    disabled={disableNext}
-                    onPress={async () => {
-                        console.log('going to fetch')
-                        const result = await fetchStudent({
-                            isTutor: isTutor,
-                            nickname: nickname,
-                            email: email,
-                            password: password,
-                            rePassword: firmPassword,
-                            phoneNumber: mobileNumber,
-                            isOAuth: false
-                        })
-                        console.log('RESULT: ', result)
-                        if (result.error) {
-                            setDisableNext(true)
-                            setNextButtonStyle(disableStyle)
-                            Alert.alert('Error', result.error)
-                        } else {
-                            setDisableNext(true)
-                            setNextButtonStyle(disableStyle)
-                            setPage({ step: 5 })
-                        }
-                    }}>
-                    <Text style={styles.buttonText}>Create Account</Text>
-                </TouchableOpacity>
+                <View>
+                    <TouchableOpacity
+                        style={nextButtonStyle}
+                        disabled={disableNext}
+                        onPress={async () => {
+                            console.log('going to fetch')
+                            const result = await fetchStudent({
+                                isTutor: isTutor,
+                                nickname: nickname,
+                                email: email,
+                                password: password,
+                                rePassword: firmPassword,
+                                phoneNumber: mobileNumber,
+                                isOAuth: false
+                            })
+                            console.log('RESULT: ', result)
+                            if (result.error) {
+                                setDisableNext(true)
+                                setNextButtonStyle(disableStyle)
+                                Alert.alert('Error', result.error)
+                            } else {
+                                setDisableNext(true)
+                                setNextButtonStyle(disableStyle)
+                                setPage({ step: 5 })
+                            }
+                        }}>
+                        <Text style={styles.buttonText}>Create Account</Text>
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row' ,justifyContent:'center'}}>
+                        <Text>Have an account? </Text>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('Login')
+                        }}>
+                            <Text style={{ color: "#14b8a6", fontWeight: 'bold' }}>Sign in</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             }
             {/* Submit Page 1 */}
             {
@@ -497,6 +512,14 @@ export default function Register() {
                         }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
+                    <View style={{ flexDirection: 'row' ,justifyContent:'center'}}>
+                        <Text>Have an account? </Text>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('Login')
+                        }}>
+                            <Text style={{ color: "#14b8a6", fontWeight: 'bold' }}>Sign in</Text>
+                        </TouchableOpacity>
+                    </View>
                 </>
             }
 
