@@ -33,6 +33,8 @@ export function HomeDrawer() {
                 // headerLeft: ()=>null,
                 // headerRight: ()=><TouchableOpacity onPress={()=>navigation.toggleDrawer()}><Text>@</Text></TouchableOpacity>,
                 // drawerType: 'front',
+                headerTintColor:'white',
+                headerTitle: '',
                 drawerPosition: "left",
                 drawerActiveTintColor: "#5eead4",
                 drawerStyle: {
@@ -45,6 +47,7 @@ export function HomeDrawer() {
             <Drawer.Screen name="A Plus Essay" component={Tabs} options={{ headerShown: false }} />
             {/* <Drawer.Screen name='App' component={App} /> */}
             {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
+            {/* <Drawer.Screen name="Login" component={LoginPage} options={{ title: ""}}/> */}
             <Drawer.Screen name="Login" component={LoginPage} />
             <Drawer.Screen name="Sign up" component={Register} />
             <Drawer.Screen name="Rules" component={Rules} />
