@@ -10,12 +10,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
-import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import { env } from "../env/env";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { just } from "@beenotung/tslib";
+import { Box, FormControl, Input, Stack, VStack, TextArea, HStack, Icon, CloseIcon, IconButton } from "native-base";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -582,7 +582,8 @@ export default function Register() {
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10 }}>
                                             <Text>{shorterFilename(studentCardImage.filename)}</Text>
                                             <TouchableOpacity onPress={() => { setStudentCardImage(() => null); }}>
-                                                <Text style={{ color: 'grey' }}>x</Text>
+                                                <Ionicons name="close" color='grey' size={18} />
+                                                {/* <Text style={{ color: 'grey' }}>x</Text> */}
                                             </TouchableOpacity>
                                         </View>
                                     ) :
@@ -610,18 +611,45 @@ export default function Register() {
                 page.step === 3 ?
                     <>
                         <Text style={styles.title}>School Life</Text>
-                        <TextInput style={styles.input} placeholder="School" onChangeText={value => setSchoolLife({
+                        <Stack space={4} w="85%">
+                            <Stack>
+                                <FormControl.Label>School(Full Name)</FormControl.Label>
+                                <Input variant="underlined" fontSize="17" fontWeight="semibold" placeholder="" onChangeText={value => setSchoolLife({
+                                    ...schoolLife,
+                                    school: value
+                                })} />
+                            </Stack>
+
+                            <Stack>
+                                <FormControl.Label>Major(Full Name)</FormControl.Label>
+                                <Input variant="underlined" fontSize="17" fontWeight="semibold" placeholder="" onChangeText={value => setSchoolLife({
+                                    ...schoolLife,
+                                    major: value
+                                })} />
+                            </Stack>
+                            <Stack>
+                                <FormControl.Label>Tutor Introduction</FormControl.Label>
+                            </Stack>
+                            <Stack alignItems="center">
+                                <TextArea h={40} placeholder="" maxW="300" w="85%" onChangeText={(value: string) => setSchoolLife({
+                                    ...schoolLife,
+                                    tutorIntroduction: value
+                                })} />
+                            </Stack>
+                        </Stack>
+
+                        {/* <TextInput style={styles.input} placeholder="School" onChangeText={value => setSchoolLife({
                             ...schoolLife,
                             school: value
-                        })} />
-                        <TextInput style={styles.input} placeholder="Major" onChangeText={value => setSchoolLife({
+                        })} /> */}
+                        {/* <TextInput style={styles.input} placeholder="Major" onChangeText={value => setSchoolLife({
                             ...schoolLife,
                             major: value
-                        })} />
-                        <TextInput style={styles.tutorIntroduction} autoCapitalize="none" multiline placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
+                        })} /> */}
+                        {/* <TextInput style={styles.tutorIntroduction} autoCapitalize="none" multiline placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
                             ...schoolLife,
                             tutorIntroduction: value
-                        })} />
+                        })} /> */}
 
                         <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
                             setDisableNext(true)
