@@ -43,7 +43,7 @@ ReturnType<typeof loginFailed>
 
 export function fetchLogin(userInfo: {email: string, password: string}) {
     return async (dispatch: Dispatch<AuthActions>) => {
-        const res = await fetch(`${env.BACKEND_URL}/login/password/`, {
+        const res = await fetch(`${env.BACKEND_URL}/login/password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

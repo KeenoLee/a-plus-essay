@@ -25,12 +25,12 @@ rating decimal(2,1) NULL
 self_intro text NULL
 ongoing_order_amount integer
 completed_order_amount integer
+school_id integer FK >0- school.id
 
 
 school
 ------
 id integer PK
-tutor_id integer FK >- tutor.id
 school varchar(127)
 
 
@@ -156,3 +156,11 @@ charge integer
 accept_time timestamp NULL
 reject_time timestamp NULL
 expire_time timestamp
+
+
+user_read_message
+-
+id pk
+user_id fk >- user.id
+order_id integer FK >0- order.id
+last_message_id fk >- chat_message.id

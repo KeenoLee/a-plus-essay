@@ -30,7 +30,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // import LoadingScreen from './src/components/LoadingScreen';
 import Home from './pages/Home'
 import Notification from './pages/Notification';
-import ChatList from './pages/ChatList';
+import ChatScreen from './pages/ChatList';
 import Register from './components/Register';
 import SelectTutor from './components/SelectTutor';
 import TutorInformation from './components/TutorInformation';
@@ -114,7 +114,7 @@ export const Tabs = () => {
               <Ionicons name="add-circle" color='grey' size={18} onPress={() => { navigation.navigate('Order Submission') }} />
             </View>
           ),
-        
+
           // headerStyle: { backgroundColor: '#BBD3CF' },
           headerTitleStyle: { fontWeight: 'bold' },
           headerTitleAlign: 'left',
@@ -124,7 +124,7 @@ export const Tabs = () => {
           ),
         }}
       />
-      <Tab.Screen name="Chats" component={ChatList}
+      <Tab.Screen name="Chats" component={ChatScreen}
         options={{
           tabBarLabel: 'Chats',
           tabBarIcon: ({ focused, color, size }) => (
@@ -162,7 +162,7 @@ export function HomeStack() {
       <Stack.Screen name="Welcome" component={LoginPage} options={{ headerShown: false }} />
       {/* {(props)=> <LoginPage navigation={props}/>} */}
       {/* </Stack.Screen> */}
-      <Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} />
+      {/* <Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} /> */}
       {/* <HomeDrawer /> */}
       {/* <Stack.Navigator initialRouteName="Order Submission" screenOptions={{headerStyle:{backgroundColor: '#ccfbf1'}}}> */}
       {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
@@ -178,7 +178,7 @@ export function HomeStack() {
       {/* <Stack.Screen name="ChatList" component={ChatList} /> */}
       <Stack.Screen name="Success Register" component={SuccessRegister} />
       <Stack.Screen name="Thank You" component={OrderMatched} />
-      <Stack.Screen name="Tutor Information" component={TutorInformation} options={{headerShown: false}} />
+      <Stack.Screen name="Tutor Information" component={TutorInformation} options={{ headerShown: false }} />
       <Stack.Screen name="Select Tutor" component={SelectTutor} />
       {/* <Stack.Screen name="Register" component={Register} /> */}
       <Stack.Screen name="Message" component={Notification} />

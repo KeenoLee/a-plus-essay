@@ -20,14 +20,14 @@ import { useRoute } from '@react-navigation/native';
 const Drawer = createDrawerNavigator();
 
 export function HomeDrawer() {
-//    let loc = useLocationHook();
+    //    let loc = useLocationHook();
 
     // const [ showsMenu, setShowsMenu ] = useState(true)
 
     return (
         <Drawer.Navigator
             screenOptions={{
-                headerStyle:{backgroundColor: '#BBD3CF'},
+                headerStyle: { backgroundColor: '#BBD3CF' },
                 // headerShown:false,
                 // headerShown: showsMenu,
                 // headerLeft: ()=>null,
@@ -42,7 +42,7 @@ export function HomeDrawer() {
                 },
             }}
             // drawerContent={}
-            // initialRouteName='Home Stack'
+            initialRouteName='Home Stack'
         >
             <Drawer.Screen name="A Plus Essay" component={Tabs} options={{ headerShown: false }} />
             {/* <Drawer.Screen name='App' component={App} /> */}
