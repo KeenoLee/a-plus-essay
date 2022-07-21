@@ -53,6 +53,6 @@ server-deploy:
         cd ~/aplusessay/a_plus_essay_server &&
         npm install &&
         cd dist &&
-        npx knex migrate:latest &&        
+        npx knex --env production migrate:latest &&        
         pm2 start ~/aplusessay/a_plus_essay_server/dist/main.js || pm2 reload ~/aplusessay/a_plus_essay_server/dist/main.js
         "
