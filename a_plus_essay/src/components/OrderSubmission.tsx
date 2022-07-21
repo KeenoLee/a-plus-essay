@@ -107,7 +107,7 @@ export default function OrderSubmission() {
         })
     }
     return (
-        // userInfo?.user_id && !userInfo?.is_admin && !userInfo?.is_tutor ?
+        state.user && !state.tutor ?
         <SafeAreaView>
             <ScrollView>
                 <VStack mt="4" alignSelf="center" px="4" w={{ base: "100%" }}>
@@ -251,15 +251,16 @@ export default function OrderSubmission() {
                 </VStack>
             </ScrollView>
         </SafeAreaView>
-        // :
-        // <View>
-        //     {Alert.alert(
-        //         'Unauthorized',
-        //         'Please login to submit order!',
-        //         [
-        //             { text: 'OK', onPress: () => { navigation.navigate('Login') } },
-        //         ]
-        //     )}
-        // </View>
+        :
+        <View>
+            {Alert.alert(
+              'Unauthorized',
+              'Please login to view profile!',
+              [
+                  { text: 'Login', onPress: () => { navigation.navigate('Login') } },
+                  { text: 'Close', onPress: () => { null}}
+              ]
+          )}
+        </View>
     )
 }
