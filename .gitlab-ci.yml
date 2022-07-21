@@ -50,8 +50,8 @@ server-deploy:
         cd ~/aplusessay &&        
         git fetch &&
         git checkout $CI_COMMIT_SHA &&
-        rm -r -f a_plus_essay &&
-        cd ~/aplusessay/a_plus_essay_server &&
+        # rm -r -f a_plus_essay &&
+        # cd ~/aplusessay/a_plus_essay_server &&
         npm install --omit=dev &&
         cd dist &&
         npx knex migrate:latest &&        
