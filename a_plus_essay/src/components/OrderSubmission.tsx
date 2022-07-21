@@ -108,7 +108,7 @@ export default function OrderSubmission() {
         })
     }
     return (
-        state.user && !state.tutor ?
+        state.user && !state.tutor  && state.token ?
         <SafeAreaView>
             <ScrollView>
                 <VStack mt="4" alignSelf="center" px="4" w={{ base: "100%" }}>
@@ -243,7 +243,7 @@ export default function OrderSubmission() {
                     </HStack>
                     <HStack justifyContent="space-evenly">
                         <Button onPress={async () => {
-                            const result = await fetchOrder(orderValue)
+                            const result = await fetchOrder(orderValue, state.token!)
                             console.log('result of creating order', result)
                             result.error ? Alert.alert('Error', result.error) : Alert.alert('Success', result)
                         }}>Confirm</Button>

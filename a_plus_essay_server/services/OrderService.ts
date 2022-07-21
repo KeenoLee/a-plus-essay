@@ -11,7 +11,7 @@ export class OrderService {
 
     async createOrder(order: OrderItem) {
         await this.knex.transaction(async knex => {
-            const orderId: number = await knex.insert({
+            const orderId: number = (await knex.insert({
                 student_id: order.studentId,
                 tutor_id: null,
                 title: order.title,
@@ -24,32 +24,46 @@ export class OrderService {
                 paid_to_tutor_time: null,
                 tutor_submission_deadline: order.tutorDeadline,
                 student_submission_deadline: order.studentDeadline
-            }).into("order").returning('id');
-
-            let subjectId: number = await knex.select('id').from('subject').where('subject_name', order.subject).first()
+            }).into("order").returning('id'))[0].id;
+            console.log('orderId: ', orderId)
+            let subjectId: number = (await knex.select('id').from('subject').where('subject_name', order.subject).first()).id
+            console.log('subjecetId: ', subjectId)
             if (!subjectId) {
-                subjectId = await knex.insert({
+                subjectId = (await knex.insert({
                     subject_name: order.subject
-                }).into('subject').returning('id');
+                }).into('subject').returning('id'))[0].id;
             }
-            const orderSubjectId: number = await knex.insert({
+            console.log('subjecetId: ', subjectId)
+            const orderSubjectId: number = (await knex.insert({
                 order_id: orderId,
                 subject_id: subjectId
-            }).into('order_subject').returning('id');
+            }).into('order_subject').returning('id'))[0].id;
+            console.log('orderSubjectID!: ', orderSubjectId)
 
-            order.guidelines.map(async guideline => {
+            for(let guideline of order.guidelines) {
+                console.log('B64', guideline)
                 await knex.insert({
                     order_id: orderId,
-                    guideline_base64: guideline.base64
-                })
-            })
-
-            order.notes.map(async note => {
+                    guideline_base64: guideline.base64Data
+                }).into('guideline')
+            }
+            for (let note of order.notes) {
                 await knex.insert({
                     order_id: orderId,
-                    note_base64: note.base64
-                })
-            })
+                    note_base64: note.base64Data
+                }).into('note')
+            }
+
+            // order.guidelines.map(async guideline => {
+            //     await knex.insert({
+            //         order_id: orderId,
+            //         guideline_base64: guideline.base64
+            //     }).into('guideline')
+            // })
+
+            // order.notes.map(async note => {
+                
+            // })
             return orderId;
         })
     }
