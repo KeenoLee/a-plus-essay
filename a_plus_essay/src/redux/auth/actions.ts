@@ -35,11 +35,19 @@ function loginFailed() {
     }
 }
 
+function saveToken(token: string) {
+    return {
+        type: '@@auth/SAVE_TOKEN' as const,
+        token
+    }
+}
+
 export type AuthActions = 
 ReturnType<typeof loginAsStudent> |
 ReturnType<typeof loginAsTutor> |
 ReturnType<typeof loginAsAdmin> |
-ReturnType<typeof loginFailed>
+ReturnType<typeof loginFailed> |
+ReturnType<typeof saveToken>
 
 export function fetchLogin(userInfo: {email: string, password: string}) {
     return async (dispatch: Dispatch<AuthActions>) => {
@@ -61,9 +69,11 @@ export function fetchLogin(userInfo: {email: string, password: string}) {
                 const tutorInfo = result.tutorInfo
                 console.log('TUTOR INFO: ', result.tutorInfo)
                 dispatch(loginAsTutor(userInfo, tutorInfo))
+                dispatch(saveToken(token))
                 return
             }
             dispatch(loginAsStudent(userInfo))
+            dispatch(saveToken(token))
             return
         }
         dispatch(loginFailed())
