@@ -7,16 +7,16 @@ import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Account() {
-    const userInfo = useSelector((state: RootState) => state.auth.user)
-    console.log('userInfo in Account', userInfo)
+    const state = useSelector((state: RootState) => state.auth)
+    console.log('userInfo in Account', state?.user)
     const navigation = useNavigation()
     const [editProfile, setEditProfile] = useState()
     return (
-        userInfo?.user_id ?
+        state?.user || state?.tutor ?
             <View>
                 <View>
                     <Text>Nickname</Text>
-                    <Text>{userInfo.nickname}</Text>
+                    <Text>{state.user?.nickname}</Text>
                 </View>
                 <Text>email</Text>
                 <Text>password</Text>
