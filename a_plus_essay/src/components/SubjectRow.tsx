@@ -4,6 +4,7 @@ import { useState } from 'react'
 // import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native'
 import { TextInput } from "react-native-gesture-handler"
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 export type Subject = {
     key: string,
@@ -19,7 +20,7 @@ interface SubjectRowProps {
     onSubjectChange: (text: string) => void,
     onScoreChange: (text: string) => void,
     onDelete: (index: number) => void
-    onCheckBox: (isChecked: boolean, index:number) => void
+    onCheckBox: (isChecked: boolean, index: number) => void
 }
 
 
@@ -33,17 +34,23 @@ export default function SubjectRow({ index, subject, onSubjectChange, onScoreCha
     // const [preSubject, setPreSubject] = useState<RadioButtonProps[]>(preSubjectData)
     return (
         <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <TouchableOpacity style={styles.editRow} onPress={() => { console.log('at delete button:', index); onDelete(index) }}><Text>-</Text></TouchableOpacity>
+            <Checkbox value="orange" aria-label='subject' size='sm'
+                style={{}}
+                isChecked={subject.isChecked}
+                onChange={(isChecked: boolean) =>
+                    onCheckBox(isChecked, index)
+                }
+            />
+            {/* <TouchableOpacity style={styles.editRow} onPress={() => { console.log('at delete button:', index); onDelete(index) }}>
+                <Text>-</Text>
+            </TouchableOpacity> */}
 
             <TextInput autoCapitalize="none" style={styles.subject} onChangeText={(text) => onSubjectChange(text)} value={subject.subject} />
             <TextInput autoCapitalize="none" style={styles.subjectScore} value={subject.score} onChangeText={text => onScoreChange(text)} />
-            <Checkbox value='' aria-label='subject' size='sm' 
-                style={{ marginRight: 30 }} 
-                isChecked={subject.isChecked} 
-                onChange={(isChecked: boolean) => 
-                    onCheckBox(isChecked, index)
-                } 
-            />
+
+            <TouchableOpacity style={styles.editRow} onPress={() => { console.log('at delete button:', index); onDelete(index) }}>
+                <Ionicons name="close-circle-outline" color='#14b8a6' size={25} />
+            </TouchableOpacity>
         </View>
     )
 }
@@ -77,18 +84,18 @@ const styles = StyleSheet.create({
     editRow: {
         // padding: 10,
         // margin: 10,
-        marginLeft: 20,
-        fontSize: 20,
+        // marginLeft: 20,
+        // fontSize: 20,
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        // alignItems: 'center',
+        // justifyContent: 'center',
         // borderWidth: 1,
         // borderColor: 'black', 
         // borderRadius: 30, 
         // width: 17, 
         // height: 30
     },
-    checkBox: {
-        flex: 2,
-    }
+    // checkBox: {
+    //     flex: 10,
+    // }
 })
