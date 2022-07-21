@@ -10,10 +10,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
-import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import { env } from "../env/env";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
+import { just } from "@beenotung/tslib";
+import { Box, FormControl, Input, Stack, VStack, TextArea, HStack, Icon, CloseIcon, IconButton } from "native-base";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -36,8 +38,8 @@ const reg: RegExp = /^[0-9\b]+$/
 const passwordLength = 7
 const mobileNumberLength = 8
 function shorterFilename(filename: string) {
-    if (filename.length > 15) {
-        return filename.substring(0, 16) + '...'
+    if (filename.length > 16) {
+        return filename.substring(0, 17) + '...'
     }
     return filename
 }
@@ -66,14 +68,14 @@ type StudentCardImage = {
 const disableStyle = {
     backgroundColor: "#a8a29e",
     padding: 10,
-    margin: 50,
+    margin: 40,
     borderRadius: 14,
     width: 210,
 }
 const nonDisableStyle = {
     backgroundColor: "#14b8a6",
     padding: 10,
-    margin: 50,
+    margin: 40,
     borderRadius: 14,
     width: 210,
 }
@@ -174,6 +176,9 @@ async function fetchTutor(registerData: TutorData) {
 }
 
 export default function Register() {
+
+    const navigation = useNavigation()
+
     // For Test ONLY: Should be passed as props
     const [isOAuth, setIsOAuth] = useState(false)
 
@@ -376,16 +381,16 @@ export default function Register() {
             {/* <SafeAreaView> */}
             {page.step === 1 && !isOAuth ?
                 <>
-                    <TouchableOpacity onPress={async() => {
+                    <TouchableOpacity onPress={async () => {
                         // setPage({ step: 5 })
-                        console.log(`${(Math.random()*8)}`.split('.')[1].substring(0,8))
+                        console.log(`${(Math.random() * 8)}`.split('.')[1].substring(0, 8))
                         const result = await fetchTutor({
                             isTutor: true,
                             nickname: 'nickname',
                             email: `${(Math.random() * 6)}@gmail.com`,
                             password: 'password',
                             rePassword: 'password',
-                            phoneNumber: `${(Math.random()*8)}`.split('.')[1].substring(0,8),
+                            phoneNumber: `${(Math.random() * 8)}`.split('.')[1].substring(0, 8),
                             isOAuth: false,
                             transcript: [...transcriptImages, { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }],
                             studentCard: { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }!,
@@ -396,6 +401,7 @@ export default function Register() {
                                 { key: '1', subject: 'A', score: 'A', isChecked: true },
                                 { key: '2', subject: 'B', score: 'B', isChecked: true },
                                 { key: '3', subject: 'C', score: 'C', isChecked: false },
+                                { key: '4', subject: 'D', score: 'D', isChecked: true },
                             ]
                         })
                         console.log('Hseudo-Result: ', result)
@@ -403,7 +409,7 @@ export default function Register() {
                         <Text style={styles.title}>Create New Account</Text>
                     </TouchableOpacity>
                     <RadioGroup
-                        containerStyle={{ flexDirection: 'row', marginHorizontal:70 ,justifyContent: 'space-evenly', width:"75%"}}
+                        containerStyle={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'space-evenly', width: "75%" }}
                         radioButtons={role}
                         onPress={() => {
                             onPressRole
@@ -444,33 +450,43 @@ export default function Register() {
 
             {
                 !isTutor && page.step === 1 &&
-                <TouchableOpacity
-                    style={nextButtonStyle}
-                    disabled={disableNext}
-                    onPress={async () => {
-                        console.log('going to fetch')
-                        const result = await fetchStudent({
-                            isTutor: isTutor,
-                            nickname: nickname,
-                            email: email,
-                            password: password,
-                            rePassword: firmPassword,
-                            phoneNumber: mobileNumber,
-                            isOAuth: false
-                        })
-                        console.log('RESULT: ', result)
-                        if (result.error) {
-                            setDisableNext(true)
-                            setNextButtonStyle(disableStyle)
-                            Alert.alert('Error', result.error)
-                        } else {
-                            setDisableNext(true)
-                            setNextButtonStyle(disableStyle)
-                            setPage({ step: 5 })
-                        }
-                    }}>
-                    <Text style={styles.buttonText}>Create Account</Text>
-                </TouchableOpacity>
+                <View>
+                    <TouchableOpacity
+                        style={nextButtonStyle}
+                        disabled={disableNext}
+                        onPress={async () => {
+                            console.log('going to fetch')
+                            const result = await fetchStudent({
+                                isTutor: isTutor,
+                                nickname: nickname,
+                                email: email,
+                                password: password,
+                                rePassword: firmPassword,
+                                phoneNumber: mobileNumber,
+                                isOAuth: false
+                            })
+                            console.log('RESULT: ', result)
+                            if (result.error) {
+                                setDisableNext(true)
+                                setNextButtonStyle(disableStyle)
+                                Alert.alert('Error', result.error)
+                            } else {
+                                setDisableNext(true)
+                                setNextButtonStyle(disableStyle)
+                                setPage({ step: 5 })
+                            }
+                        }}>
+                        <Text style={styles.buttonText}>Create Account</Text>
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Text>Have an account? </Text>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('Login')
+                        }}>
+                            <Text style={{ color: "#14b8a6", fontWeight: 'bold' }}>Sign in</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             }
             {/* Submit Page 1 */}
             {
@@ -497,6 +513,14 @@ export default function Register() {
                         }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Text>Have an account? </Text>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('Login')
+                        }}>
+                            <Text style={{ color: "#14b8a6", fontWeight: 'bold' }}>Sign in</Text>
+                        </TouchableOpacity>
+                    </View>
                 </>
             }
 
@@ -522,11 +546,12 @@ export default function Register() {
                                 </Select>
                             </VStack> */}
                                 <TouchableOpacity onPress={() => addTranscriptImage()}>
-                                    <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                                    <Ionicons name="attach" color='grey' size={18} />
+                                    {/* <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text> */}
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={{ height: 100 }}>
+                            <View style={{}}>
                                 {/* {transcriptFiles && transcriptFiles.map((file, index) => (
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Text key={index}>{shorterFilename(file.filename)}</Text>
@@ -536,11 +561,12 @@ export default function Register() {
                                 </View>
                             ))} */}
                                 {transcriptImages && transcriptImages.map((image, index) => (
-                                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 5 }}>
+                                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 180 }}>
                                             <Text>{shorterFilename(image.filename)}</Text>
                                             <TouchableOpacity onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
-                                                <Text style={{ color: 'grey' }}>x</Text>
+                                                <Ionicons name="close" color='grey' size={18} />
+                                                {/* <Text style={{ color: 'grey' }}>x</Text> */}
                                             </TouchableOpacity>
                                         </View>
                                         <View style={{ flex: 5 }}></View>
@@ -554,16 +580,18 @@ export default function Register() {
                                 <Text style={{ flex: 6 }}>Student Card</Text>
                                 {studentCardImage ?
                                     (
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 4.5, paddingRight: 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10 }}>
                                             <Text>{shorterFilename(studentCardImage.filename)}</Text>
                                             <TouchableOpacity onPress={() => { setStudentCardImage(() => null); }}>
-                                                <Text style={{ color: 'grey' }}>x</Text>
+                                                <Ionicons name="close" color='grey' size={18} />
+                                                {/* <Text style={{ color: 'grey' }}>x</Text> */}
                                             </TouchableOpacity>
                                         </View>
                                     ) :
                                     (
                                         <TouchableOpacity onPress={() => addStudentCardImage()}>
-                                            <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                                            <Ionicons name="attach" color='grey' size={18} />
+                                            {/* <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text> */}
                                         </TouchableOpacity>
                                     )
                                 }
@@ -584,18 +612,45 @@ export default function Register() {
                 page.step === 3 ?
                     <>
                         <Text style={styles.title}>School Life</Text>
-                        <TextInput style={styles.input} placeholder="School" onChangeText={value => setSchoolLife({
+                        <Stack space={4} w="85%">
+                            <Stack>
+                                <FormControl.Label>School(Full Name)</FormControl.Label>
+                                <Input variant="underlined" fontSize="17" fontWeight="semibold" placeholder="" onChangeText={value => setSchoolLife({
+                                    ...schoolLife,
+                                    school: value
+                                })} />
+                            </Stack>
+
+                            <Stack>
+                                <FormControl.Label>Major(Full Name)</FormControl.Label>
+                                <Input variant="underlined" fontSize="17" fontWeight="semibold" placeholder="" onChangeText={value => setSchoolLife({
+                                    ...schoolLife,
+                                    major: value
+                                })} />
+                            </Stack>
+                            <Stack>
+                                <FormControl.Label>Tutor Introduction</FormControl.Label>
+                            </Stack>
+                            <Stack alignItems="center">
+                                <TextArea h={40} placeholder="" maxW="300" w="85%" onChangeText={(value: string) => setSchoolLife({
+                                    ...schoolLife,
+                                    tutorIntroduction: value
+                                })} />
+                            </Stack>
+                        </Stack>
+
+                        {/* <TextInput style={styles.input} placeholder="School" onChangeText={value => setSchoolLife({
                             ...schoolLife,
                             school: value
-                        })} />
-                        <TextInput style={styles.input} placeholder="Major" onChangeText={value => setSchoolLife({
+                        })} /> */}
+                        {/* <TextInput style={styles.input} placeholder="Major" onChangeText={value => setSchoolLife({
                             ...schoolLife,
                             major: value
-                        })} />
-                        <TextInput style={styles.tutorIntroduction} autoCapitalize="none" multiline placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
+                        })} /> */}
+                        {/* <TextInput style={styles.tutorIntroduction} autoCapitalize="none" multiline placeholder="Tutor Introduction" onChangeText={value => setSchoolLife({
                             ...schoolLife,
                             tutorIntroduction: value
-                        })} />
+                        })} /> */}
 
                         <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={() => {
                             setDisableNext(true)
@@ -611,15 +666,22 @@ export default function Register() {
             {
                 page.step === 4 ?
                     <>
+                        <Stack>
+                            <HStack alignItems="center">
+                                <Text>Subject</Text>
+                                <Text>Subject</Text>
+                            </HStack>
+                        </Stack>
                         <Text style={styles.title}>School Life</Text>
                         <View style={{ flexDirection: 'row', width: 300 }}>
                             <Text style={{ flex: 7 }}>Subject</Text>
                             <Text style={{ flex: 2 }}>Score</Text>
-                            <TouchableOpacity
-                                style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
-                                onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}>
-                                <Text style={{}}>+</Text>
-                            </TouchableOpacity>
+                            {/* <TouchableOpacity */}
+                            {/* // style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }} */}
+                            {/* // onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}> */}
+                            {/* <Text style={{}}>+</Text> */}
+                            {/* <Ionicons name="add-circle-outline" color='grey' size={18} />
+                            </TouchableOpacity> */}
                         </View>
                         {subjects.map((subject, index) => (
 
@@ -652,6 +714,12 @@ export default function Register() {
                             // }｝
                             />
                         ))}
+                        <TouchableOpacity
+                            // style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }}
+                            onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}>
+                            {/* <Text style={{}}>+</Text> */}
+                            <Ionicons name="add-circle-outline" color='#0f766e' size={30} />
+                        </TouchableOpacity>
 
                         <TouchableOpacity style={nextButtonStyle} disabled={disableNext} onPress={async () => {
                             // Send to DB
