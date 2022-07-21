@@ -55,16 +55,23 @@ export class OrderService {
     }
     async getChatMessage(userId: number, is_tutor: boolean) {
         try {
-            let orderInfo;
+            let orders;
             if (is_tutor) {
-                orderInfo = await this.knex.select("*").from("order").where('tutor_id', userId)
+                orders = await this.knex.select("*").from("order").where('tutor_id', userId)
             } else {
-                orderInfo = await this.knex.select("*").from("order").where('student_id', userId)
+                orders = await this.knex.select("*").from("order").where('student_id', userId)
             }
-            // To be tested:
-            let files = orderInfo.map(async (order) => (await this.knex.select('*').from('file').where('order_id', order.id)))
-            let chatMessages = orderInfo.map(async (order) => (await this.knex.select('*').from('chat_message').where('order_id', order.id)))
-
+            let files = []
+            let chatMessages = []
+            // Let say, user contains 3 orders, files/ orders should be like [[ { }, { } ], [ { }, [ ] ], [ { }, { } ] ]
+            // Sorting by date time asc
+            files.push(orders.map(async (order) => (await this.knex.select('*').from('file').where('order_id', order.id).orderBy('created_time', 'asc'))))
+            chatMessages.push(orders.map(async (order) => (await this.knex.select('*').from('chat_message').where('order_id', order.id).orderBy('created_time', 'asc'))))
+            
+            // [order1:{
+            //     files: []
+            //     chatMessages: []
+            // }]
 
 
         } catch (error) {
