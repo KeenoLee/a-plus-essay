@@ -1,5 +1,4 @@
 import { AuthActions } from "./actions"
-import jwt_decode from 'jwt-decode'
 import { AuthState, JWTStudentPayload, SchoolInfo, TranscriptInfo, TutorInfo } from "./type"
 
 const initialState: AuthState = {}
