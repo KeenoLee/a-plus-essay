@@ -38,8 +38,8 @@ const reg: RegExp = /^[0-9\b]+$/
 const passwordLength = 7
 const mobileNumberLength = 8
 function shorterFilename(filename: string) {
-    if (filename.length > 15) {
-        return filename.substring(0, 16) + '...'
+    if (filename.length > 16) {
+        return filename.substring(0, 17) + '...'
     }
     return filename
 }
@@ -408,7 +408,7 @@ export default function Register() {
                         <Text style={styles.title}>Create New Account</Text>
                     </TouchableOpacity>
                     <RadioGroup
-                        containerStyle={{ flexDirection: 'row', marginVertical: 10,justifyContent: 'space-evenly', width: "75%" }}
+                        containerStyle={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'space-evenly', width: "75%" }}
                         radioButtons={role}
                         onPress={() => {
                             onPressRole
@@ -477,7 +477,7 @@ export default function Register() {
                         }}>
                         <Text style={styles.buttonText}>Create Account</Text>
                     </TouchableOpacity>
-                    <View style={{ flexDirection: 'row' ,justifyContent:'center'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <Text>Have an account? </Text>
                         <TouchableOpacity onPress={() => {
                             navigation.navigate('Login')
@@ -512,7 +512,7 @@ export default function Register() {
                         }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
-                    <View style={{ flexDirection: 'row' ,justifyContent:'center'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <Text>Have an account? </Text>
                         <TouchableOpacity onPress={() => {
                             navigation.navigate('Login')
@@ -545,11 +545,12 @@ export default function Register() {
                                 </Select>
                             </VStack> */}
                                 <TouchableOpacity onPress={() => addTranscriptImage()}>
-                                    <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                                    <Ionicons name="attach" color='grey' size={18} />
+                                    {/* <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text> */}
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={{ height: 100 }}>
+                            <View style={{}}>
                                 {/* {transcriptFiles && transcriptFiles.map((file, index) => (
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Text key={index}>{shorterFilename(file.filename)}</Text>
@@ -559,11 +560,12 @@ export default function Register() {
                                 </View>
                             ))} */}
                                 {transcriptImages && transcriptImages.map((image, index) => (
-                                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 5 }}>
+                                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 180 }}>
                                             <Text>{shorterFilename(image.filename)}</Text>
                                             <TouchableOpacity onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
-                                                <Text style={{ color: 'grey' }}>x</Text>
+                                                <Ionicons name="close" color='grey' size={18} />
+                                                {/* <Text style={{ color: 'grey' }}>x</Text> */}
                                             </TouchableOpacity>
                                         </View>
                                         <View style={{ flex: 5 }}></View>
@@ -577,7 +579,7 @@ export default function Register() {
                                 <Text style={{ flex: 6 }}>Student Card</Text>
                                 {studentCardImage ?
                                     (
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 4.5, paddingRight: 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10 }}>
                                             <Text>{shorterFilename(studentCardImage.filename)}</Text>
                                             <TouchableOpacity onPress={() => { setStudentCardImage(() => null); }}>
                                                 <Text style={{ color: 'grey' }}>x</Text>
@@ -586,7 +588,8 @@ export default function Register() {
                                     ) :
                                     (
                                         <TouchableOpacity onPress={() => addStudentCardImage()}>
-                                            <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text>
+                                            <Ionicons name="attach" color='grey' size={18} />
+                                            {/* <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text> */}
                                         </TouchableOpacity>
                                     )
                                 }
