@@ -53,4 +53,23 @@ export class OrderService {
             return orderId;
         })
     }
+    async getChatMessage(userId: number, is_tutor: boolean) {
+        try {
+            let orderInfo;
+            if (is_tutor) {
+                orderInfo = await this.knex.select("*").from("order").where('tutor_id', userId)
+            } else {
+                orderInfo = await this.knex.select("*").from("order").where('student_id', userId)
+            }
+            // To be tested:
+            let files = orderInfo.map(async (order) => (await this.knex.select('*').from('file').where('order_id', order.id)))
+            let chatMessages = orderInfo.map(async (order) => (await this.knex.select('*').from('chat_message').where('order_id', order.id)))
+
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
 }

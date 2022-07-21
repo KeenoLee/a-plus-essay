@@ -1,6 +1,7 @@
 import { Dispatch } from 'react'
 import { AnyAction } from 'redux'
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
+import { env } from '../../env/env'
 import { SchoolInfo, TranscriptInfo, TutorInfo, UserInfo } from './type'
 
 
@@ -34,22 +35,15 @@ function loginFailed() {
     }
 }
 
-function logoutSuccess() {
-    return {
-        type: '@@auth/LOGOUT_SUCCESS' as const
-    }
-}
-
 export type AuthActions = 
 ReturnType<typeof loginAsStudent> |
 ReturnType<typeof loginAsTutor> |
 ReturnType<typeof loginAsAdmin> |
-ReturnType<typeof loginFailed> |
-ReturnType<typeof logoutSuccess>
+ReturnType<typeof loginFailed>
 
 export function fetchLogin(userInfo: {email: string, password: string}) {
     return async (dispatch: Dispatch<AuthActions>) => {
-        const res = await fetch(`http://localhost:8111/login/password`, {
+        const res = await fetch(`${env.BACKEND_URL}/login/password/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -62,7 +56,6 @@ export function fetchLogin(userInfo: {email: string, password: string}) {
             const userInfo = result.userInfo
             console.log('token in thunk action: ', token)
             console.log('userAuth: ', userInfo)
-            // dispatch(loginSuccess(token))
             console.log('RESULT!@!', result.tutorInfo)
             if (userInfo.is_tutor && result.tutorInfo) {
                 const tutorInfo = result.tutorInfo
