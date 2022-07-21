@@ -39,7 +39,7 @@ export default function LoginPage({ navigation }: Props) {
     // const navigation = useNavigation()
     return (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 35, textAlign: 'center', color: "#14532d", marginBottom:20}}>Welcome</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: 35, textAlign: 'center', color: "#14532d", marginBottom: 20 }}>Welcome</Text>
             <TextInput style={styles.input} textContentType='emailAddress' autoCapitalize="none" placeholder="Email address" onChangeText={email => setUsername(email)} />
             <TextInput style={styles.input} textContentType='password' secureTextEntry placeholder="Password" onChangeText={password => setPassword(password)} />
 

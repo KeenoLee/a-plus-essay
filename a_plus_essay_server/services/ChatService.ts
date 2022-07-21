@@ -54,6 +54,7 @@ export class ChatService {
         let newNoticeFromRoom: NewMessage = {
             order_id: id,
         };
+        //send this id to other's notification
         this.io.emit("new message", newNoticeFromRoom);
     }
 }
