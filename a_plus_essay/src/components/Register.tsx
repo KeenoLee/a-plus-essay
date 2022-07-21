@@ -12,7 +12,6 @@ import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
-import { registerStudent } from "../redux/student/actions";
 import { env } from "../env/env";
 import Ionicons from "react-native-vector-icons/Ionicons";
 // import RNFetchBlob from 'rn-fetch-blob'
