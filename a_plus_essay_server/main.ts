@@ -48,7 +48,8 @@ app.use(orderRoutes)
 
 userRoutes.post("/register/student", userController.createUser);
 userRoutes.post("/register/tutor", userController.createUser);
-userRoutes.post("/login/password/:id/:isTutor", userController.loginWithPassword);
+userRoutes.post("/login/password", userController.loginWithPassword);
+// userRoutes.post("/login/password/:id/:isTutor", userController.loginWithPassword);
 userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplication);
 userRoutes.get("/login/google", userController.loginWithGoogle);
 userRoutes.get("/login/facebook", userController.loginWithFacebook);

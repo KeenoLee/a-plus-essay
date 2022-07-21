@@ -401,6 +401,7 @@ export default function Register() {
                                 { key: '1', subject: 'A', score: 'A', isChecked: true },
                                 { key: '2', subject: 'B', score: 'B', isChecked: true },
                                 { key: '3', subject: 'C', score: 'C', isChecked: false },
+                                { key: '4', subject: 'D', score: 'D', isChecked: true },
                             ]
                         })
                         console.log('Hseudo-Result: ', result)
