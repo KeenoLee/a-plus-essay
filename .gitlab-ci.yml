@@ -2,7 +2,7 @@ image: node:16.16-alpine
 
 stages:  
   - server-build
-  # - server-deploy
+  - server-deploy
 
 variables:
   POSTGRES_DB: aplusessay
@@ -24,36 +24,36 @@ server-build:
   script:
     - npx tsc -p .
 
-# server-deploy:
-#   stage: server-deploy
-#   only:
-#     - production
-#   image: ubuntu:22.04
-#   dependencies:
-#     - build
-#   before_script:
-#     - apt update    
-#     - apt install --yes git rsync openssh-client
-#     - mkdir -p ~/.ssh
-#     - echo "$aplusessay_ssh_private_key" > ~/.ssh/id_rsa
-#     - chmod 600 ~/.ssh/id_rsa
-#     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
-#     - echo "Host aplusessay" >> ~/.ssh/config
-#     - echo "  Hostname $SERVER_HOST" >> ~/.ssh/config
-#     - echo "  User $SERVER_USER" >> ~/.ssh/config
-#     - echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
-#     - cd $WEB_SERVER_ROOT
+server-deploy:
+  stage: server-deploy
+  only:
+    - production
+  image: ubuntu:22.04
+  dependencies:
+    - build
+  before_script:
+    - apt update    
+    - apt install --yes git rsync openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$aplusessay_ssh_private_key" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
+    - echo "Host aplusessay" >> ~/.ssh/config
+    - echo "  Hostname $SERVER_HOST" >> ~/.ssh/config
+    - echo "  User $SERVER_USER" >> ~/.ssh/config
+    - echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+    - cd $WEB_SERVER_ROOT
     
-#   script:
-#     - rsync -SavLP dist "aplusessay:$WEB_SERVER_ROOT/dist"    
-#     - ssh aplusessay "
-#         # source ~/.nvm/nvm.sh &&
-#         cd ~ &&        
-#         git fetch &&
-#         git checkout $CI_COMMIT_SHA &&
-#         cd $WEB_SERVER_ROOT &&
-#         npm install --omit=dev &&
-#         cd dist &&
-#         npx knex migrate:latest &&        
-#         pm2 start $WEB_SERVER_ROOT/dist/main.js || pm2 reload $WEB_SERVER_ROOT/dist/main.js
+  script:
+    - rsync -SavLP dist "aplusessay:~/aplusessay/a_plus_essay_server/dist"    
+    - ssh aplusessay "
+        # source ~/.nvm/nvm.sh &&
+        cd ~ &&        
+        git fetch &&
+        git checkout $CI_COMMIT_SHA &&
+        cd ~/aplusessay/a_plus_essay_server &&
+        npm install --omit=dev &&
+        cd dist &&
+        npx knex migrate:latest &&        
+        pm2 start ~/aplusessay/a_plus_essay_server/dist/main.js || pm2 reload ~/aplusessay/a_plus_essay_server/dist/main.js
 #         "
