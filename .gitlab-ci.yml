@@ -45,7 +45,7 @@ server-deploy:
     - cd $WEB_SERVER_ROOT
     
   script:
-    - rsync -SavLP dist "aplusessay:~/aplusessay/a_plus_essay_server/dist"    
+    - rsync -SavLP dist "aplusessay:~/aplusessay/a_plus_essay_server"    
     - ssh aplusessay "        
         cd ~/aplusessay &&        
         git fetch &&
