@@ -635,7 +635,7 @@ export default function Register() {
                                 <TextArea h={40} placeholder="" maxW="300" w="85%" onChangeText={(value: string) => setSchoolLife({
                                     ...schoolLife,
                                     tutorIntroduction: value
-                                })} />
+                                })} autoCompleteType={undefined} />
                             </Stack>
                         </Stack>
 
@@ -666,16 +666,10 @@ export default function Register() {
             {
                 page.step === 4 ?
                     <>
-                        <Stack>
-                            <HStack alignItems="center">
-                                <Text>Subject</Text>
-                                <Text>Subject</Text>
-                            </HStack>
-                        </Stack>
                         <Text style={styles.title}>School Life</Text>
-                        <View style={{ flexDirection: 'row', width: 300 }}>
-                            <Text style={{ flex: 7 }}>Subject</Text>
-                            <Text style={{ flex: 2 }}>Score</Text>
+                        <View style={{ flexDirection: 'row', width: "70%" , justifyContent: 'space-between'}}>
+                            <Text style={{}}>Subject</Text>
+                            <Text style={{}}>Score</Text>
                             {/* <TouchableOpacity */}
                             {/* // style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }} */}
                             {/* // onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}> */}

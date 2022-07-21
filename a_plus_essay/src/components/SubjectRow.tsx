@@ -1,4 +1,4 @@
-import { Checkbox } from 'native-base'
+import { Checkbox, HStack, Stack } from 'native-base'
 import * as React from 'react'
 import { useState } from 'react'
 // import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
@@ -34,20 +34,17 @@ export default function SubjectRow({ index, subject, onSubjectChange, onScoreCha
     // const [preSubject, setPreSubject] = useState<RadioButtonProps[]>(preSubjectData)
     return (
         <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <Checkbox value="orange" aria-label='subject' size='sm'
-                style={{}}
-                isChecked={subject.isChecked}
-                onChange={(isChecked: boolean) =>
-                    onCheckBox(isChecked, index)
-                }
-            />
-            {/* <TouchableOpacity style={styles.editRow} onPress={() => { console.log('at delete button:', index); onDelete(index) }}>
-                <Text>-</Text>
-            </TouchableOpacity> */}
-
+            <View style={{marginLeft: 15, marginRight: 10}}>
+                <Checkbox value='orange' aria-label='subject' size='sm'
+                    style={{}}
+                    isChecked={subject.isChecked}
+                    onChange={(isChecked: boolean) =>
+                        onCheckBox(isChecked, index)
+                    }
+                />
+            </View>
             <TextInput autoCapitalize="none" style={styles.subject} onChangeText={(text) => onSubjectChange(text)} value={subject.subject} />
             <TextInput autoCapitalize="none" style={styles.subjectScore} value={subject.score} onChangeText={text => onScoreChange(text)} />
-
             <TouchableOpacity style={styles.editRow} onPress={() => { console.log('at delete button:', index); onDelete(index) }}>
                 <Ionicons name="close-circle-outline" color='#14b8a6' size={25} />
             </TouchableOpacity>
@@ -73,6 +70,7 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderRadius: 10,
+        textAlign: 'center',
         // marginRight: 50,
         flex: 1,
         backgroundColor: 'white',
