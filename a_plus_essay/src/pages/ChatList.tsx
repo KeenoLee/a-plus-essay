@@ -9,9 +9,9 @@ import { then } from '@beenotung/tslib';
 import { format } from 'date-fns'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
-
 
 interface ChatRoom {
   chatroom_id: number;
@@ -56,19 +56,18 @@ const ChatList = (props: ChatListProps) => {
 }
 
 export default function ChatScreen() {
-
+  const navigation = useNavigation()
   const [json, setJSON] = useState([])
   const userInfo = useSelector((state: RootState) => state.auth.user)
 
   useEffect(() => {
     console.log(userInfo)
-    if (!userInfo) return Alert.alert('Unauthorized', 'Please login')
+    if (!userInfo) return Alert.alert('Unauthorized', 'Please login', [{ text: 'OK', onPress: () => { navigation.navigate('Login') } }])
     fetch('http://192.168.168.103:8111/chat/list')
       .then(res => res.json())
       .then(setJSON)
       .catch(error => console.error(error))
   }, [])
-
 
 
   return (
@@ -77,7 +76,7 @@ export default function ChatScreen() {
       <FlatList
         data={json}
         renderItem={({ item }) => <ChatList chatRoom={item} />}
-        keyExtractor={(item) => item.chatroom_id}
+        keyExtractor={(item) => item}
       />
       {/* </ScrollView> */}
     </View>
