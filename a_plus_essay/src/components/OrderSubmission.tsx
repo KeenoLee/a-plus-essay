@@ -35,12 +35,13 @@ function shorterFilename(filename: string) {
     }
     return filename
 }
-async function fetchOrder(order: OrderValue) {
+async function fetchOrder(order: OrderValue, token: string) {
     const res = await fetch(`${env.BACKEND_URL}/order-submission`, {
         method: 'POST',
-        // headers: {
-        //     'Content-Type': 'application/json'
-        // },
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization":`Bearer ${token}`
+        },
         body: JSON.stringify(order)
     })
     const result = await res.json()
