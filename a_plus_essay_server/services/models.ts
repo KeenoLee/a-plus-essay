@@ -1,6 +1,14 @@
 interface Guideline {
     filename: string;
-    base64Data: string;
+    uri: string;
+    type: string;
+    // base64Data: string;
+}
+interface Note {
+    filename: string;
+    uri: string;
+    type: string;
+    // base64Data: string;
 }
 export type SubjectFromDB = {
     id: number;
@@ -12,10 +20,6 @@ export type Subject = {
     score: string;
     isChecked: boolean;
 };
-interface Note {
-    filename: string;
-    base64Data: string;
-}
 export interface OrderItem {
     studentId: number;
     tutorId?: number;
@@ -24,13 +28,17 @@ export interface OrderItem {
     subject: string;
     grade: string;
     description: string;
-    guidelines: Guideline[]; // base64
-    notes: Note[]; // base64
+    // guidelines: Guideline[]; // base64
+    // notes: Note[]; // base64
     budget: number;
     completed?: Date | null;
     paid?: Date | null;
     studentDeadline: Date;
     tutorDeadline: Date;
+}
+export interface OrderFile {
+    guidelines: Guideline[]; // base64
+    notes: Note[]; // base64
 }
 
 export interface ChatMessage {

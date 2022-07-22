@@ -56,18 +56,12 @@ const genUniqueKey = () => {
 //     type: string,
 //     base64Data: string
 // }
-type TranscriptImage = {
-    uri: string,
-    filename: string,
-    type: string | null,
-    base64Data: string
-}
-type StudentCardImage = {
+type Image = {
     uri: string,
     filename: string,
     type: string,
-    base64Data: string
 }
+
 const disableStyle = {
     backgroundColor: "#a8a29e",
     padding: 10,
@@ -103,34 +97,15 @@ interface TutorData {
     password: string,
     rePassword: string,
     phoneNumber: string,
-    isOAuth: boolean
-    transcript: TranscriptImage[],
-    studentCard: StudentCardImage,
+    isOAuth: boolean,
+    transcript: Image[],
+    studentCard: Image,
     school: string,
     major: string,
     selfIntro: string,
     subjects: Subject[]
 }
-// async function convertFileToBase64(uri: string) {
-//     console.log('going to BASE')
-//     const base64Data = await RNFetchBlob.fs.readFile(uri, 'base64')
-//     // const StreamData = await RNFetchBlob.fs.readStream(uri, 'base64')
-//     // const base64Data = await ImgToBase64.getBase64String(uri)
-//     // console.log('SAFSD64 ', StreamData)
 
-//     console.log('bASE^4 ', base64Data)
-//     return base64Data
-// }
-function checkIsTutor(role: RadioButtonProps[]): boolean | string {
-    const selectedRole = role.find(object => object.selected === true)
-    if (!selectedRole || !selectedRole.value) {
-        return 'role not found'
-    }
-    if (selectedRole.value === 'tutor') {
-        return true
-    }
-    return false
-}
 async function fetchStudent(registerData: StudentData) {
     // const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/register/tutor`)
     const res = await fetch(`${env.BACKEND_URL}/register/student`, {
@@ -177,6 +152,12 @@ async function fetchTutor(registerData: TutorData) {
     }
     return 'success'
 }
+async function fetchTutorFile(studentCard: Image | null, transcripts: Image[]) {
+    const formData = new FormData()
+    for (let t = 0; t < transcripts.length; t++) {
+        formData.append(`transcript_${t}`, transcripts[t] as any)
+    }
+}
 
 export default function Register() {
 
@@ -211,9 +192,9 @@ export default function Register() {
     const [mobileValid, setMobileValid] = useState(false)
 
     // Page Two Information (Academic Information)
-    const [transcriptImages, setTranscriptImages] = useState<TranscriptImage[]>([])
+    const [transcriptImages, setTranscriptImages] = useState<Image[]>([])
     // const [transcriptFiles, setTranscriptFiles] = useState<TranscriptImage[]>([])
-    const [studentCardImage, setStudentCardImage] = useState<StudentCardImage | null>()
+    const [studentCardImage, setStudentCardImage] = useState<Image | null>()
     const [position, setPosition] = useState("Upload");
     const addTranscriptImage = () => {
         openGallery(file => {
@@ -227,7 +208,7 @@ export default function Register() {
         })
     }
 
-    const openGallery = (callback: (file: { uri: string, filename: string, type: string, base64Data: string }) => void) => {
+    const openGallery = (callback: (file: { uri: string, filename: string, type: string }) => void) => {
         launchImageLibrary({
             mediaType: 'photo',
             includeBase64: true
@@ -240,11 +221,9 @@ export default function Register() {
                 let uri = res.assets?.[0].uri
                 let filename = res.assets?.[0].fileName
                 let type = res.assets?.[0].type
-                let base64Data = res.assets?.[0].base64
-                // console.log(base64.decode(base64Format!))
-                // console.log('base64', base64Format)
-                if (uri && filename && type && base64Data) {
-                    callback({ uri, filename, type, base64Data })
+      
+                if (uri && filename && type) {
+                    callback({ uri, filename, type })
                     return
                 }
                 console.log('file is not found')
@@ -252,28 +231,6 @@ export default function Register() {
             }
         })
     }
-
-    // const addTranscriptFile = async () => {
-    //     try {
-
-    //         // const file = await DocumentPicker.pickSingle()
-    //         // const encodedUri = base64.encode(file.uri)
-    //         // console.log('FILE!!! ', file)
-    //         // console.log('URI ', encodedUri)
-
-    //         const { uri, name, type } = await DocumentPicker.pickSingle({
-    //             // type: [DocumentPicker.types.pdf, DocumentPicker.types.images]
-    //         })
-    //         const file = await convertFileToBase64(uri)
-    //         // const base64Data = await RNFetchBlob.fs.readFile(uri, 'base64')
-    //         console.log('fdgdf', file)
-    //         const base64Data = 'dsafas'
-    //         // console.log('basE64: ', base64Data)
-    //         setTranscriptFiles([...transcriptFiles, { uri, filename: name, type, base64Data }])
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
 
     // Checking Page Two
 
@@ -376,33 +333,6 @@ export default function Register() {
         }
     }, [subjects])
 
-
-    // Fetch Server
-    // useCallback(async()=>{
-    //     console.log('going to callback')
-    //      if (submitStudent) {
-    //         console.log('going to feCH in callback')
-    //         const result = await fetchStudent({
-    //             isTutor: isTutor,
-    //             nickname: nickname,
-    //             email: email,
-    //             password: password,
-    //             rePassword: firmPassword,
-    //             phoneNumber: mobileNumber,
-    //             isOAuth: false
-    //         })
-    //         console.log('RESULT: ', result)
-    //         if (result.error) {
-    //             setDisableNext(true)
-    //             setNextButtonStyle(disableStyle)
-    //             Alert.alert('Error', result.error)
-    //         } else {
-    //             setDisableNext(true)
-    //             setNextButtonStyle(disableStyle)
-    //             setPage({ step: 5 })
-    //         }
-        // }
-    // },[submitStudent])
     useEffect(() => {
         setIsTutor(() => false)
     }, [])
@@ -424,8 +354,8 @@ export default function Register() {
                             rePassword: 'password',
                             phoneNumber: `${(Math.random() * 8)}`.split('.')[1].substring(0, 8),
                             isOAuth: false,
-                            transcript: [...transcriptImages, { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }],
-                            studentCard: { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }!,
+                            transcript: [...transcriptImages, { uri: 'testing', filename: 'testing', type: 'testing' }],
+                            studentCard: { uri: 'testing', filename: 'testing', type: 'testing' }!,
                             school: 'schoolLife.school',
                             major: 'schoolLife.major',
                             selfIntro: 'schoolLife.tutorIntroduction',
@@ -769,6 +699,9 @@ export default function Register() {
                                 major: schoolLife.major,
                                 selfIntro: schoolLife.tutorIntroduction,
                                 subjects: subjects
+                            })
+                            const fileResult = await fetchTutorFile({
+                                
                             })
                             console.log('RESULT: ', result)
                             if (result.error) {
