@@ -29,8 +29,14 @@ export default function DateTimePicker({ onChange }: Props) {
     const [open, setOpen] = useState(false)
 
     return (
-        <HStack w="100%" style={{alignItems: 'center'}}>
-            <Button size="sm" onPress={() => setOpen(true)} style={{}} >Select Date</Button>
+        <HStack w="100%" style={{ alignItems: 'center' }}>
+            <Button _pressed={{
+                bgColor: "teal.600"
+            }}
+                size='sm' bgColor="teal.500"
+                onPress={() => setOpen(true)} >
+                Select Date
+            </Button>
             <DatePicker
                 modal
                 open={open}

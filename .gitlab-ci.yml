@@ -9,7 +9,7 @@ variables:
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_HOST: postgres
-  SERVER_HOST:  54.177.154.87
+  SERVER_HOST:  13.215.212.32
   SERVER_USER: ubuntu
   WEB_SERVER_ROOT: ./a_plus_essay_server
 
@@ -52,7 +52,7 @@ server-deploy:
         git checkout $CI_COMMIT_SHA && 
         rm -r -f a_plus_essay &&       
         cd ~/aplusessay/a_plus_essay_server &&
-        npm install &&
+        npm install --omit=dev &&
         cd dist &&
         npx knex --env production migrate:latest &&        
         pm2 start ~/aplusessay/a_plus_essay_server/dist/main.js || pm2 reload ~/aplusessay/a_plus_essay_server/dist/main.js
