@@ -1,111 +1,115 @@
 // import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import {createStackNavigator} from '@react-navigation/stack';
 
-import { View, Text, StyleSheet, ScrollView, Alert, FlatList } from 'react-native'
-import React, { Fragment, useEffect, useState } from 'react'
-import Chatroom from '../components/Chatroom'
-import { Divider } from 'native-base';
-import { then } from '@beenotung/tslib';
-import { format, formatDistanceToNow } from 'date-fns'
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  FlatList,
+} from 'react-native';
+import React, {Fragment, useEffect, useState} from 'react';
+import Chatroom from '../components/Chatroom';
+import {Divider} from 'native-base';
+import {then} from '@beenotung/tslib';
+import {format, formatDistanceToNow} from 'date-fns';
+import {useSelector} from 'react-redux';
+import {RootState} from '../redux/store';
 
 import uuid from 'react-native-uuid';
 
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {useGet} from '../hooks/use-get';
+import {useAppNavigation} from '../../routes';
 
 const Stack = createStackNavigator();
 
 interface ChatRoom {
-  chatroom_id: number;
+  order_id: number;
   title: string;
   nickname: string;
   is_tutor: boolean;
   last_message: string;
   last_message_time: string;
-  uuid?: string;
 }
 interface ChatListProps {
-  chatRoom: ChatRoom
+  chatRoom: ChatRoom;
 }
 
+const ChatListItem = (props: ChatListProps) => {
+  const {chatRoom} = props;
+  const navigation = useAppNavigation();
 
-const ChatList = (props: ChatListProps) => {
-  const { chatRoom } = props;
-
-
-
+  const onClick = () => {
+    navigation.navigate({name: 'Chatroom', params: {id: chatRoom.order_id}});
+  };
+  // return (
+  //   <View>
+  //     <Text>{JSON.stringify(chatRoom)}</Text>
+  //   </View>
+  // );
   return (
     // <View style={styles.container}>
     //   <ScrollView>
     <>
       {/* {Array.isArray(json) && json.map((jsonItem: any) => */}
-      <View style={styles.innerContainer}>
-        <View style={styles.topRow}>
-          <Text numberOfLines={1} style={styles.assignmentName}>{chatRoom.title}</Text>
-          {/* <Text style={styles.timeFormat}>{format(new Date(chatRoom.last_message_time), '   KK:mm aaa')}</Text> */}
-          <Text style={styles.timeFormat}>{formatDistanceToNow(new Date(chatRoom.last_message_time), { addSuffix: true })}</Text>
+      <TouchableWithoutFeedback onPress={onClick}>
+        <View style={styles.innerContainer}>
+          <View style={styles.topRow}>
+            <Text numberOfLines={1} style={styles.assignmentName}>
+              {chatRoom.title}
+            </Text>
+            {/* <Text style={styles.timeFormat}>{format(new Date(chatRoom.last_message_time), '   KK:mm aaa')}</Text> */}
+            <Text style={styles.timeFormat}>
+              {formatDistanceToNow(new Date(chatRoom.last_message_time), {
+                addSuffix: true,
+              })}
+            </Text>
+          </View>
+          <View style={styles.secondRow}>
+            <Text style={styles.lastSender}>
+              {'    ' + chatRoom.nickname + ': '}
+            </Text>
+            <Text numberOfLines={1} style={styles.text}>
+              {chatRoom.last_message}
+            </Text>
+          </View>
+          {/* <Text>{'toDelete - id: ' + chatRoom.chatroom_id}</Text> */}
         </View>
-        <View style={styles.secondRow}>
-          <Text style={styles.lastSender}>{'    ' + chatRoom.nickname + ': '}</Text>
-          <Text numberOfLines={1} style={styles.text}>{chatRoom.last_message}</Text>
-        </View>
-        {/* <Text>{'toDelete - id: ' + chatRoom.chatroom_id}</Text> */}
-      </View>
+      </TouchableWithoutFeedback>
       <Divider style={styles.divider} />
     </>
     // )}
     //   </ScrollView>
     // </View>
-  )
-}
+  );
+};
 
 export default function ChatScreen() {
-  const navigation = useNavigation()
-  const [json, setJSON] = useState<ChatRoom[]>([])
-  const onClick = () => {
-    navigation.navigate('ChatRoom')
-  }
+  const chatList = useGet<{rooms: ChatRoom[]; error?: string}>(
+    'chatrooms',
+    '/chat/list',
+    {error: 'loading', rooms: []},
+  );
 
-  const userInfo = useSelector((state: RootState) => state.auth.user)
-
-  useEffect(() => {
-    // console.log(userInfo)
-    // if (!userInfo) return Alert.alert('Unauthorized', 'Please login', [{ text: 'OK', onPress: () => { navigation.navigate('Login') } }])
-    // fetch('http://192.168.168.103:8111/chat/list')
-    //   .then(res => res.json())
-    //   .then(setJSON)
-    //   .catch(error => console.error(error))
-
-    (async () => {
-      let res = await fetch('http://192.168.168.103:8111/chat/list');
-      let result = await res.json();
-
-      let finalArr = Array.isArray(result) ? result.map(v => {
-        return {
-          ...v,
-          uuid: uuid.v4(),
-        }
-      }) : [];
-
-      setJSON(finalArr);
-    })()
-  }, [])
-
+  const userInfo = useSelector((state: RootState) => state.auth.user);
 
   return (
     <View style={styles.container}>
       {/* <ScrollView> */}
-      <FlatList
-        style={{ width: '100%' }}
-        data={json}
-        renderItem={({ item }) => <ChatList chatRoom={item} />}
-        keyExtractor={item => item.uuid + ""}
-      />
+      {chatList.render(json => (
+        <FlatList
+          style={{width: '100%'}}
+          data={json.rooms}
+          renderItem={({item}) => <ChatListItem chatRoom={item} />}
+          keyExtractor={item => String(item.order_id)}
+        />
+      ))}
       {/* </ScrollView> */}
     </View>
-  )
-
+  );
 }
 // function ChatStack() {
 //   return (
@@ -122,10 +126,8 @@ export default function ChatScreen() {
 //   )
 // }
 
-
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   innerContainer: {
     padding: 10,
     backgroundColor: '#f0fdfa',
@@ -160,8 +162,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 6,
     color: 'grey',
-    flex: 0.3
-
+    flex: 0.3,
   },
 
   text: {
@@ -175,4 +176,4 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontWeight: '500',
   },
-})
+});
