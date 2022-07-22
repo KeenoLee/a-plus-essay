@@ -98,7 +98,9 @@ export default function OrderSubmission() {
                 console.log(base64Data)
                 if (filename && base64Data) {
                     let blob = dataURItoBlob(base64Data)
+                    console.log('blob: ', blob)
                     let file = new File([blob], 'photo', { type: blob.type, lastModified: Date.now() })  // Binary
+                    console.log('file: ', file)
                     callback({ filename, base64Data, file })
                     return
                 }
