@@ -70,7 +70,7 @@ async function testing() {
 // testing().catch(e => console.error(e)).finally(() => knex.destroy())
 
 orderRoutes.get("/order/data", orderController.getOrderData);
-// userRoutes.post("/order-submission", orderController.createOrder)
+orderRoutes.post("/order-submission", orderController.createOrder)
 
 const PORT = 8111;
 

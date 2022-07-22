@@ -1,6 +1,6 @@
 import { Alert } from 'react-native'
 import * as React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, HStack, IconButton, StatusBar, Text, View } from 'native-base';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -10,7 +10,14 @@ export default function Account() {
     const state = useSelector((state: RootState) => state.auth)
     console.log('userInfo in Account', state?.user)
     const navigation = useNavigation()
+    // const [isAuth, setIsAuth] = useState(false)
     const [editProfile, setEditProfile] = useState()
+    // useEffect(()=>{
+    //     if (!state.user && !state.tutor) {
+        
+    //         navigation.navigate('Login')
+    //     }
+    // })
     return (
         state?.user || state?.tutor ?
             <View>
