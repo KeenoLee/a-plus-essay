@@ -128,6 +128,10 @@ export class OrderService {
             console.log('get from order_subject: ', orderSubejctId, subjectId)
             const matchedSubjectTutorIds = await this.knex.select('tutor_id').from('preferred_subject').where('subject_id', subjectId)
             console.log('matched ids: ', matchedSubjectTutorIds)
+            // await this.knex.select('preferred_subject.tutor_id')
+            //     .from('order_subject')
+            //     .innerJoin('preferred_subject')
+            //     .where('order_subject.subject_id', '=', 'preferred_subject.subject_id')
             const { subejctName } = (await this.knex.select('subject_name').from('subject').where('id', subjectId))[0]
 
         } catch (error) {
