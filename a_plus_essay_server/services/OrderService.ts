@@ -43,21 +43,21 @@ export class OrderService {
             console.log('orderSubjectID!: ', orderSubjectId)
 
             // for (let guideline of order.guidelines) {
-                // Guideline {
-                //     filename: string,
-                //     base64Data: long long string,
-                //     file: {
-                //         _data: {
-                //             blobId: string,
-                //             offset: 0,
-                //             size: 35,
-                //             type: long long string, (seems same as bas64Data)
-                //             lastModified: 1658464651040,
-                //             __collecror: {},
-                //             name: 'photo'
-                //         }
-                //     }
-                // }
+            // Guideline {
+            //     filename: string,
+            //     base64Data: long long string,
+            //     file: {
+            //         _data: {
+            //             blobId: string,
+            //             offset: 0,
+            //             size: 35,
+            //             type: long long string, (seems same as bas64Data)
+            //             lastModified: 1658464651040,
+            //             __collecror: {},
+            //             name: 'photo'
+            //         }
+            //     }
+            // }
             //     console.log('Guideline', guideline)
             //     await knex.insert({
             //         order_id: orderId,
@@ -81,18 +81,31 @@ export class OrderService {
             // order.notes.map(async note => {
 
             // })
-            this.matchOrder(orderId)
+            // this.matchOrder(orderId)
             return orderId
             // id = orderId
 
         })
         // return id;
     }
-    async uploadOrderFile() {
+    async uploadOrderFile(files: any) {
         try {
-            
+            let objectKeys = Object.keys(files)
+            for (let i = 0; i < objectKeys.length; i++) {
+                if (objectKeys[i].includes('guideline')) {
+                    console.log('HIHIHIHIHI: ',files.guideline_0.originalFilename)
+                    console.log('HIHIHIHIHI: ',objectKeys)
+                    this.knex.insert({
+                        filename: files[objectKeys[i]].originalFilename
+                    }).into('guideline')
+                } else if (objectKeys[i].includes('note')) {
+                    this.knex.insert({
+                        filename: files[objectKeys[i]].originalFilename
+                    }).into('note')
+                }
+            }
         } catch (error) {
-            
+            console.log(error)
         }
     }
     async getChatMessage(userId: number, is_tutor: boolean) {
@@ -121,7 +134,7 @@ export class OrderService {
         }
 
     }
-    
+
     async matchOrder(orderId: number) {
         try {
             const { orderSubejctId, subjectId } = (await this.knex.select('id', 'subject_id').from('order_subject').where('order_id', orderId))[0]
