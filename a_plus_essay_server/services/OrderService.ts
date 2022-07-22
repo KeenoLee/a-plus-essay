@@ -95,11 +95,11 @@ export class OrderService {
                 if (objectKeys[i].includes('guideline')) {
                     console.log('HIHIHIHIHI: ',files.guideline_0.originalFilename)
                     console.log('HIHIHIHIHI: ',objectKeys)
-                    this.knex.insert({
+                    await this.knex.insert({
                         filename: files[objectKeys[i]].originalFilename
                     }).into('guideline')
                 } else if (objectKeys[i].includes('note')) {
-                    this.knex.insert({
+                    await this.knex.insert({
                         filename: files[objectKeys[i]].originalFilename
                     }).into('note')
                 }

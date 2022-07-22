@@ -5,11 +5,12 @@ import jwtSimple from 'jwt-simple';
 import dotenv from 'dotenv';
 import jwt_decode from 'jwt-decode'
 import { Subject } from '../services/models';
-import formidable  from "formidable";
+import formidable from "formidable";
 import fs from "fs";
+import { resourceLimits } from 'worker_threads';
 
 const uploadDir = 'uploads'
-fs.mkdirSync(uploadDir,{recursive:true})
+fs.mkdirSync(uploadDir, { recursive: true })
 dotenv.config({ path: '../.env' || '../../.env' });
 const form = formidable({
     uploadDir,
@@ -18,8 +19,8 @@ const form = formidable({
     maxFiles: 10,
     maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
     filter: part => part.mimetype?.startsWith('image/') || false,
-  })
-  
+})
+
 export class UserController {
     //TODO:
     constructor(private userService: UserService) {
@@ -89,15 +90,16 @@ export class UserController {
             return;
         };
 
-        await this.createTutor(req, res, userInfo[0].id);
-        res.json({ success: true, token: jwt });
+        const tutorId = await this.createTutor(req, res, userInfo[0].id);
+        console.log('SUCCESS to create!: ', tutorId)
+        res.json({ success: true, token: jwt, tutorId: tutorId });
         return;
     }
 
     createTutor = async (req: Request, res: Response, userId: number) => {
         console.log('going to create tutor...')
 
-        let { email, transcript, studentCard, school, major, selfIntro, subjects } = req.body;
+        let { email, school, major, selfIntro, subjects } = req.body;
 
         // if no transcript, .......
         // if no studentCard, .......
@@ -122,22 +124,24 @@ export class UserController {
             res.status(400).json({ error: "Subject or score or preferred subject is missed" });
             return;
         };
-        console.log('controller line 113')
-        await this.userService.createTutor(
+        console.log('controller line 125')
+        const tutorId = await this.userService.createTutor(
             {
                 userId,
                 email,
-                transcript,
-                studentCard,
                 school,
                 major,
                 selfIntro,
                 subjects,
                 preferredSubjects
             }
-        );
+        )
+        if (!tutorId) {
+            res.json({ error: 'Failed to create account, please try again!' })
+        }
+        console.log('TUTORIDDDDDDD: DGSDFGDFG: ', tutorId)
         // res.json({ success: true });
-        return;
+        return tutorId
     }
 
     //TODO:
@@ -317,22 +321,18 @@ export class UserController {
         if (!token) {
             return res.status(401).json({ error: "permission denied" });
         }
-
         const payload = jwtSimple.decode(token, process.env.jwtSecret!);
         if (!payload) {
             return res.status(401).json({ error: "Invalid JWT" });;
         }
-
         if (!email) {
             res.status(400).json({ error: "Missing email" })
             return;
         };
-
         if (reg.test(email) === false) {
             res.status(400).json({ error: "Invalid email address" });
             return;
         };
-
         const emailRegistration = await this.userService.checkEmailDuplication(email);
         if (!emailRegistration) {
             res.status(400).json({ error: "This email address has not been registered in the system" })
@@ -376,5 +376,28 @@ export class UserController {
         };
         res.json({ success: true })
         return
+    }
+
+    uploadTutorFile = async (req: Request, res: Response) => {
+        try {
+            form.parse(req, async (err, fields, files) => {
+                console.log(files)
+                console.log('FIELDS??? ', fields)
+                const tutorId: number = +fields.tutorId
+                if (err) {
+                    res.json({ error: err })
+                    return
+                }
+                if (files) {
+                    const result = await this.userService.uploadTutorFile(tutorId, files)
+                    res.json(result)
+                    return
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            res.json(err)
+            return
+        }
     }
 }
