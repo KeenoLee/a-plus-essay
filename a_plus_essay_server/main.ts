@@ -70,6 +70,7 @@ chatRoutes.get("/chat/:id/message", chatController.getChatroom);
 
 orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
+orderRoutes.post("/order-file", orderController.uploadOrderFile)
 
 app.use(userRoutes);
 app.use(orderRoutes);

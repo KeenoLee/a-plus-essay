@@ -5,9 +5,21 @@ import jwtSimple from 'jwt-simple';
 import dotenv from 'dotenv';
 import jwt_decode from 'jwt-decode'
 import { Subject } from '../services/models';
+import formidable  from "formidable";
+import fs from "fs";
 
+const uploadDir = 'uploads'
+fs.mkdirSync(uploadDir,{recursive:true})
 dotenv.config({ path: '../.env' || '../../.env' });
-
+const form = formidable({
+    uploadDir,
+    multiples: true,
+    keepExtensions: true,
+    maxFiles: 10,
+    maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
+    filter: part => part.mimetype?.startsWith('image/') || false,
+  })
+  
 export class UserController {
     //TODO:
     constructor(private userService: UserService) {
