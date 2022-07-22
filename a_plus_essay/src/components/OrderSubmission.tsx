@@ -35,12 +35,13 @@ function shorterFilename(filename: string) {
     }
     return filename
 }
-async function fetchOrder(order: OrderValue) {
+async function fetchOrder(order: OrderValue, token: string) {
     const res = await fetch(`${env.BACKEND_URL}/order-submission`, {
         method: 'POST',
-        // headers: {
-        //     'Content-Type': 'application/json'
-        // },
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization":`Bearer ${token}`
+        },
         body: JSON.stringify(order)
     })
     const result = await res.json()
@@ -97,7 +98,9 @@ export default function OrderSubmission() {
                 console.log(base64Data)
                 if (filename && base64Data) {
                     let blob = dataURItoBlob(base64Data)
+                    console.log('blob: ', blob)
                     let file = new File([blob], 'photo', { type: blob.type, lastModified: Date.now() })  // Binary
+                    console.log('file: ', file)
                     callback({ filename, base64Data, file })
                     return
                 }
@@ -107,7 +110,7 @@ export default function OrderSubmission() {
         })
     }
     return (
-        state.user && !state.tutor ?
+        state.user && !state.tutor && state.token ?
             <SafeAreaView>
                 <ScrollView>
                     <VStack mt="4" alignSelf="center" px="4" w={{ base: "100%" }}>
@@ -260,7 +263,7 @@ export default function OrderSubmission() {
                             }}
                                 size='md' bgColor="success.500"
                                 onPress={async () => {
-                                    const result = await fetchOrder(orderValue)
+                                    const result = await fetchOrder(orderValue, state.token!)
                                     console.log('result of creating order', result)
                                     result.error ? Alert.alert('Error', result.error) : Alert.alert('Success', result)
                                 }}>Confirm</Button>
