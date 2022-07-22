@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import jwt_decode from 'jwt-decode'
 import { Subject } from '../services/models';
 
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: '../.env' || '../../.env' });
 
 export class UserController {
     //TODO:
