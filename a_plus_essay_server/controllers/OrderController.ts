@@ -17,6 +17,7 @@ const form = formidable({
     maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
     filter: part => part.mimetype?.startsWith('image/') || false,
   })
+  
 const permit = new Bearer({
     query: "access_token"
 })
@@ -90,7 +91,7 @@ export class OrderController {
             return;
         };
         console.log('going to insert into db... ')
-        await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
+        await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, tutorDeadline, studentDeadline });
         // console.log('orderID: ', orderId)
         // await this.orderService.matchOrder(orderId)
         res.json({ success: true });
@@ -99,14 +100,20 @@ export class OrderController {
     uploadOrderFile = async (req: Request, res: Response) => {
         try {
             form.parse(req, (err, fields, files) => {
-
-                console.log('FORM>PARSE!', {err, fields, files})
-
+                console.log('fields??? ', fields)
+                if (err) {
+                    res.json({error: err})
+                    return
+                }
+                if (files) {
+                    this.orderService.uploadOrderFile(files)
+                    res.json({success: true})
+                    return
+                }
             })
-            console.log('uploadOrderFile(req): ', req)
-            console.log('good body ', req.body)
         } catch (error) {
-            
+            res.json({error: error})
+            return
         }
     }
     getOrderData = async (req: Request, res: Response) => {
