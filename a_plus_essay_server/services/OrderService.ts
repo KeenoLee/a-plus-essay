@@ -1,4 +1,5 @@
 import { Knex } from "knex";
+import { stringify } from "querystring";
 import { OrderItem } from "./models"
 
 export class OrderService {
@@ -41,19 +42,34 @@ export class OrderService {
             }).into('order_subject').returning('id'))[0].id;
             console.log('orderSubjectID!: ', orderSubjectId)
 
-            for (let guideline of order.guidelines) {
-                // console.log('B64', guideline)
-                await knex.insert({
-                    order_id: orderId,
-                    guideline_base64: guideline.base64Data
-                }).into('guideline')
-            }
-            for (let note of order.notes) {
-                await knex.insert({
-                    order_id: orderId,
-                    note_base64: note.base64Data
-                }).into('note')
-            }
+            // for (let guideline of order.guidelines) {
+                // Guideline {
+                //     filename: string,
+                //     base64Data: long long string,
+                //     file: {
+                //         _data: {
+                //             blobId: string,
+                //             offset: 0,
+                //             size: 35,
+                //             type: long long string, (seems same as bas64Data)
+                //             lastModified: 1658464651040,
+                //             __collecror: {},
+                //             name: 'photo'
+                //         }
+                //     }
+                // }
+            //     console.log('Guideline', guideline)
+            //     await knex.insert({
+            //         order_id: orderId,
+            //         guideline_base64: guideline.base64Data
+            //     }).into('guideline')
+            // }
+            // for (let note of order.notes) {
+            //     await knex.insert({
+            //         order_id: orderId,
+            //         note_base64: note.base64Data
+            //     }).into('note')
+            // }
             console.log('goin to return : ', orderId)
             // order.guidelines.map(async guideline => {
             //     await knex.insert({
@@ -71,6 +87,13 @@ export class OrderService {
 
         })
         // return id;
+    }
+    async uploadOrderFile() {
+        try {
+            
+        } catch (error) {
+            
+        }
     }
     async getChatMessage(userId: number, is_tutor: boolean) {
         try {
@@ -98,15 +121,19 @@ export class OrderService {
         }
 
     }
-
+    
     async matchOrder(orderId: number) {
         try {
             const { orderSubejctId, subjectId } = (await this.knex.select('id', 'subject_id').from('order_subject').where('order_id', orderId))[0]
             console.log('get from order_subject: ', orderSubejctId, subjectId)
             const matchedSubjectTutorIds = await this.knex.select('tutor_id').from('preferred_subject').where('subject_id', subjectId)
             console.log('matched ids: ', matchedSubjectTutorIds)
+            // await this.knex.select('preferred_subject.tutor_id')
+            //     .from('order_subject')
+            //     .innerJoin('preferred_subject')
+            //     .where('order_subject.subject_id', '=', 'preferred_subject.subject_id')
             const { subejctName } = (await this.knex.select('subject_name').from('subject').where('id', subjectId))[0]
-            
+
         } catch (error) {
             console.log(error)
         }
