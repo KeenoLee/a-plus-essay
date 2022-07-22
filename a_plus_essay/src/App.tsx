@@ -10,6 +10,7 @@
 
 import * as React from 'react';
 import {
+  Alert,
   ImageBackground,
   SafeAreaView,
   ScrollView,
@@ -49,6 +50,8 @@ import { HomeDrawer } from './components/HomeDrawer';
 import HomeScreen from './components/HomeScreen';
 import Account from './components/Account';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
+import { useSelector } from 'react-redux';
+import { RootState } from './redux/store';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 export type RootStackParamList = {
@@ -88,7 +91,7 @@ export const Fabtn = () => {
 // Bottom Tab navigation
 export const Tabs = () => {
   const navigation = useNavigation();
-
+  const state = useSelector((state: RootState) => state.auth)
   return (
     <Tab.Navigator
       screenOptions={{
@@ -135,7 +138,15 @@ export const Tabs = () => {
         options={{
           tabBarLabel: 'Account',
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="person-circle" color={color} size={focused ? 30 : size} />
+            // Sometime cannot navigate
+            <Ionicons name="person-circle" color={color} size={focused ? 30 : size} onPress={() => Alert.alert(
+              'Unauthorized',
+              'Please login to view profile!',
+              [
+                  { text: 'Login', onPress: () => { navigation.navigate('Login') } },
+                  { text: 'Close', onPress: () => { null}}
+              ]
+          )} />
           ),
         }} />
     </Tab.Navigator>
