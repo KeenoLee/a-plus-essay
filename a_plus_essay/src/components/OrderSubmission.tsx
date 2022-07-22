@@ -8,15 +8,15 @@ import FilePicker from './FilePicker';
 import { format } from 'date-fns'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Alert, SafeAreaView } from 'react-native';
-import { dataURItoBlob } from '@beenotung/tslib/image'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
 interface UserFile {
-    filename: string,
-    base64Data: string
-    file: File
+    uri: string
+    type: string
+    name: string
+    // file: File
 }
 interface OrderValue {
     title: string
@@ -45,8 +45,8 @@ async function fetchOrder(order: OrderValue, token: string) {
         headers: {
             // TODO: seperate upload file/image 
             // "Accept": "application/json",
-            "Content-Type":  "application/json",
-            "Authorization":`Bearer ${token}`
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(order)
     })
@@ -57,13 +57,17 @@ async function fetchOrder(order: OrderValue, token: string) {
     return 'success'
 }
 async function fetchFile(orderFiles: OrderFiles) {
-    console.log('WHATs type??: ', typeof orderFiles.guidelines[0].file)
+    // console.log('WHATs type??: ', typeof orderFiles.guidelines[0].file)
+    console.log('GUIDELINE: ', orderFiles.guidelines)
+    console.log('NOTES: ', orderFiles.notes)
     const formData = new FormData()
-    for (let g = 0; g > orderFiles.guidelines.length;g ++) {
-        formData.append(`guideline${g}`, orderFiles.guidelines[g].file)
+    console.log('FORMDATA: ', formData)
+    for (let g = 0; g < orderFiles.guidelines.length; g++) { 
+        console.log(orderFiles.guidelines[g])
+        formData.append(`${orderFiles.guidelines[g].name}_${g}`, orderFiles.guidelines[g] as any)
     }
-    for (let n = 0; n > orderFiles.notes.length;n ++) {
-        formData.append(`notes${n}`, orderFiles.notes[n].file)
+    for (let n = 0; n < orderFiles.notes.length; n++) {
+        formData.append(`${orderFiles.notes[n].name}_${n}`, orderFiles.notes[n] as any)
     }
     console.log('FORMDATA: ', formData)
 
@@ -71,7 +75,6 @@ async function fetchFile(orderFiles: OrderFiles) {
         method: 'POST',
         headers: {
             "Content-Type": "multipart/form-data",
-            
         },
         body: formData
     })
@@ -113,22 +116,24 @@ export default function OrderSubmission() {
     const openGallery = (callback: (file: UserFile) => void) => {
         launchImageLibrary({
             mediaType: 'photo',
-            includeBase64: true
+            // includeBase64: true
         }, (res) => {
             if (res.didCancel) {
                 console.log('user cancelled image picker')
             } else if (res.errorMessage) {
                 console.log('Error: ', res.errorMessage)
             } else {
-                let filename = res.assets?.[0].fileName
-                let base64Data = res.assets?.[0].base64
+                let name = res.assets?.[0].fileName
+                let uri = res.assets?.[0].uri
+                let type = res.assets?.[0].type
+                console.log('uri', res.assets?.[0].uri)
                 // console.log(base64Data)
-                if (filename && base64Data) {
-                    let blob = dataURItoBlob(base64Data)
-                    console.log('blob: ', typeof blob.type, typeof blob)
-                    let file = new File([blob], 'photo', { type: blob.type, lastModified: Date.now() })  // Binary
+                if (name && uri && type) {
+                    // let blob = dataURItoBlob(uri)
+                    // console.log('blob: ', typeof blob.type, typeof blob)
+                    // let file = new File([blob], 'photo', { type: blob.type, lastModified: Date.now() })  // Binary
                     // console.log('file: ', file.type)
-                    callback({ filename, base64Data, file })
+                    callback({ name, uri, type })
                     return
                 }
                 console.log('file is not found')
@@ -194,7 +199,7 @@ export default function OrderSubmission() {
                                 {orderValue.guidelines.map((guideline, index) => (
                                     <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 180 }}>
                                         <Text style={{ textAlign: 'center' }}>
-                                            {shorterFilename(guideline.filename)}
+                                            {shorterFilename(guideline.name)}
                                         </Text>
                                         <TouchableOpacity
                                             onPress={() => {
@@ -230,7 +235,7 @@ export default function OrderSubmission() {
                             {orderValue.notes.map((note, index) => (
                                 <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 180 }}>
                                     <Text style={{ textAlign: 'center' }}>
-                                        {shorterFilename(note.filename)}
+                                        {shorterFilename(note.name)}
                                     </Text>
                                     <TouchableOpacity
                                         onPress={() => {
@@ -291,7 +296,7 @@ export default function OrderSubmission() {
                                 size='md' bgColor="success.500"
                                 onPress={async () => {
                                     const result = await fetchOrder(orderValue, state.token!)
-                                    const fileResult = await fetchFile({guidelines: orderValue.guidelines,notes: orderValue.notes})
+                                    const fileResult = await fetchFile({ guidelines: orderValue.guidelines, notes: orderValue.notes })
                                     console.log('fileResult: ', fileResult)
                                     // console.log('result of creating order', result)
                                     result.error ? Alert.alert('Error', result.error) : Alert.alert('Success', result)
