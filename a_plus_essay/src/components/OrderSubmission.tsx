@@ -64,7 +64,7 @@ async function fetchFile(orderFiles: OrderFiles) {
     console.log('FORMDATA: ', formData)
     for (let g = 0; g < orderFiles.guidelines.length; g++) { 
         console.log(orderFiles.guidelines[g])
-        formData.append(`${g}`, orderFiles.guidelines[g] as any)
+        formData.append(`guideline_${g}`, orderFiles.guidelines[g] as any)
     }
     for (let n = 0; n < orderFiles.notes.length; n++) {
         formData.append(`note_${n}`, orderFiles.notes[n] as any)
