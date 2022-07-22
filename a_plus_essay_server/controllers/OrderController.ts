@@ -3,10 +3,20 @@ import { Request, Response } from "express";
 import jwtSimple from 'jwt-simple';
 import { Bearer } from 'permit';
 import dotenv from 'dotenv';
-import { isConstructorDeclaration } from "typescript";
+import formidable  from "formidable";
+import fs from "fs";
 
+const uploadDir = 'uploads'
+fs.mkdirSync(uploadDir,{recursive:true})
 dotenv.config({ path: '../.env' || '../../.env' });
-
+const form = formidable({
+    uploadDir,
+    multiples: true,
+    keepExtensions: true,
+    maxFiles: 10,
+    maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
+    filter: part => part.mimetype?.startsWith('image/') || false,
+  })
 const permit = new Bearer({
     query: "access_token"
 })
@@ -86,7 +96,19 @@ export class OrderController {
         res.json({ success: true });
         return;
     }
+    uploadOrderFile = async (req: Request, res: Response) => {
+        try {
+            form.parse(req, (err, fields, files) => {
 
+                console.log('FORM>PARSE!', {err, fields, files})
+
+            })
+            console.log('uploadOrderFile(req): ', req)
+            console.log('good body ', req.body)
+        } catch (error) {
+            
+        }
+    }
     getOrderData = async (req: Request, res: Response) => {
         try {
             const userId = 1;
