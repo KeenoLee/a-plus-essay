@@ -59,6 +59,7 @@ userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplicat
 userRoutes.get("/login/google", userController.loginWithGoogle);
 userRoutes.get("/login/facebook", userController.loginWithFacebook);
 userRoutes.post("/resetpassword", userController.resetPassword);
+userRoutes.post("/tutor-file", userController.uploadTutorFile);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:order_id/message", chatController.getChatList);
