@@ -64,10 +64,10 @@ async function fetchFile(orderFiles: OrderFiles) {
     console.log('FORMDATA: ', formData)
     for (let g = 0; g < orderFiles.guidelines.length; g++) { 
         console.log(orderFiles.guidelines[g])
-        formData.append(`${orderFiles.guidelines[g].name}_${g}`, orderFiles.guidelines[g] as any)
+        formData.append(`${g}`, orderFiles.guidelines[g] as any)
     }
     for (let n = 0; n < orderFiles.notes.length; n++) {
-        formData.append(`${orderFiles.notes[n].name}_${n}`, orderFiles.notes[n] as any)
+        formData.append(`note_${n}`, orderFiles.notes[n] as any)
     }
     console.log('FORMDATA: ', formData)
 
@@ -79,6 +79,7 @@ async function fetchFile(orderFiles: OrderFiles) {
         body: formData
     })
     const result = await res.json()
+    return result
 }
 export default function OrderSubmission() {
     const navigation = useNavigation()
@@ -299,7 +300,12 @@ export default function OrderSubmission() {
                                     const fileResult = await fetchFile({ guidelines: orderValue.guidelines, notes: orderValue.notes })
                                     console.log('fileResult: ', fileResult)
                                     // console.log('result of creating order', result)
-                                    result.error ? Alert.alert('Error', result.error) : Alert.alert('Success', result)
+                                    if (result.error || fileResult.error) {
+                                        Alert.alert('Error', result.error || fileResult.error)
+                                    } else {
+                                        Alert.alert('Success', result)
+                                    }
+                                    
                                 }}>Confirm</Button>
                             <Button _pressed={{
                                 bgColor: "secondary.500"
