@@ -29,6 +29,10 @@ interface OrderValue {
     tutorDeadline: Date | null
     studentDeadline: Date | null
 }
+interface OrderFiles {
+    guidelines: UserFile[]
+    notes: UserFile[]
+}
 function shorterFilename(filename: string) {
     if (filename.length > 16) {
         return filename.substring(0, 17) + '...'
@@ -41,7 +45,6 @@ async function fetchOrder(order: OrderValue, token: string) {
         headers: {
             // TODO: seperate upload file/image 
             // "Accept": "application/json",
-            // "Content-Type": "multipart/form-data",
             "Content-Type":  "application/json",
             "Authorization":`Bearer ${token}`
         },
@@ -52,6 +55,27 @@ async function fetchOrder(order: OrderValue, token: string) {
         return result
     }
     return 'success'
+}
+async function fetchFile(orderFiles: OrderFiles) {
+    console.log('WHATs type??: ', typeof orderFiles.guidelines[0].file)
+    const formData = new FormData()
+    for (let g = 0; g > orderFiles.guidelines.length;g ++) {
+        formData.append(`guideline${g}`, orderFiles.guidelines[g].file)
+    }
+    for (let n = 0; n > orderFiles.notes.length;n ++) {
+        formData.append(`notes${n}`, orderFiles.notes[n].file)
+    }
+    console.log('FORMDATA: ', formData)
+
+    const res = await fetch(`${env.BACKEND_URL}/order-file`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "multipart/form-data",
+            
+        },
+        body: formData
+    })
+    const result = await res.json()
 }
 export default function OrderSubmission() {
     const navigation = useNavigation()
@@ -101,9 +125,9 @@ export default function OrderSubmission() {
                 // console.log(base64Data)
                 if (filename && base64Data) {
                     let blob = dataURItoBlob(base64Data)
-                    // console.log('blob: ', blob.type)
+                    console.log('blob: ', typeof blob.type, typeof blob)
                     let file = new File([blob], 'photo', { type: blob.type, lastModified: Date.now() })  // Binary
-                    console.log('file: ', file.type)
+                    // console.log('file: ', file.type)
                     callback({ filename, base64Data, file })
                     return
                 }
@@ -267,7 +291,9 @@ export default function OrderSubmission() {
                                 size='md' bgColor="success.500"
                                 onPress={async () => {
                                     const result = await fetchOrder(orderValue, state.token!)
-                                    console.log('result of creating order', result)
+                                    const fileResult = await fetchFile({guidelines: orderValue.guidelines,notes: orderValue.notes})
+                                    console.log('fileResult: ', fileResult)
+                                    // console.log('result of creating order', result)
                                     result.error ? Alert.alert('Error', result.error) : Alert.alert('Success', result)
                                 }}>Confirm</Button>
                             <Button _pressed={{
