@@ -39,7 +39,10 @@ async function fetchOrder(order: OrderValue, token: string) {
     const res = await fetch(`${env.BACKEND_URL}/order-submission`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            // TODO: seperate upload file/image 
+            // "Accept": "application/json",
+            // "Content-Type": "multipart/form-data",
+            "Content-Type":  "application/json",
             "Authorization":`Bearer ${token}`
         },
         body: JSON.stringify(order)
@@ -95,12 +98,12 @@ export default function OrderSubmission() {
             } else {
                 let filename = res.assets?.[0].fileName
                 let base64Data = res.assets?.[0].base64
-                console.log(base64Data)
+                // console.log(base64Data)
                 if (filename && base64Data) {
                     let blob = dataURItoBlob(base64Data)
-                    console.log('blob: ', blob)
+                    // console.log('blob: ', blob.type)
                     let file = new File([blob], 'photo', { type: blob.type, lastModified: Date.now() })  // Binary
-                    console.log('file: ', file)
+                    console.log('file: ', file.type)
                     callback({ filename, base64Data, file })
                     return
                 }
