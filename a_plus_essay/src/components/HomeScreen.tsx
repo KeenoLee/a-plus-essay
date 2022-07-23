@@ -1,9 +1,10 @@
-import * as React from "react";
 import { VStack, Center, Text, Box, Stack, Button, View, PresenceTransition } from 'native-base';
 import LottieView from 'lottie-react-native';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import VerticalTutorCard from "./VerticalTutorCard";
+import { FlatList } from 'react-native';
+
 
 
 export function HowToUseCard() {
@@ -19,7 +20,7 @@ export function HowToUseCard() {
     return (
         // Card Size: Almost cover half of the screen
         <Box>
-            <Box bg="primary.600" alignSelf="center" py="4" mt='4' borderRadius="xl" width="90%" maxWidth="100%" bgColor='tertiary.400'>
+            <Box alignSelf="center" py="4" mt='4' borderRadius="xl" width="90%" maxWidth="100%" bgColor='tertiary.400'>
                 <Stack>
                     <Stack ml='4'>
                         {/* Heading Message: 
@@ -30,9 +31,9 @@ export function HowToUseCard() {
                         <Text fontWeight='bold' fontSize='20' color='white'>with our Expert!</Text>
                     </Stack>
                 </Stack>
-                <Stack>
+                <Stack pt='3'>
                     {/* Lottle File Animation: Book etc*/}
-                    <View pt="100">
+                    <View pt="110">
                         <LottieView
                             ref={animationRef}
                             source={require('../assets/Books.json')}
@@ -65,8 +66,9 @@ export function HowToUseCard() {
                         duration: 100
                     }
                 }}>
+                    {/*Show Progress*/}
                     {isOpen ?
-                        <Box mt="7" mb='7 'bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
+                        <Box mt="7" mb='7' bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
                             <Text>Step</Text>
                         </Box>
                         : null
@@ -84,14 +86,59 @@ export function HowToUseCard() {
     Fade
 </Center> */}
 
+export function RenderTutor() {
+    const DATA = [
+        {
+            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+            title: 'First Item',
+        },
+        {
+            id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+            title: 'Second Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            title: 'Third Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            title: 'Third Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            title: 'Third Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            title: 'Third Item',
+        },
+    ];
+
+    // return (
+    //     <View>
+    //         <FlatList
+    //             horizontal
+    //             data={DATA}
+    //             listKey=''
+    //             keyExtractor={(item) => item.id}
+    //             showsHorizontalScrollIndicator={false}
+    //             renderItem={({ item, index }) => (
+    //                 <VerticalTutorCard/>
+    //             )}
+    //         />
+    //     </View>
+    // )
+}
+
+
 export default function Home() {
 
     return (
         <ScrollView>
             <HowToUseCard />
-            <VerticalTutorCard />
-            <VStack space={5}>
-                {/* <HowToUseCard /> */}
+            <VerticalTutorCard/>
+            {/* <RenderTutor /> */}
+            {/* <VStack space={5}>
                 <Center bg="primary.400" _text={{
                     color: "white",
                     fontWeight: "bold"
@@ -110,7 +157,7 @@ export default function Home() {
                 }}>
                     This is the Center
                 </Center>
-            </VStack>
+            </VStack> */}
         </ScrollView>
     )
 }
