@@ -7,7 +7,6 @@ import jwt_decode from 'jwt-decode'
 import { Subject } from '../services/models';
 import formidable from "formidable";
 import fs from "fs";
-import { resourceLimits } from 'worker_threads';
 
 const uploadDir = 'uploads'
 fs.mkdirSync(uploadDir, { recursive: true })
@@ -405,8 +404,12 @@ export class UserController {
         try {
             const editInfo = req.body
             console.log('EDIT INFO: ', editInfo)
-            await this.userService.editProfile(editInfo)
-            res.json({ success: true })
+            const result = await this.userService.editProfile(editInfo)
+            if (result.success) {
+                res.json({ success: true })
+                return
+            }
+            return
         } catch (error) {
             console.log(error)
             res.json(error)
