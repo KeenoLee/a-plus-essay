@@ -9,7 +9,7 @@ import { Button, Center, Divider, Heading, Select, Stack, VStack } from 'native-
 import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input as InputN } from 'native-base'
-import { env } from '../../backup/env';
+import { env } from '../env/env';
 
 // import { Header } from '@react-navigation/native-stack'
 
