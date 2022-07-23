@@ -283,9 +283,17 @@ export function HomeStack() {
   );
 }
 
+
+const config = {
+  dependencies: {
+    'linear-gradient': require('react-native-linear-gradient').default,
+  },
+};
+
+
 export default function App() {
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider config={config}>
       <NavigationContainer>
         {/* <Fabtn/> */}
         <HomeDrawer />
