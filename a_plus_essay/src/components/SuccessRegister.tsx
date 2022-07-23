@@ -36,7 +36,7 @@ export default function SuccessRegister({ onPress }: OnPress) {
                 borderRadius: 15,
             }} onPress={() => {
                 onPress()
-                navigation.navigate('A Plus Essay')
+                navigation.navigate('Tabs')
             }}>
                 <Text style={{
                     textAlign: 'center',
