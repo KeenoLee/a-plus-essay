@@ -144,7 +144,6 @@ export class UserController {
         return tutorId
     }
 
-    //TODO:
     loginWithPassword = async (req: Request, res: Response) => {
         let { email, password } = req.body;
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

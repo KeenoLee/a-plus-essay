@@ -216,7 +216,15 @@ export class UserService {
         delete tutor.school_id
         const transcript = await this.knex.select('id', 'filename').from('transcript').where('tutor_id', userId)
         console.log('TRANSCRIPT: ', transcript)
-        return [tutor, school, transcript]
+        const preferredSubjectId = await this.knex.select('subject_id').from('preferred_subject').where('tutor_id', userId)
+        let preferredSubject = []
+        if (preferredSubjectId) {
+            for (let i = 0; i < preferredSubjectId.length; i++) {
+                preferredSubject.push((await this.knex.select('subject_name').from('subject').where('id', preferredSubjectId[i]))[0])
+            }
+        }
+        console.log('preferredSubject?: ', preferredSubject)
+            return [tutor, school, transcript, preferredSubject]
     }
     async uploadTutorFile(tutorId: number, files: any) {
         console.log('tutor files ', files)
