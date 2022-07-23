@@ -1,9 +1,10 @@
 import { Knex } from "knex";
 import { stringify } from "querystring";
 import { OrderItem } from "./models"
+import { Server } from 'socket.io';
 
 export class OrderService {
-    constructor(private knex: Knex) { }
+    constructor(private knex: Knex, private io: Server) { }
 
     async getOrderDataByUser(userId: number) {
         const data = await this.knex<OrderItem>("orders").where("students_id", userId)
@@ -93,8 +94,8 @@ export class OrderService {
             let objectKeys = Object.keys(files)
             for (let i = 0; i < objectKeys.length; i++) {
                 if (objectKeys[i].includes('guideline')) {
-                    console.log('HIHIHIHIHI: ',files.guideline_0.originalFilename)
-                    console.log('HIHIHIHIHI: ',objectKeys)
+                    console.log('HIHIHIHIHI: ', files.guideline_0.originalFilename)
+                    console.log('HIHIHIHIHI: ', objectKeys)
                     await this.knex.insert({
                         filename: files[objectKeys[i]].originalFilename
                     }).into('guideline')
@@ -137,6 +138,7 @@ export class OrderService {
 
     async matchOrder(orderId: number) {
         try {
+            let matchedTutors = [];
             let tutor5Id = await this.knex.select('tutor.id')
                 .from('order_subject')
                 .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
@@ -144,6 +146,8 @@ export class OrderService {
                 .orderBy([
                     'rating', { column: 'ongoing_order_amount', order: 'asc' }])
                 .first();
+            if (tutor5Id) { matchedTutors.push({ "id": tutor5Id }) }
+            else matchedTutors.push({ "id": -1 });
 
             let tutor4Id = await this.knex.select('tutor.id')
                 .from('order_subject')
@@ -152,6 +156,8 @@ export class OrderService {
                 .whereBetween('rating', [4.00, 4.99])
                 .orderBy('ongoing_order_amount', 'asc')
                 .first();
+            if (tutor4Id) { matchedTutors.push({ "id": tutor4Id }) }
+            else matchedTutors.push({ "id": -1 });
 
             let tutor3Id = await this.knex.select('tutor.id')
                 .from('order_subject')
@@ -160,6 +166,8 @@ export class OrderService {
                 .whereBetween('rating', [3.00, 3.99])
                 .orderBy('ongoing_order_amount', 'asc')
                 .first();
+            if (tutor3Id) { matchedTutors.push({ "id": tutor3Id }) }
+            else matchedTutors.push({ "id": -1 });
 
             let newTutorId = await this.knex.select('tutor.id')
                 .from('order_subject')
@@ -168,6 +176,8 @@ export class OrderService {
                 .where('completed_order_amount', '<', '5')
                 .orderBy('ongoing_order_amount', 'asc')
                 .first();
+            if (newTutorId) { matchedTutors.push({ "id": newTutorId }) }
+            else matchedTutors.push({ "id": -1 });
 
             const time = new Date();
             const newHour = time.getHours() + 2;
@@ -207,6 +217,16 @@ export class OrderService {
                     expire_time: time.toLocaleString('en-US', { hour12: false })
                 },
             ]).into('candidate');
+
+            matchedTutors.map((tutor) => {
+                this.io.to(`${tutor.id}`).emit('new-order', 'An new order is matched');
+            });
+
+            let result;
+            result = matchedTutors.filter(tutor => tutor.id > 0);
+            if (result.length === 0) {
+                return ('No tutor can be matched at the moment');
+            } else return result;
 
         } catch (error) {
             console.log(error)
