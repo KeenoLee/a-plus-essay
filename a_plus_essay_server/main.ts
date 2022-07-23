@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import socketio from "socket.io";
-import http from "http";
+import http, { request } from "http";
 import cors from "cors";
 import { UserService } from "./services/UserService";
 import { UserController } from "./controllers/UserController";
@@ -47,9 +47,7 @@ app.use(express.urlencoded({ limit: "200mb", extended: true }));
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
 
-app.use(userRoutes);
-app.use(orderRoutes);
-app.use(chatRoutes);
+
 
 userRoutes.post("/register/student", userController.createUser);
 userRoutes.post("/register/tutor", userController.createUser);
@@ -62,17 +60,27 @@ userRoutes.post("/resetpassword", userController.resetPassword);
 userRoutes.post("/tutor-file", userController.uploadTutorFile);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
-chatRoutes.get("/chat/:order_id/message", chatController.getChatList);
+chatRoutes.get("/chat/:id/message", chatController.getChatroom);
 
-async function testing() {
-    let chats = await chatService.getChatroomListById(); //use 53 if input ID
-    console.log(chats);
-}
+
+// async function testing() {
+//     let chats = await chatService.getChatroomListById(); //use 53 if input ID
+//     console.log(chats);
+// }
 // testing().catch(e => console.error(e)).finally(() => knex.destroy())
 
 orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
+
+app.use(userRoutes);
+app.use(orderRoutes);
+app.use(chatRoutes);
+
+app.use((req, res) => {
+    res.status(404).json({ error: 'routes not found, method: ' + req.method + ' url: ' + req.url })
+})
+
 
 const PORT = 8111;
 

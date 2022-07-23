@@ -81,7 +81,7 @@ export class UserController {
             res.status(400).json({ error: "This phone number has been registered. Please register with another phone number." })
             return;
         };
-
+        //set encode payload { id, nickname, is_tutor} into jwt
         const userInfo = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
         const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
         console.log('going to end...')
@@ -236,8 +236,8 @@ export class UserController {
             res.json({ success: true, token: jwt });
             // res.json({ success: true })
             return;
-        } catch (e: any) {
-            res.status(500).json({ msg: e.toString() })
+        } catch (e) {
+            res.status(500).json({ msg: String(e) })
             return;
         }
     }

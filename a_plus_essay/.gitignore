@@ -64,4 +64,5 @@ buck-out/
 
 backup
 .env
-env.ts
+
+.cache/
