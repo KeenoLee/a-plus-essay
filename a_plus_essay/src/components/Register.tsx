@@ -163,6 +163,7 @@ async function fetchTutor(registerData: TutorData) {
     }
     if (registerData.studentCard) {
         formData.append(`student_card`, registerData.studentCard as any)
+        console.log('STUDENTCARD???', registerData.studentCard)
     }
     console.log('FORMDATA??: ', formData)
     const fileRes = await fetch(`${env.BACKEND_URL}/tutor-file`, {
@@ -233,13 +234,13 @@ export default function Register() {
     const [position, setPosition] = useState("Upload");
     const addTranscriptImage = () => {
         openGallery(file => {
-            console.log('WHY NO FILENAME????: ', file)
             setTranscriptImages(files => [...files, file])
         })
     }
-
+    
     const addStudentCardImage = () => {
         openGallery(file => {
+            console.log('WHY NO FILENAME????: ', file)
             setStudentCardImage(() => file)
         })
     }
@@ -738,16 +739,16 @@ export default function Register() {
                             console.log('I need RESULT! ', result)
                             // const fileResult = await fetchTutorFile(studentCardImage, transcriptImages)
                             // console.log('RESULT: ', result)
-                            // if (result.error || fileResult.error) {
-                            //     setDisableNext(true)
-                            //     setNextButtonStyle(disableStyle)
-                            //     Alert.alert('Error', result.error || fileResult.error)
-                            // } else {
-                            //     setDisableNext(true)
-                            //     setNextButtonStyle(disableStyle)
-                            //     setPage({ step: 5 })
-                            //     dispatch(fetchLogin({email: email, password: password}))
-                            // }
+                            if (result.result.error || result.fileResult.error) {
+                                setDisableNext(true)
+                                setNextButtonStyle(disableStyle)
+                                Alert.alert('Error', result.result.error || result.fileResult.error)
+                            } else {
+                                setDisableNext(true)
+                                setNextButtonStyle(disableStyle)
+                                setPage({ step: 5 })
+                                dispatch(fetchLogin({email: email, password: password}))
+                            }
                         }} >
                             <Text style={styles.buttonText}>Create Account</Text>
                         </TouchableOpacity>
@@ -755,7 +756,7 @@ export default function Register() {
             }
             {
                 page.step === 5 ?
-                    <SuccessRegister /> : null
+                    <SuccessRegister onPress={()=>setPage({ step: 1 })}/> : null
             }
             {/* </SafeAreaView> */}
         </View >
