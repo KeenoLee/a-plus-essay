@@ -3,9 +3,20 @@ import { Request, Response } from "express";
 import jwtSimple from 'jwt-simple';
 import { Bearer } from 'permit';
 import dotenv from 'dotenv';
-import { isConstructorDeclaration } from "typescript";
+import formidable  from "formidable";
+import fs from "fs";
 
+const uploadDir = 'uploads'
+fs.mkdirSync(uploadDir,{recursive:true})
 dotenv.config({ path: '../.env' || '../../.env' });
+const form = formidable({
+    uploadDir,
+    multiples: true,
+    keepExtensions: true,
+    maxFiles: 10,
+    maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
+    filter: part => part.mimetype?.startsWith('image/') || false,
+  })
 
 const permit = new Bearer({
     query: "access_token"
@@ -80,13 +91,31 @@ export class OrderController {
             return;
         };
         console.log('going to insert into db... ')
-        await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, guidelines, notes, tutorDeadline, studentDeadline });
+        await this.orderService.createOrder({ studentId, title, subject, budget, grade, description, tutorDeadline, studentDeadline });
         // console.log('orderID: ', orderId)
         // await this.orderService.matchOrder(orderId)
         res.json({ success: true });
         return;
     }
-
+    uploadOrderFile = async (req: Request, res: Response) => {
+        try {
+            form.parse(req, async (err, fields, files) => {
+                console.log('fields??? ', fields)
+                if (err) {
+                    res.json({error: err})
+                    return
+                }
+                if (files) {
+                    await this.orderService.uploadOrderFile(files)
+                    res.json({success: true})
+                    return
+                }
+            })
+        } catch (error) {
+            res.json({error: error})
+            return
+        }
+    }
     getOrderData = async (req: Request, res: Response) => {
         try {
             const userId = 1;

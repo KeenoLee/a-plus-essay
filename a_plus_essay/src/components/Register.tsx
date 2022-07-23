@@ -11,7 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
 import SuccessRegister from "./SuccessRegister";
-import { env } from "../env/env";
+import { env } from "../../backup/env";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { just } from "@beenotung/tslib";
@@ -19,6 +19,7 @@ import { Box, FormControl, Input, Stack, VStack, TextArea, HStack, Icon, CloseIc
 import { fetchLogin } from "../redux/auth/actions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/dispatch";
+import { useAppNavigation } from "../../routes";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -56,18 +57,12 @@ const genUniqueKey = () => {
 //     type: string,
 //     base64Data: string
 // }
-type TranscriptImage = {
+type Image = {
     uri: string,
-    filename: string,
-    type: string | null,
-    base64Data: string
-}
-type StudentCardImage = {
-    uri: string,
-    filename: string,
+    name: string,
     type: string,
-    base64Data: string
 }
+
 const disableStyle = {
     backgroundColor: "#a8a29e",
     padding: 10,
@@ -103,34 +98,15 @@ interface TutorData {
     password: string,
     rePassword: string,
     phoneNumber: string,
-    isOAuth: boolean
-    transcript: TranscriptImage[],
-    studentCard: StudentCardImage,
+    isOAuth: boolean,
+    transcript: Image[],
+    studentCard: Image,
     school: string,
     major: string,
     selfIntro: string,
     subjects: Subject[]
 }
-// async function convertFileToBase64(uri: string) {
-//     console.log('going to BASE')
-//     const base64Data = await RNFetchBlob.fs.readFile(uri, 'base64')
-//     // const StreamData = await RNFetchBlob.fs.readStream(uri, 'base64')
-//     // const base64Data = await ImgToBase64.getBase64String(uri)
-//     // console.log('SAFSD64 ', StreamData)
 
-//     console.log('bASE^4 ', base64Data)
-//     return base64Data
-// }
-function checkIsTutor(role: RadioButtonProps[]): boolean | string {
-    const selectedRole = role.find(object => object.selected === true)
-    if (!selectedRole || !selectedRole.value) {
-        return 'role not found'
-    }
-    if (selectedRole.value === 'tutor') {
-        return true
-    }
-    return false
-}
 async function fetchStudent(registerData: StudentData) {
     // const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/register/tutor`)
     const res = await fetch(`${env.BACKEND_URL}/register/student`, {
@@ -175,12 +151,54 @@ async function fetchTutor(registerData: TutorData) {
     if (result.error) {
         return result
     }
-    return 'success'
+    if (!result.tutorId) {
+        return {error: 'Failed to create account. Please try again!'}
+    }
+    const formData = new FormData()
+    console.log('reegisterdata.transcript: ', registerData.transcript)
+    console.log('registerdata.studentcard: ', registerData.studentCard)
+    formData.append('tutorId', result.tutorId.toString())
+    for (let t = 0; t < registerData.transcript.length; t++) {
+        formData.append(`transcript_${t}`, registerData.transcript[t] as any)
+        console.log('WHAT THE FUCK HAPPEN?: ', registerData.transcript[t])
+    }
+    if (registerData.studentCard) {
+        formData.append(`student_card`, registerData.studentCard as any)
+        console.log('STUDENTCARD???', registerData.studentCard)
+    }
+    console.log('FORMDATA??: ', formData)
+    const fileRes = await fetch(`${env.BACKEND_URL}/tutor-file`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+        body: formData
+    })
+    const fileResult = await fileRes.json()
+    return {result, fileResult}
 }
+// async function fetchTutorFile(studentCard: Image | null, transcripts: Image[], tutorId: number) {
+//     const formData = new FormData()
+//     for (let t = 0; t < transcripts.length; t++) {
+//         formData.append(`transcript_${t}`, transcripts[t] as any)
+//     }
+//     if (studentCard) {
+//         formData.append(`student_card`, studentCard as any)
+//     }
+//     const res = await fetch(`${env.BACKEND_URL}/tutor-file`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'multipart/form-data',
+//         },
+//         body: formData
+//     })
+//     const result = await res.json()
+//     return result
+// }
 
 export default function Register() {
 
-    const navigation = useNavigation()
+    const navigation = useAppNavigation()
 
     // For Test ONLY: Should be passed as props
     const [isOAuth, setIsOAuth] = useState(false)
@@ -211,26 +229,26 @@ export default function Register() {
     const [mobileValid, setMobileValid] = useState(false)
 
     // Page Two Information (Academic Information)
-    const [transcriptImages, setTranscriptImages] = useState<TranscriptImage[]>([])
+    const [transcriptImages, setTranscriptImages] = useState<Image[]>([])
     // const [transcriptFiles, setTranscriptFiles] = useState<TranscriptImage[]>([])
-    const [studentCardImage, setStudentCardImage] = useState<StudentCardImage | null>()
+    const [studentCardImage, setStudentCardImage] = useState<Image | null>(null)
     const [position, setPosition] = useState("Upload");
     const addTranscriptImage = () => {
         openGallery(file => {
             setTranscriptImages(files => [...files, file])
         })
     }
-
+    
     const addStudentCardImage = () => {
         openGallery(file => {
+            console.log('WHY NO FILENAME????: ', file)
             setStudentCardImage(() => file)
         })
     }
 
-    const openGallery = (callback: (file: { uri: string, filename: string, type: string, base64Data: string }) => void) => {
+    const openGallery = (callback: (file: { uri: string, name: string, type: string }) => void) => {
         launchImageLibrary({
             mediaType: 'photo',
-            includeBase64: true
         }, (res) => {
             if (res.didCancel) {
                 console.log('user cancelled image picker')
@@ -238,13 +256,11 @@ export default function Register() {
                 console.log('Error: ', res.errorMessage)
             } else {
                 let uri = res.assets?.[0].uri
-                let filename = res.assets?.[0].fileName
+                let name = res.assets?.[0].fileName
                 let type = res.assets?.[0].type
-                let base64Data = res.assets?.[0].base64
-                // console.log(base64.decode(base64Format!))
-                // console.log('base64', base64Format)
-                if (uri && filename && type && base64Data) {
-                    callback({ uri, filename, type, base64Data })
+      
+                if (uri && name && type) {
+                    callback({ uri, name, type })
                     return
                 }
                 console.log('file is not found')
@@ -252,28 +268,6 @@ export default function Register() {
             }
         })
     }
-
-    // const addTranscriptFile = async () => {
-    //     try {
-
-    //         // const file = await DocumentPicker.pickSingle()
-    //         // const encodedUri = base64.encode(file.uri)
-    //         // console.log('FILE!!! ', file)
-    //         // console.log('URI ', encodedUri)
-
-    //         const { uri, name, type } = await DocumentPicker.pickSingle({
-    //             // type: [DocumentPicker.types.pdf, DocumentPicker.types.images]
-    //         })
-    //         const file = await convertFileToBase64(uri)
-    //         // const base64Data = await RNFetchBlob.fs.readFile(uri, 'base64')
-    //         console.log('fdgdf', file)
-    //         const base64Data = 'dsafas'
-    //         // console.log('basE64: ', base64Data)
-    //         setTranscriptFiles([...transcriptFiles, { uri, filename: name, type, base64Data }])
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
 
     // Checking Page Two
 
@@ -376,33 +370,6 @@ export default function Register() {
         }
     }, [subjects])
 
-
-    // Fetch Server
-    // useCallback(async()=>{
-    //     console.log('going to callback')
-    //      if (submitStudent) {
-    //         console.log('going to feCH in callback')
-    //         const result = await fetchStudent({
-    //             isTutor: isTutor,
-    //             nickname: nickname,
-    //             email: email,
-    //             password: password,
-    //             rePassword: firmPassword,
-    //             phoneNumber: mobileNumber,
-    //             isOAuth: false
-    //         })
-    //         console.log('RESULT: ', result)
-    //         if (result.error) {
-    //             setDisableNext(true)
-    //             setNextButtonStyle(disableStyle)
-    //             Alert.alert('Error', result.error)
-    //         } else {
-    //             setDisableNext(true)
-    //             setNextButtonStyle(disableStyle)
-    //             setPage({ step: 5 })
-    //         }
-        // }
-    // },[submitStudent])
     useEffect(() => {
         setIsTutor(() => false)
     }, [])
@@ -424,8 +391,8 @@ export default function Register() {
                             rePassword: 'password',
                             phoneNumber: `${(Math.random() * 8)}`.split('.')[1].substring(0, 8),
                             isOAuth: false,
-                            transcript: [...transcriptImages, { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }],
-                            studentCard: { uri: 'testing', filename: 'testing', type: 'testing', base64Data: 'testing' }!,
+                            transcript: [...transcriptImages, { uri: 'testing', name: 'testing', type: 'testing' }],
+                            studentCard: { uri: 'testing', name: 'testing', type: 'testing' }!,
                             school: 'schoolLife.school',
                             major: 'schoolLife.major',
                             selfIntro: 'schoolLife.tutorIntroduction',
@@ -598,7 +565,7 @@ export default function Register() {
                                 {transcriptImages && transcriptImages.map((image, index) => (
                                     <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 180 }}>
-                                            <Text>{shorterFilename(image.filename)}</Text>
+                                            <Text>{shorterFilename(image.name)}</Text>
                                             <TouchableOpacity onPress={() => { setTranscriptImages(images => images.filter((_, i) => i !== index)) }}>
                                                 <Ionicons name="close" color='grey' size={18} />
                                                 {/* <Text style={{ color: 'grey' }}>x</Text> */}
@@ -616,7 +583,7 @@ export default function Register() {
                                 {studentCardImage ?
                                     (
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10 }}>
-                                            <Text>{shorterFilename(studentCardImage.filename)}</Text>
+                                            <Text>{shorterFilename(studentCardImage.name)}</Text>
                                             <TouchableOpacity onPress={() => { setStudentCardImage(() => null); }}>
                                                 <Ionicons name="close" color='grey' size={18} />
                                                 {/* <Text style={{ color: 'grey' }}>x</Text> */}
@@ -770,11 +737,13 @@ export default function Register() {
                                 selfIntro: schoolLife.tutorIntroduction,
                                 subjects: subjects
                             })
-                            console.log('RESULT: ', result)
-                            if (result.error) {
+                            console.log('I need RESULT! ', result)
+                            // const fileResult = await fetchTutorFile(studentCardImage, transcriptImages)
+                            // console.log('RESULT: ', result)
+                            if (result.result.error || result.fileResult.error) {
                                 setDisableNext(true)
                                 setNextButtonStyle(disableStyle)
-                                Alert.alert('Error', result.error)
+                                Alert.alert('Error', result.result.error || result.fileResult.error)
                             } else {
                                 setDisableNext(true)
                                 setNextButtonStyle(disableStyle)
@@ -788,7 +757,7 @@ export default function Register() {
             }
             {
                 page.step === 5 ?
-                    <SuccessRegister /> : null
+                    <SuccessRegister onPress={()=>setPage({ step: 1 })}/> : null
             }
             {/* </SafeAreaView> */}
         </View >
