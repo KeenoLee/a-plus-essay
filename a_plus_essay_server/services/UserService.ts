@@ -220,7 +220,7 @@ export class UserService {
         let preferredSubject = []
         if (preferredSubjectId) {
             for (let i = 0; i < preferredSubjectId.length; i++) {
-                preferredSubject.push((await this.knex.select('subject_name').from('subject').where('id', preferredSubjectId[i]))[0])
+                preferredSubject.push((await this.knex.select('subject_name').from('subject').where('id', preferredSubjectId[i]['id']))[0])
             }
         }
         console.log('preferredSubject?: ', preferredSubject)
