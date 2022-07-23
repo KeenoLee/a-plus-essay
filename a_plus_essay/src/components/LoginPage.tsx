@@ -16,19 +16,18 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import {RootStackParamList} from '../App';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {fetchLogin} from '../redux/auth/actions';
 import {RootState, store} from '../redux/store';
 import {ThunkDispatch} from 'redux-thunk';
 import {AppDispatch} from '../redux/dispatch';
 import {Marker} from 'react-native-svg';
-import {useAppNavigation} from '../../routes';
+import {useAppNavigation, AppParamList} from '../../routes';
 interface UserInfo {
   email: string;
   password: string;
 }
-type Props = NativeStackScreenProps<RootStackParamList>;
+type Props = NativeStackScreenProps<AppParamList>;
 
 export default function LoginPage({}: Props) {
   const navigation = useAppNavigation();
