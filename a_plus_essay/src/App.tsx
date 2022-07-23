@@ -161,19 +161,6 @@ export const Tabs = () => {
           tabBarLabel: 'Account',
           tabBarIcon: ({focused, color, size}) => (
             // Sometime cannot navigate
-<<<<<<< HEAD
-            <Ionicons name="person-circle" color={color} size={focused ? 30 : size} onPress={() => {
-              !state.user || !state.tutor ?
-              Alert.alert(
-                'Unauthorized',
-                'Please login to view profile!',
-                [
-                  { text: 'Login', onPress: () => { navigation.navigate('Login') } },
-                  { text: 'Close', onPress: () => { null } }
-                ]
-              ) : null
-            }} />
-=======
             <Ionicons
               name="person-circle"
               color={color}
@@ -195,7 +182,6 @@ export const Tabs = () => {
                 ])
               }
             />
->>>>>>> f2f88bec9eb865694032ac74cc3d5fecadf9e0dd
           ),
         }}
       />

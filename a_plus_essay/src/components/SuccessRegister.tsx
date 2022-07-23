@@ -3,14 +3,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import * as React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { RootStackParamList } from '../App'
+import {AppParamList, useAppNavigation} from '../../routes'
 
-type Props = NativeStackScreenProps<RootStackParamList>
+type Props = NativeStackScreenProps<AppParamList>
 type OnPress = {
     onPress: () => void
 }
 export default function SuccessRegister({ onPress }: OnPress) {
-    const navigation = useNavigation()
+    const navigation = useAppNavigation()
     return (
         <View style={{
             height: '70%',

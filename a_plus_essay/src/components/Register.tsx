@@ -11,7 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
 import SuccessRegister from "./SuccessRegister";
-import { env } from "../env/env";
+import { env } from "../../backup/env";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { just } from "@beenotung/tslib";
@@ -19,6 +19,7 @@ import { Box, FormControl, Input, Stack, VStack, TextArea, HStack, Icon, CloseIc
 import { fetchLogin } from "../redux/auth/actions";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/dispatch";
+import { useAppNavigation } from "../../routes";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -197,7 +198,7 @@ async function fetchTutor(registerData: TutorData) {
 
 export default function Register() {
 
-    const navigation = useNavigation()
+    const navigation = useAppNavigation()
 
     // For Test ONLY: Should be passed as props
     const [isOAuth, setIsOAuth] = useState(false)

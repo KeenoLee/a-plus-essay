@@ -41,7 +41,7 @@ export default function Account() {
                 </View>
                 <View>
                     <Text>Student Card</Text>
-                    <Text>{state.tutor?.studentCard}</Text>
+                    <Text>{}</Text>
                 </View>
                 <View>
                     <Text>Transcript</Text>
