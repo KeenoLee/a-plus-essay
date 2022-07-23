@@ -267,29 +267,34 @@ export class UserService {
         console.log('USERID ', userId)
         console.log('PRE SUBJECT ARRAY: ', preferredSubject)
         console.log('self INTRO', selfIntro)
-        this.knex.transaction(async knex => {
-            if (nickname) {
-                await knex('user').update('nickname', nickname).where('id', userId)
-            }
-            // Todo: password update
-            if (phoneNumber) {
-                await knex('user').update('phone_number', phoneNumber).where('id', userId)
-            }
-            if (preferredSubject[0]) {
-                for (let i = 0; i < preferredSubject.length; i++) {
-                    console.log('SUBject_name?: ', preferredSubject[i])
-                    let { subjectId } = (await knex.select('id').from('subject').where('subject_name', preferredSubject[i]!.subject_name).first())
-                    if (!subjectId) {
-                        subjectId = (await knex.insert('subject_name', preferredSubject[i]!['subject_name']).into('subject').returning('id'))[0]
-                    }
-                    await knex('preferred_subject').update('nickname', preferredSubject[i]!['subject_name']).where('tutor_id', userId)
+        return this.knex.transaction(async knex => {
+            try {
+                if (nickname) {
+                    await knex('user').update('nickname', nickname).where('id', userId)
                 }
+                // Todo: password update
+                if (phoneNumber) {
+                    await knex('user').update('phone_number', phoneNumber).where('id', userId)
+                }
+                if (preferredSubject[0]) {
+                    for (let i = 0; i < preferredSubject.length; i++) {
+                        console.log('SUBject_name?: ', preferredSubject[i])
+                        let { subjectId } = (await knex.select('id').from('subject').where('subject_name', preferredSubject[i]!.subject_name).first())
+                        if (!subjectId) {
+                            subjectId = (await knex.insert('subject_name', preferredSubject[i]!['subject_name']).into('subject').returning('id'))[0]
+                        }
+                        await knex('preferred_subject').update('nickname', preferredSubject[i]!['subject_name']).where('tutor_id', userId)
+                    }
+                }
+                if (selfIntro) {
+                    console.log('going to update SELF inTRO: ', selfIntro)
+                    console.log('WHY CANT? NO ID??: ', userId)
+                    await knex('tutor').update('self_intro', selfIntro).where('id', userId)
+                }
+            } catch (error) {
+                return { error: error }
             }
-            if (selfIntro) {
-                console.log('going to update SELF inTRO: ', selfIntro)
-                console.log('WHY CANT? NO ID??: ', userId)
-                await knex('tutor').update('self_intro', selfIntro).where('id', userId)
-            }
+            return { success: true }
         })
     }
 }
