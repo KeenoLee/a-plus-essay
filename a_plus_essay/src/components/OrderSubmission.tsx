@@ -11,7 +11,7 @@ import { Alert, SafeAreaView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
-import { env } from '../../backup/env';
+import { env } from '../env/env';
 interface UserFile {
     uri: string
     type: string
