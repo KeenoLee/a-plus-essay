@@ -216,7 +216,16 @@ export class UserService {
         delete tutor.school_id
         const transcript = await this.knex.select('id', 'filename').from('transcript').where('tutor_id', userId)
         console.log('TRANSCRIPT: ', transcript)
-        return [tutor, school, transcript]
+        const preferredSubjectId = await this.knex.select('subject_id').from('preferred_subject').where('tutor_id', userId)
+        console.log('PRESUB ID:', preferredSubjectId)
+        let preferredSubject = []
+        if (preferredSubjectId) {
+            for (let i = 0; i < preferredSubjectId.length; i++) {
+                preferredSubject.push((await this.knex.select('subject_name').from('subject').where('id', preferredSubjectId[i]['subject_id']))[0])
+            }
+        }
+        console.log('preferredSubject?: ', preferredSubject)
+            return [tutor, school, transcript, preferredSubject]
     }
     async uploadTutorFile(tutorId: number, files: any) {
         console.log('tutor files ', files)
@@ -237,9 +246,6 @@ export class UserService {
                 } else if (objectKeys[i] === 'student_card') {
                     console.log('WHY NO ORI NAMe in student CARD??: ', files[objectKeys[i]].originalFilename)
                     await this.knex('tutor').update({student_card:files[objectKeys[i]].originalFilename }).where('id', tutorId)
-                    // this.knex.update({
-                    //     student_card: files[objectKeys[i]].originalFilename
-                    // }).into('tutor').where('tutorId', tutorId)
                 }
             }
             return { success: true }
@@ -248,4 +254,5 @@ export class UserService {
             return { error: error }
         }
     }
+    
 }
