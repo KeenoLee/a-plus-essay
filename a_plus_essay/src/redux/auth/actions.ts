@@ -1,8 +1,8 @@
 import { Dispatch } from 'react'
 import { AnyAction } from 'redux'
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
-import { env } from '../../../backup/env'
-import { SchoolInfo, TranscriptInfo, TutorInfo, UserInfo } from './type'
+import { env } from "../../env/env";
+import { PreferredSubject, SchoolInfo, TranscriptInfo, TutorInfo, UserInfo } from './type'
 
 
 function loginAsStudent(userInfo: UserInfo) {
@@ -14,7 +14,7 @@ function loginAsStudent(userInfo: UserInfo) {
     }
 }
 
-function loginAsTutor(userInfo: UserInfo, tutorInfo: Array<TutorInfo & SchoolInfo & TranscriptInfo[]>) {
+function loginAsTutor(userInfo: UserInfo, tutorInfo: Array<TutorInfo & SchoolInfo & TranscriptInfo[] & PreferredSubject[]>) {
     return {
         type: '@@auth/LOGIN_AS_TUTOR' as const,
         userInfo,

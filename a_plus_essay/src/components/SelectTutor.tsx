@@ -10,7 +10,7 @@ import { RootState } from '../redux/store'
 import { useNavigation } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Stack } from 'native-base'
-import { env } from '../../backup/env'
+import { env } from '../env/env'
 // import { NavigationContainer } from '@react-navigation/native'
 // import { createStackNavigator } from '@react-navigation/stack'
 interface StudentReview {

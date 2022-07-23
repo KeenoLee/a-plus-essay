@@ -29,6 +29,9 @@ export interface TranscriptInfo {
     id: number,
     filename: string
 }
+export interface PreferredSubject {
+    subject_name: string
+}
 export interface AuthState {
     user?: UserInfo
     tutor?: Array<TutorInfo & SchoolInfo & TranscriptInfo[]>
@@ -45,3 +48,4 @@ export type JWTStudentPayload = {
     created_at: Date,
     updated_at: Date,
 }
+// jdshds@rsdhfdsh.Jeff's
