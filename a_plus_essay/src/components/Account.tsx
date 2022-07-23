@@ -9,27 +9,51 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useAppNavigation } from '../../routes';
 import TutorBox from './TutorBox';
 import SubjectRow from './SubjectRow';
+import { env } from '../env/env';
+interface PreferredSubject {
+    subject_name: string
+}
+export type EditInfo = {
+    userId: number,
+    nickname: string | null,
+    password: string | null,
+    phoneNumber: string | null,
+    preferredSubject: Array<PreferredSubject | null>,
+    selfIntro: string | null,
+}
+async function fetchEditProfile(editInfo: EditInfo) {
+    const res = await fetch(`${env.BACKEND_URL}/edit-profile`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editInfo)
+    })
+    const result = await res.json()
+    return result
+}
 export default function Account() {
     const state: any = useSelector((state: RootState) => state.auth)
-    const user = state.user
+    const userId = state.user.id
+    console.log('userID in ACCOUNT: ', userId)
     // if (state.tutor) {
     //     const tutor = state.tutor[0]
     //     const school = state.tutor[1]
     //     const transcript = state.tutor[2]
     // }
     console.log('userInfo in Account', state?.user)
-    console.log('tutorInfo in Account', state?.tutor[3])
+    console.log('tutorInfo in Account', state?.tutor)
     const navigation = useAppNavigation()
     // const [isAuth, setIsAuth] = useState(false)
     const [editProfile, setEditProfile] = useState<Boolean | null>(null)
-    const [editNickname, setEditNickname] = useState<String | null>(null)
-    const [editPassword, setEditPassword] = useState<String | null>(null)
-    const [editPhoneNumber, setEditPhoneNumber] = useState<String | null>(null)
-    const [editSchool, setEditSchool] = useState<String | null>(null)
-    const [editStudentCard, setEditStudentCard] = useState<String | null>(null)
-    const [editTranscript, setEditTranscript] = useState<String | null>(null)
-    const [editPreferredSubject, setEditPreferredSubject] = useState<Array<String | null>>([null])
-    const [editSelfIntro, setEditSelfIntro] = useState<String | null>(null)
+    const [editNickname, setEditNickname] = useState<string | null>(null)
+    const [editPassword, setEditPassword] = useState<string | null>(null)
+    const [editPhoneNumber, setEditPhoneNumber] = useState<string | null>(null)
+    const [editSchool, setEditSchool] = useState<string | null>(null)
+    const [editStudentCard, setEditStudentCard] = useState<string | null>(null)
+    const [editTranscript, setEditTranscript] = useState<string | null>(null)
+    const [editPreferredSubject, setEditPreferredSubject] = useState<Array<PreferredSubject | null>>([null])
+    const [editSelfIntro, setEditSelfIntro] = useState<string | null>(null)
 
     return (
         state?.user ?
@@ -42,9 +66,21 @@ export default function Account() {
                         }
                     </View>
                     {editProfile ?
-                        <TouchableOpacity onPress={() =>
+                        <TouchableOpacity onPress={async () => {
                             setEditProfile(false)
-                            // Fetch server to update
+                            const result = await fetchEditProfile({
+                                userId: userId,
+                                nickname: editNickname,
+                                password: editPassword,
+                                phoneNumber: editPhoneNumber,
+                                preferredSubject: editPreferredSubject,
+                                selfIntro: editSelfIntro
+                            })
+                            console.log('result from edit profile: ', result)
+                            if (result.success) {
+                                console.log('going to update store...')
+                            }
+                        }
                         }>
                             <Text>Confirm</Text>
                         </TouchableOpacity> :
@@ -128,4 +164,8 @@ export default function Account() {
 
             </View> : null
     )
+}
+
+function dispatch() {
+    throw new Error('Function not implemented.');
 }
