@@ -64,8 +64,14 @@ export function HomeDrawer() {
             <Drawer.Screen name="Rules" component={Rules} />
             <Drawer.Screen name="FAQ" component={FAQ} />
             <Drawer.Screen name="Contact Us" component={ContactUs} />
-            <Drawer.Screen name="Order Submission" component={OrderSubmission} />
-            <Drawer.Screen name="Chatroom" component={ChatRoom} />
+            {state.user && !state.tutor ?
+                <Drawer.Screen name="Order Submission" component={OrderSubmission} /> :
+                null
+            }
+            {state.token ?
+                <Drawer.Screen name="Chatroom" component={ChatRoom} /> :
+                null
+            }
             {state.token ?
                 <Drawer.Screen name="Logout" component={LoginPage} /> :
                 null

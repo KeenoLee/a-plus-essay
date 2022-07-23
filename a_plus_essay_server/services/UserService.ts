@@ -265,12 +265,15 @@ export class UserService {
     async editProfile(editInfo: EditInfo) {
         const { userId, nickname, password, phoneNumber, preferredSubject, selfIntro } = editInfo
         console.log('USERID ', userId)
+        console.log('NIckname SHOULD bE BEENO GOD:  ', nickname)
         console.log('PRE SUBJECT ARRAY: ', preferredSubject)
         console.log('self INTRO', selfIntro)
         return this.knex.transaction(async knex => {
             try {
                 if (nickname) {
-                    await knex('user').update('nickname', nickname).where('id', userId)
+                    console.log('going to update nickname... ')
+                    const result = (await knex('user').update('nickname', nickname).where('id', userId).returning(['id', 'nickname']))
+                    console.log('SHOULD BE UPDATED!! ', result)
                 }
                 // Todo: password update
                 if (phoneNumber) {
