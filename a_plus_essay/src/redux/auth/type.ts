@@ -11,7 +11,7 @@ export interface UserInfo {
 export interface TutorInfo {
     tutor_id: number,
     is_verified: boolean,
-    student_card_base64: string,
+    student_card: string | null,
     rating: string,
     self_intro: string,
     ongoing_order_amount: number,
@@ -27,7 +27,7 @@ export interface SchoolInfo {
 }
 export interface TranscriptInfo {
     id: number,
-    transcript_base64: string
+    filename: string
 }
 export interface AuthState {
     user?: UserInfo

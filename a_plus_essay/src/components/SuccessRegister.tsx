@@ -6,8 +6,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { RootStackParamList } from '../App'
 
 type Props = NativeStackScreenProps<RootStackParamList>
-
-export default function SuccessRegister() {
+type OnPress = {
+    onPress: () => void
+}
+export default function SuccessRegister({ onPress }: OnPress) {
     const navigation = useNavigation()
     return (
         <View style={{
@@ -32,7 +34,8 @@ export default function SuccessRegister() {
                 backgroundColor: 'rgb(27,70,245)',
                 width: 250,
                 borderRadius: 15,
-            }} onPress={()=>{
+            }} onPress={() => {
+                onPress()
                 navigation.navigate('A Plus Essay')
             }}>
                 <Text style={{

@@ -214,7 +214,7 @@ export class UserService {
         delete tutor.major_id
         const school = await this.knex.select('*').from('school').where('id', tutor.school_id).first()
         delete tutor.school_id
-        const transcript = await this.knex.select('id', 'transcript_base64').from('transcript').where('tutor_id', userId)
+        const transcript = await this.knex.select('id', 'filename').from('transcript').where('tutor_id', userId)
         console.log('TRANSCRIPT: ', transcript)
         return [tutor, school, transcript]
     }
@@ -222,8 +222,11 @@ export class UserService {
         console.log('tutor files ', files)
         try {
             let objectKeys = Object.keys(files)
+            console.log('obJECT KEYS?????!%$%&$%#$: ', objectKeys)
             console.log('going to insert images! tutorID: ', tutorId)
             for (let i = 0; i < objectKeys.length; i++) {
+                // console.log('%$*$%^*W#$^&#QYH%ERYHSR', files[objectKeys[i]])
+                console.log('%$*$%^*W#$^&#QYH%ERYHSR',objectKeys[i])
                 if (objectKeys[i].includes('transcript')) {
                     console.log('OBJECTKEY?? ', objectKeys[i])
                     console.log('OBJECTKEY?? ', files[objectKeys[i]])
@@ -231,13 +234,15 @@ export class UserService {
                         tutor_id: tutorId,
                         filename: files[objectKeys[i]].originalFilename
                     }).into('transcript')
-                } else if (objectKeys[i].includes('student_card')) {
-                    await this.knex.insert({
-                        student_card: files[objectKeys[i]].originalFilename
-                    }).into('tutor')
+                } else if (objectKeys[i] === 'student_card') {
+                    console.log('WHY NO ORI NAMe in student CARD??: ', files[objectKeys[i]].originalFilename)
+                    await this.knex('tutor').update({student_card:files[objectKeys[i]].originalFilename }).where('id', tutorId)
+                    // this.knex.update({
+                    //     student_card: files[objectKeys[i]].originalFilename
+                    // }).into('tutor').where('tutorId', tutorId)
                 }
-                return { success: true }
             }
+            return { success: true }
         } catch (error) {
             console.log(error)
             return { error: error }
