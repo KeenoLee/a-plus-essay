@@ -60,7 +60,7 @@ export default function Account() {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View>
                         {editProfile ?
-                            <TextInput placeholder='Edit Nickname' onChangeText={value => setEditNickname(() => value)}></TextInput> :
+                            <TextInput placeholder='Edit Nickname' onChangeText={value => {setEditNickname(() => value); console.log('edit nickname MATCH? ', value, editNickname)}}></TextInput> :
                             <Text>{state.user?.nickname}</Text>
                         }
                     </View>
@@ -132,8 +132,10 @@ export default function Account() {
                                         key={i}
                                         placeholder='Edit Subject'
                                         onChangeText={value => {
+                                            console.log('State.Tutor[3]: ', state.tutor[3])
                                             let newPreferredSubject = [...state.tutor[3]]
-                                            newPreferredSubject[i] = value
+                                            newPreferredSubject[i].subject_name = value
+                                            console.log('NEW PreferredSubject Array: ', newPreferredSubject)
                                             setEditPreferredSubject(newPreferredSubject)
                                         }}></TextInput> :
                                     <Text key={i}>{subject.subject_name}</Text>
