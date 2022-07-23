@@ -7,7 +7,6 @@ import jwt_decode from 'jwt-decode'
 import { Subject } from '../services/models';
 import formidable from "formidable";
 import fs from "fs";
-import { resourceLimits } from 'worker_threads';
 
 const uploadDir = 'uploads'
 fs.mkdirSync(uploadDir, { recursive: true })

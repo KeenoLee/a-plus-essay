@@ -32,6 +32,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from './pages/Home';
 import Notification from './pages/Notification';
 import ChatScreen from './pages/ChatList';
+import ChatStack from './pages/ChatList';
 import Register from './components/Register';
 import SelectTutor from './components/SelectTutor';
 import TutorInformation from './components/TutorInformation';
