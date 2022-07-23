@@ -328,7 +328,7 @@ export class UserService {
 
     async resetPassword(account: { id: number, newPassword: string }) {
         const hashedPassword = hashPassword(account.newPassword);
-        const userId: number = await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first();
+        const userId: number = (await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first()).id;
         return userId;
     }
     private async getTutorInfo(userId: number) {
