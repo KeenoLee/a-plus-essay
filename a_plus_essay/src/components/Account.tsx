@@ -34,8 +34,7 @@ async function fetchEditProfile(editInfo: EditInfo) {
 }
 export default function Account() {
     const state: any = useSelector((state: RootState) => state.auth)
-    const userId = state.user.id
-    console.log('userID in ACCOUNT: ', userId)
+
     // if (state.tutor) {
     //     const tutor = state.tutor[0]
     //     const school = state.tutor[1]
@@ -69,7 +68,7 @@ export default function Account() {
                         <TouchableOpacity onPress={async () => {
                             setEditProfile(false)
                             const result = await fetchEditProfile({
-                                userId: userId,
+                                userId: state.user.id,
                                 nickname: editNickname,
                                 password: editPassword,
                                 phoneNumber: editPhoneNumber,
