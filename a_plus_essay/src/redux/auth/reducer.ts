@@ -23,11 +23,11 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
         const userInfo = action.userInfo
         // console.log(tutor.map(info=>console.log(info)))
         // const [tutorInfo, schoolInfo ,transcriptInfo] = tutor
-        const [tutorInfo, schoolInfo ,transcriptInfo] = action.tutorInfo
+        const [tutorInfo, schoolInfo ,transcriptInfo, preferredSubject] = action.tutorInfo
         return {
             ...state,
             user: userInfo,
-            tutor: [tutorInfo, schoolInfo, transcriptInfo]
+            tutor: [tutorInfo, schoolInfo, transcriptInfo, preferredSubject]
         }
     }
     if (action.type === '@@auth/SAVE_TOKEN') {

@@ -15,8 +15,9 @@ export type AppParamList = {
     Register: undefined;
     Message: undefined;
     Status: undefined;
-    'A Plus Essay': undefined
+    // 'A Plus Essay': undefined
     'Login': undefined
+    'Account': undefined
 }
 
 export type AppRouteName = keyof AppParamList
