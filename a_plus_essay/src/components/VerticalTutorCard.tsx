@@ -31,13 +31,13 @@ export default function VerticalTutorCard() {
                 {/* 1. Preferred Subject -> Limited Text*/}
                 {/* 2. Preferred Subject -> Limited Text*/}
                 {/* 3. Preferred Subject -> Limited Text*/}
-                <Text fontWeight='thin' textAlign='center'>Accounting</Text>
-                <Text fontWeight='thin' textAlign='center'>Marketing</Text>
-                <Text fontWeight='thin' textAlign='center'>Finance</Text>
+                <Text fontWeight='light' textAlign='center'>Programming</Text>
+                <Text fontWeight='light' textAlign='center'>Marketing</Text>
+                <Text fontWeight='light' textAlign='center'>Finance</Text>
             </Stack>
-            <Stack>
+            <Stack pb='4'>
                 {/* No. of completed order + "Finished Papers"*/}
-                <Text>32 Finished Papers</Text>
+                <Text fontWeight='medium' textAlign='center'>32 Finished Papers</Text>
             </Stack>
         </Box>
     )
