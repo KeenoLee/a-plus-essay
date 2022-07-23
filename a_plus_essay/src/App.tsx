@@ -32,6 +32,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from './pages/Home';
 import Notification from './pages/Notification';
 import ChatScreen from './pages/ChatList';
+import ChatStack from './pages/ChatList';
 import Register from './components/Register';
 import SelectTutor from './components/SelectTutor';
 import TutorInformation from './components/TutorInformation';
@@ -166,6 +167,8 @@ export const Tabs = () => {
               color={color}
               size={focused ? 30 : size}
               onPress={() =>
+                state.user?
+                navigation.navigate('Account') :
                 Alert.alert('Unauthorized', 'Please login to view profile!', [
                   {
                     text: 'Login',
@@ -281,9 +284,17 @@ export function HomeStack() {
   );
 }
 
+
+const config = {
+  dependencies: {
+    'linear-gradient': require('react-native-linear-gradient').default,
+  },
+};
+
+
 export default function App() {
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider config={config}>
       <NavigationContainer>
         {/* <Fabtn/> */}
         <HomeDrawer />

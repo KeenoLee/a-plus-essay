@@ -11,7 +11,8 @@ import { Alert, SafeAreaView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
-import { env } from '../../backup/env';
+import { env } from '../env/env';
+import { useAppNavigation } from '../../routes';
 interface UserFile {
     uri: string
     type: string
@@ -82,7 +83,7 @@ async function fetchFile(orderFiles: OrderFiles) {
     return result
 }
 export default function OrderSubmission() {
-    const navigation = useNavigation()
+    const navigation = useAppNavigation()
     const state = useSelector((state: RootState) => state.auth)
     const [orderValue, setOrderValue] = useState<OrderValue>({
         title: '',

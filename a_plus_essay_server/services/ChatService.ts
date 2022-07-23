@@ -69,6 +69,9 @@ export class ChatService {
         };
         //send this id to other's notification
         this.io.emit("new message", newNoticeFromRoom);
+        return {
+            order_id: id
+        }
     }
 
     async getChatroom(input: { userId: number, orderId: number }) {
@@ -88,7 +91,7 @@ export class ChatService {
         } else {
             return { error: 'not room member' }
         }
-        let otherUser = await this.knex.select('nickname').from('user').where('id', otherUserId).first()
+        let otherUser = await this.knex.select('nickname', 'is_tutor').from('user').where('id', otherUserId).first()
         if (!otherUser) { return { error: 'cannot find other user, id = ' + otherUserId } }
 
         let messages = await this.knex

@@ -150,7 +150,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
             keyboardVerticalOffset={keyboardVerticalOffset}>
             <View style={{flex: 1}}>
               {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-              <Text>{JSON.stringify(this.props.room)}</Text>
+              <Text>debug：{JSON.stringify(this.props.room)}</Text>
               <ScrollView
                 style={{backgroundColor: 'yellow', flex: 1, marginBottom: 40}}
                 ref={ref => {
@@ -289,6 +289,7 @@ const styles = StyleSheet.create({
   textInput: {
     // flex: 1,
     // alignItems: 'flex-end',
+    paddingHorizontal: 10,
     height: 40,
     width: '80%',
     borderWidth: 2,

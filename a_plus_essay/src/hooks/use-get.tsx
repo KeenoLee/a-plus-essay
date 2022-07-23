@@ -38,7 +38,7 @@ export function useGet<T extends {error?: string}>(
       })
       .catch(error => ({error: String(error)}))
       .then(json => {
-        console.log('JSSSSSSON error:', json);
+        console.log('JSON: ', json);
         setJSON(json);
         // if (json.error) {
         //   Alert.alert('Fail to load ' + name, json.error, [{text: 'Dismiss'}]);

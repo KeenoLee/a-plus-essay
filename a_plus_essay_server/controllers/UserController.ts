@@ -7,7 +7,6 @@ import jwt_decode from 'jwt-decode'
 import { Subject } from '../services/models';
 import formidable from "formidable";
 import fs from "fs";
-import { resourceLimits } from 'worker_threads';
 
 const uploadDir = 'uploads'
 fs.mkdirSync(uploadDir, { recursive: true })
@@ -144,7 +143,6 @@ export class UserController {
         return tutorId
     }
 
-    //TODO:
     loginWithPassword = async (req: Request, res: Response) => {
         let { email, password } = req.body;
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -164,7 +162,7 @@ export class UserController {
             return;
         };
 
-        const isLoggedIn = await this.userService.loginWithPassword({ email, password });
+        const isLoggedIn: any = await this.userService.loginWithPassword({ email, password });
         console.log('isLoggedIn: ', isLoggedIn)
         const jwt = jwtSimple.encode(isLoggedIn.userInfo, process.env.jwtSecret!);
         console.log('JWT: ', jwt)
@@ -175,6 +173,7 @@ export class UserController {
                 res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo });
                 return
             }
+            console.log('TUTOR!!: ', isLoggedIn.tutorInfo?.[3])
             res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo, tutorInfo: isLoggedIn.tutorInfo });
             return
         }
@@ -397,6 +396,23 @@ export class UserController {
         } catch (err) {
             console.log(err)
             res.json(err)
+            return
+        }
+    }
+
+    editProfile = async (req: Request, res: Response) => {
+        try {
+            const editInfo = req.body
+            console.log('EDIT INFO: ', editInfo)
+            const result = await this.userService.editProfile(editInfo)
+            if (result.success) {
+                res.json({ success: true })
+                return
+            }
+            return
+        } catch (error) {
+            console.log(error)
+            res.json(error)
             return
         }
     }
