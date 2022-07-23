@@ -17,7 +17,7 @@ const form = formidable({
     maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
     filter: part => part.mimetype?.startsWith('image/') || false,
   })
-  
+
 const permit = new Bearer({
     query: "access_token"
 })
@@ -99,14 +99,14 @@ export class OrderController {
     }
     uploadOrderFile = async (req: Request, res: Response) => {
         try {
-            form.parse(req, (err, fields, files) => {
+            form.parse(req, async (err, fields, files) => {
                 console.log('fields??? ', fields)
                 if (err) {
                     res.json({error: err})
                     return
                 }
                 if (files) {
-                    this.orderService.uploadOrderFile(files)
+                    await this.orderService.uploadOrderFile(files)
                     res.json({success: true})
                     return
                 }

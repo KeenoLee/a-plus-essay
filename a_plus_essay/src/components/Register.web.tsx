@@ -13,7 +13,7 @@ import DocumentPicker from 'react-native-document-picker'
 import { Select, VStack } from 'native-base';
 import SuccessRegister from "./SuccessRegister";
 import { stringToHex } from "react-native-mmkv-storage/dist/src/utils";
-import { env } from "../env/env";
+import { env } from "../../src/env/env";
 
 
 
