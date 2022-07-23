@@ -403,7 +403,10 @@ export class UserController {
 
     editProfile = async (req: Request, res: Response) => {
         try {
-            
+            const editInfo = req.body
+            console.log('EDIT INFO: ', editInfo)
+            await this.userService.editProfile(editInfo)
+            res.json({ success: true })
         } catch (error) {
             console.log(error)
             res.json(error)
