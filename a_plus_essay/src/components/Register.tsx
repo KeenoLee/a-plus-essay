@@ -11,7 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from "./SubjectRow";
 import DocumentPicker from 'react-native-document-picker'
 import SuccessRegister from "./SuccessRegister";
-import { env } from "../../backup/env";
+import { env } from "../env/env
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { just } from "@beenotung/tslib";
