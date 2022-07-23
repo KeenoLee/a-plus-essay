@@ -23,7 +23,7 @@ export default function VerticalTutorCard() {
                         <Text ml='1' color='white' fontWeight='bold' fontSize='13'>5.0</Text>
                     </HStack>
                 </HStack>
-                <Divider my='1' />
+                <Divider my='1'/>
                 <Stack>
                     {/*University -> Limited Text*/}
                     <Text pl='3' pr='3' fontWeight='bold' textAlign='center'>The Hong Kong Polytechnic University</Text>
