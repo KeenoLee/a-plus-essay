@@ -22,10 +22,13 @@ export default function Account() {
     const navigation = useAppNavigation()
     // const [isAuth, setIsAuth] = useState(false)
     const [editProfile, setEditProfile] = useState<Boolean | null>(null)
+    const [editNickname, setEditNickname] = useState<String | null>(null)
+    const [editPassword, setEditPassword] = useState<String | null>(null)
+    const [editPhoneNumber, setEditPhoneNumber] = useState<String | null>(null)
     const [editSchool, setEditSchool] = useState<String | null>(null)
     const [editStudentCard, setEditStudentCard] = useState<String | null>(null)
     const [editTranscript, setEditTranscript] = useState<String | null>(null)
-    const [editPreferredSubject, setEditPreferredSubject] = useState<String | null>(null)
+    const [editPreferredSubject, setEditPreferredSubject] = useState<Array<String | null>>([null])
     const [editSelfIntro, setEditSelfIntro] = useState<String | null>(null)
 
     return (
@@ -33,10 +36,16 @@ export default function Account() {
             <View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View>
-                        <Text>{state.user?.nickname}</Text>
+                        {editProfile ?
+                            <TextInput placeholder='Edit Nickname' onChangeText={value => setEditNickname(() => value)}></TextInput> :
+                            <Text>{state.user?.nickname}</Text>
+                        }
                     </View>
                     {editProfile ?
-                        <TouchableOpacity onPress={() => setEditProfile(false)}>
+                        <TouchableOpacity onPress={() =>
+                            setEditProfile(false)
+                            // Fetch server to update
+                        }>
                             <Text>Confirm</Text>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={() => setEditProfile(true)}>
@@ -51,11 +60,17 @@ export default function Account() {
                 </View>
                 <View>
                     <Text>Password</Text>
-                    <Text>********</Text>
+                    {editProfile ?
+                        <TextInput placeholder='Edit Password' onChangeText={value => setEditPassword(() => value)}></TextInput> :
+                        <Text>********</Text>
+                    }
                 </View>
                 <View>
                     <Text>Phone Number</Text>
-                    <Text>{state.user?.phone_number}</Text>
+                    {editProfile ?
+                        <TextInput placeholder='Edit Phone Number' onChangeText={value => setEditPhoneNumber(() => value)}></TextInput> :
+                        <Text>{state.user?.phone_number}</Text>
+                    }
                 </View>
                 {state?.tutor ?
                     <>
@@ -77,13 +92,24 @@ export default function Account() {
                         <View>
                             <Text>Preferred Subjects</Text>
                             {state.tutor[3].map((subject: any, i: number) => (
-                                <Text key={i}>{subject.subject_name}</Text>
+                                editProfile ?
+                                    <TextInput
+                                        key={i}
+                                        placeholder='Edit Subject'
+                                        onChangeText={value => {
+                                            let newPreferredSubject = [...state.tutor[3]]
+                                            newPreferredSubject[i] = value
+                                            setEditPreferredSubject(newPreferredSubject)
+                                        }}></TextInput> :
+                                    <Text key={i}>{subject.subject_name}</Text>
                             ))}
                         </View>
-
                         <View>
                             <Text>Self Introduction</Text>
-                            <Text>{state.tutor[0].self_intro}</Text>
+                            {editProfile ?
+                                <TextInput placeholder='Edit Self Introduction' onChangeText={value => setEditSelfIntro(() => value)}></TextInput> :
+                                <Text>{state.tutor[0].self_intro}</Text>
+                            }
                         </View>
                         <View>
                             <Text>Rating</Text>
