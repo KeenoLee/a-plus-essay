@@ -14,12 +14,7 @@ export default function Account() {
     const navigation = useNavigation()
     // const [isAuth, setIsAuth] = useState(false)
     const [editProfile, setEditProfile] = useState()
-    // useEffect(()=>{
-    //     if (!state.user && !state.tutor) {
-        
-    //         navigation.navigate('Login')
-    //     }
-    // })
+
     return (
         state?.user || state?.tutor ?
             <View>
@@ -38,6 +33,10 @@ export default function Account() {
                 <View>
                     <Text>Phone Number</Text>
                     <Text>{state.user?.phone_number}</Text>
+                </View>
+                <View>
+                    <Text>School</Text>
+                    <Text>{state.tutor}</Text>
                 </View>
                 <View>
                     <Text>Student Card</Text>
