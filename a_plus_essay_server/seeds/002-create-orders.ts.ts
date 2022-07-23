@@ -10,9 +10,9 @@ export async function seed(knex: Knex): Promise<void> {
         .where("nickname", "student")
         .returning("id");
     const studentId = userRow[0].id;
-    const tutorRow = await knex("tutor")
-        .join("user", "tutor.id", "user.id")
-        .select("nickname", "tutor")
+    const tutorRow = await knex("user")
+        .select("*")
+        .where("is_tutor", true)
         .returning("id");
     const tutorId = tutorRow[0].id;
 
