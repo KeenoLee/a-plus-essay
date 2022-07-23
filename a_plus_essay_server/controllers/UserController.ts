@@ -405,8 +405,12 @@ export class UserController {
         try {
             const editInfo = req.body
             console.log('EDIT INFO: ', editInfo)
-            await this.userService.editProfile(editInfo)
-            res.json({ success: true })
+            const result = await this.userService.editProfile(editInfo)
+            if (result.success) {
+                res.json({ success: true })
+                return
+            }
+            return
         } catch (error) {
             console.log(error)
             res.json(error)
