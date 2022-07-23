@@ -45,7 +45,7 @@ export function HomeDrawer() {
       initialRouteName="Home Stack">
       <Drawer.Screen
         name="Tabs"
-        component={Tabs}
+        component={HomeStack}
         options={{headerShown: false, title: 'A Plus Essay'}}
       />
       {/* <Drawer.Screen name='App' component={App} /> */}
@@ -57,7 +57,7 @@ export function HomeDrawer() {
       <Drawer.Screen name="FAQ" component={FAQ} />
       <Drawer.Screen name="Contact Us" component={ContactUs} />
       <Drawer.Screen name="Order Submission" component={OrderSubmission} />
-      <Drawer.Screen name="Chatroom" component={ChatRoom} />
+      {/* <Drawer.Screen name="Chatroom" component={ChatRoom} /> */}
       <Drawer.Screen name="Logout" component={LoginPage} />
     </Drawer.Navigator>
   );
