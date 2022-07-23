@@ -32,6 +32,10 @@ async function fetchEditProfile(editInfo: EditInfo) {
     const result = await res.json()
     return result
 }
+async function fetchGetImage(tutorId: number) {
+    const res = await fetch(`${env.BACKEND_URL}/get-image/${tutorId}`)
+    const result = await res.json()
+}
 export default function Account() {
     const state: any = useSelector((state: RootState) => state.auth)
 
