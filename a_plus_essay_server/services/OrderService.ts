@@ -95,11 +95,11 @@ export class OrderService {
                 if (objectKeys[i].includes('guideline')) {
                     console.log('HIHIHIHIHI: ',files.guideline_0.originalFilename)
                     console.log('HIHIHIHIHI: ',objectKeys)
-                    this.knex.insert({
+                    await this.knex.insert({
                         filename: files[objectKeys[i]].originalFilename
                     }).into('guideline')
                 } else if (objectKeys[i].includes('note')) {
-                    this.knex.insert({
+                    await this.knex.insert({
                         filename: files[objectKeys[i]].originalFilename
                     }).into('note')
                 }
@@ -137,15 +137,76 @@ export class OrderService {
 
     async matchOrder(orderId: number) {
         try {
-            const { orderSubejctId, subjectId } = (await this.knex.select('id', 'subject_id').from('order_subject').where('order_id', orderId))[0]
-            console.log('get from order_subject: ', orderSubejctId, subjectId)
-            const matchedSubjectTutorIds = await this.knex.select('tutor_id').from('preferred_subject').where('subject_id', subjectId)
-            console.log('matched ids: ', matchedSubjectTutorIds)
-            // await this.knex.select('preferred_subject.tutor_id')
-            //     .from('order_subject')
-            //     .innerJoin('preferred_subject')
-            //     .where('order_subject.subject_id', '=', 'preferred_subject.subject_id')
-            const { subejctName } = (await this.knex.select('subject_name').from('subject').where('id', subjectId))[0]
+            let tutor5Id = await this.knex.select('tutor.id')
+                .from('order_subject')
+                .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
+                .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
+                .orderBy([
+                    'rating', { column: 'ongoing_order_amount', order: 'asc' }])
+                .first();
+
+            let tutor4Id = await this.knex.select('tutor.id')
+                .from('order_subject')
+                .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
+                .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
+                .whereBetween('rating', [4.00, 4.99])
+                .orderBy('ongoing_order_amount', 'asc')
+                .first();
+
+            let tutor3Id = await this.knex.select('tutor.id')
+                .from('order_subject')
+                .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
+                .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
+                .whereBetween('rating', [3.00, 3.99])
+                .orderBy('ongoing_order_amount', 'asc')
+                .first();
+
+            let newTutorId = await this.knex.select('tutor.id')
+                .from('order_subject')
+                .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
+                .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
+                .where('completed_order_amount', '<', '5')
+                .orderBy('ongoing_order_amount', 'asc')
+                .first();
+
+            const time = new Date();
+            const newHour = time.getHours() + 2;
+            time.setHours(newHour);
+
+            await this.knex.insert([
+                {
+                    order_id: orderId,
+                    tutor_id: tutor5Id,
+                    charge: null,
+                    accept_time: null,
+                    reject_time: null,
+                    expire_time: time.toLocaleString('en-US', { hour12: false })
+                },
+                {
+                    order_id: orderId,
+                    tutor_id: tutor4Id,
+                    charge: null,
+                    accept_time: null,
+                    reject_time: null,
+                    expire_time: time.toLocaleString('en-US', { hour12: false })
+                },
+                {
+                    order_id: orderId,
+                    tutor_id: tutor3Id,
+                    charge: null,
+                    accept_time: null,
+                    reject_time: null,
+                    expire_time: time.toLocaleString('en-US', { hour12: false })
+                },
+                {
+                    order_id: orderId,
+                    tutor_id: newTutorId,
+                    charge: null,
+                    accept_time: null,
+                    reject_time: null,
+                    expire_time: time.toLocaleString('en-US', { hour12: false })
+                },
+            ]).into('candidate');
 
         } catch (error) {
             console.log(error)

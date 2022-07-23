@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import { env } from "../../env/env"
+import { env } from "../../../backup/env"
 import { ChatMessage, OrderInfo } from "./type"
 
 function getChatMessage(orderInfo: OrderInfo, chatMessage: ChatMessage) {

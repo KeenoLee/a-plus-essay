@@ -1,4 +1,5 @@
 import { Knex } from "knex";
+import { createNoSubstitutionTemplateLiteral } from "typescript";
 import { runInThisContext } from "vm";
 import { hashPassword, checkPassword } from "../utils/hash";
 import { Subject, SubjectFromDB } from "./models";
@@ -14,8 +15,6 @@ type User = {
 type Tutor = {
     userId: number,
     email: string,
-    transcript: string,
-    studentCard: string,
     school: string,
     major: string,
     selfIntro?: string,
@@ -42,6 +41,7 @@ export class UserService {
 
     async checkPhoneNumberDuplication(phoneNumber: number) {
         const userId: number = await this.knex.select("id").from("user").where("phone_number", phoneNumber).first();
+        console.log('checking phone number... ')
         if (userId === undefined) {
             return false
         }
@@ -71,7 +71,7 @@ export class UserService {
     }
 
     async createTutor(tutor: Tutor) {
-        this.knex.transaction(async knex => {
+        return this.knex.transaction(async knex => {
             let majorId;
             if (!(await knex.select("id").from("major").where("major", tutor.major).first())) {
                 majorId = (await knex.insert({ major: tutor.major }).into("major").returning("id"))[0].id
@@ -86,19 +86,12 @@ export class UserService {
                 is_verified: false,
                 // transcript: ????,
                 school_id: schoolId,
-                student_card_base64: 'card',
                 major_id: majorId,
                 rating: null,
                 self_intro: tutor.selfIntro || null,
                 ongoing_order_amount: 0,
                 completed_order_amount: 0,
             }).into("tutor")
-            await knex.insert({
-                tutor_id: tutor.userId,
-                transcript_base64: 'transcript',
-                // filename: ???????,
-            }).into("transcript");
-
             // .map入面如果係async function，佢會直接return成舊promise，而唔係你想要既value！
             // .map會return個array出黎！
             let subjectsFromDB: Array<SubjectFromDB> = []
@@ -166,9 +159,9 @@ export class UserService {
                     subject_id: subjectId
                 }).into("preferred_subject")
             }
-            return;
+            console.log(tutor.userId)
+            return tutor.userId;
         })
-        return;
     };
 
     async loginWithPassword(account: { email: string, password: string }) {
@@ -210,7 +203,7 @@ export class UserService {
 
     async resetPassword(account: { id: number, newPassword: string }) {
         const hashedPassword = hashPassword(account.newPassword);
-        const userId: number = await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first();
+        const userId: number = (await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first()).id;
         return userId;
     }
     private async getTutorInfo(userId: number) {
@@ -221,8 +214,38 @@ export class UserService {
         delete tutor.major_id
         const school = await this.knex.select('*').from('school').where('id', tutor.school_id).first()
         delete tutor.school_id
-        const transcript = await this.knex.select('id', 'transcript_base64').from('transcript').where('tutor_id', userId)
+        const transcript = await this.knex.select('id', 'filename').from('transcript').where('tutor_id', userId)
         console.log('TRANSCRIPT: ', transcript)
         return [tutor, school, transcript]
+    }
+    async uploadTutorFile(tutorId: number, files: any) {
+        console.log('tutor files ', files)
+        try {
+            let objectKeys = Object.keys(files)
+            console.log('obJECT KEYS?????!%$%&$%#$: ', objectKeys)
+            console.log('going to insert images! tutorID: ', tutorId)
+            for (let i = 0; i < objectKeys.length; i++) {
+                // console.log('%$*$%^*W#$^&#QYH%ERYHSR', files[objectKeys[i]])
+                console.log('%$*$%^*W#$^&#QYH%ERYHSR',objectKeys[i])
+                if (objectKeys[i].includes('transcript')) {
+                    console.log('OBJECTKEY?? ', objectKeys[i])
+                    console.log('OBJECTKEY?? ', files[objectKeys[i]])
+                    await this.knex.insert({
+                        tutor_id: tutorId,
+                        filename: files[objectKeys[i]].originalFilename
+                    }).into('transcript')
+                } else if (objectKeys[i] === 'student_card') {
+                    console.log('WHY NO ORI NAMe in student CARD??: ', files[objectKeys[i]].originalFilename)
+                    await this.knex('tutor').update({student_card:files[objectKeys[i]].originalFilename }).where('id', tutorId)
+                    // this.knex.update({
+                    //     student_card: files[objectKeys[i]].originalFilename
+                    // }).into('tutor').where('tutorId', tutorId)
+                }
+            }
+            return { success: true }
+        } catch (error) {
+            console.log(error)
+            return { error: error }
+        }
     }
 }
