@@ -167,6 +167,8 @@ export const Tabs = () => {
               color={color}
               size={focused ? 30 : size}
               onPress={() =>
+                state.user?
+                navigation.navigate('Account') :
                 Alert.alert('Unauthorized', 'Please login to view profile!', [
                   {
                     text: 'Login',

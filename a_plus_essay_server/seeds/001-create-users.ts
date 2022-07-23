@@ -5,12 +5,17 @@ export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     await knex("user_read_message").del();
     await knex("chat_message").del();
+    await knex('preferred_subject').del();
+    await knex('transcript_subject').del()
+    await knex('order_subject').del()
     await knex("subject").del();
+    await knex('guideline').del()
+    await knex('note').del()
     await knex("order").del();
     await knex("sample").del();
     await knex("transcript").del();
-    await knex("tutor").del();
     await knex("school").del();
+    await knex("tutor").del();
     await knex("major").del();
     await knex("user").del();
 
@@ -52,21 +57,21 @@ export async function seed(knex: Knex): Promise<void> {
             .insert([{ id: 1, major: "dummy_major" }])
             .returning("id")
     )[0].id;
-    const subjectId = await knex("subject")
+    const  subjectId = (await knex("subject")
         .insert([{ id: 1, subject_name: "dummy_subject" }])
-        .returning("id");
-    const schoolId = (
-        await knex("school")
-            .insert([{ school: "Tecky University" }])
-            .returning("id")
-    )[0].id;
+        .returning("id"))[0].id;
+    const schoolId = (await knex
+        .insert({ school: "Tecky University" })
+        .into('school')
+        .returning("id"))[0].id
+
     console.log("SCHOOLID: ", schoolId);
     await knex("tutor")
         .insert([
             {
                 id: tutorId,
                 major_id: majorId,
-                student_card_base64: "student card base 64",
+                student_card: "student card base 64",
                 school_id: schoolId,
                 rating: 5,
                 self_intro: "this is self intro",
@@ -75,9 +80,13 @@ export async function seed(knex: Knex): Promise<void> {
             },
         ])
         .returning("id");
+    await knex('preferred_subject').insert({
+        tutor_id: tutorId,
+        subject_id: subjectId
+    })
     await knex("transcript").insert([
         {
-            transcript_base64: "transcript base64",
+            filename: "transcript base64",
             tutor_id: tutorId,
         },
     ]);
