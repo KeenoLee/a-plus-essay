@@ -3,12 +3,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import * as React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { RootStackParamList } from '../App'
+import {AppParamList, useAppNavigation} from '../../routes'
 
-type Props = NativeStackScreenProps<RootStackParamList>
-
-export default function SuccessRegister() {
-    const navigation = useNavigation()
+type Props = NativeStackScreenProps<AppParamList>
+type OnPress = {
+    onPress: () => void
+}
+export default function SuccessRegister({ onPress }: OnPress) {
+    const navigation = useAppNavigation()
     return (
         <View style={{
             height: '70%',
@@ -32,7 +34,8 @@ export default function SuccessRegister() {
                 backgroundColor: 'rgb(27,70,245)',
                 width: 250,
                 borderRadius: 15,
-            }} onPress={()=>{
+            }} onPress={() => {
+                onPress()
                 navigation.navigate('A Plus Essay')
             }}>
                 <Text style={{

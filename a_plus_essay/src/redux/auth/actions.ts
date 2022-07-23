@@ -1,7 +1,7 @@
 import { Dispatch } from 'react'
 import { AnyAction } from 'redux'
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
-import { env } from '../../env/env'
+import { env } from '../../../backup/env'
 import { SchoolInfo, TranscriptInfo, TutorInfo, UserInfo } from './type'
 
 
