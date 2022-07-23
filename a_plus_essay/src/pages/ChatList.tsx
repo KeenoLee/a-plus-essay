@@ -1,17 +1,10 @@
 // import { NavigationContainer } from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack';
 
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  FlatList,
-} from 'react-native';
+import {Text, StyleSheet, ScrollView, Alert, FlatList} from 'react-native';
 import React, {Fragment, useEffect, useState} from 'react';
 import Chatroom from '../components/Chatroom';
-import {Divider} from 'native-base';
+import {View, Divider} from 'native-base';
 import {then} from '@beenotung/tslib';
 import {format, formatDistanceToNow} from 'date-fns';
 import {useSelector} from 'react-redux';
@@ -94,9 +87,12 @@ export default function ChatScreen() {
     {error: 'loading', rooms: []},
   );
 
-  const userInfo = useSelector((state: RootState) => state.auth.user);
+  const state = useSelector((state: RootState) => state.auth);
+  console.log('userInfo in ChatList', state?.user);
+  console.log('tutorInfo in ChatList', state?.tutor);
+  const navigation = useAppNavigation();
 
-  return (
+  return state?.user || state?.tutor ? (
     <View style={styles.container}>
       {/* <ScrollView> */}
       {chatList.render(json => (
@@ -109,21 +105,34 @@ export default function ChatScreen() {
       ))}
       {/* </ScrollView> */}
     </View>
+  ) : (
+    <View>
+      {Alert.alert('Unauthorized', 'Please login to view chatroom!', [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.navigate('Login');
+          },
+        },
+      ])}
+    </View>
   );
 }
-// function ChatStack() {
+
+//Trying to turn the chatroom into Stack
+// export function ChatStack() {
 //   return (
 //     <Stack.Navigator>
 //       <Stack.Screen
-//         name={headerName}
-//         component={componentName}
+//         name="Chat"
+//         component={ChatScreen}
 //         options={{
 //           headerTintColor: 'white',
-//           headerStyle: { backgroundColor: 'tomato' },
+//           headerStyle: {backgroundColor: 'tomato'},
 //         }}
 //       />
 //     </Stack.Navigator>
-//   )
+//   );
 // }
 
 const styles = StyleSheet.create({

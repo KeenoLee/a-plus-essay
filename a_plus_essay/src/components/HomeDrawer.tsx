@@ -16,10 +16,13 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import SelectTutor from './SelectTutor';
 import ChatRoom from './Chatroom';
 import {useRoute} from '@react-navigation/native';
+import {RootState} from '../redux/store';
+import {useSelector} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
 
 export function HomeDrawer() {
+  const state = useSelector((state: RootState) => state.auth);
   //    let loc = useLocationHook();
 
   // const [ showsMenu, setShowsMenu ] = useState(true)
@@ -51,14 +54,24 @@ export function HomeDrawer() {
       {/* <Drawer.Screen name='App' component={App} /> */}
       {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
       {/* <Drawer.Screen name="Login" component={LoginPage} options={{ title: ""}}/> */}
-      <Drawer.Screen name="Login" component={LoginPage} />
-      <Drawer.Screen name="Sign up" component={Register} />
+      {state.token ? null : (
+        <>
+          <Drawer.Screen name="Login" component={LoginPage} />
+          <Drawer.Screen name="Sign up" component={Register} />
+        </>
+      )}
       <Drawer.Screen name="Rules" component={Rules} />
       <Drawer.Screen name="FAQ" component={FAQ} />
       <Drawer.Screen name="Contact Us" component={ContactUs} />
-      <Drawer.Screen name="Order Submission" component={OrderSubmission} />
-      <Drawer.Screen name="Chatroom" component={ChatRoom} />
-      <Drawer.Screen name="Logout" component={LoginPage} />
+      {state.user && !state.tutor ? (
+        <Drawer.Screen name="Order Submission" component={OrderSubmission} />
+      ) : null}
+      {state.token ? (
+        <Drawer.Screen name="Chatroom" component={ChatRoom} />
+      ) : null}
+      {state.token ? (
+        <Drawer.Screen name="Logout" component={LoginPage} />
+      ) : null}
     </Drawer.Navigator>
   );
 }
