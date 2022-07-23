@@ -1,9 +1,17 @@
 import { Knex } from "knex";
-import { createNoSubstitutionTemplateLiteral } from "typescript";
-import { runInThisContext } from "vm";
 import { hashPassword, checkPassword } from "../utils/hash";
 import { Subject, SubjectFromDB } from "./models";
-
+interface PreferredSubject {
+    subject_name: string
+}
+export type EditInfo = {
+    userId: number,
+    nickname: string | null,
+    password: string | null,
+    phoneNumber: string | null,
+    preferredSubject: Array<PreferredSubject | null>,
+    selfIntro: string | null,
+}
 type User = {
     isTutor: boolean,
     nickname: string,
@@ -225,7 +233,7 @@ export class UserService {
             }
         }
         console.log('preferredSubject?: ', preferredSubject)
-            return [tutor, school, transcript, preferredSubject]
+        return [tutor, school, transcript, preferredSubject]
     }
     async uploadTutorFile(tutorId: number, files: any) {
         console.log('tutor files ', files)
@@ -235,7 +243,7 @@ export class UserService {
             console.log('going to insert images! tutorID: ', tutorId)
             for (let i = 0; i < objectKeys.length; i++) {
                 // console.log('%$*$%^*W#$^&#QYH%ERYHSR', files[objectKeys[i]])
-                console.log('%$*$%^*W#$^&#QYH%ERYHSR',objectKeys[i])
+                console.log('%$*$%^*W#$^&#QYH%ERYHSR', objectKeys[i])
                 if (objectKeys[i].includes('transcript')) {
                     console.log('OBJECTKEY?? ', objectKeys[i])
                     console.log('OBJECTKEY?? ', files[objectKeys[i]])
@@ -245,7 +253,7 @@ export class UserService {
                     }).into('transcript')
                 } else if (objectKeys[i] === 'student_card') {
                     console.log('WHY NO ORI NAMe in student CARD??: ', files[objectKeys[i]].originalFilename)
-                    await this.knex('tutor').update({student_card:files[objectKeys[i]].originalFilename }).where('id', tutorId)
+                    await this.knex('tutor').update({ student_card: files[objectKeys[i]].originalFilename }).where('id', tutorId)
                 }
             }
             return { success: true }
@@ -254,5 +262,34 @@ export class UserService {
             return { error: error }
         }
     }
-    
+    async editProfile(editInfo: EditInfo) {
+        const { userId, nickname, password, phoneNumber, preferredSubject, selfIntro } = editInfo
+        console.log('USERID ', userId)
+        console.log('PRE SUBJECT ARRAY: ', preferredSubject)
+        console.log('self INTRO', selfIntro)
+        this.knex.transaction(async knex => {
+            if (nickname) {
+                await knex('user').update('nickname', nickname).where('id', userId)
+            }
+            // Todo: password update
+            if (phoneNumber) {
+                await knex('user').update('phone_number', phoneNumber).where('id', userId)
+            }
+            if (preferredSubject[0]) {
+                for (let i = 0; i < preferredSubject.length; i++) {
+                    console.log('SUBject_name?: ', preferredSubject[i])
+                    let { subjectId } = (await knex.select('id').from('subject').where('subject_name', preferredSubject[i]!.subject_name).first())
+                    if (!subjectId) {
+                        subjectId = (await knex.insert('subject_name', preferredSubject[i]!['subject_name']).into('subject').returning('id'))[0]
+                    }
+                    await knex('preferred_subject').update('nickname', preferredSubject[i]!['subject_name']).where('tutor_id', userId)
+                }
+            }
+            if (selfIntro) {
+                console.log('going to update SELF inTRO: ', selfIntro)
+                console.log('WHY CANT? NO ID??: ', userId)
+                await knex('tutor').update('self_intro', selfIntro).where('id', userId)
+            }
+        })
+    }
 }
