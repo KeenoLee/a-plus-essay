@@ -12,10 +12,6 @@ import { ChatController } from "./controllers/ChatController";
 import { ChatService } from "./services/ChatService";
 
 export const knex = Knex(config[process.env.NODE_ENV || "development"]);
-const userService = new UserService(knex);
-const userController = new UserController(userService);
-const orderService = new OrderService(knex);
-const orderController = new OrderController(orderService);
 
 const app = express();
 const userRoutes = express.Router();
@@ -30,10 +26,6 @@ let io = new socketio.Server(server, {
     },
 });
 
-const chatService = new ChatService(knex, io);
-const chatController = new ChatController(chatService);
-// app.use(cors({ 'production' }))
-
 io.on("connection", (socket) => {
     console.log("socket.io is connected");
     socket.on("chat message", (msg) => {
@@ -42,12 +34,19 @@ io.on("connection", (socket) => {
     });
 });
 
+const userService = new UserService(knex);
+const userController = new UserController(userService);
+const orderService = new OrderService(knex, io);
+const orderController = new OrderController(orderService);
+
+const chatService = new ChatService(knex, io);
+const chatController = new ChatController(chatService);
+// app.use(cors({ 'production' }))
+
 app.use(express.json({ limit: "200mb" }));
 app.use(express.urlencoded({ limit: "200mb", extended: true }));
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
-
-
 
 userRoutes.post("/register/student", userController.createUser);
 userRoutes.post("/register/tutor", userController.createUser);
