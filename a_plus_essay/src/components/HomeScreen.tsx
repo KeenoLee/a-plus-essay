@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import VerticalTutorCard from "./VerticalTutorCard";
 import { FlatList } from 'react-native';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 
 export function HowToUseCard() {
+    const state: any = useSelector((state: RootState) => state.auth)
     const animationRef = React.useRef<LottieView>(null)
     const [isOpen, setIsOpen] = useState(false)
     // useEffect(() => {
@@ -19,64 +21,118 @@ export function HowToUseCard() {
 
     return (
         // Card Size: Almost cover half of the screen
-        <Box>
-            <Box alignSelf="center" py="4" mt='4' borderRadius="xl" width="90%" maxWidth="100%" bgColor='tertiary.400'>
-                <Stack>
-                    <Stack ml='4'>
-                        {/* Heading Message: 
+        state?.tutor ?
+            <Box>
+                <Box>
+                    <Box alignSelf="center" py="4" mt='4' borderRadius="xl" width="90%" maxWidth="100%" bgColor='tertiary.400'>
+                        <Stack>
+                            <Stack ml='4'>
+                                {/* Heading Message: Tutor: How to start your first Job etc..*/}
+                                <Text fontWeight='normal' fontSize='20' color='white'>HOW TO</Text>
+                                <Text fontWeight='bold' fontSize='20' color='white'>Start your First Job</Text>
+                                {/* <Text fontWeight='bold' fontSize='20' color='white'>with our Expert!</Text> */}
+                            </Stack>
+                        </Stack>
+                        <Stack pt='3'>
+                            {/* Lottle File Animation: Book etc*/}
+                            <View pt="110">
+                                <LottieView
+                                    ref={animationRef}
+                                    source={require('../assets/Books.json')}
+                                    autoPlay
+                                    loop />
+                            </View>
+                        </Stack>
+                        <Stack>
+                            <Box bg='amber.200' size='4' width='100%'></Box>
+                            {/* Button:Tutor: Let's Started*/}
+                            {/* onPress -> Show how to use photo etc... */}
+                            <Button mt='4' ml='4' w='150' py='2' borderRadius="14" size='sm' bgColor="white"
+                                _text={{ color: 'black', fontSize: '15', fontWeight: 'bold' }}
+                                _pressed={{ bgColor: "teal.700" }}
+                                onPress={() => setIsOpen(!isOpen)}
+                            >
+                                {isOpen ? "Back" : "Let's Started"}
+                            </Button>
+                        </Stack>
+                    </Box>
+                    <Stack>
+                        <PresenceTransition visible={isOpen} initial={{
+                            opacity: 0
+                        }} animate={{
+                            opacity: 1,
+                            transition: {
+                                duration: 100
+                            }
+                        }}>
+                            {/*Show Progress*/}
+                            {isOpen ?
+                                <Box mt="7" mb='7' bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
+                                    <Text>Step</Text>
+                                </Box>
+                                : null
+                            }
+                        </PresenceTransition>
+                    </Stack>
+                </Box>
+            </Box> :
+            <Box>
+                <Box alignSelf="center" py="4" mt='4' borderRadius="xl" width="90%" maxWidth="100%" bgColor='tertiary.400'>
+                    <Stack>
+                        <Stack ml='4'>
+                            {/* Heading Message: 
                     Tutor: How to start your first Job etc..
                     Student: How to start your study journey etc.. */}
-                        <Text fontWeight='normal' fontSize='20' color='white'>HOW TO</Text>
-                        <Text fontWeight='bold' fontSize='20' color='white'>Start your study journey</Text>
-                        <Text fontWeight='bold' fontSize='20' color='white'>with our Expert!</Text>
+                            <Text fontWeight='normal' fontSize='20' color='white'>HOW TO</Text>
+                            <Text fontWeight='bold' fontSize='20' color='white'>Start your study journey</Text>
+                            <Text fontWeight='bold' fontSize='20' color='white'>with our Expert!</Text>
+                        </Stack>
                     </Stack>
-                </Stack>
-                <Stack pt='3'>
-                    {/* Lottle File Animation: Book etc*/}
-                    <View pt="110">
-                        <LottieView
-                            ref={animationRef}
-                            source={require('../assets/Books.json')}
-                            autoPlay
-                            loop />
-                    </View>
-                </Stack>
-                <Stack>
-                    <Box bg='amber.200' size='4' width='100%'></Box>
-                    {/* Button:
+                    <Stack pt='3'>
+                        {/* Lottle File Animation: Book etc*/}
+                        <View pt="110">
+                            <LottieView
+                                ref={animationRef}
+                                source={require('../assets/Books.json')}
+                                autoPlay
+                                loop />
+                        </View>
+                    </Stack>
+                    <Stack>
+                        <Box bg='amber.200' size='4' width='100%'></Box>
+                        {/* Button:
                     Tutor: Let's Started
                     Student: Start Learning
                     */}
-                    {/* onPress -> Show how to use photo etc... */}
-                    <Button mt='4' ml='4' w='150' py='2' borderRadius="14" size='sm' bgColor="white"
-                        _text={{ color: 'black', fontSize: '15', fontWeight: 'bold' }}
-                        _pressed={{ bgColor: "teal.700" }}
-                        onPress={() => setIsOpen(!isOpen)}
-                    >
-                        {isOpen ? "Back" : "Start Learning"}
-                    </Button>
+                        {/* onPress -> Show how to use photo etc... */}
+                        <Button mt='4' ml='4' w='150' py='2' borderRadius="14" size='sm' bgColor="white"
+                            _text={{ color: 'black', fontSize: '15', fontWeight: 'bold' }}
+                            _pressed={{ bgColor: "teal.700" }}
+                            onPress={() => setIsOpen(!isOpen)}
+                        >
+                            {isOpen ? "Back" : "Start Learning"}
+                        </Button>
+                    </Stack>
+                </Box>
+                <Stack>
+                    <PresenceTransition visible={isOpen} initial={{
+                        opacity: 0
+                    }} animate={{
+                        opacity: 1,
+                        transition: {
+                            duration: 100
+                        }
+                    }}>
+                        {/*Show Progress*/}
+                        {isOpen ?
+                            <Box mt="7" mb='7' bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
+                                <Text>Step</Text>
+                            </Box>
+                            : null
+                        }
+                    </PresenceTransition>
                 </Stack>
             </Box>
-            <Stack>
-                <PresenceTransition visible={isOpen} initial={{
-                    opacity: 0
-                }} animate={{
-                    opacity: 1,
-                    transition: {
-                        duration: 100
-                    }
-                }}>
-                    {/*Show Progress*/}
-                    {isOpen ?
-                        <Box mt="7" mb='7' bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
-                            <Text>Step</Text>
-                        </Box>
-                        : null
-                    }
-                </PresenceTransition>
-            </Stack>
-        </Box>
-
     )
 }
 
@@ -156,7 +212,7 @@ export default function Home() {
                 <HStack justifyContent='space-evenly' mt='2' pb='4'>
                     <Box padding='10' bg={{
                         linearGradient: {
-                            colors:['#9896F0', '#FBC8D5'],
+                            colors: ['#9896F0', '#FBC8D5'],
                             // colors: ['#DBD5ED', '# F3E7EA'],
                             start: [0, 2],
                             end: [0, 0],
@@ -171,8 +227,8 @@ export default function Home() {
                             start: [0, 2],
                             end: [0, 0],
                         }
-                    }} 
-                    borderRadius="14">
+                    }}
+                        borderRadius="14">
                         <Text fontWeight='medium' fontSize='20'>About Us</Text>
                     </Box>
                 </HStack>
