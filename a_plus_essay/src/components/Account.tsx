@@ -7,6 +7,7 @@ import { RootState } from '../redux/store';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useAppNavigation } from '../../routes';
 import { env } from '../env/env';
+import { getData } from '../storage/storage';
 interface PreferredSubject {
     subject_name: string
 }
@@ -35,7 +36,7 @@ async function fetchGetImage(tutorId: number) {
 }
 export default function Account() {
     const state: any = useSelector((state: RootState) => state.auth)
-
+    
     // if (state.tutor) {
     //     const tutor = state.tutor[0]
     //     const school = state.tutor[1]
@@ -54,7 +55,13 @@ export default function Account() {
     const [editTranscript, setEditTranscript] = useState<string | null>(null)
     const [editPreferredSubject, setEditPreferredSubject] = useState<Array<PreferredSubject | null>>([null])
     const [editSelfIntro, setEditSelfIntro] = useState<string | null>(null)
-
+    useEffect(()=>{
+        async function getStorage() {
+            const token = await getData('token')
+            console.log('can get token from storage?: ', token)
+        }
+        getStorage()
+    })
     return (
         state?.user ?
             <View>
