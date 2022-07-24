@@ -138,6 +138,9 @@ export const Tabs = () => {
           headerTitleStyle: { fontWeight: 'bold' },
           headerTitleAlign: 'left',
           tabBarLabel: 'Order',
+          // TODO: No. of unread message
+          tabBarBadge: '1',
+          tabBarBadgeStyle: { backgroundColor: '#0d9488'},
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
               name="hourglass"
@@ -152,6 +155,12 @@ export const Tabs = () => {
         component={ChatScreen}
         options={{
           tabBarLabel: 'Chats',
+<<<<<<< HEAD
+=======
+          // TODO: No. of unread message
+          tabBarBadge: '1',
+          tabBarBadgeStyle: { backgroundColor: '#0d9488' },
+>>>>>>> 51bba9c3475efdd06b9c8b05ea5da7479ae6e822
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
               name="chatbubbles"
