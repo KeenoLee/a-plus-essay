@@ -161,7 +161,7 @@ export default function Home() {
                             start: [0, 2],
                             end: [0, 0],
                         }
-                    }} borderRadius="14" >
+                    }} borderRadius="14">
                         <Text fontWeight='medium' fontSize='20'>Comment</Text>
                     </Box>
                     <Box padding='10' bg={{

@@ -22,10 +22,10 @@ import {
 } from 'react-native';
 
 // import { StyleSheet } from 'react-native';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 // import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import Register from './src/components/Register';
 // import LoadingScreen from './src/components/LoadingScreen';
@@ -39,7 +39,7 @@ import TutorInformation from './components/TutorInformation';
 import OrderMatched from './components/OrderMatched';
 // import OrderSubmission from './backup/OrderSubmission';
 
-import {Center, NativeBaseProvider, Fab, Box} from 'native-base';
+import { Center, NativeBaseProvider, Fab, Box } from 'native-base';
 import OrderSubmission from './components/OrderSubmission';
 import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
@@ -47,13 +47,19 @@ import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
 
 import OrderStatus from './pages/OrderStatus/OrderStatus';
-import {HomeDrawer} from './components/HomeDrawer';
+import { HomeDrawer } from './components/HomeDrawer';
 import HomeScreen from './components/HomeScreen';
 import Account from './components/Account';
-import {createIconSetFromFontello} from 'react-native-vector-icons';
-import {useSelector} from 'react-redux';
-import {RootState} from './redux/store';
-import {AppParamList, useAppNavigation} from '../routes';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
+import { useSelector } from 'react-redux';
+import { RootState } from './redux/store';
+import { AppParamList, useAppNavigation } from '../routes';
+import { useEffect } from 'react';
+import { getData } from './storage/storage';
+import { useDispatch } from 'react-redux';
+import jwt_decode from 'jwt-decode'
+import { fetchLoginWithToken } from './redux/auth/actions';
+import { AppDispatch } from './redux/dispatch';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 const Stack = createStackNavigator<AppParamList>();
@@ -89,8 +95,8 @@ export const Tabs = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'white',
-        tabBarStyle: {backgroundColor: '#BBD3CF'},
-        headerStyle: {backgroundColor: '#BBD3CF'},
+        tabBarStyle: { backgroundColor: '#BBD3CF' },
+        headerStyle: { backgroundColor: '#BBD3CF' },
         // headerShown: false
       }}>
       <Tab.Screen
@@ -99,7 +105,7 @@ export const Tabs = () => {
         options={{
           // headerShown: false,
           tabBarLabel: 'Home',
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name="home" color={color} size={focused ? 30 : size} />
           ),
         }}
@@ -129,10 +135,13 @@ export const Tabs = () => {
           ),
 
           // headerStyle: { backgroundColor: '#BBD3CF' },
-          headerTitleStyle: {fontWeight: 'bold'},
+          headerTitleStyle: { fontWeight: 'bold' },
           headerTitleAlign: 'left',
           tabBarLabel: 'Order',
-          tabBarIcon: ({focused, color, size}) => (
+          // TODO: No. of unread message
+          tabBarBadge: '1',
+          tabBarBadgeStyle: { backgroundColor: '#0d9488'},
+          tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
               name="hourglass"
               color={color}
@@ -146,7 +155,10 @@ export const Tabs = () => {
         component={ChatScreen}
         options={{
           tabBarLabel: 'Chats',
-          tabBarIcon: ({focused, color, size}) => (
+          // TODO: No. of unread message
+          tabBarBadge: '1',
+          tabBarBadgeStyle: { backgroundColor: '#0d9488' },
+          tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
               name="chatbubbles"
               color={color}
@@ -160,29 +172,29 @@ export const Tabs = () => {
         component={Account}
         options={{
           tabBarLabel: 'Account',
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({ focused, color, size }) => (
             // Sometime cannot navigate
             <Ionicons
               name="person-circle"
               color={color}
               size={focused ? 30 : size}
               onPress={() =>
-                state.user?
-                navigation.navigate('Account') :
-                Alert.alert('Unauthorized', 'Please login to view profile!', [
-                  {
-                    text: 'Login',
-                    onPress: () => {
-                      navigation.navigate('Login');
+                state.user ?
+                  navigation.navigate('Account') :
+                  Alert.alert('Unauthorized', 'Please login to view profile!', [
+                    {
+                      text: 'Login',
+                      onPress: () => {
+                        navigation.navigate('Login');
+                      },
                     },
-                  },
-                  {
-                    text: 'Close',
-                    onPress: () => {
-                      null;
+                    {
+                      text: 'Close',
+                      onPress: () => {
+                        null;
+                      },
                     },
-                  },
-                ])
+                  ])
               }
             />
           ),
@@ -210,13 +222,13 @@ export function HomeStack() {
       <Stack.Screen
         name="Tabs"
         component={Tabs}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* <Stack.Screen name="Home Drawer" component={HomeDrawer} options={{ headerShown: false }} /> */}
       <Stack.Screen
         name="Welcome"
         component={LoginPage}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* {(props)=> <LoginPage navigation={props}/>} */}
       {/* </Stack.Screen> */}
@@ -239,7 +251,7 @@ export function HomeStack() {
       <Stack.Screen
         name="Tutor Information"
         component={TutorInformation}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen name="Select Tutor" component={SelectTutor} />
       {/* <Stack.Screen name="Register" component={Register} /> */}
@@ -293,6 +305,24 @@ const config = {
 
 
 export default function App() {
+  const state = useSelector((state: RootState) => state.auth)
+  const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+    console.log('going to get token from async storage...')
+    async function getStorage() {
+      if (!state.token) {
+        const token = await getData('token')
+        console.log('TOKEN from App: ', token)
+        if (token) {
+          const userInfo = jwt_decode(token)
+          console.log('decoded?: ', userInfo)
+          const result = await dispatch(fetchLoginWithToken(token))
+          console.log('result from login with token: ', result)
+        }
+      }
+    }
+    getStorage()
+  }, [])
   return (
     <NativeBaseProvider config={config}>
       <NavigationContainer>
@@ -303,4 +333,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({});
+

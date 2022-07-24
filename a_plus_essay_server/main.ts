@@ -10,7 +10,9 @@ import Knex from "knex";
 import config from "./knexfile";
 import { ChatController } from "./controllers/ChatController";
 import { ChatService } from "./services/ChatService";
+import path from 'path';
 
+const dirPath = path.join(__dirname, '/uploads')
 export const knex = Knex(config[process.env.NODE_ENV || "development"]);
 
 const app = express();
@@ -82,6 +84,7 @@ app.use((req, res) => {
     res.status(404).json({ error: 'routes not found, method: ' + req.method + ' url: ' + req.url })
 })
 
+app.use(express.static('./uploads'))
 
 const PORT = 8111;
 
