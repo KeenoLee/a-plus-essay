@@ -64,31 +64,33 @@ userRoutes.get("/login/token", userController.loginWithToken);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:id/message", chatController.getChatroom);
+chatRoutes.post("/post/message", chatController.postMessage);
 
 
 // async function testing() {
-    //     let chats = await chatService.getChatroomListById(); //use 53 if input ID
-    //     console.log(chats);
-    // }
-    // testing().catch(e => console.error(e)).finally(() => knex.destroy())
-    
-    orderRoutes.get("/order/data", orderController.getOrderData);
-    orderRoutes.post("/order-submission", orderController.createOrder)
-    orderRoutes.post("/order-file", orderController.uploadOrderFile)
-    
-    app.use(userRoutes);
-    app.use(orderRoutes);
-    app.use(chatRoutes);
-    
-    app.use((req, res) => {
-        res.status(404).json({ error: 'routes not found, method: ' + req.method + ' url: ' + req.url })
-    })
-    
-    app.use(express.static('./uploads'))
-    
-    const PORT = 8111;
-    
-    server.listen(PORT, () => {
-        console.log(`Listening to ${PORT}`);
-    });
-    
+//     let chats = await chatService.getChatroomListById(); //use 53 if input ID
+//     console.log(chats);
+// }
+// testing().catch(e => console.error(e)).finally(() => knex.destroy())
+
+orderRoutes.get("/order/data", orderController.getOrderData);
+orderRoutes.post("/order-submission", orderController.createOrder)
+orderRoutes.post("/order-file", orderController.uploadOrderFile)
+orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
+orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
+
+app.use(userRoutes);
+app.use(orderRoutes);
+app.use(chatRoutes);
+
+app.use((req, res) => {
+    res.status(404).json({ error: 'routes not found, method: ' + req.method + ' url: ' + req.url })
+})
+
+app.use(express.static('./uploads'))
+
+const PORT = 8111;
+
+server.listen(PORT, () => {
+    console.log(`Listening to ${PORT}`);
+});

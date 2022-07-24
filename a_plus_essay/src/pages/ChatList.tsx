@@ -80,7 +80,7 @@ const ChatListItem = (props: ChatListProps) => {
   );
 };
 
-export default function ChatScreen() {
+export default function ChatListScreen() {
   const chatList = useGet<{rooms: ChatRoom[]; error?: string}>(
     'chatrooms',
     '/chat/list',
@@ -88,8 +88,8 @@ export default function ChatScreen() {
   );
 
   const state = useSelector((state: RootState) => state.auth);
-  console.log('userInfo in ChatList', state?.user);
-  console.log('tutorInfo in ChatList', state?.tutor);
+  // console.log('userInfo in ChatList', state?.user);
+  // console.log('tutorInfo in ChatList', state?.tutor);
   const navigation = useAppNavigation();
 
   return state?.user || state?.tutor ? (
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 6,
     color: 'grey',
-    flex: 0.3,
+    flex: 0.2,
   },
 
   text: {
