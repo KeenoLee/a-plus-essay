@@ -62,6 +62,7 @@ userRoutes.post("/edit-profile", userController.editProfile);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:id/message", chatController.getChatroom);
+chatRoutes.post("/post/message", chatController.postMessage);
 
 
 // async function testing() {
