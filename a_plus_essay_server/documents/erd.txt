@@ -19,7 +19,7 @@ tutor
 -----
 id integer PK FK - user.id
 is_verified boolean
-student_card_base64 text NULL
+student_card text NULL
 major_id integer FK >0- major.id
 rating decimal(2,1) NULL
 self_intro text NULL
@@ -38,7 +38,7 @@ transcript
 ----------
 id integer PK
 tutor_id integer FK >- tutor.id
-transcript_base64 text
+filename text
 
 
 preferred_subject
@@ -137,14 +137,14 @@ guideline
 ---------
 id integer PK
 order_id integer FK >- order.id
-guideline_base64 text
+filename text
 
 
 note
 ----
 id integer PK
 order_id integer FK >- order.id
-note_base64 text
+filename text
 
 
 candidate
