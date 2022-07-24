@@ -7,7 +7,7 @@ import Welcome from '../pages/Welcome';
 import Register from './Register';
 import FAQ from '../pages/FAQ';
 import Rules from '../pages/Rules';
-import ContactUs from '../pages/ContactUs';
+import AboutUs from '../pages/AboutUs';
 import LoginPage from './LoginPage';
 import HomeScreen from './HomeScreen';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
@@ -18,6 +18,7 @@ import ChatRoom from './Chatroom';
 import {useRoute} from '@react-navigation/native';
 import {RootState} from '../redux/store';
 import {useSelector} from 'react-redux';
+import ChatListScreen from '../pages/ChatList';
 
 const Drawer = createDrawerNavigator();
 
@@ -37,7 +38,7 @@ export function HomeDrawer() {
         // headerRight: ()=><TouchableOpacity onPress={()=>navigation.toggleDrawer()}><Text>@</Text></TouchableOpacity>,
         // drawerType: 'front',
         headerTintColor: 'white',
-        headerTitle: '',
+        // headerTitle: '',
         drawerPosition: 'left',
         drawerActiveTintColor: '#5eead4',
         drawerStyle: {
@@ -56,18 +57,29 @@ export function HomeDrawer() {
       {/* <Drawer.Screen name="Login" component={LoginPage} options={{ title: ""}}/> */}
       {state.token ? null : (
         <>
-          <Drawer.Screen name="Login" component={LoginPage} />
+          <Drawer.Screen
+            name="Login"
+            component={LoginPage}
+            options={{headerTitle: ''}}
+          />
           <Drawer.Screen name="Sign up" component={Register} />
         </>
       )}
       <Drawer.Screen name="Rules" component={Rules} />
       <Drawer.Screen name="FAQ" component={FAQ} />
-      <Drawer.Screen name="Contact Us" component={ContactUs} />
+      <Drawer.Screen name="About Us" component={AboutUs} />
       {state.user && !state.tutor ? (
         <Drawer.Screen name="Order Submission" component={OrderSubmission} />
       ) : null}
       {state.token ? (
-        <Drawer.Screen name="Logout" component={LoginPage} />
+        <Drawer.Screen name="Chatroom" component={ChatListScreen} />
+      ) : null}
+      {state.token ? (
+        <Drawer.Screen
+          name="Logout"
+          component={LoginPage}
+          options={{headerShown: false}}
+        />
       ) : null}
     </Drawer.Navigator>
   );

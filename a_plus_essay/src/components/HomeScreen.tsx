@@ -1,4 +1,4 @@
-import { VStack, Center, Text, Box, Stack, Button, View, PresenceTransition } from 'native-base';
+import { VStack, Center, Text, Box, Stack, Button, View, PresenceTransition, Heading, HStack, Pressable } from 'native-base';
 import LottieView from 'lottie-react-native';
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
@@ -79,12 +79,6 @@ export function HowToUseCard() {
 
     )
 }
-{/* <Center mt="7" bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'
-    _text={{
-        color: "white"
-    }}>
-    Fade
-</Center> */}
 
 export function RenderTutor() {
     const DATA = [
@@ -97,37 +91,51 @@ export function RenderTutor() {
             title: 'Second Item',
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '586wefewf-145571e29d72343242342',
             title: 'Third Item',
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
-            title: 'Third Item',
+            id: '58694a0f-3da1-wefewf471f-bd96-145571e29d72',
+            title: 'Thirfefd Item',
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
-            title: 'Third Item',
+            id: '58694a0f-3da1-471f-bwefewfd96-145571e29d72',
+            title: 'Third efeItem',
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
-            title: 'Third Item',
+            id: '58694a0f-3da1-47wef1wefweff-bd96-145571e29d72',
+            title: 'Thirdeweffe Item',
         },
+        {
+            id: '58694a0f-3da1-471wefweff-bd96-145571e29d72',
+            title: 'Thirdefewef Item',
+        },
+        {
+            id: '58694a0f-3da1-471wefweff-bd96-1455741e29d72',
+            title: 'Thirdefghe Item',
+        },
+        {
+            id: '58694a0f-3da1-471wefw2eff-bd96-145571e29d72',
+            title: 'Thirdhefe Item',
+        },
+
     ];
 
-    // return (
-    //     <View>
-    //         <FlatList
-    //             horizontal
-    //             data={DATA}
-    //             listKey=''
-    //             keyExtractor={(item) => item.id}
-    //             showsHorizontalScrollIndicator={false}
-    //             renderItem={({ item, index }) => (
-    //                 <VerticalTutorCard/>
-    //             )}
-    //         />
-    //     </View>
-    // )
+    return (
+        <Stack>
+            <FlatList
+                style={{}}
+                horizontal
+                data={DATA}
+                listKey='Tutor Introductions'
+                keyExtractor={(item) => item.id}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index }) => (
+                    <VerticalTutorCard />
+                )}
+            />
+        </Stack>
+    )
 }
 
 
@@ -136,28 +144,39 @@ export default function Home() {
     return (
         <ScrollView>
             <HowToUseCard />
-            <VerticalTutorCard/>
-            {/* <RenderTutor /> */}
-            {/* <VStack space={5}>
-                <Center bg="primary.400" _text={{
-                    color: "white",
-                    fontWeight: "bold"
-                }} height={200} width={{
-                    base: 200,
-                    lg: 250
-                }}>
-                    This is the Center
-                </Center>
-                <Center bg="primary.400" _text={{
-                    color: "white",
-                    fontWeight: "bold"
-                }} height={200} width={{
-                    base: 200,
-                    lg: 250
-                }}>
-                    This is the Center
-                </Center>
-            </VStack> */}
+            <Stack mt='4'>
+                <Heading ml='4'>Tutor Introduction</Heading>
+                <RenderTutor />
+                {/* <VerticalTutorCard /> */}
+            </Stack>
+            <Stack mt='4'>
+                <Heading ml='4'>More Info</Heading>
+            </Stack>
+            <Pressable >
+                <HStack justifyContent='space-evenly' mt='2' pb='4'>
+                    <Box padding='10' bg={{
+                        linearGradient: {
+                            colors:['#9896F0', '#FBC8D5'],
+                            // colors: ['#DBD5ED', '# F3E7EA'],
+                            start: [0, 2],
+                            end: [0, 0],
+                        }
+                    }} borderRadius="14">
+                        <Text fontWeight='medium' fontSize='20'>Comment</Text>
+                    </Box>
+                    <Box padding='10' bg={{
+                        linearGradient: {
+                            // colors:['#9896F0', '#FBC8D5'],
+                            colors: ['#DBD5ED', '#F3E7EA'],
+                            start: [0, 2],
+                            end: [0, 0],
+                        }
+                    }} 
+                    borderRadius="14">
+                        <Text fontWeight='medium' fontSize='20'>About Us</Text>
+                    </Box>
+                </HStack>
+            </Pressable>
         </ScrollView>
     )
 }

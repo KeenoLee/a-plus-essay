@@ -4,12 +4,10 @@ import { useState, useEffect } from 'react'
 import { Box, HStack, IconButton, StatusBar, Text, View } from 'native-base';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { useNavigation } from '@react-navigation/native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useAppNavigation } from '../../routes';
-import TutorBox from './TutorBox';
-import SubjectRow from './SubjectRow';
 import { env } from '../env/env';
+import { getData } from '../storage/storage';
 interface PreferredSubject {
     subject_name: string
 }
@@ -32,9 +30,13 @@ async function fetchEditProfile(editInfo: EditInfo) {
     const result = await res.json()
     return result
 }
+async function fetchGetImage(tutorId: number) {
+    const res = await fetch(`${env.BACKEND_URL}/get-image/${tutorId}`)
+    const result = await res.json()
+}
 export default function Account() {
     const state: any = useSelector((state: RootState) => state.auth)
-
+    
     // if (state.tutor) {
     //     const tutor = state.tutor[0]
     //     const school = state.tutor[1]
@@ -53,14 +55,20 @@ export default function Account() {
     const [editTranscript, setEditTranscript] = useState<string | null>(null)
     const [editPreferredSubject, setEditPreferredSubject] = useState<Array<PreferredSubject | null>>([null])
     const [editSelfIntro, setEditSelfIntro] = useState<string | null>(null)
-
+    useEffect(()=>{
+        async function getStorage() {
+            const token = await getData('token')
+            console.log('can get token from storage?: ', token)
+        }
+        getStorage()
+    })
     return (
         state?.user ?
             <View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View>
                         {editProfile ?
-                            <TextInput placeholder='Edit Nickname' onChangeText={value => {setEditNickname(() => value); console.log('edit nickname MATCH? ', value, editNickname)}}></TextInput> :
+                            <TextInput placeholder='Edit Nickname' onChangeText={value => { setEditNickname(() => value); console.log('edit nickname MATCH? ', value, editNickname) }}></TextInput> :
                             <Text>{state.user?.nickname}</Text>
                         }
                     </View>
