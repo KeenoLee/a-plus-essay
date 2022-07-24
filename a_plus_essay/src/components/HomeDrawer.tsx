@@ -15,9 +15,10 @@ import App, { HomeStack, Tabs } from '../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SelectTutor from './SelectTutor';
 import ChatRoom from './Chatroom';
-import { useRoute } from '@react-navigation/native';
-import { RootState } from '../redux/store';
-import { useSelector } from 'react-redux';
+import {useRoute} from '@react-navigation/native';
+import {RootState} from '../redux/store';
+import {useSelector} from 'react-redux';
+import ChatListScreen from '../pages/ChatList';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/dispatch';
 import { logout } from '../redux/auth/actions';
@@ -52,9 +53,9 @@ export function HomeDrawer() {
       // drawerContent={}
       initialRouteName="Home Stack">
       <Drawer.Screen
-        name="Tabs"
-        component={Tabs}
-        options={{ headerShown: false, title: 'A Plus Essay' }}
+        name="Tab"
+        component={HomeStack}
+        options={{headerShown: false, title: 'A Plus Essay'}}
       />
       {/* <Drawer.Screen name='App' component={App} /> */}
       {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
@@ -72,7 +73,7 @@ export function HomeDrawer() {
         <Drawer.Screen name="Order Submission" component={OrderSubmission} />
       ) : null}
       {state.token ? (
-        <Drawer.Screen name="Chatroom" component={ChatRoom} />
+        <Drawer.Screen name="Chatroom" component={ChatListScreen} />
       ) : null}
       {state.token ? (
         <Drawer.Screen name="Logout" component={LoginPage} listeners={{

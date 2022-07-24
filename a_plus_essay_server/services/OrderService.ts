@@ -136,7 +136,7 @@ export class OrderService {
 
     }
 
-    async matchOrder(orderId: number) {
+    async matchTutor(orderId: number) {
         try {
             let matchedTutors = [];
             let tutor5Id = await this.knex.select('tutor.id')
@@ -218,18 +218,61 @@ export class OrderService {
                 },
             ]).into('candidate');
 
-            matchedTutors.map((tutor) => {
-                this.io.to(`${tutor.id}`).emit('new-order', 'An new order is matched');
-            });
+            const isTutorMatched = matchedTutors.some(tutor => tutor.id > 0);
+            if (isTutorMatched === false) {
+                return ('No tutor can be matched now');
+            };
 
-            let result;
-            result = matchedTutors.filter(tutor => tutor.id > 0);
-            if (result.length === 0) {
-                return ('No tutor can be matched at the moment');
-            } else return result;
+            matchedTutors.map((tutor) => {
+                if (tutor.id > 0) { this.io.to(`${tutor.id}`).emit('new-order', 'An new order is matched') }
+            });
 
         } catch (error) {
             console.log(error)
         }
+    }
+
+    async getOrderBudget(orderId: number) {
+        const orderBudget = await this.knex.select('budget').from('order').where('id', orderId).first();
+        return orderBudget.budget;
+    }
+
+    async submitQuotation(quote: { orderId: number, tutorId: number, charge: number }) {
+        const time = new Date();
+
+        await this.knex('candidate')
+            .where('order_id', quote.orderId)
+            .andWhere('tutor_id', quote.tutorId)
+            .update({
+                charge: quote.charge,
+            })
+
+        const studentId = await this.knex.select('student_id').from('order').where('id', quote.orderId);
+        this.io.to(`${studentId}`).emit('new-quotation', 'Your order got an new quotation');
+        return;
+    }
+
+    async acceptQuotation(input: { orderId: number, tutorId: number }) {
+        const time = new Date();
+        await this.knex('candidate')
+            .where('order_id', input.orderId)
+            .andWhere('tutor_id', input.tutorId)
+            .update({ accept_time: time.toLocaleString('en-US', { hour12: false }) });
+
+        await this.knex('order').where('id', input.orderId).update({ tutor_id: input.tutorId });
+        return;
+    }
+
+    async rejectQuotation(input: { orderId: number, tutorId: number }) {
+        const time = new Date();
+        await this.knex('candidate')
+            .where('order_id', input.orderId)
+            .andWhere('tutor_id', input.tutorId)
+            .update({ reject_time: time.toLocaleString('en-US', { hour12: false }) });
+
+        const rating = await this.knex.select('rating').from('tutor').where('id', input.tutorId);
+
+        !!!!!!!!!!!!!!!!!!!
+
     }
 }
