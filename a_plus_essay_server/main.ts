@@ -10,7 +10,9 @@ import Knex from "knex";
 import config from "./knexfile";
 import { ChatController } from "./controllers/ChatController";
 import { ChatService } from "./services/ChatService";
+import path from 'path';
 
+const dirPath = path.join(__dirname, '/uploads')
 export const knex = Knex(config[process.env.NODE_ENV || "development"]);
 
 const app = express();
@@ -64,26 +66,28 @@ chatRoutes.get("/chat/:id/message", chatController.getChatroom);
 
 
 // async function testing() {
-//     let chats = await chatService.getChatroomListById(); //use 53 if input ID
-//     console.log(chats);
-// }
-// testing().catch(e => console.error(e)).finally(() => knex.destroy())
-
-orderRoutes.get("/order/data", orderController.getOrderData);
-orderRoutes.post("/order-submission", orderController.createOrder)
-orderRoutes.post("/order-file", orderController.uploadOrderFile)
-
-app.use(userRoutes);
-app.use(orderRoutes);
-app.use(chatRoutes);
-
-app.use((req, res) => {
-    res.status(404).json({ error: 'routes not found, method: ' + req.method + ' url: ' + req.url })
-})
-
-
-const PORT = 8111;
-
-server.listen(PORT, () => {
-    console.log(`Listening to ${PORT}`);
-});
+    //     let chats = await chatService.getChatroomListById(); //use 53 if input ID
+    //     console.log(chats);
+    // }
+    // testing().catch(e => console.error(e)).finally(() => knex.destroy())
+    
+    orderRoutes.get("/order/data", orderController.getOrderData);
+    orderRoutes.post("/order-submission", orderController.createOrder)
+    orderRoutes.post("/order-file", orderController.uploadOrderFile)
+    
+    app.use(userRoutes);
+    app.use(orderRoutes);
+    app.use(chatRoutes);
+    
+    app.use((req, res) => {
+        res.status(404).json({ error: 'routes not found, method: ' + req.method + ' url: ' + req.url })
+    })
+    
+    app.use(express.static('./uploads'))
+    
+    const PORT = 8111;
+    
+    server.listen(PORT, () => {
+        console.log(`Listening to ${PORT}`);
+    });
+    

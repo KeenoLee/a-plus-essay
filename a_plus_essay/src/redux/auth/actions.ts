@@ -42,14 +42,14 @@ function saveToken(token: string) {
     }
 }
 
-export type AuthActions = 
-ReturnType<typeof loginAsStudent> |
-ReturnType<typeof loginAsTutor> |
-ReturnType<typeof loginAsAdmin> |
-ReturnType<typeof loginFailed> |
-ReturnType<typeof saveToken>
+export type AuthActions =
+    ReturnType<typeof loginAsStudent> |
+    ReturnType<typeof loginAsTutor> |
+    ReturnType<typeof loginAsAdmin> |
+    ReturnType<typeof loginFailed> |
+    ReturnType<typeof saveToken>
 
-export function fetchLogin(userInfo: {email: string, password: string}) {
+export function fetchLogin(userInfo: { email: string, password: string }) {
     return async (dispatch: Dispatch<AuthActions>) => {
         const res = await fetch(`${env.BACKEND_URL}/login/password`, {
             method: 'POST',
@@ -70,14 +70,14 @@ export function fetchLogin(userInfo: {email: string, password: string}) {
                 console.log('TUTOR INFO: ', result.tutorInfo)
                 dispatch(loginAsTutor(userInfo, tutorInfo))
                 dispatch(saveToken(token))
-                return
+                return { success: true }
             }
             dispatch(loginAsStudent(userInfo))
             dispatch(saveToken(token))
-            return
+            return { success: true }
         }
         dispatch(loginFailed())
-        return
+        return { success: false }
     }
 }
 
