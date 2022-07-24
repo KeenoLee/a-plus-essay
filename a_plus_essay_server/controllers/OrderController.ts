@@ -138,6 +138,28 @@ export class OrderController {
     //     }
     // }
 
+    submitQuotation = async (req: Request, res: Response) => {
+        const { orderId, tutorId, charge } = req.body.charge;
+
+        if (!charge) {
+            res.status(400).json({ error: 'Charge is missed' });
+            return;
+        };
+
+        if (charge <= 0) {
+            res.status(400).json({ error: 'Charge must be larger than 0' });
+            return;
+        };
+
+        const budget = await this.orderService.getOrderBudget(orderId);
+        if (charge > (budget * 1.1)) {
+            res.status(400).json({ error: 'The charge is over the order budget' })
+            return;
+        }
+
+        await this.orderService.submitQuotation({ orderId, tutorId, charge });
+    }
+
     // matchOrder = async (req: Request, res: Response) => {
     //     try {
 

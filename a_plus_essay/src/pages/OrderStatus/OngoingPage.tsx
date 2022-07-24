@@ -10,9 +10,9 @@ export default function OngoingPage() {
                 <View style={styles.container}>
                     <Text style={styles.assignmentName}>Financial Accounting AsmFinancial Accounting AsmFinancial Accounting AsmFinancial Accounting Asm</Text>
                     <Text style={styles.time}>DD/MM/YYYY 13:00</Text>
-                    <TouchableOpacity style={styles.icon}>
+                    {/* <TouchableOpacity style={styles.icon}>
                         <Ionicons name="heart-dislike" color='grey' size={18} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </ScrollView>
         </View>
