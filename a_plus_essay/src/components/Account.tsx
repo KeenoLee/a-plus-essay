@@ -4,11 +4,8 @@ import { useState, useEffect } from 'react'
 import { Box, HStack, IconButton, StatusBar, Text, View } from 'native-base';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { useNavigation } from '@react-navigation/native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useAppNavigation } from '../../routes';
-import TutorBox from './TutorBox';
-import SubjectRow from './SubjectRow';
 import { env } from '../env/env';
 interface PreferredSubject {
     subject_name: string
@@ -64,7 +61,7 @@ export default function Account() {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View>
                         {editProfile ?
-                            <TextInput placeholder='Edit Nickname' onChangeText={value => {setEditNickname(() => value); console.log('edit nickname MATCH? ', value, editNickname)}}></TextInput> :
+                            <TextInput placeholder='Edit Nickname' onChangeText={value => { setEditNickname(() => value); console.log('edit nickname MATCH? ', value, editNickname) }}></TextInput> :
                             <Text>{state.user?.nickname}</Text>
                         }
                     </View>

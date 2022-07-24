@@ -14,8 +14,8 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("order").del();
     await knex("sample").del();
     await knex("transcript").del();
-    await knex("school").del();
     await knex("tutor").del();
+    await knex("school").del();
     await knex("major").del();
     await knex("user").del();
 
