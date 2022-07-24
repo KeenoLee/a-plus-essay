@@ -6,6 +6,7 @@ import { Bearer } from "permit";
 import jwtSimple from "jwt-simple";
 import dotenv from "dotenv";
 import { getJWTPayload } from "../utils/get-jwt";
+import { request } from "http";
 
 dotenv.config({ path: "../.env" });
 
@@ -66,7 +67,20 @@ export class ChatController extends RestController {
         }
     };
 
-    sendMessage = async (req: Request, res: Response, next: NextFunction) => {
+    postMessage = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { senderIsTutor, orderId, newMessage } = req.body
+            const result = await this.chatService.postMessage({ senderIsTutor, orderId, newMessage })
+            if (result.success) {
+                res.json(result)
+                return
+            }
+
+        } catch (err) {
+            console.error('orderControllerError: ', err)
+            res.status(500).json({ error: String(err) })
+            return
+        }
         // return this.chatService.sendMessage(
         //     order_id: req.params.order_id,
         //     )

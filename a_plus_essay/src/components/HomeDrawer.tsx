@@ -47,8 +47,8 @@ export function HomeDrawer() {
       // drawerContent={}
       initialRouteName="Home Stack">
       <Drawer.Screen
-        name="Tabs"
-        component={Tabs}
+        name="Tab"
+        component={HomeStack}
         options={{headerShown: false, title: 'A Plus Essay'}}
       />
       {/* <Drawer.Screen name='App' component={App} /> */}
@@ -65,9 +65,6 @@ export function HomeDrawer() {
       <Drawer.Screen name="Contact Us" component={ContactUs} />
       {state.user && !state.tutor ? (
         <Drawer.Screen name="Order Submission" component={OrderSubmission} />
-      ) : null}
-      {state.token ? (
-        <Drawer.Screen name="Chatroom" component={ChatRoom} />
       ) : null}
       {state.token ? (
         <Drawer.Screen name="Logout" component={LoginPage} />

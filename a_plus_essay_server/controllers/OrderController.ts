@@ -3,11 +3,11 @@ import { Request, Response } from "express";
 import jwtSimple from 'jwt-simple';
 import { Bearer } from 'permit';
 import dotenv from 'dotenv';
-import formidable  from "formidable";
+import formidable from "formidable";
 import fs from "fs";
 
 const uploadDir = 'uploads'
-fs.mkdirSync(uploadDir,{recursive:true})
+fs.mkdirSync(uploadDir, { recursive: true })
 dotenv.config({ path: '../.env' || '../../.env' });
 const form = formidable({
     uploadDir,
@@ -16,7 +16,7 @@ const form = formidable({
     maxFiles: 10,
     maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
     filter: part => part.mimetype?.startsWith('image/') || false,
-  })
+})
 
 const permit = new Bearer({
     query: "access_token"
@@ -102,17 +102,17 @@ export class OrderController {
             form.parse(req, async (err, fields, files) => {
                 console.log('fields??? ', fields)
                 if (err) {
-                    res.json({error: err})
+                    res.json({ error: err })
                     return
                 }
                 if (files) {
                     await this.orderService.uploadOrderFile(files)
-                    res.json({success: true})
+                    res.json({ success: true })
                     return
                 }
             })
         } catch (error) {
-            res.json({error: error})
+            res.json({ error: error })
             return
         }
     }
@@ -127,16 +127,16 @@ export class OrderController {
         }
     }
 
-    getChatMessage = async (req: Request, res: Response) => {
-        try {
-            const { userId, is_tutor } = req.body
-            this.orderService.getChatMessage(userId, is_tutor)
-            console.log('id in getChatMassage Contoller: ', userId, is_tutor)
-        } catch (err) {
-            console.error('orderControllerError: ', err)
-            res.status(500).json({ message: "internal server errror" })
-        }
-    }
+    // getChatMessage = async (req: Request, res: Response) => {
+    //     try {
+    //         const { userId, is_tutor } = req.body
+    //         this.orderService.getChatMessage(userId, is_tutor)
+    //         console.log('id in getChatMassage Contoller: ', userId, is_tutor)
+    //     } catch (err) {
+    //         console.error('orderControllerError: ', err)
+    //         res.status(500).json({ message: "internal server errror" })
+    //     }
+    // }
 
     // matchOrder = async (req: Request, res: Response) => {
     //     try {
