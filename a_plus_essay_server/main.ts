@@ -75,6 +75,7 @@ orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
 orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
+orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
 
 app.use(userRoutes);
 app.use(orderRoutes);

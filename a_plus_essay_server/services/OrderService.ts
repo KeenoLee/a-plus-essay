@@ -241,14 +241,38 @@ export class OrderService {
         const time = new Date();
 
         await this.knex('candidate')
-            .where('order_Id', quote.orderId)
+            .where('order_id', quote.orderId)
             .andWhere('tutor_id', quote.tutorId)
             .update({
                 charge: quote.charge,
-                accept_time: time.toLocaleString('en-US', { hour12: false })
             })
 
         const studentId = await this.knex.select('student_id').from('order').where('id', quote.orderId);
         this.io.to(`${studentId}`).emit('new-quotation', 'Your order got an new quotation');
+        return;
+    }
+
+    async acceptQuotation(input: { orderId: number, tutorId: number }) {
+        const time = new Date();
+        await this.knex('candidate')
+            .where('order_id', input.orderId)
+            .andWhere('tutor_id', input.tutorId)
+            .update({ accept_time: time.toLocaleString('en-US', { hour12: false }) });
+
+        await this.knex('order').where('id', input.orderId).update({ tutor_id: input.tutorId });
+        return;
+    }
+
+    async rejectQuotation(input: { orderId: number, tutorId: number }) {
+        const time = new Date();
+        await this.knex('candidate')
+            .where('order_id', input.orderId)
+            .andWhere('tutor_id', input.tutorId)
+            .update({ reject_time: time.toLocaleString('en-US', { hour12: false }) });
+
+        const rating = await this.knex.select('rating').from('tutor').where('id', input.tutorId);
+
+        !!!!!!!!!!!!!!!!!!!
+
     }
 }
