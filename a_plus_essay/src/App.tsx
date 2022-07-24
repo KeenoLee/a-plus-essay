@@ -306,6 +306,7 @@ const config = {
 
 export default function App() {
   const state = useSelector((state: RootState) => state.auth)
+  console.log('USERID?? ID??: ', state.user)
   const dispatch = useDispatch<AppDispatch>()
   useEffect(() => {
     console.log('going to get token from async storage...')
