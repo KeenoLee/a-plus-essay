@@ -155,7 +155,13 @@ export class UserController {
         if (reg.test(email) === false) {
             res.status(400).json({ error: "Invalid email address" });
             return;
-        }
+        };
+
+        const emailDuplication = await this.userService.checkEmailDuplication(email);
+        if (emailDuplication === false) {
+            res.status(400).json({ error: "This email address has not been registered" })
+            return;
+        };
 
         if (!password) {
             res.status(400).json({ error: "Missing password" })
