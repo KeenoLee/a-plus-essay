@@ -3,11 +3,11 @@ import { Request, Response } from "express";
 import jwtSimple from 'jwt-simple';
 import { Bearer } from 'permit';
 import dotenv from 'dotenv';
-import formidable  from "formidable";
+import formidable from "formidable";
 import fs from "fs";
 
 const uploadDir = 'uploads'
-fs.mkdirSync(uploadDir,{recursive:true})
+fs.mkdirSync(uploadDir, { recursive: true })
 dotenv.config({ path: '../.env' || '../../.env' });
 const form = formidable({
     uploadDir,
@@ -16,7 +16,7 @@ const form = formidable({
     maxFiles: 10,
     maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
     filter: part => part.mimetype?.startsWith('image/') || false,
-  })
+})
 
 const permit = new Bearer({
     query: "access_token"
@@ -102,17 +102,17 @@ export class OrderController {
             form.parse(req, async (err, fields, files) => {
                 console.log('fields??? ', fields)
                 if (err) {
-                    res.json({error: err})
+                    res.json({ error: err })
                     return
                 }
                 if (files) {
                     await this.orderService.uploadOrderFile(files)
-                    res.json({success: true})
+                    res.json({ success: true })
                     return
                 }
             })
         } catch (error) {
-            res.json({error: error})
+            res.json({ error: error })
             return
         }
     }
@@ -136,6 +136,28 @@ export class OrderController {
             console.error('orderControllerError: ', err)
             res.status(500).json({ message: "internal server errror" })
         }
+    }
+
+    submitQuotation = async (req: Request, res: Response) => {
+        const { orderId, tutorId, charge } = req.body.charge;
+
+        if (!charge) {
+            res.status(400).json({ error: 'Charge is missed' });
+            return;
+        };
+
+        if (charge <= 0) {
+            res.status(400).json({ error: 'Charge must be larger than 0' });
+            return;
+        };
+
+        const budget = await this.orderService.getOrderBudget(orderId);
+        if (charge > (budget * 1.1)) {
+            res.status(400).json({ error: 'The charge is over the order budget' })
+            return;
+        }
+
+        await this.orderService.submitQuotation({ orderId, tutorId, charge });
     }
 
     // matchOrder = async (req: Request, res: Response) => {
