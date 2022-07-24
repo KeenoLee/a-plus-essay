@@ -31,7 +31,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // import LoadingScreen from './src/components/LoadingScreen';
 import Home from './pages/Home';
 import Notification from './pages/Notification';
-import ChatScreen from './pages/ChatList';
+import ChatListScreen from './pages/ChatList';
 import ChatStack from './pages/ChatList';
 import Register from './components/Register';
 import SelectTutor from './components/SelectTutor';
@@ -140,7 +140,7 @@ export const Tabs = () => {
           tabBarLabel: 'Order',
           // TODO: No. of unread message
           tabBarBadge: '1',
-          tabBarBadgeStyle: { backgroundColor: '#0d9488'},
+          tabBarBadgeStyle: { backgroundColor: '#0d9488' },
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
               name="hourglass"
@@ -152,7 +152,7 @@ export const Tabs = () => {
       />
       <Tab.Screen
         name="ChatList"
-        component={ChatScreen}
+        component={ChatListScreen}
         options={{
           tabBarLabel: 'Chats',
           // TODO: No. of unread message
@@ -216,7 +216,11 @@ function RegisterStacks() {
 
 export function HomeStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: '#BBD3CF' },
+        headerBackTitleVisible: false,
+      }}>
       {/* <NavigationContainer> */}
       {/* <Stack.Screen name="Loading" component={LoadingScreen} /> */}
       <Stack.Screen
@@ -296,13 +300,11 @@ export function HomeStack() {
   );
 }
 
-
 const config = {
   dependencies: {
     'linear-gradient': require('react-native-linear-gradient').default,
   },
 };
-
 
 export default function App() {
   const state = useSelector((state: RootState) => state.auth)

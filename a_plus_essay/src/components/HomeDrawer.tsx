@@ -18,6 +18,7 @@ import ChatRoom from './Chatroom';
 import {useRoute} from '@react-navigation/native';
 import {RootState} from '../redux/store';
 import {useSelector} from 'react-redux';
+import ChatListScreen from '../pages/ChatList';
 
 const Drawer = createDrawerNavigator();
 
@@ -47,8 +48,8 @@ export function HomeDrawer() {
       // drawerContent={}
       initialRouteName="Home Stack">
       <Drawer.Screen
-        name="Tabs"
-        component={Tabs}
+        name="Tab"
+        component={HomeStack}
         options={{headerShown: false, title: 'A Plus Essay'}}
       />
       {/* <Drawer.Screen name='App' component={App} /> */}
@@ -56,7 +57,11 @@ export function HomeDrawer() {
       {/* <Drawer.Screen name="Login" component={LoginPage} options={{ title: ""}}/> */}
       {state.token ? null : (
         <>
-          <Drawer.Screen name="Login" component={LoginPage} options={{headerTitle: ''}}/>
+          <Drawer.Screen
+            name="Login"
+            component={LoginPage}
+            options={{headerTitle: ''}}
+          />
           <Drawer.Screen name="Sign up" component={Register} />
         </>
       )}
@@ -67,10 +72,14 @@ export function HomeDrawer() {
         <Drawer.Screen name="Order Submission" component={OrderSubmission} />
       ) : null}
       {state.token ? (
-        <Drawer.Screen name="Chatroom" component={ChatRoom} />
+        <Drawer.Screen name="Chatroom" component={ChatListScreen} />
       ) : null}
       {state.token ? (
-        <Drawer.Screen name="Logout" component={LoginPage} options={{headerShown: false}}/>
+        <Drawer.Screen
+          name="Logout"
+          component={LoginPage}
+          options={{headerShown: false}}
+        />
       ) : null}
     </Drawer.Navigator>
   );
