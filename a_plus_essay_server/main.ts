@@ -60,6 +60,7 @@ userRoutes.get("/login/facebook", userController.loginWithFacebook);
 userRoutes.post("/resetpassword", userController.resetPassword);
 userRoutes.post("/tutor-file", userController.uploadTutorFile);
 userRoutes.post("/edit-profile", userController.editProfile);
+userRoutes.get("/login/token", userController.loginWithToken);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:id/message", chatController.getChatroom);
