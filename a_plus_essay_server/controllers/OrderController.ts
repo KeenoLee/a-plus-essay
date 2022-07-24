@@ -158,18 +158,17 @@ export class OrderController {
         }
 
         await this.orderService.submitQuotation({ orderId, tutorId, charge });
+        return ({ success: true })
     }
 
-    // matchOrder = async (req: Request, res: Response) => {
-    //     try {
-
-
-    //     } catch (error) {
-    //         console.log(error)
-
-    //     }
-    // }
-
-
+    acceptOrRejectQuotation = async (req: Request, res: Response) => {
+        const { orderId, tutorId, acceptQuotation } = req.body;
+        if (acceptQuotation === true) {
+            await this.orderService.acceptQuotation({ orderId, tutorId });
+        }
+        if (acceptQuotation === false) {
+            await this.orderService.rejectQuotation({ orderId, tutorId });
+        }
+    }
 
 }
