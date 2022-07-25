@@ -8,6 +8,7 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useAppNavigation } from '../../routes';
 import { env } from '../env/env';
 import { getData } from '../storage/storage';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 interface PreferredSubject {
     subject_name: string
 }
@@ -104,10 +105,10 @@ export default function Account() {
                             }
                         }
                         }>
-                            <Text>Confirm</Text>
+                            <Ionicons name="checkmark-circle-outline" color='grey' size={25} />
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={() => setEditProfile(true)}>
-                            <Text>Edit</Text>
+                            <Ionicons name="create-outline" color='grey' size={25} />
                         </TouchableOpacity>
                     }
                 </View>
@@ -146,7 +147,8 @@ export default function Account() {
                             <View style={{ flexDirection: 'row' }}>
                                 {editTranscript.map((transcript: any, i: number) =>
                                     // console.log('INSide .mAP: ', transcript.filename)
-                                    <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} />
+                                    transcript.filename?
+                                    <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} /> : null
                                 )}
                             </View>
                         </View>
