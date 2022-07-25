@@ -1,4 +1,4 @@
-import { Alert } from 'react-native'
+import { Alert, Image } from 'react-native'
 import * as React from 'react'
 import { useState, useEffect } from 'react'
 import { Box, HStack, IconButton, StatusBar, Text, View } from 'native-base';
@@ -10,6 +10,10 @@ import { env } from '../env/env';
 import { getData } from '../storage/storage';
 interface PreferredSubject {
     subject_name: string
+}
+type EditTranscript = {
+    id: number,
+    filename: string
 }
 export type EditInfo = {
     userId: number,
@@ -36,12 +40,13 @@ async function fetchGetImage(tutorId: number) {
 }
 export default function Account() {
     const state: any = useSelector((state: RootState) => state.auth)
-    
+
     // if (state.tutor) {
     //     const tutor = state.tutor[0]
     //     const school = state.tutor[1]
     //     const transcript = state.tutor[2]
     // }
+
     console.log('userInfo in Account', state?.user)
     console.log('tutorInfo in Account', state?.tutor)
     const navigation = useAppNavigation()
@@ -52,16 +57,24 @@ export default function Account() {
     const [editPhoneNumber, setEditPhoneNumber] = useState<string | null>(null)
     const [editSchool, setEditSchool] = useState<string | null>(null)
     const [editStudentCard, setEditStudentCard] = useState<string | null>(null)
-    const [editTranscript, setEditTranscript] = useState<string | null>(null)
+    const [editTranscript, setEditTranscript] = useState<Array<EditTranscript | null>>([null])
     const [editPreferredSubject, setEditPreferredSubject] = useState<Array<PreferredSubject | null>>([null])
     const [editSelfIntro, setEditSelfIntro] = useState<string | null>(null)
-    useEffect(()=>{
-        async function getStorage() {
-            const token = await getData('token')
-            console.log('can get token from storage?: ', token)
+    useEffect(() => {
+        async function fetchImageFilename() {
+            const res = await fetch(`${env.BACKEND_URL}/get-user-file`, {
+                headers: { Authorization: `Bearer ${state.token}` }
+            })
+            const result = await res.json()
+            setEditStudentCard(() => result.studentCard.student_card)
+            setEditTranscript(() => result.transcript)
+            // setEditTranscript(()=>[...editTranscript, result.transcript])
+            console.log('studentcard: ', editStudentCard)
+            console.log('transcripts: ', editTranscript)
+            console.log('RESULT in aCCount: ', result)
         }
-        getStorage()
-    })
+        fetchImageFilename()
+    }, [])
     return (
         state?.user ?
             <View>
@@ -123,13 +136,17 @@ export default function Account() {
                         </View>
                         <View>
                             <Text>Student Card</Text>
-                            <Text>{state.tutor[0].student_card}</Text>
+                            {/* <Text>{state.tutor[0].student_card}</Text> */}
+                            <Image style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${editStudentCard}` }} />
                         </View>
                         <View>
                             <Text>Transcript</Text>
-                            {state.tutor[2].map((transcript: any, i: number) =>
-                                <Text key={i}>{transcript.filename}</Text>
-                            )}
+                            <View style={{flexDirection: 'row'}}>
+                                {editTranscript.map((transcript: any, i: number) =>
+                                    // console.log('INSide .mAP: ', transcript.filename)
+                                    <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} />
+                                )}
+                            </View>
                         </View>
 
                         <View>

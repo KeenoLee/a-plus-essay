@@ -454,4 +454,29 @@ export class UserController {
             return
         }
     }
+    getUserImage = async (req: Request, res: Response) => {
+        try {
+            const token: string = permit.check(req)
+            if (!token) {
+                res.json({ error: 'Please login!' })
+                return
+            }
+            const userInfo: any = jwt_decode(token)
+            if (userInfo.is_tutor) {
+                const result = await this.userService.getUserImage(userInfo.id)
+                console.log(result)
+                if (!result.error) {
+                    res.json(result)
+                    return
+                }
+                res.json(result.error)
+                return
+            }
+            res.json({ error: 'user is not a tutor' })
+            return
+        } catch (error) {
+            res.json(error)
+            return
+        }
+    }
 }
