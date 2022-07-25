@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
 import { useAppNavigation } from '../../routes';
 import OrderMatched from './OrderMatched';
+import DateTime from './DateTime';
 interface UserFile {
     uri: string
     type: string
@@ -147,7 +148,7 @@ export default function OrderSubmission() {
     }
     return (
         orderMatched ?
-            <OrderMatched onPress={()=>setOrderMatched(false)}/> :
+            <OrderMatched onPress={() => setOrderMatched(false)} /> :
             state.user && !state.tutor && state.token ?
                 <SafeAreaView>
                     <ScrollView>
@@ -265,10 +266,7 @@ export default function OrderSubmission() {
 
                             <HStack space={4} alignItems='center'>
                                 <HStack w="150" style={{ marginLeft: 50 }}>
-                                    {orderValue.tutorDeadline ?
-                                        <Text>{format(orderValue.tutorDeadline, 'yyyy-MM-dd HH:mm')}</Text> :
-                                        <Text>{format(Date.now(), 'yyyy-MM-dd HH:mm')}</Text>
-                                    }
+                                    <DateTime time={orderValue.tutorDeadline} />
                                 </HStack>
                                 <HStack>
                                     <DateTimePicker

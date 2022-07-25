@@ -8,12 +8,9 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
 // Status Page 
-import PendingPage from './PendingPage';
-import MatchingPage from './MatchingPage';
-import OngoingPage from './OngoingPage';
-import CompletedPage from './CompletedPage';
 import { env } from '../../env/env';
 import { useAppNavigation } from '../../../routes';
+import { CompletedOrderListPage, MatchingOrderListPage, OngoingOrderListPage, PendingOrderListPage } from './OrderListPage';
 
 const MainTab = createMaterialTopTabNavigator<MainTabParamList>()
 
@@ -41,7 +38,7 @@ export function TopTabNavigator() {
                 tabBarIndicatorStyle: { backgroundColor: 'white' }
             }}
         >
-            <MainTab.Screen name="Pending" component={PendingPage}
+            <MainTab.Screen name="Pending" component={PendingOrderListPage}
             // listeners={{
             //     tabPress: async (event) => {
             //         event.preventDefault()
@@ -60,9 +57,9 @@ export function TopTabNavigator() {
             // }} 
 
             />
-            <MainTab.Screen name="Matching" component={MatchingPage} />
-            <MainTab.Screen name="Ongoing" component={OngoingPage} />
-            <MainTab.Screen name="Completed" component={CompletedPage} />
+            <MainTab.Screen name="Matching" component={MatchingOrderListPage} />
+            <MainTab.Screen name="Ongoing" component={OngoingOrderListPage} />
+            <MainTab.Screen name="Completed" component={CompletedOrderListPage} />
         </MainTab.Navigator>
     )
 }
