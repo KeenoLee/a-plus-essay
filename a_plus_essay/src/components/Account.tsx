@@ -5,7 +5,7 @@ import { Box, HStack, IconButton, StatusBar, Text, View } from 'native-base';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { useAppNavigation } from '../../routes';
+import { useAppNavigation } from '../routes';
 import { env } from '../env/env';
 import { getData } from '../storage/storage';
 interface PreferredSubject {

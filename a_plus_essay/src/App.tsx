@@ -51,9 +51,9 @@ import { HomeDrawer } from './components/HomeDrawer';
 import HomeScreen from './components/HomeScreen';
 import Account from './components/Account';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
-import { useSelector } from 'react-redux';
-import { RootState } from './redux/store';
-import { AppParamList, useAppNavigation } from '../routes';
+import { Provider, useSelector } from 'react-redux';
+import { RootState, store } from './redux/store';
+import { AppParamList, useAppNavigation } from './routes';
 import { useEffect } from 'react';
 import { getData } from './storage/storage';
 import { useDispatch } from 'react-redux';
@@ -300,13 +300,13 @@ export function HomeStack() {
   );
 }
 
-const config = {
-  dependencies: {
-    'linear-gradient': require('react-native-linear-gradient').default,
-  },
-};
+// const config = {
+//   dependencies: {
+// 'linear-gradient': require('react-native-linear-gradient').default,
+//   },
+// };
 
-export default function App() {
+function App2() {
   const state = useSelector((state: RootState) => state.auth)
   console.log('USERID?? ID??: ', state.user)
   const dispatch = useDispatch<AppDispatch>()
@@ -327,13 +327,18 @@ export default function App() {
     getStorage()
   }, [])
   return (
-    <NativeBaseProvider config={config}>
+    <NativeBaseProvider>
       <NavigationContainer>
         {/* <Fabtn/> */}
         <HomeDrawer />
       </NavigationContainer>
     </NativeBaseProvider>
   );
+}
+export default function App() {
+  return <Provider store={store}>
+    <App2 />
+  </Provider>
 }
 
 

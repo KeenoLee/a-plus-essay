@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import * as React from 'react';
 import { Component } from 'react';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
@@ -28,122 +28,136 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input as InputN } from 'native-base';
 import { env } from '../env/env';
-import { AppParamList, useAppNavigation } from '../../routes';
+import { AppParamList, useAppNavigation } from '../routes';
 import { useGet } from '../hooks/use-get';
+import { usePost } from '../hooks/use-post';
 
 // import { Header } from '@react-navigation/native-stack'
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 100 : 0;
 
+interface ChatMessage {
+  id: number;
+  sender_id: number;
+  message: string;
+  updated_at: string
+}
+
 interface Room {
-  otherUser: { id: number; nickname: string; is_tutor: Boolean };
-  messages: [
-    { id: number; sent_by_tutor: Boolean; message: string; updated_at: string },
-  ];
+  otherUser: { id: number; nickname: string; };
+  messages: ChatMessage[];
   order: { id: number; tutor_id: number; student_id: number; title: string };
 }
 interface IChatroomProps {
   room: Room;
+  post: ReturnType<typeof usePost>
+  token: string
 }
 
 interface IChatroomState {
   chatMessage: string;
-  chatMessages: string[];
+  messages: ChatMessage[];
   file?: string;
 }
 
 class Chatroom extends Component<IChatroomProps, IChatroomState> {
-  socket: any;
+  socket: Socket;
   is_hardcode_tutor: boolean;
   scrollView: any;
+  is_first = true;
   constructor(props: IChatroomProps) {
     super(props);
     this.state = {
       chatMessage: '',
-      chatMessages: [],
+      messages: props.room.messages,
     };
     this.is_hardcode_tutor = true;
     this.scrollView = '';
+    this.socket = io(`${env.BACKEND_ORIGIN}`);
+    this.socket.on('connect', () => {
+      console.log('connected!!!!!');
+    });
   }
   componentDidMount() {
-    this.socket = io(`${env.BACKEND_ORIGIN}`);
-    this.socket.on('chat message', (msg: string) => {
-      this.setState({ chatMessages: [...this.state.chatMessages, msg] });
-    });
+    this.socket.on('chat message', this.receivedMessage)
+    this.socket.emit('join', this.props.room.order.id)
+  }
+
+  componentWillUnmount() {
+    this.socket.off('chat message', this.receivedMessage)
+    this.socket.emit('leave', this.props.room.order.id)
+
+
+  }
+  receivedMessage = (message: ChatMessage) => {
+    this.setState({ messages: [...this.state.messages, message] });
   }
 
   async submitChatMessage() {
-    const senderIsTutor = !this.props.room.otherUser.is_tutor;
     const orderId = this.props.room.order.id;
     const newMessage = this.state.chatMessage;
-    const res = await fetch(`${env.BACKEND_ORIGIN}/post/message`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ senderIsTutor, orderId, newMessage }),
-    });
-    const result = await res.json();
-    console.log('SUCCESS? ', result);
+    this.props.post('send message', `/chat/${orderId}/message`, {
+      // senderIsTutor, orderId, newMessage
+      message: newMessage
+    }, json => {
+      console.log('newMessageSuccess? ', json);
 
-    this.socket.emit('chat message', this.state.chatMessage);
-    this.setState({ chatMessage: '' });
+      this.socket.emit('chat message', this.state.chatMessage);
+      if (this.state.chatMessage == newMessage) {
+        this.setState({ chatMessage: '' });
+      }
+    })
+
+    // const res = await fetch(`${env.BACKEND_ORIGIN}/post/message`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ senderIsTutor, orderId, newMessage }),
+    // });
+    // const result = await res.json();
+    // console.log('SUCCESS? ', result);
+
+    // this.socket.emit('chat message', this.state.chatMessage);
+    // this.setState({ chatMessage: '' });
   }
 
   render() {
-    const otherUser_is_tutor = this.props.room.otherUser.is_tutor;
     const messagesFromServer = this.props.room.messages;
-    const messageFromServer = messagesFromServer.map(msg => (
-      <View
-        //TODO: unique ID
-        key={msg + (Math.random() * 100).toFixed(5)}
-        //TODO:
-        style={
-          otherUser_is_tutor == msg.sent_by_tutor
-            ? styles.incomingMessageBox
-            : styles.sendMessageBox
-        }>
-        {otherUser_is_tutor == msg.sent_by_tutor ? (
-          <View>
-            <Text style={styles.otherNickname}>
-              {this.props.room.otherUser.nickname}
-            </Text>
-            <Text style={styles.content}>{msg.message.trim() + '   '}</Text>
-            <Text style={styles.timeDisplay}>
-              {format(new Date(msg.updated_at), 'KK:mm aaa')}
-            </Text>
-          </View>
-        ) : (
-          <View>
-            <Text style={styles.content}>{msg.message.trim() + '   '}</Text>
-            <Text style={styles.timeDisplay}>
-              {format(new Date(msg.updated_at), 'KK:mm aaa')}
-            </Text>
-          </View>
-        )}
-      </View>
-    ));
-
-    const chatMessages = this.state.chatMessages.map(chatMessage => (
-      <View
-        //TODO: unique ID
-        key={chatMessage + (Math.random() * 100).toFixed(5)}
-        //TODO:
-        style={
-          this.props.room.otherUser.is_tutor
-            ? styles.sendMessageBox
-            : styles.incomingMessageBox
-        }>
-        <View>
-          <Text style={styles.content}>
-            {chatMessage.toString().trim() + '   '}
-          </Text>
-          <Text numberOfLines={1} style={styles.timeDisplay}>
-            {format(new Date(), 'KK:mm aaa')}
-          </Text>
+    const messageFromServer = messagesFromServer.map(msg => {
+      let isIncoming = msg.sender_id == this.props.room.otherUser.id
+      return (
+        <View
+          //TODO: unique ID
+          key={msg + (Math.random() * 100).toFixed(5)}
+          //TODO:
+          style={
+            isIncoming
+              ? styles.incomingMessageBox
+              : styles.sendMessageBox
+          }>
+          {isIncoming ? (
+            <View>
+              <Text style={styles.otherNickname}>
+                {this.props.room.otherUser.nickname}
+              </Text>
+              <Text style={styles.content}>{msg.message.trim() + '   '}</Text>
+              <Text style={styles.timeDisplay}>
+                {format(new Date(msg.updated_at), 'KK:mm aaa')}
+              </Text>
+            </View>
+          ) : (
+            <View>
+              <Text style={styles.content}>{msg.message.trim() + '   '}</Text>
+              <Text style={styles.timeDisplay}>
+                {format(new Date(msg.updated_at), 'KK:mm aaa')}
+              </Text>
+            </View>
+          )}
         </View>
-      </View>
-    ));
+      )
+    }
+    );
     return (
       <>
         <SafeAreaView
@@ -155,7 +169,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
             keyboardVerticalOffset={keyboardVerticalOffset}>
             <View style={{ flex: 1, backgroundColor: 'rgb(215,226,225)' }}>
               {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-              <Text>debug：{JSON.stringify(this.props.room) + '-'.repeat(30)}</Text>
+              {/* <Text>debug：{JSON.stringify(this.props.room) + '-'.repeat(30)}</Text> */}
               <ImageBackground
                 style={{ flex: 1, width: '100%', height: '100%' }}
                 source={require('../assets/chatbg.jpg')}
@@ -165,17 +179,19 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
                   ref={ref => {
                     this.scrollView = ref;
                   }}
-                  onContentSizeChange={() =>
-                    this.scrollView.scrollToEnd({ animated: true })
+                  onContentSizeChange={() => {
+                    this.scrollView.scrollToEnd({ animated: !this.is_first })
+                    this.is_first = false
+                  }
                   }
                   automaticallyAdjustContentInsets={true}>
                   {messageFromServer}
-                  {chatMessages}
                   <View
                     style={{
                       backgroundColor: 'transparent',
                       width: 50,
-                      height: 300,
+                      height: 30,
+                      // height: 300,
                     }}></View>
                 </ScrollView>
                 <View style={styles.inputContainer}>
@@ -206,28 +222,24 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
     );
   }
 }
-const ConnectedChatroom = (props: { id: number }) => {
+const ConnectedChatroom = (props: {
+  route: { params: AppParamList['Chatroom'] }
+  token: string
+}) => {
   //   const navigation = useAppNavigation();
   // navigation.getState().routes
   const room = useGet<{ error?: string; room?: Room }>(
     'chatroom',
-    '/chat/' + props.id + '/message',
+    '/chat/' + props.route.params.id + '/message',
     {
       error: 'loading',
     },
   );
-  return room.render(json => <Chatroom room={json.room!} />);
+  const post = usePost()
+  return room.render(json => <Chatroom room={json.room!} post={post} token={props.route.params.token} />);
 };
 
-class ChatroomScreen extends Component<{
-  route: { params: AppParamList['Chatroom'] };
-}> {
-  render() {
-    let id = this.props.route.params.id;
-    return <ConnectedChatroom id={id} />;
-  }
-}
-export default ChatroomScreen;
+export default ConnectedChatroom;
 
 const styles = StyleSheet.create({
   outerContainer: {

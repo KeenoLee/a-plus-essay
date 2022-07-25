@@ -49,7 +49,7 @@ export default class Chatroom extends Component<IChatroomProps, IChatroomState> 
     }
 
     componentDidMount() {
-        this.socket = io(`${env.BACKEND_IP}`)
+        this.socket = io(`${env.BACKEND_ORIGIN}`)
         this.socket.on("chat message", (msg: string) => {
             this.setState({ chatMessages: [...this.state.chatMessages, msg] })
         })
