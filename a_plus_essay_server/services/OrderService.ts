@@ -143,8 +143,8 @@ export class OrderService {
                 .from('order_subject')
                 .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
                 .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
-                .orderBy([
-                    'rating', { column: 'ongoing_order_amount', order: 'asc' }])
+                .where('rating', 5.00)
+                .orderBy('ongoing_order_amount', 'asc')
                 .first();
             if (tutor5Id) { matchedTutors.push({ "id": tutor5Id }) }
             else matchedTutors.push({ "id": -1 });
