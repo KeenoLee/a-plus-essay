@@ -66,11 +66,13 @@ export default function Account() {
                 headers: { Authorization: `Bearer ${state.token}` }
             })
             const result = await res.json()
-            setEditStudentCard(() => result.studentCard.student_card)
-            setEditTranscript(() => result.transcript)
-            // setEditTranscript(()=>[...editTranscript, result.transcript])
-            console.log('studentcard: ', editStudentCard)
-            console.log('transcripts: ', editTranscript)
+            if (!result.error) {
+                setEditStudentCard(() => result.studentCard.student_card)
+                setEditTranscript(() => result.transcript)
+                // setEditTranscript(()=>[...editTranscript, result.transcript])
+                console.log('studentcard: ', editStudentCard)
+                console.log('transcripts: ', editTranscript)
+            }
             console.log('RESULT in aCCount: ', result)
         }
         fetchImageFilename()
@@ -141,7 +143,7 @@ export default function Account() {
                         </View>
                         <View>
                             <Text>Transcript</Text>
-                            <View style={{flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row' }}>
                                 {editTranscript.map((transcript: any, i: number) =>
                                     // console.log('INSide .mAP: ', transcript.filename)
                                     <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} />
