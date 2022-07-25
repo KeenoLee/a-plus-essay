@@ -5,7 +5,7 @@ import { Bearer } from "permit";
 import dotenv from "dotenv";
 import formidable from "formidable";
 import fs from "fs";
-import { request } from "http";
+import { getJWTPayload } from "../utils/get-jwt";
 
 const uploadDir = "uploads";
 fs.mkdirSync(uploadDir, { recursive: true });
@@ -175,24 +175,24 @@ export class OrderController {
     const { orderId, tutorId, charge } = req.body.charge;
 
     if (!charge) {
-        res.status(400).json({ error: 'Charge is missed' });
-        return;
+      res.status(400).json({ error: 'Charge is missed' });
+      return;
     };
 
     if (charge <= 0) {
-        res.status(400).json({ error: 'Charge must be larger than 0' });
-        return;
+      res.status(400).json({ error: 'Charge must be larger than 0' });
+      return;
     };
 
     const budget = await this.orderService.getOrderBudget(orderId);
     if (charge > (budget * 1.1)) {
-        res.status(400).json({ error: 'The charge is over the order budget' })
-        return;
+      res.status(400).json({ error: 'The charge is over the order budget' })
+      return;
     }
 
     await this.orderService.submitQuotation({ orderId, tutorId, charge });
     return ({ success: true })
-}
+  }
 
   // matchOrder = async (req: Request, res: Response) => {
   //     try {
@@ -202,44 +202,40 @@ export class OrderController {
 
   //     }
   // }
-    getPendingOrder = async (req: Request, res: Response) => {
+  getPendingOrder = async (req: Request, res: Response) => {
     // const {id, isTutor} = req.body
     try {
-        const id = +req.params.id;
-        let isTutor: string | boolean = req.params.isTutor;
-        if (isTutor === "true") {
-            isTutor = true;
-        } else {
-            isTutor = false
-        }
-        const pendingOrder = await this.orderService.getPendingOrder(id, isTutor);
-        console.log("Geting pending order... ", pendingOrder);
-        res.json(pendingOrder)
-        return
-    } catch(error) {
-        res.json({error})
-        return
+      let payload = getJWTPayload(req)
+      if (payload.is_tutor) {
+        let json = await this.orderService.getTutorPendingOrder(payload.id)
+        res.json(json)
+      } else {
+        let json = await this.orderService.getStudentPendingOrder(payload.id)
+        res.json(json)
+      }
+    } catch (error) {
+      res.json({ error: String(error) })
     }
-}
-    // getChatMessage = async (req: Request, res: Response) => {
-    //     try {
-    //         const { userId, is_tutor } = req.body
-    //         this.orderService.getChatMessage(userId, is_tutor)
-    //         console.log('id in getChatMassage Contoller: ', userId, is_tutor)
-    //     } catch (err) {
-    //         console.error('orderControllerError: ', err)
-    //         res.status(500).json({ message: "internal server errror" })
-    //     }
-    // }
+  }
+  // getChatMessage = async (req: Request, res: Response) => {
+  //     try {
+  //         const { userId, is_tutor } = req.body
+  //         this.orderService.getChatMessage(userId, is_tutor)
+  //         console.log('id in getChatMassage Contoller: ', userId, is_tutor)
+  //     } catch (err) {
+  //         console.error('orderControllerError: ', err)
+  //         res.status(500).json({ message: "internal server errror" })
+  //     }
+  // }
 
-    acceptOrRejectQuotation = async (req: Request, res: Response) => {
-        const { orderId, tutorId, acceptQuotation } = req.body;
-        if (acceptQuotation === true) {
-            await this.orderService.acceptQuotation({ orderId, tutorId });
-        }
-        if (acceptQuotation === false) {
-            await this.orderService.rejectQuotation({ orderId, tutorId });
-        }
+  acceptOrRejectQuotation = async (req: Request, res: Response) => {
+    const { orderId, tutorId, acceptQuotation } = req.body;
+    if (acceptQuotation === true) {
+      await this.orderService.acceptQuotation({ orderId, tutorId });
     }
+    if (acceptQuotation === false) {
+      await this.orderService.rejectQuotation({ orderId, tutorId });
+    }
+  }
 }
 

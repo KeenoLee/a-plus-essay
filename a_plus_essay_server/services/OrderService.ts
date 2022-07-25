@@ -271,34 +271,27 @@ export class OrderService {
         // !!!!!!!!!!!!!!!!!!!
 
     }
-    async getPendingOrder(id: number, isTutor: boolean) {
-        // await this.knex.select('title', 'tutor_submission_deadline')
-        // .from('order')
-        try {
-            if (isTutor){
-                const tutorOrder = await this.knex.select('id', 'title', 'tutor_submission_deadline')
-                .from('order')
-                .where('tutor_id', id)
-                .whereNull('matched_time')
-                for (let order of tutorOrder) {
-                    const candidate = await this.knex.select('*')
-                    .from('candidate')
-                    .where('order_id', order.id)
-                    .andWhere('tutor_id', id)
-                    console.log(candidate)
-                }
-                return 
+    async getStudentPendingOrder(id: number) {
+        const orders = await this.knex
+            .select('title', 'tutor_submission_deadline')
+            .from('order')
+            .where('student_id', id)
+            .whereNull('matched_time')
+        return { orders }
+    }
 
-            }
-            if (!isTutor) {
-                const studentPendingOrder =  await this.knex.select('title', 'tutor_submission_deadline')
-                .from('order')
-                .where('student_id', id)
-                .whereNull('matched_time')
-                return studentPendingOrder
-            }
-        } catch (error) {
-            console.log('Pending Order Not Found', error)
+    async getTutorPendingOrder(id: number) {
+        const orders = await this.knex.select('id', 'title', 'tutor_submission_deadline')
+            .from('order')
+            .where('tutor_id', id)
+            .whereNull('matched_time')
+        for (let order of orders) {
+            const candidate = await this.knex.select('*')
+                .from('candidate')
+                .where('order_id', order.id)
+                .andWhere('tutor_id', id)
+            console.log(candidate)
         }
+        return { orders }
     }
 }
