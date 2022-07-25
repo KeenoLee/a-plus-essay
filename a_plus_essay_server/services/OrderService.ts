@@ -1,7 +1,8 @@
-import { Knex } from "knex";
+import knex, { Knex } from "knex";
 import { stringify } from "querystring";
 import { OrderItem } from "./models"
 import { Server } from 'socket.io';
+import console from "console";
 
 export class OrderService {
     constructor(private knex: Knex, private io: Server) { }
@@ -250,5 +251,35 @@ export class OrderService {
 
         const studentId = await this.knex.select('student_id').from('order').where('id', quote.orderId);
         this.io.to(`${studentId}`).emit('new-quotation', 'Your order got an new quotation');
+    }
+    async getPendingOrder(id: number, isTutor: boolean) {
+        // await this.knex.select('title', 'tutor_submission_deadline')
+        // .from('order')
+        try {
+            if (isTutor){
+                const tutorOrder = await this.knex.select('id', 'title', 'tutor_submission_deadline')
+                .from('order')
+                .where('tutor_id', id)
+                .whereNull('matched_time')
+                for (let order of tutorOrder) {
+                    const candidate = await this.knex.select('*')
+                    .from('candidate')
+                    .where('order_id', order.id)
+                    .andWhere('tutor_id', id)
+                    console.log(candidate)
+                }
+                return 
+
+            }
+            if (!isTutor) {
+                const studentPendingOrder =  await this.knex.select('title', 'tutor_submission_deadline')
+                .from('order')
+                .where('student_id', id)
+                .whereNull('matched_time')
+                return studentPendingOrder
+            }
+        } catch (error) {
+            console.log('Pending Order Not Found', error)
+        }
     }
 }
