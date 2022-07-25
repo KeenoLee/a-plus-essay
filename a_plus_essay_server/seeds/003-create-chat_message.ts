@@ -10,7 +10,10 @@ export async function seed(knex: Knex): Promise<void> {
     let orderId1
     let orderId2
     let orderId3
-    [orderId1, orderId2, orderId3] = orderRow.map((v) => v.id)
+    let orderId4
+    let orderId5
+    let orderId6
+    [orderId1, orderId2, orderId3, orderId4, orderId5, orderId6] = orderRow.map((v) => v.id)
     let chat_msg_id = await knex("chat_message").insert([
         { order_id: orderId1, sent_by_tutor: true, message: 'id1 m1' },
         { order_id: orderId1, sent_by_tutor: false, message: 'id1 m2' },
