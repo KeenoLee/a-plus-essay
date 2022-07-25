@@ -51,10 +51,10 @@ const SelectTutorStack = createStackNavigator()
 export default function SelectTutor() {
     const [tutors, setTutors] = useState('hi')
     const [isSelected, setIsSelected] = useState(false)
-    const userInfo = useSelector((state: RootState) => state.auth.user)
+    const state = useSelector((state: RootState) => state.auth)
     const navigation = useNavigation()
     // const TutorInformationStack = createStackNavigator()
-    useCallback(async()=>{
+    useCallback(async () => {
         const res = await fetch(`${env.BACKEND_URL}/select-tutor`)
         const matchedTutors = await res.json()
         console.log(matchedTutors)
@@ -62,48 +62,48 @@ export default function SelectTutor() {
             console.log(matchedTutors.error)
         }
 
-    },[])
+    }, [])
     return (
-        !userInfo?.user_id && !userInfo?.is_admin && !userInfo?.is_tutor ?
-            <View style={styles.page}>
-                <TouchableOpacity onPress={() => {
-                    setIsSelected(!isSelected)
-                }}>
-                    <TutorBox isSelected={isSelected} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                    setIsSelected(!isSelected)
-                }}>
-                    <TutorBox isSelected={isSelected} />
-                </TouchableOpacity><TouchableOpacity onPress={() => {
-                    setIsSelected(!isSelected)
-                }}>
-                    <TutorBox isSelected={isSelected} />
-                </TouchableOpacity>
-                {/* <SelectTutorStack.Navigator>
+        state.user && !state.tutor ?
+        <View style={styles.page}>
+            <TouchableOpacity onPress={() => {
+                setIsSelected(!isSelected)
+            }}>
+                <TutorBox isSelected={isSelected} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                setIsSelected(!isSelected)
+            }}>
+                <TutorBox isSelected={isSelected} />
+            </TouchableOpacity><TouchableOpacity onPress={() => {
+                setIsSelected(!isSelected)
+            }}>
+                <TutorBox isSelected={isSelected} />
+            </TouchableOpacity>
+            {/* <SelectTutorStack.Navigator>
                     <SelectTutorStack.Screen name="Tutor Box" component={TutorBox} />
                 </SelectTutorStack.Navigator> */}
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 50 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 50 }}>
 
-                    <TouchableOpacity style={{ backgroundColor: 'rgb(142,208,175)', padding: 10, borderRadius: 10, width: 80 }}>
-                        <Text style={styles.buttonText}>Confirm</Text>
-                    </TouchableOpacity>
+                <TouchableOpacity style={{ backgroundColor: 'rgb(142,208,175)', padding: 10, borderRadius: 10, width: 80 }}>
+                    <Text style={styles.buttonText}>Confirm</Text>
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={{ backgroundColor: 'rgb(214,148,172)', padding: 10, borderRadius: 10, width: 80 }}>
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
-            </View> :
-            <View>
-                {/* {Alert.alert(
+                <TouchableOpacity style={{ backgroundColor: 'rgb(214,148,172)', padding: 10, borderRadius: 10, width: 80 }}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+            </View>
+        </View> :
+    <View>
+        {/* {Alert.alert(
                 'Unauthorized',
                 'Please login to submit order!',
                 // [
                 //     { text: 'OK', onPress: () => { navigation.navigate('Welcome') }},
                 // ]
                 )} */}
-            </View>
+    </View>
     )
 }
 
