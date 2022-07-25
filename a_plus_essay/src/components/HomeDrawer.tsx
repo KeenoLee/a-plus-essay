@@ -1,7 +1,7 @@
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import * as React from 'react';
 
-import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import OrderSubmission from './OrderSubmission';
 import Welcome from '../pages/Welcome';
 import Register from './Register';
@@ -10,28 +10,33 @@ import Rules from '../pages/Rules';
 import AboutUs from '../pages/AboutUs';
 import LoginPage from './LoginPage';
 import HomeScreen from './HomeScreen';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import App, {HomeStack, Tabs} from '../App';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import App, { HomeStack, Tabs } from '../App';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import SelectTutor from './SelectTutor';
 import ChatRoom from './Chatroom';
 import {useRoute} from '@react-navigation/native';
 import {RootState} from '../redux/store';
 import {useSelector} from 'react-redux';
 import ChatListScreen from '../pages/ChatList';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../redux/dispatch';
+import { logout } from '../redux/auth/actions';
+import { getData, removeData } from '../storage/storage';
 
 const Drawer = createDrawerNavigator();
 
 export function HomeDrawer() {
   const state = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>()
   //    let loc = useLocationHook();
 
   // const [ showsMenu, setShowsMenu ] = useState(true)
 
   return (
     <Drawer.Navigator
-      screenOptions={{
-        headerStyle: {backgroundColor: '#BBD3CF'},
+      screenOptions={() => ({
+        headerStyle: { backgroundColor: '#BBD3CF' },
         // headerShown:false,
         // headerShown: showsMenu,
         // headerLeft: ()=>null,
@@ -43,8 +48,8 @@ export function HomeDrawer() {
         drawerActiveTintColor: '#5eead4',
         drawerStyle: {
           // width: 500,
-        },
-      }}
+        }
+      })}
       // drawerContent={}
       initialRouteName="Home Stack">
       <Drawer.Screen
@@ -57,11 +62,7 @@ export function HomeDrawer() {
       {/* <Drawer.Screen name="Login" component={LoginPage} options={{ title: ""}}/> */}
       {state.token ? null : (
         <>
-          <Drawer.Screen
-            name="Login"
-            component={LoginPage}
-            options={{headerTitle: ''}}
-          />
+          <Drawer.Screen name="Login" component={LoginPage} options={{ headerTitle: '' }} />
           <Drawer.Screen name="Sign up" component={Register} />
         </>
       )}
@@ -75,11 +76,16 @@ export function HomeDrawer() {
         <Drawer.Screen name="Chatroom" component={ChatListScreen} />
       ) : null}
       {state.token ? (
-        <Drawer.Screen
-          name="Logout"
-          component={LoginPage}
-          options={{headerShown: false}}
-        />
+        <Drawer.Screen name="Logout" component={LoginPage} listeners={{
+          drawerItemPress: async () => {
+            dispatch(logout())
+            await removeData('token')
+            console.log('Store should be removed: ', state)
+            console.log('async storage should be removed: ', await getData('token'))
+          }
+        }} options={() => ({
+          headerShown: false
+        })} />
       ) : null}
     </Drawer.Navigator>
   );
