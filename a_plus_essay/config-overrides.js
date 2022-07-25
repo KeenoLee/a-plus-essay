@@ -11,10 +11,12 @@ module.exports = override(
         '@babel/plugin-syntax-jsx',
     ),
     // Add not-supported-by-web files
-    // addWebpackAlias({
-    //     'react-native-ble': require.resolve('./empty/index.js'),
-    // 'react-native-image-picker': require.resolve('./node_modules/source-map-loader/dist/cjs.js'),
-    // }),
+    addWebpackAlias({
+        // 'react-native-ble': require.resolve('./empty/index.js'),
+        // 'react-native-image-picker': require.resolve('./node_modules/source-map-loader/dist/cjs.js'),
+        // 'react-native-linear-gradient': require.resolve('./empty/index.js')
+        'lottie-react-native': 'react-native-web-lottie'
+    }),
     addWebpackPlugin(
         new webpack.DefinePlugin({
             __DEV__: true
@@ -27,5 +29,6 @@ module.exports = override(
         path.resolve(__dirname, 'node_modules/date-fns'),
         path.resolve(__dirname, 'node_modules/react-native-image-picker'),
         path.resolve(__dirname, 'node_modules/react-native-reanimated'),
+        // path.resolve(__dirname, 'node_modules/react-native-linear-gradient'),
     ]),
 );

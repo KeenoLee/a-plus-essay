@@ -38,7 +38,7 @@ import {
 import { fetchLogin } from '../redux/auth/actions';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/dispatch';
-import { useAppNavigation } from '../../routes';
+import { useAppNavigation } from '../routes';
 // import RNFetchBlob from 'rn-fetch-blob'
 
 const roleData: RadioButtonProps[] = [
@@ -128,7 +128,6 @@ interface TutorData {
 }
 
 async function fetchStudent(registerData: StudentData) {
-    // const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/register/tutor`)
     const res = await fetch(`${env.BACKEND_URL}/register/student`, {
         method: 'POST',
         headers: {

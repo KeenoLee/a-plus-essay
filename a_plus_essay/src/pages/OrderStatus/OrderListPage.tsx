@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react'
 import { useGet } from '../../hooks/use-get'
-import { AppParamList } from '../../../routes'
+import { AppParamList } from '../../routes'
 import { format } from 'date-fns'
 import DateTime from '../../components/DateTime'
 import Ionicons from 'react-native-vector-icons/Ionicons'
