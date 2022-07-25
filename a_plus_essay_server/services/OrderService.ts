@@ -184,6 +184,7 @@ export class OrderService {
                     order_id: orderId,
                     tutor_id: tutor5Id,
                     charge: null,
+                    category: 5,
                     accept_time: null,
                     reject_time: null,
                     expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
@@ -192,6 +193,7 @@ export class OrderService {
                     order_id: orderId,
                     tutor_id: tutor4Id,
                     charge: null,
+                    category: 4,
                     accept_time: null,
                     reject_time: null,
                     expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
@@ -200,6 +202,7 @@ export class OrderService {
                     order_id: orderId,
                     tutor_id: tutor3Id,
                     charge: null,
+                    category: 3,
                     accept_time: null,
                     reject_time: null,
                     expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
@@ -208,6 +211,7 @@ export class OrderService {
                     order_id: orderId,
                     tutor_id: newTutorId,
                     charge: null,
+                    category: 0,
                     accept_time: null,
                     reject_time: null,
                     expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
