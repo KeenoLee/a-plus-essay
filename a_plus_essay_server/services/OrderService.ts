@@ -23,7 +23,7 @@ export class OrderService {
                 description: order.description,
                 budget: order.budget,
                 matched_time: null,
-                completed_time: null,
+                completed_time: order.tutorDeadline,
                 paid_by_student_time: null,
                 paid_to_tutor_time: null,
                 tutor_submission_deadline: order.tutorDeadline,
