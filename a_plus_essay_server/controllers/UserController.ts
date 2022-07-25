@@ -176,6 +176,11 @@ export class UserController {
         console.log('JWT: ', jwt)
         console.log('decoded: ', jwt_decode(jwt))
 
+        if (isLoggedIn.success === false) {
+            res.status(400).json({ error: "Incorrect password" });
+            return;
+        };
+
         if (isLoggedIn.success === true) {
             if (!isLoggedIn.tutorInfo) {
                 res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo });
@@ -185,8 +190,6 @@ export class UserController {
             res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo, tutorInfo: isLoggedIn.tutorInfo });
             return
         }
-        res.status(400).json({ error: "Incorrect password" });
-        return;
     }
 
     loginWithFacebook = async (req: Request, res: Response) => {
