@@ -69,6 +69,7 @@ chatRoutes.get("/chat/:id/message", chatController.getChatroom);
 chatRoutes.post("/post/message", chatController.postMessage);
 
 
+
 // async function testing() {
 //     let chats = await chatService.getChatroomListById(); //use 53 if input ID
 //     console.log(chats);
@@ -79,6 +80,8 @@ orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
 orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
+orderRoutes.get("/order/pending/:id/:isTutor", orderController.getPendingOrder)
+
 orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
 
 app.use(userRoutes);
