@@ -1,42 +1,43 @@
 // import { NavigationContainer } from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import {Text, StyleSheet, ScrollView, Alert, FlatList} from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import { Text, StyleSheet, ScrollView, Alert, FlatList, ImageBackground } from 'react-native';
+import React, { Fragment, useEffect, useState } from 'react';
 import Chatroom from '../components/Chatroom';
-import {View, Divider} from 'native-base';
-import {then} from '@beenotung/tslib';
-import {format, formatDistanceToNow} from 'date-fns';
-import {useSelector} from 'react-redux';
-import {RootState} from '../redux/store';
+import { View, Divider } from 'native-base';
+import { then } from '@beenotung/tslib';
+import { format, formatDistanceToNow } from 'date-fns';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 import uuid from 'react-native-uuid';
 
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {useGet} from '../hooks/use-get';
-import {useAppNavigation} from '../../routes';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { useGet } from '../hooks/use-get';
+import { useAppNavigation } from '../../routes';
 
 const Stack = createStackNavigator();
 
 interface ChatRoom {
   order_id: number;
   title: string;
-  nickname: string;
-  is_tutor: boolean;
-  last_message: string;
-  last_message_time: string;
+  nickname?: string;
+  is_tutor?: boolean;
+  last_message?: string;
+  last_message_time?: string;
 }
 interface ChatListProps {
   chatRoom: ChatRoom;
 }
 
 const ChatListItem = (props: ChatListProps) => {
-  const {chatRoom} = props;
+  const { chatRoom } = props;
   const navigation = useAppNavigation();
 
   const onClick = () => {
-    navigation.navigate({name: 'Chatroom', params: {id: chatRoom.order_id}});
+    navigation.navigate({ name: 'Chatroom', params: { id: chatRoom.order_id } });
+    console.log('Should save user_id, order_id, last_message_id', chatRoom,)
   };
   // return (
   //   <View>
@@ -54,22 +55,26 @@ const ChatListItem = (props: ChatListProps) => {
             <Text numberOfLines={1} style={styles.assignmentName}>
               {chatRoom.title}
             </Text>
-            {/* <Text style={styles.timeFormat}>{format(new Date(chatRoom.last_message_time), '   KK:mm aaa')}</Text> */}
             <Text style={styles.timeFormat}>
-              {formatDistanceToNow(new Date(chatRoom.last_message_time), {
-                addSuffix: true,
-              })}
+              {(chatRoom.last_message_time == undefined)
+                ? ' ' :
+                (formatDistanceToNow(new Date(chatRoom.last_message_time), {
+                  addSuffix: true,
+                }))}
             </Text>
           </View>
           <View style={styles.secondRow}>
             <Text style={styles.lastSender}>
-              {'    ' + chatRoom.nickname + ': '}
+              {(chatRoom.nickname == undefined)
+                ? ' ' :
+                ('    ' + chatRoom.nickname + ': ')}
             </Text>
             <Text numberOfLines={1} style={styles.text}>
-              {chatRoom.last_message}
+              {(chatRoom.last_message == undefined)
+                ? ' ' :
+                chatRoom.last_message}
             </Text>
           </View>
-          {/* <Text>{'toDelete - id: ' + chatRoom.chatroom_id}</Text> */}
         </View>
       </TouchableWithoutFeedback>
       <Divider style={styles.divider} />
@@ -81,30 +86,34 @@ const ChatListItem = (props: ChatListProps) => {
 };
 
 export default function ChatListScreen() {
-  const chatList = useGet<{rooms: ChatRoom[]; error?: string}>(
+  const chatList = useGet<{ rooms: ChatRoom[]; error?: string }>(
     'chatrooms',
     '/chat/list',
-    {error: 'loading', rooms: []},
+    { error: 'loading', rooms: [] },
   );
 
   const state = useSelector((state: RootState) => state.auth);
-  // console.log('userInfo in ChatList', state?.user);
-  // console.log('tutorInfo in ChatList', state?.tutor);
+  console.log('userInfo in ChatList', state?.user);
+  console.log('tutorInfo in ChatList', state?.tutor);
+  console.log(chatList)
   const navigation = useAppNavigation();
 
   return state?.user || state?.tutor ? (
-    <View style={styles.container}>
-      {/* <ScrollView> */}
-      {chatList.render(json => (
-        <FlatList
-          style={{width: '100%'}}
-          data={json.rooms}
-          renderItem={({item}) => <ChatListItem chatRoom={item} />}
-          keyExtractor={item => String(item.order_id)}
-        />
-      ))}
-      {/* </ScrollView> */}
-    </View>
+    <ImageBackground
+      style={{ flex: 1, width: '100%', height: '100%' }}
+      source={require('../assets/chatbg.jpg')}
+      imageStyle={{ opacity: 0.35 }}>
+      <View style={styles.container}>
+        {chatList.render(json => (
+          <FlatList
+            style={{ width: '100%' }}
+            data={json.rooms}
+            renderItem={({ item }) => <ChatListItem chatRoom={item} />}
+            keyExtractor={item => String(item.order_id)}
+          />
+        ))}
+      </View>
+    </ImageBackground>
   ) : (
     <View>
       {Alert.alert('Unauthorized', 'Please login to view chatroom!', [
