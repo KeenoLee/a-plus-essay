@@ -1,7 +1,8 @@
-import { Knex } from "knex";
+import knex, { Knex } from "knex";
 import { stringify } from "querystring";
 import { OrderItem } from "./models"
 import { Server } from 'socket.io';
+import console from "console";
 
 export class OrderService {
     constructor(private knex: Knex, private io: Server) { }
@@ -179,10 +180,6 @@ export class OrderService {
             if (newTutorId) { matchedTutors.push({ "id": newTutorId }) }
             else matchedTutors.push({ "id": -1 });
 
-            const time = new Date();
-            const newHour = time.getHours() + 2;
-            time.setHours(newHour);
-
             await this.knex.insert([
                 {
                     order_id: orderId,
@@ -190,7 +187,7 @@ export class OrderService {
                     charge: null,
                     accept_time: null,
                     reject_time: null,
-                    expire_time: time.toLocaleString('en-US', { hour12: false })
+                    expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
                 },
                 {
                     order_id: orderId,
@@ -198,7 +195,7 @@ export class OrderService {
                     charge: null,
                     accept_time: null,
                     reject_time: null,
-                    expire_time: time.toLocaleString('en-US', { hour12: false })
+                    expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
                 },
                 {
                     order_id: orderId,
@@ -206,7 +203,7 @@ export class OrderService {
                     charge: null,
                     accept_time: null,
                     reject_time: null,
-                    expire_time: time.toLocaleString('en-US', { hour12: false })
+                    expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
                 },
                 {
                     order_id: orderId,
@@ -214,7 +211,7 @@ export class OrderService {
                     charge: null,
                     accept_time: null,
                     reject_time: null,
-                    expire_time: time.toLocaleString('en-US', { hour12: false })
+                    expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
                 },
             ]).into('candidate');
 
@@ -224,7 +221,7 @@ export class OrderService {
             };
 
             matchedTutors.map((tutor) => {
-                if (tutor.id > 0) { this.io.to(`${tutor.id}`).emit('new-order', 'An new order is matched') }
+                if (tutor.id > 0) { this.io.to(`${tutor.id}`).emit('new-order', 'You have an new order.') }
             });
 
         } catch (error) {
@@ -241,14 +238,67 @@ export class OrderService {
         const time = new Date();
 
         await this.knex('candidate')
-            .where('order_Id', quote.orderId)
+            .where('order_id', quote.orderId)
             .andWhere('tutor_id', quote.tutorId)
             .update({
                 charge: quote.charge,
-                accept_time: time.toLocaleString('en-US', { hour12: false })
             })
 
         const studentId = await this.knex.select('student_id').from('order').where('id', quote.orderId);
-        this.io.to(`${studentId}`).emit('new-quotation', 'Your order got an new quotation');
+        this.io.to(`${studentId}`).emit('new-quotation', 'Your order got an new quotation.');
+        return;
+    }
+
+    async acceptQuotation(input: { orderId: number, tutorId: number }) {
+        await this.knex('candidate')
+            .where('order_id', input.orderId)
+            .andWhere('tutor_id', input.tutorId)
+            .update({ accept_time: this.knex.fn.now() });
+
+        await this.knex('order').where('id', input.orderId).update({ tutor_id: input.tutorId, matched_time: this.knex.fn.now() });
+        this.io.to(`${input.tutorId}`).emit('order-matched', 'An order is matched successfully.')
+        return;
+    }
+
+    async rejectQuotation(input: { orderId: number, tutorId: number }) {
+        await this.knex('candidate')
+            .where('order_id', input.orderId)
+            .andWhere('tutor_id', input.tutorId)
+            .update({ reject_time: this.knex.fn.now() });
+
+        const rating = await this.knex.select('rating').from('tutor').where('id', input.tutorId);
+
+        // !!!!!!!!!!!!!!!!!!!
+
+    }
+    async getPendingOrder(id: number, isTutor: boolean) {
+        // await this.knex.select('title', 'tutor_submission_deadline')
+        // .from('order')
+        try {
+            if (isTutor){
+                const tutorOrder = await this.knex.select('id', 'title', 'tutor_submission_deadline')
+                .from('order')
+                .where('tutor_id', id)
+                .whereNull('matched_time')
+                for (let order of tutorOrder) {
+                    const candidate = await this.knex.select('*')
+                    .from('candidate')
+                    .where('order_id', order.id)
+                    .andWhere('tutor_id', id)
+                    console.log(candidate)
+                }
+                return 
+
+            }
+            if (!isTutor) {
+                const studentPendingOrder =  await this.knex.select('title', 'tutor_submission_deadline')
+                .from('order')
+                .where('student_id', id)
+                .whereNull('matched_time')
+                return studentPendingOrder
+            }
+        } catch (error) {
+            console.log('Pending Order Not Found', error)
+        }
     }
 }

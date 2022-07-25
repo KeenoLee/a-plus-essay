@@ -60,10 +60,12 @@ userRoutes.get("/login/facebook", userController.loginWithFacebook);
 userRoutes.post("/resetpassword", userController.resetPassword);
 userRoutes.post("/tutor-file", userController.uploadTutorFile);
 userRoutes.post("/edit-profile", userController.editProfile);
+userRoutes.get("/login/token", userController.loginWithToken);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:id/message", chatController.getChatroom);
 chatRoutes.post("/post/message", chatController.postMessage);
+
 
 
 // async function testing() {
@@ -76,6 +78,9 @@ orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
 orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
+orderRoutes.get("/order/pending/:id/:isTutor", orderController.getPendingOrder)
+
+orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
 
 app.use(userRoutes);
 app.use(orderRoutes);

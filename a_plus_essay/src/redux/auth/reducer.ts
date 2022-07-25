@@ -9,7 +9,9 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
 
     if (action.type === '@@auth/LOGIN_FAILED') {
         console.log('initializing state...')
-        return initialState
+        return {
+            ...initialState
+        }
     }
     if (action.type === '@@auth/LOGIN_AS_STUDENT') {
         return {
@@ -36,6 +38,10 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
             ...state,
             token: action.token
         }
+    }
+    if (action.type === '@@auth/LOGOUT') {
+        console.log('logouting... going to initialize state...')
+        return initialState
     }
     console.log('returning initialState... ', initialState)
     return initialState
