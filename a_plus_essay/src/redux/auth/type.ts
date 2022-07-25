@@ -1,5 +1,5 @@
 export interface UserInfo {
-    user_id: number,
+    id: number,
     nickname: string,
     email: string,
     phone_number: string,
@@ -9,7 +9,7 @@ export interface UserInfo {
     updated_at: Date
 }
 export interface TutorInfo {
-    tutor_id: number,
+    id: number,
     is_verified: boolean,
     student_card: string | null,
     rating: string,

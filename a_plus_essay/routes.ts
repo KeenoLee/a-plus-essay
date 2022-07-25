@@ -18,6 +18,7 @@ export type AppParamList = {
     // 'A Plus Essay': undefined
     'Login': undefined
     'Account': undefined
+    'Pending': undefined
 }
 
 export type AppRouteName = keyof AppParamList

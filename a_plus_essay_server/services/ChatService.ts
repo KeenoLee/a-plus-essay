@@ -11,6 +11,9 @@ export class ChatService {
     constructor(private knex: Knex, private io: Server) { }
 
     async getChatroomListById(userId: number) {
+
+        //1. get only room title
+        //2. get last message, time, tutor
         //TODO: unread message, use group by order_id 008R_11055
         let chatroomList: ChatroomList[] = await this.knex
             .select(
@@ -37,7 +40,19 @@ export class ChatService {
             .orderBy("chat_message.updated_at", "desc");
         // .where(userId, order.studentId )
         // .where('order.paid_by_student_time', '!=', null)
-        return chatroomList;
+        console.log(userId);
+        console.log('crl:', chatroomList)
+        if (chatroomList.length == 0) {
+            let newChatroomList = await this.knex
+                .select('title', 'id as order_id')
+                .from('order')
+                .whereNotNull('tutor_id')
+                .andWhere('student_id', userId)
+            console.log('newchatroom:', newChatroomList)
+            return newChatroomList
+        } else {
+            return chatroomList;
+        }
     }
     async getUnReadMessageNotification() {
         // 
@@ -60,7 +75,6 @@ export class ChatService {
         console.log('INPUT?: ', input)
         let [{ id }] = await this.knex
             .insert({
-                id: 999,
                 order_id: input.orderId,
                 sent_by_tutor: input.senderIsTutor,
                 message: input.newMessage,
