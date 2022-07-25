@@ -10,11 +10,11 @@ import {
   ImageBackground,
 } from 'react-native';
 import * as React from 'react';
-import {Component} from 'react';
+import { Component } from 'react';
 import io from 'socket.io-client';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScrollView} from 'react-native-gesture-handler';
-import {format} from 'date-fns';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
+import { format } from 'date-fns';
 import {
   Button,
   Center,
@@ -24,31 +24,23 @@ import {
   Stack,
   VStack,
 } from 'native-base';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Input as InputN} from 'native-base';
-import {env} from '../env/env';
-import {AppParamList, useAppNavigation} from '../../routes';
-import {useGet} from '../hooks/use-get';
+import { Input as InputN } from 'native-base';
+import { env } from '../env/env';
+import { AppParamList, useAppNavigation } from '../../routes';
+import { useGet } from '../hooks/use-get';
 
 // import { Header } from '@react-navigation/native-stack'
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 100 : 0;
-// export default function Chatroom() {
-//     const socket = io("http://192.168.168.94:8111")
-//     return (
-//         <View>
-//             <Text>Chatroom</Text>
-//         </View>
-//     )
-// }
 
 interface Room {
-  otherUser: {id: number; nickname: string; is_tutor: Boolean};
+  otherUser: { id: number; nickname: string; is_tutor: Boolean };
   messages: [
-    {id: number; sent_by_tutor: Boolean; message: string; updated_at: string},
+    { id: number; sent_by_tutor: Boolean; message: string; updated_at: string },
   ];
-  order: {id: number; tutor_id: number; student_id: number; title: string};
+  order: { id: number; tutor_id: number; student_id: number; title: string };
 }
 interface IChatroomProps {
   room: Room;
@@ -76,19 +68,11 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
   componentDidMount() {
     this.socket = io(`${env.BACKEND_ORIGIN}`);
     this.socket.on('chat message', (msg: string) => {
-      this.setState({chatMessages: [...this.state.chatMessages, msg]});
+      this.setState({ chatMessages: [...this.state.chatMessages, msg] });
     });
   }
 
   async submitChatMessage() {
-    this.socket.emit(
-      'chat message',
-      'istutor: ' + JSON.stringify(!this.props.room.otherUser.is_tutor),
-    );
-    this.socket.emit(
-      'chat message',
-      'orderid:' + JSON.stringify(this.props.room.order.id),
-    );
     const senderIsTutor = !this.props.room.otherUser.is_tutor;
     const orderId = this.props.room.order.id;
     const newMessage = this.state.chatMessage;
@@ -97,46 +81,14 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({senderIsTutor, orderId, newMessage}),
+      body: JSON.stringify({ senderIsTutor, orderId, newMessage }),
     });
     const result = await res.json();
     console.log('SUCCESS? ', result);
 
     this.socket.emit('chat message', this.state.chatMessage);
-    this.setState({chatMessage: ''});
+    this.setState({ chatMessage: '' });
   }
-
-  // addFile = () => {
-  //     this.openGallery(file => {
-  //         setState(file)
-  //     })
-  // }
-
-  // openGallery = (callback: (file: { uri: string, filename: string, type: string, base64Data: string }) => void) => {
-  //     launchImageLibrary({
-  //         mediaType: 'photo',
-  //         includeBase64: true
-  //     }, (res) => {
-  //         if (res.didCancel) {
-  //             console.log('user cancelled image picker')
-  //         } else if (res.errorMessage) {
-  //             console.log('Error: ', res.errorMessage)
-  //         } else {
-  //             let uri = res.assets?.[0].uri
-  //             let filename = res.assets?.[0].fileName
-  //             let type = res.assets?.[0].type
-  //             let base64Data = res.assets?.[0].base64
-  //             // console.log(base64.decode(base64Format!))
-  //             // console.log('base64', base64Format)
-  //             if (uri && filename && type && base64Data) {
-  //                 callback({ uri, filename, type, base64Data })
-  //                 return
-  //             }
-  //             console.log('file is not found')
-  //             return
-  //         }
-  //     })
-  // }
 
   render() {
     const otherUser_is_tutor = this.props.room.otherUser.is_tutor;
@@ -196,27 +148,25 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
       <>
         <SafeAreaView
           edges={['bottom', 'left', 'right']}
-          style={{flex: 1, backgroundColor: 'rgb(188,211,207)'}}>
+          style={{ flex: 1, backgroundColor: 'rgb(188,211,207)' }}>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             style={styles.outerContainer}
             keyboardVerticalOffset={keyboardVerticalOffset}>
-            <View style={{flex: 1, backgroundColor: 'rgb(215,226,225)'}}>
+            <View style={{ flex: 1, backgroundColor: 'rgb(215,226,225)' }}>
               {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-              <Text>
-                debug：{JSON.stringify(this.props.room) + '-'.repeat(30)}
-              </Text>
+              <Text>debug：{JSON.stringify(this.props.room) + '-'.repeat(30)}</Text>
               <ImageBackground
-                style={{flex: 1, width: '100%', height: '100%'}}
+                style={{ flex: 1, width: '100%', height: '100%' }}
                 source={require('../assets/chatbg.jpg')}
-                imageStyle={{opacity: 0.35}}>
+                imageStyle={{ opacity: 0.35 }}>
                 <ScrollView
-                  style={{flex: 1, marginBottom: 40}}
+                  style={{ flex: 1, marginBottom: 40 }}
                   ref={ref => {
                     this.scrollView = ref;
                   }}
                   onContentSizeChange={() =>
-                    this.scrollView.scrollToEnd({animated: true})
+                    this.scrollView.scrollToEnd({ animated: true })
                   }
                   automaticallyAdjustContentInsets={true}>
                   {messageFromServer}
@@ -238,7 +188,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
                     value={this.state.chatMessage}
                     onSubmitEditing={() => this.submitChatMessage()}
                     onChangeText={chatMessage => {
-                      this.setState({chatMessage});
+                      this.setState({ chatMessage });
                     }}
                   />
                   <Ionicons
@@ -256,10 +206,10 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
     );
   }
 }
-const ConnectedChatroom = (props: {id: number}) => {
+const ConnectedChatroom = (props: { id: number }) => {
   //   const navigation = useAppNavigation();
   // navigation.getState().routes
-  const room = useGet<{error?: string; room?: Room}>(
+  const room = useGet<{ error?: string; room?: Room }>(
     'chatroom',
     '/chat/' + props.id + '/message',
     {
@@ -270,7 +220,7 @@ const ConnectedChatroom = (props: {id: number}) => {
 };
 
 class ChatroomScreen extends Component<{
-  route: {params: AppParamList['Chatroom']};
+  route: { params: AppParamList['Chatroom'] };
 }> {
   render() {
     let id = this.props.route.params.id;
