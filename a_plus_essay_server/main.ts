@@ -80,7 +80,7 @@ orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
 orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
-orderRoutes.get("/order/pending/:id/:isTutor", orderController.getPendingOrder)
+// orderRoutes.get("/order/pending/:id/:isTutor", orderController.getPendingOrder)
 
 orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
 
