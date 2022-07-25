@@ -12,12 +12,14 @@ import PendingPage from './PendingPage';
 import MatchingPage from './MatchingPage';
 import OngoingPage from './OngoingPage';
 import CompletedPage from './CompletedPage';
+import { env } from '../../env/env';
+import { useAppNavigation } from '../../../routes';
 
 const MainTab = createMaterialTopTabNavigator<MainTabParamList>()
 
 export type MainTabParamList = {
     Pending: undefined,
-    Matching:undefined,
+    Matching: undefined,
     Ongoing: undefined,
     Completed: undefined,
 }
@@ -27,6 +29,8 @@ export type MainTabParamList = {
 //TODO: Add button link to orderSubmission
 
 export function TopTabNavigator() {
+    const state = useSelector((state: RootState) => state.auth)
+    const navigation = useAppNavigation()
     return (
         <MainTab.Navigator
             initialRouteName="Pending"
@@ -34,9 +38,27 @@ export function TopTabNavigator() {
                 tabBarActiveTintColor: 'black',
                 tabBarStyle: { backgroundColor: '#BBD3CF' },
                 tabBarLabelStyle: { fontSize: 10, fontWeight: 'bold' },
-                tabBarIndicatorStyle: {backgroundColor: 'white'}
-            }}>
-            <MainTab.Screen name="Pending" component={PendingPage} />
+                tabBarIndicatorStyle: { backgroundColor: 'white' }
+            }}
+        >
+            <MainTab.Screen name="Pending" component={PendingPage} listeners={{
+                tabPress: async (event) => {
+                    event.preventDefault()
+                    if (state.user) {
+                        console.log('User IDDDDD', state.user.id)
+                        const res = await fetch(`${env.BACKEND_URL}/order/pending/${state.user.id}/${state.user.is_tutor}`)
+                        const result = await res.json()
+                        console.log('BE', result)
+                        if (!result.error) {
+                            navigation.navigate('Pending', {result: result, isTutor: state.user.is_tutor})
+                        }
+                        return result
+                    }
+
+                },
+            }} 
+
+            />
             <MainTab.Screen name="Matching" component={MatchingPage} />
             <MainTab.Screen name="Ongoing" component={OngoingPage} />
             <MainTab.Screen name="Completed" component={CompletedPage} />
