@@ -1,9 +1,22 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import React, { useEffect } from 'react'
+import { useGet } from '../../hooks/use-get'
 
+export default function PendingPage(props: any) {
+    useGet('pending orders', '/order/pending', { error: 'loading' })
+    console.log('propppppps', props)
+    if (props.route) {
+        // const result = props.route.params?.result
+        // const isTutor = props.route.params?.isTutor
+    }
+    // useEffect(() =>{
+    //     if(props.route) {
+    //         console.log(props.route)
+    //     }
+    // },[props])
 
-export default function PendingPage() {
+    // console.log('inside pending page ararararaararar: ', props.route.params.isTutor)
+
     return (
         <View>
             <ScrollView>

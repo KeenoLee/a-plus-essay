@@ -8,13 +8,13 @@ import {
   VStack,
   Text,
 } from 'native-base';
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 // import {Text} from 'react-native';
-import {env} from '../env/env';
-import {RootState} from '../redux/store';
+import { env } from '../env/env';
+import { RootState } from '../redux/store';
 
-export function useGet<T extends {error?: string}>(
+export function useGet<T extends { error?: string }>(
   name: string,
   url: string,
   defaultValue: T,
@@ -33,12 +33,12 @@ export function useGet<T extends {error?: string}>(
         try {
           return JSON.parse(text);
         } catch (error) {
-          return {error: text};
+          return { error: text };
         }
       })
-      .catch(error => ({error: String(error)}))
+      .catch(error => ({ error: String(error) }))
       .then(json => {
-        console.log('JSON: ', json);
+        // console.log('JSON: ', json);
         setJSON(json);
         // if (json.error) {
         //   Alert.alert('Fail to load ' + name, json.error, [{text: 'Dismiss'}]);
@@ -84,5 +84,5 @@ export function useGet<T extends {error?: string}>(
     }
     return fn(json);
   }
-  return {json, setJSON, render};
+  return { json, setJSON, render };
 }
