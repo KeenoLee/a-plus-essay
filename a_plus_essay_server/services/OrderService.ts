@@ -139,43 +139,43 @@ export class OrderService {
     async matchTutor(orderId: number) {
         try {
             let matchedTutors = [];
-            let tutor5Id = await this.knex.select('tutor.id')
+            const tutor5Id = (await this.knex.select('tutor.id')
                 .from('order_subject')
                 .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
                 .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
                 .where('rating', 5.00)
                 .orderBy('ongoing_order_amount', 'asc')
-                .first();
+                .first()).id;
             if (tutor5Id) { matchedTutors.push({ "id": tutor5Id }) }
             else matchedTutors.push({ "id": -1 });
 
-            let tutor4Id = await this.knex.select('tutor.id')
+            const tutor4Id = (await this.knex.select('tutor.id')
                 .from('order_subject')
                 .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
                 .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
                 .whereBetween('rating', [4.00, 4.99])
                 .orderBy('ongoing_order_amount', 'asc')
-                .first();
+                .first()).id;
             if (tutor4Id) { matchedTutors.push({ "id": tutor4Id }) }
             else matchedTutors.push({ "id": -1 });
 
-            let tutor3Id = await this.knex.select('tutor.id')
+            const tutor3Id = (await this.knex.select('tutor.id')
                 .from('order_subject')
                 .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
                 .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
                 .whereBetween('rating', [3.00, 3.99])
                 .orderBy('ongoing_order_amount', 'asc')
-                .first();
+                .first()).id;
             if (tutor3Id) { matchedTutors.push({ "id": tutor3Id }) }
             else matchedTutors.push({ "id": -1 });
 
-            let newTutorId = await this.knex.select('tutor.id')
+            const newTutorId = (await this.knex.select('tutor.id')
                 .from('order_subject')
                 .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
                 .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
                 .where('completed_order_amount', '<', '5')
                 .orderBy('ongoing_order_amount', 'asc')
-                .first();
+                .first()).id;
             if (newTutorId) { matchedTutors.push({ "id": newTutorId }) }
             else matchedTutors.push({ "id": -1 });
 
@@ -233,12 +233,11 @@ export class OrderService {
     }
 
     async getOrderBudget(orderId: number) {
-        const orderBudget = await this.knex.select('budget').from('order').where('id', orderId).first();
-        return orderBudget.budget;
+        const orderBudget = (await this.knex.select('budget').from('order').where('id', orderId).first()).budget;
+        return orderBudget;
     }
 
     async submitQuotation(quote: { orderId: number, tutorId: number, charge: number }) {
-        const time = new Date();
 
         await this.knex('candidate')
             .where('order_id', quote.orderId)
@@ -269,9 +268,117 @@ export class OrderService {
             .andWhere('tutor_id', input.tutorId)
             .update({ reject_time: this.knex.fn.now() });
 
-        const rating = await this.knex.select('rating').from('tutor').where('id', input.tutorId);
+        const tutorIdList = await this.knex.select('tutor_id').from('candidate').where('order_id', input.orderId)
+        const category: number = await this.knex.select('category').from('candidate').where('order_id', input.orderId).andWhere('tutor_id', input.tutorId).first();
+        let tutorHasBeenSelected: boolean = true;
 
-        // !!!!!!!!!!!!!!!!!!!
+        while (tutorHasBeenSelected === true) {
+            let found;
+            switch (category) {
+                case 5:
+                    let tutor5Id = (await this.knex.select('tutor.id')
+                        .from('order_subject')
+                        .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
+                        .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
+                        .where('rating', 5.00)
+                        .orderBy('ongoing_order_amount', 'asc')
+                        .first()).id;
+                    if (!tutor5Id) { tutor5Id = -1; };
 
+                    found = tutorIdList.find(tutorId => (tutorId !== -1 && tutorId === tutor5Id));
+                    if (found === undefined) {
+                        tutorHasBeenSelected = false;
+                        await this.knex.insert({
+                            order_id: input.orderId,
+                            tutor_id: tutor5Id,
+                            charge: null,
+                            category: 5,
+                            accept_time: null,
+                            reject_time: null,
+                            expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
+                        }).into('candidate');
+                        if (tutor5Id > 0) { this.io.to(`${tutor5Id}`).emit('new-order', 'You have an new order.') }
+                    }
+                    break;
+
+                case 4:
+                    let tutor4Id = (await this.knex.select('tutor.id')
+                        .from('order_subject')
+                        .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
+                        .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
+                        .whereBetween('rating', [4.00, 4.99])
+                        .orderBy('ongoing_order_amount', 'asc')
+                        .first()).id;
+                    if (!tutor4Id) { tutor4Id = -1; };
+
+                    found = tutorIdList.find(tutorId => (tutorId !== -1 && tutorId === tutor4Id));
+                    if (found === undefined) {
+                        tutorHasBeenSelected = false;
+                        await this.knex.insert({
+                            order_id: input.orderId,
+                            tutor_id: tutor4Id,
+                            charge: null,
+                            category: 4,
+                            accept_time: null,
+                            reject_time: null,
+                            expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
+                        }).into('candidate');
+                        if (tutor4Id > 0) { this.io.to(`${tutor4Id}`).emit('new-order', 'You have an new order.') }
+                    }
+                    break;
+
+                case 3:
+                    let tutor3Id = (await this.knex.select('tutor.id')
+                        .from('order_subject')
+                        .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
+                        .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
+                        .whereBetween('rating', [3.00, 3.99])
+                        .orderBy('ongoing_order_amount', 'asc')
+                        .first()).id;
+                    if (!tutor3Id) { tutor3Id = -1; };
+
+                    found = tutorIdList.find(tutorId => (tutorId !== -1 && tutorId === tutor3Id));
+                    if (found === undefined) {
+                        tutorHasBeenSelected = false;
+                        await this.knex.insert({
+                            order_id: input.orderId,
+                            tutor_id: tutor3Id,
+                            charge: null,
+                            category: 3,
+                            accept_time: null,
+                            reject_time: null,
+                            expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
+                        }).into('candidate');
+                        if (tutor3Id > 0) { this.io.to(`${tutor3Id}`).emit('new-order', 'You have an new order.') }
+                    }
+                    break;
+
+                case 0:
+                    let newTutorId = (await this.knex.select('tutor.id')
+                        .from('order_subject')
+                        .innerJoin('preferred_subject', 'order_subject.subject_id', '=', 'preferred_subject.subject_id')
+                        .innerJoin('tutor', 'preferred_subject.tutor_id', '=', 'tutor.id')
+                        .where('completed_order_amount', '<', '5')
+                        .orderBy('ongoing_order_amount', 'asc')
+                        .first()).id;
+                    if (!newTutorId) { newTutorId = -1; };
+
+                    found = tutorIdList.find(tutorId => (tutorId !== -1 && tutorId === newTutorId));
+                    if (found === undefined) {
+                        tutorHasBeenSelected = false;
+                        await this.knex.insert({
+                            order_id: input.orderId,
+                            tutor_id: newTutorId,
+                            charge: null,
+                            category: 0,
+                            accept_time: null,
+                            reject_time: null,
+                            expire_time: this.knex.raw('current_timestamp + interval "2 hours"')
+                        }).into('candidate');
+                        if (newTutorId > 0) { this.io.to(`${newTutorId}`).emit('new-order', 'You have an new order.') }
+                    }
+                    break;
+            }
+        }
     }
 }
