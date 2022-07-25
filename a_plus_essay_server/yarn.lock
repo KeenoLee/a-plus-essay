@@ -1123,6 +1123,11 @@ picomatch@^2.0.4, picomatch@^2.2.1:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
+populate-env@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/populate-env/-/populate-env-2.0.0.tgz#3c1be17fad5e6ee0ab811136683abf4b553b780d"
+  integrity sha512-s+GGQ22+R0qJTJRaootY+/b7T6aPPKtk7lsehZuYH0zXFWahW/G7MdLpGFNVaIIBsCbOw8wMpMo6sEXAYAxBzg==
+
 postgres-array@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/postgres-array/-/postgres-array-2.0.0.tgz#48f8fce054fbc69671999329b8834b772652d82e"
@@ -1196,10 +1201,10 @@ qs@6.9.3:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.3.tgz#bfadcd296c2d549f1dffa560619132c977f5008e"
   integrity sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==
 
-quick-erd@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/quick-erd/-/quick-erd-3.1.4.tgz#1c0f7e6e644260ccf761e30d000913c1d800f9fc"
-  integrity sha512-Rc5bytJ2z3kCrsnepdL1LP5QSmltxodBHjT1TW29Po+dDp6QdpsNsNWMegQnwgIdpVrJp9mwiLBNGYdMXTaUiA==
+quick-erd@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/quick-erd/-/quick-erd-3.2.0.tgz#4710440a2aad553820add0e8abce26e4818b2765"
+  integrity sha512-HGNjNBU6y4DesEKIU/GIYzXHUPlBXM/ZnivwepJX4xYL4jPINxCeZ2cjMHBdO9Y7JC84sNhIz+FITBr53fqlzw==
   dependencies:
     fastest-levenshtein "^1.0.12"
   optionalDependencies:

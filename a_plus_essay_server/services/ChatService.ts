@@ -21,7 +21,7 @@ export class ChatService {
                 "order.title",
                 "user.nickname",
                 "user.is_tutor",
-                "chat_message.sent_by_tutor",
+                "chat_message.sender_id",
                 "chat_message.message as last_message",
                 "chat_message.updated_at as last_message_time"
                 // this.knex.raw('count(*) as unread_message'),
@@ -67,25 +67,31 @@ export class ChatService {
         //         ORDER BY cm.id DESC
         //     `, 59, )
     }
-    async getChatRoomMessage() {
+    async checkMember(input: { order_id: number, user_id: number }, knex = this.knex) {
+        let order = await knex.select('id', 'student_id', 'tutor_id').from('order').where('id', input.order_id).first()
+        return order?.student_id == input.user_id || order?.tutor_id == input.user_id
 
     }
-
     async postMessage(input: MessageInput) {
-        console.log('INPUT?: ', input)
-        let [{ id }] = await this.knex
-            .insert({
-                order_id: input.orderId,
-                sent_by_tutor: input.senderIsTutor,
-                message: input.newMessage,
-            })
-            .into("chat_message")
-            .returning("id");
-        console.log('ID?? ', id)
-        if (!id) {
-            return { success: false }
-        }
-        return { success: true }
+        //1. update chat_message
+        //2. update user_read_message
+        return this.knex.transaction(async knex => {
+            if (!await this.checkMember({ order_id: input.order_id, user_id: input.sender_id })) {
+                throw new Error('Not a room member')
+            }
+            let [{ id, updated_at }] = await knex
+                .insert(input)
+                .into("chat_message")
+                .returning(["id", "updated_at"])
+            knex
+                .select('id')
+                .from('user_read_message')
+                .where({ order_id: input.order_id })
+            return { id, updated_at, sender_id: input.sender_id, message: input.message }
+        })
+
+
+        // await this.knex
         // let newNoticeFromRoom: NewMessage = {
         //     order_id: id,
         // };
@@ -119,7 +125,7 @@ export class ChatService {
         let messages = await this.knex
             .select(
                 "chat_message.id",
-                "sent_by_tutor",
+                "sender_id",
                 "chat_message.message",
                 "chat_message.updated_at"
                 // this.knex.raw('count(*) as unread_message'),

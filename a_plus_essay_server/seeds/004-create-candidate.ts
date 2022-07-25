@@ -18,10 +18,10 @@ export async function seed(knex: Knex): Promise<void> {
     let onGoingOrderId2
     [onGoingOrderId1, onGoingOrderId2] = onGoingOrderIds.map(v => v.id)
 
-    const ratingOfTutorResult = await knex('tutor').select('rating').returning('rating').first()
-    console.log(ratingOfTutorResult)
-    let ratingOfTutor
-    ratingOfTutorResult == null ? ratingOfTutor = 0 : ratingOfTutor = Math.trunc(ratingOfTutorResult.rating)
+    // const ratingOfTutorResult = await knex('tutor').select('rating').returning('rating').first()
+    // console.log(ratingOfTutorResult)
+    // let ratingOfTutor
+    // ratingOfTutorResult == null ? ratingOfTutor = 0 : ratingOfTutor = Math.trunc(ratingOfTutorResult.rating)
 
     // Tutor Pending Order => charge, accept_time, reject_time : null 
     await knex("candidate").insert([
@@ -29,7 +29,7 @@ export async function seed(knex: Knex): Promise<void> {
             order_id: pendingOrderId1,
             tutor_id: tutorObject.id,
             charge: null,
-            category: ratingOfTutor,
+            category: 3,
             accept_time: null,
             reject_time: null,
             expire_time: "2022-07-28T14:00:00.000Z",
@@ -41,7 +41,7 @@ export async function seed(knex: Knex): Promise<void> {
             order_id: pendingOrderId2,
             tutor_id: tutorObject.id,
             charge: 1000,
-            category: ratingOfTutor,
+            category: 0,
             accept_time: null,
             reject_time: null,
             expire_time: "2022-07-28T14:00:00.000Z",
@@ -53,7 +53,7 @@ export async function seed(knex: Knex): Promise<void> {
             order_id: onGoingOrderId1,
             tutor_id: tutorObject.id,
             charge: 7000,
-            category: ratingOfTutor,
+            category: 5,
             accept_time: "2022-07-25T14:00:00.000Z",
             reject_time: null,
             expire_time: "2022-07-28T14:00:00.000Z",
@@ -65,7 +65,7 @@ export async function seed(knex: Knex): Promise<void> {
             order_id: pendingOrderId2,
             tutor_id: tutorObject.id,
             charge: 4000,
-            category: ratingOfTutor,
+            category: 4,
             accept_time: null,
             reject_time: "2022-07-26T14:00:00.000Z",
             expire_time: "2022-07-28T14:00:00.000Z",

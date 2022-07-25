@@ -1,3 +1,5 @@
+yarn run v1.22.18
+$ /Users/mkai/tecky/FRDFinal/aplusessay/a_plus_essay_server/node_modules/.bin/pg-to-erd
 # Visualize on https://erd.surge.sh
 # or https://quick-erd.surge.sh
 #
@@ -17,20 +19,15 @@
 
 tutor
 -----
-id integer PK FK - user.id
+id integer PK
 is_verified boolean
-student_card text NULL
+school_id integer FK >- school.id
 major_id integer FK >- major.id
-self_intro text NULL
+rating numeric NULL
 ongoing_order_amount integer
 completed_order_amount integer
-school_id integer FK >- school.id
-
-
-school
-------
-id integer PK
-school varchar(127)
+student_card text NULL
+self_intro text NULL
 
 
 transcript
@@ -47,23 +44,16 @@ tutor_id integer FK >- tutor.id
 subject_id integer FK >- subject.id
 
 
-major
------
-id integer PK
-major varchar(127)
-
-
 subject
 -------
 id integer PK
 subject_name varchar(127)
 
 
-order_subject
--------------
+school
+------
 id integer PK
-order_id integer FK >0- order.id
-subject_id integer FK >0- subject.id
+school varchar(127)
 
 
 transcript_subject
@@ -74,38 +64,27 @@ subject_id integer FK >- subject.id
 score varchar(20)
 
 
-user
-----
-id integer PK
-is_admin boolean
-is_tutor boolean
-nickname varchar(31)
-email varchar(127) unique
-hashed_password varchar(60) NULL
-phone_number integer unique
-
-
-comment
--------
-id integer PK
-order_id integer FK >0- order.id
-comment text NULL
-rating integer 
-
-
 sample
 ------
 id integer PK
+tutor_id integer FK >- tutor.id
 sample text
-tutor_id integer FK >0- tutor.id
 
 
 chat_message
 ------------
 id integer PK
-order_id integer FK >0- order.id
-sender_id integer FK >0- user.id
+order_id integer FK >- order.id
+sent_by_tutor boolean
 message text
+
+
+comment
+-------
+id integer PK
+student_id integer FK >- user.id
+tutor_id integer FK >- tutor.id
+comment text
 
 
 file
@@ -115,21 +94,11 @@ order_id integer FK >- order.id
 filename varchar(127)
 
 
-order
------
+order_subject
+-------------
 id integer PK
-student_id integer FK >0- user.id
-tutor_id integer NULL FK >0- user.id
-title varchar(63)
-grade varchar(63)
-description text
-budget integer
-matched_time timestamp NULL
-completed_time timestamp NULL
-paid_by_student_time timestamp NULL
-paid_to_tutor_time timestamp NULL
-tutor_submission_deadline timestamp
-student_submission_deadline timestamp
+order_id integer FK >- order.id
+subject_id integer FK >- subject.id
 
 
 guideline
@@ -146,21 +115,56 @@ order_id integer FK >- order.id
 filename text
 
 
-candidate
----------
-id integer PK
-order_id integer FK >0- order.id
-tutor_id integer FK >0- tutor.id
-charge integer NULL
-category integer
-accept_time timestamp NULL
-reject_time timestamp NULL
-expire_time timestamp
-
-
 user_read_message
 -----------------
 id integer PK
 user_id integer FK >- user.id
 order_id integer FK >- order.id
 last_message_id integer FK >- chat_message.id
+
+
+candidate
+---------
+id integer PK
+order_id integer FK >- order.id
+tutor_id integer FK >- tutor.id
+charge integer NULL
+accept_time timestamp NULL
+reject_time timestamp NULL
+expire_time timestamp
+category integer
+
+
+major
+-----
+id integer PK
+major varchar(127)
+
+
+user
+----
+id integer PK
+is_admin boolean
+is_tutor boolean
+phone_number integer unique
+nickname varchar(31)
+email varchar(127) unique
+hashed_password varchar(60) NULL
+
+
+order
+-----
+student_id integer FK >- user.id
+tutor_id integer NULL FK >- user.id
+student_submission_deadline timestamp NULL
+id integer PK
+budget integer
+matched_time timestamp NULL
+completed_time timestamp NULL
+paid_by_student_time timestamp NULL
+paid_to_tutor_time timestamp NULL
+tutor_submission_deadline timestamp NULL
+title varchar(63)
+grade varchar(63)
+description text
+Done in 0.82s.
