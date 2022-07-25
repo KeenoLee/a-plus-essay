@@ -7,6 +7,7 @@ import jwtSimple from "jwt-simple";
 import dotenv from "dotenv";
 import { getJWTPayload } from "../utils/get-jwt";
 import { request } from "http";
+import { resolveSoa } from "dns";
 
 dotenv.config({ path: "../.env" });
 
@@ -59,6 +60,7 @@ export class ChatController extends RestController {
             console.log(payload)
             let rooms = await this.chatService.getChatroomListById(payload.id);
             res.json({ rooms });
+            console.log(rooms)
             return;
 
         } catch (error) {

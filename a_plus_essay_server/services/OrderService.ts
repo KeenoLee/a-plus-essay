@@ -1,7 +1,8 @@
-import { Knex } from "knex";
+import knex, { Knex } from "knex";
 import { stringify } from "querystring";
 import { OrderItem } from "./models"
 import { Server } from 'socket.io';
+import console from "console";
 
 export class OrderService {
     constructor(private knex: Knex, private io: Server) { }
@@ -94,14 +95,14 @@ export class OrderService {
             let objectKeys = Object.keys(files)
             for (let i = 0; i < objectKeys.length; i++) {
                 if (objectKeys[i].includes('guideline')) {
-                    console.log('HIHIHIHIHI: ', files.guideline_0.originalFilename)
+                    console.log('HIHIHIHIHI: ', files.guideline_0.newFilename)
                     console.log('HIHIHIHIHI: ', objectKeys)
                     await this.knex.insert({
-                        filename: files[objectKeys[i]].originalFilename
+                        filename: files[objectKeys[i]].newFilename
                     }).into('guideline')
                 } else if (objectKeys[i].includes('note')) {
                     await this.knex.insert({
-                        filename: files[objectKeys[i]].originalFilename
+                        filename: files[objectKeys[i]].newFilename
                     }).into('note')
                 }
             }
@@ -380,5 +381,28 @@ export class OrderService {
                     break;
             }
         }
+    }
+    async getStudentPendingOrder(id: number) {
+        const orders = await this.knex
+            .select('title', 'tutor_submission_deadline')
+            .from('order')
+            .where('student_id', id)
+            .whereNull('matched_time')
+        return { orders }
+    }
+
+    async getTutorPendingOrder(id: number) {
+        const orders = await this.knex.select('id', 'title', 'tutor_submission_deadline')
+            .from('order')
+            .where('tutor_id', id)
+            .whereNull('matched_time')
+        for (let order of orders) {
+            const candidate = await this.knex.select('*')
+                .from('candidate')
+                .where('order_id', order.id)
+                .andWhere('tutor_id', id)
+            console.log(candidate)
+        }
+        return { orders }
     }
 }
