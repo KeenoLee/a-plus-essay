@@ -153,6 +153,7 @@ id integer PK
 order_id integer FK >0- order.id
 tutor_id integer FK >0- tutor.id
 charge integer
+categoty integer 
 accept_time timestamp NULL
 reject_time timestamp NULL
 expire_time timestamp
