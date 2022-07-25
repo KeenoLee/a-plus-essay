@@ -47,7 +47,7 @@ const chatController = new ChatController(chatService);
 
 app.use(express.json({ limit: "200mb" }));
 app.use(express.urlencoded({ limit: "200mb", extended: true }));
-app.use('/get-image',express.static(__dirname + '/uploads'))
+app.use('/get-image', express.static(__dirname + '/uploads'))
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
 
