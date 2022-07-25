@@ -11,9 +11,11 @@ import config from "./knexfile";
 import { ChatController } from "./controllers/ChatController";
 import { ChatService } from "./services/ChatService";
 import path from 'path';
+import { getJWTPayload, JWTPayload } from "./utils/get-jwt";
+import { env } from "./env";
 
 const dirPath = path.join(__dirname, '/uploads')
-export const knex = Knex(config[process.env.NODE_ENV || "development"]);
+export const knex = Knex(config[env.NODE_ENV || "development"]);
 
 const app = express();
 const userRoutes = express.Router();
@@ -28,21 +30,13 @@ let io = new socketio.Server(server, {
     },
 });
 
-io.on("connection", (socket) => {
-    console.log("socket.io is connected");
-    socket.on("chat message", (msg) => {
-        console.log("chat message:", msg);
-        io.emit("chat message", msg);
-    });
-});
-
 const userService = new UserService(knex);
 const userController = new UserController(userService);
 const orderService = new OrderService(knex, io);
 const orderController = new OrderController(orderService);
 
 const chatService = new ChatService(knex, io);
-const chatController = new ChatController(chatService);
+const chatController = new ChatController(chatService, io);
 // app.use(cors({ 'production' }))
 
 app.use(express.json({ limit: "200mb" }));
@@ -66,7 +60,7 @@ userRoutes.get("/get-user-file", userController.getUserImage);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:id/message", chatController.getChatroom);
-chatRoutes.post("/post/message", chatController.postMessage);
+chatRoutes.post("/chat/:id/message", chatController.postMessage);
 
 
 
