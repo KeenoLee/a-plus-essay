@@ -249,11 +249,11 @@ export class UserService {
                     console.log('OBJECTKEY?? ', files[objectKeys[i]])
                     await this.knex.insert({
                         tutor_id: tutorId,
-                        filename: files[objectKeys[i]].originalFilename
+                        filename: files[objectKeys[i]].newFilename
                     }).into('transcript')
                 } else if (objectKeys[i] === 'student_card') {
-                    console.log('WHY NO ORI NAMe in student CARD??: ', files[objectKeys[i]].originalFilename)
-                    await this.knex('tutor').update({ student_card: files[objectKeys[i]].originalFilename }).where('id', tutorId)
+                    console.log('WHY NO ORI NAMe in student CARD??: ', files[objectKeys[i]].newFilename)
+                    await this.knex('tutor').update({ student_card: files[objectKeys[i]].newFilename }).where('id', tutorId)
                 }
             }
             return { success: true }
@@ -299,5 +299,16 @@ export class UserService {
             }
             return { success: true }
         })
+    }
+    async getUserImage(id: number) {
+        try {
+            const [studentCard] = await this.knex.select('student_card').from('tutor').where('id', id)
+            console.log('student card?: ', studentCard)
+            const transcript = await this.knex.select('id', 'filename').from('transcript').where('tutor_id', id)
+            console.log('TRANScript: ', transcript)
+            return { studentCard, transcript }
+        } catch (error) {
+            return { error }
+        }
     }
 }
