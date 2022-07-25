@@ -172,9 +172,8 @@ export class UserController {
 
         const isLoggedIn: any = await this.userService.loginWithPassword({ email, password });
         console.log('isLoggedIn: ', isLoggedIn)
-        const jwt = jwtSimple.encode(isLoggedIn.userInfo, process.env.jwtSecret!);
-        console.log('JWT: ', jwt)
-        console.log('decoded: ', jwt_decode(jwt))
+        // console.log('JWT: ', jwt)
+        // console.log('decoded: ', jwt_decode(jwt))
 
         if (isLoggedIn.success === false) {
             res.status(400).json({ error: "Incorrect password" });
@@ -182,6 +181,7 @@ export class UserController {
         };
 
         if (isLoggedIn.success === true) {
+            const jwt = jwtSimple.encode(isLoggedIn.userInfo, process.env.jwtSecret!);
             if (!isLoggedIn.tutorInfo) {
                 res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo });
                 return
