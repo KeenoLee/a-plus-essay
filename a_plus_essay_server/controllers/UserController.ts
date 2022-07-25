@@ -19,7 +19,9 @@ const form = formidable({
     maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
     filter: part => part.mimetype?.startsWith('image/') || false,
 })
-
+const permit = new Bearer({
+    query: "access_token"
+})
 export class UserController {
     //TODO:
     constructor(private userService: UserService) {
@@ -419,6 +421,36 @@ export class UserController {
         } catch (error) {
             console.log(error)
             res.json(error)
+            return
+        }
+    }
+    loginWithToken = async (req: Request, res: Response) => {
+        console.log('going to login with token... : ')
+        const token: string = permit.check(req);
+        console.log('cAN GET tokEN?!!: ?? ', token)
+        try {
+            console.log('token in user controller: ', token)
+            if (!token) {
+                res.json({ error: 'Please login!' })
+                return
+            }
+            const userInfo: any = jwt_decode(token)
+            if (!userInfo) {
+                res.json({ error: 'Please login!' })
+                return
+            }
+            if (!userInfo.is_tutor) {
+                res.json({ success: true, token, userInfo })
+                return
+            } else {
+                console.log('userinfo.id?? in usercontroller: ', userInfo.id)
+                const tutorInfo = await this.userService.getTutorInfo(userInfo.id)
+                console.log('tutorinfo in usercontroller: ', tutorInfo)
+                res.json({ success: true, token, userInfo, tutorInfo })
+                return
+            }
+        } catch (error) {
+            res.json({ error })
             return
         }
     }

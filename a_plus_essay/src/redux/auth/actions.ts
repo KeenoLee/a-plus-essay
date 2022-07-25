@@ -44,12 +44,18 @@ export function saveToken(token: string) {
     }
 }
 
+export function logout() {
+    return {
+        type: '@@auth/LOGOUT' as const
+    }
+}
 export type AuthActions =
     ReturnType<typeof loginAsStudent> |
     ReturnType<typeof loginAsTutor> |
     ReturnType<typeof loginAsAdmin> |
     ReturnType<typeof loginFailed> |
-    ReturnType<typeof saveToken>
+    ReturnType<typeof saveToken> |
+    ReturnType<typeof logout>
 
 export function fetchLogin(userInfo: { email: string, password: string }) {
     return async (dispatch: Dispatch<AuthActions>) => {
