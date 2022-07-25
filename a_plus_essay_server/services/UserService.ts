@@ -214,7 +214,7 @@ export class UserService {
         const userId: number = (await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first()).id;
         return userId;
     }
-    private async getTutorInfo(userId: number) {
+    async getTutorInfo(userId: number) {
         if (!userId) {
             return { error: 'user id not found' }
         }
