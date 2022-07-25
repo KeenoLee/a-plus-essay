@@ -11,7 +11,7 @@ dotenv.config();
 export interface JWTPayload {
     id: number
     nickname: string
-    is_tutor: Boolean
+    is_tutor: boolean
 }
 
 const permit = new Bearer({

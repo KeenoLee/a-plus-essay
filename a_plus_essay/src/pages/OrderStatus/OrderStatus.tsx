@@ -41,22 +41,23 @@ export function TopTabNavigator() {
                 tabBarIndicatorStyle: { backgroundColor: 'white' }
             }}
         >
-            <MainTab.Screen name="Pending" component={PendingPage} listeners={{
-                tabPress: async (event) => {
-                    event.preventDefault()
-                    if (state.user) {
-                        console.log('User IDDDDD', state.user.id)
-                        const res = await fetch(`${env.BACKEND_URL}/order/pending/${state.user.id}/${state.user.is_tutor}`)
-                        const result = await res.json()
-                        console.log('BE', result)
-                        if (!result.error) {
-                            navigation.navigate('Pending', {result: result, isTutor: state.user.is_tutor})
-                        }
-                        return result
-                    }
+            <MainTab.Screen name="Pending" component={PendingPage}
+            // listeners={{
+            //     tabPress: async (event) => {
+            //         event.preventDefault()
+            // if (state.user) {
+            //     console.log('User IDDDDD', state.user.id)
+            //     const res = await fetch(`${env.BACKEND_URL}/order/pending/${state.user.id}/${state.user.is_tutor}`)
+            //     const result = await res.json()
+            //     console.log('BE', result)
+            //     if (!result.error) {
+            //         navigation.navigate('Pending', {result: result, isTutor: state.user.is_tutor})
+            //     }
+            //     return result
+            // }
 
-                },
-            }} 
+            //     },
+            // }} 
 
             />
             <MainTab.Screen name="Matching" component={MatchingPage} />
