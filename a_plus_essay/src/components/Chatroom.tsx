@@ -81,13 +81,17 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
 
   }
   componentDidMount() {
-    this.socket.on('chat message', message => {
-      console.log("messssssage:", message);
-      this.receivedMessage(message)
-    })
+    // this.socket.on('chat message', message => {
+    //   console.log("messssssage:", message);
+    //   this.receivedMessage(message)
+    // })
     console.log('reseivedMessage!!!!', this.receivedMessage);
     this.socket.emit('join', this.props.room.order.id)
     console.log('seesee this.props.room.order.id', this.props.room.order.id);
+
+    this.socket.on('chat message', (msg: ChatMessage) => {
+      this.setState({ messages: [...this.state.messages, msg] });
+    })
   }
 
   componentWillUnmount() {
@@ -119,7 +123,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
       if (this.state.chatMessage == newMessage) {
         this.setState({ chatMessage: '' });
       }
-
+      this.socket.emit('chat message', this.state.chatMessage)
     })
 
     // const res = await fetch(`${env.BACKEND_ORIGIN}/post/message`, {
@@ -172,6 +176,30 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
       )
     }
     );
+
+    const chatMessages = this.state.messages.map(message => {
+      let isIncoming = message.sender_id == this.props.room.otherUser.id
+      console.log('dabeeno', message);
+      return (
+        <View
+          key={message.id + (Math.random() * 100).toFixed(5)}
+          style={
+            isIncoming
+              ? styles.incomingMessageBox
+              : styles.sendMessageBox
+          }>
+          <View>
+            <Text style={styles.content}>
+              {message.message.toString().trim() + '   '}
+            </Text>
+            <Text numberOfLines={1} style={styles.timeDisplay}>
+              {format(new Date(), 'KK:mm aaa')}
+            </Text>
+          </View>
+        </View>
+      )
+    });
+    // console.log('sajdfhlkjadsfhk', chatMessages)
     return (
       <>
         <View style={{ backgroundColor: 'rgb(188,211,207)' }}><Text style={{ alignSelf: 'center', backgroundColor: 'rgb(188,211,207)' }}>{this.props.room.order.title}</Text></View>
@@ -201,6 +229,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
                   }
                   automaticallyAdjustContentInsets={true}>
                   {messageFromServer}
+                  {chatMessages}
                   <View
                     style={{
                       backgroundColor: 'transparent',
