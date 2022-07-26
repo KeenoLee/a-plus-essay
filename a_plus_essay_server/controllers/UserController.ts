@@ -7,6 +7,7 @@ import jwt_decode from 'jwt-decode'
 import { Subject } from '../services/models';
 import formidable from "formidable";
 import fs from "fs";
+import { env } from '../env';
 
 const uploadDir = 'uploads'
 fs.mkdirSync(uploadDir, { recursive: true })
@@ -84,7 +85,7 @@ export class UserController {
         };
         //set encode payload { id, nickname, is_tutor} into jwt
         const userInfo = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
-        const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+        const jwt = jwtSimple.encode(userInfo, env.JWT_SECRET)
         console.log('going to end...')
         if (isTutor === false) {
             res.json({ success: true, token: jwt });
@@ -172,11 +173,16 @@ export class UserController {
 
         const isLoggedIn: any = await this.userService.loginWithPassword({ email, password });
         console.log('isLoggedIn: ', isLoggedIn)
-        const jwt = jwtSimple.encode(isLoggedIn.userInfo, process.env.jwtSecret!);
-        console.log('JWT: ', jwt)
-        console.log('decoded: ', jwt_decode(jwt))
+        // console.log('JWT: ', jwt)
+        // console.log('decoded: ', jwt_decode(jwt))
+
+        if (isLoggedIn.success === false) {
+            res.status(400).json({ error: "Incorrect password" });
+            return;
+        };
 
         if (isLoggedIn.success === true) {
+            const jwt = jwtSimple.encode(isLoggedIn.userInfo, env.JWT_SECRET);
             if (!isLoggedIn.tutorInfo) {
                 res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo });
                 return
@@ -185,8 +191,6 @@ export class UserController {
             res.json({ success: true, token: jwt, userInfo: isLoggedIn.userInfo, tutorInfo: isLoggedIn.tutorInfo });
             return
         }
-        res.status(400).json({ error: "Incorrect password" });
-        return;
     }
 
     loginWithFacebook = async (req: Request, res: Response) => {
@@ -213,7 +217,7 @@ export class UserController {
             // login with facebook
             if (user) {
                 const userInfo = await this.userService.loginByOAuth(email)
-                const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+                const jwt = jwtSimple.encode(userInfo, env.JWT_SECRET)
                 console.log('going to end...');
                 res.json({ success: true, token: jwt });
                 return;
@@ -232,7 +236,7 @@ export class UserController {
 
             // register with facebook
             const userInfo = await this.userService.registerByOAuth({ isTutor, nickname, email });
-            const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+            const jwt = jwtSimple.encode(userInfo, env.JWT_SECRET)
             console.log('going to end...')
             if (isTutor === false) {
                 res.json({ success: true, token: jwt });
@@ -281,7 +285,7 @@ export class UserController {
             // login with google
             if (user) {
                 const userInfo = await this.userService.loginByOAuth(email)
-                const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+                const jwt = jwtSimple.encode(userInfo, env.JWT_SECRET)
                 console.log('going to end...');
                 res.json({ success: true, token: jwt });
                 return;
@@ -300,7 +304,7 @@ export class UserController {
 
             // register with google
             const userInfo = await this.userService.registerByOAuth({ isTutor, nickname, email });
-            const jwt = jwtSimple.encode(userInfo, process.env.jwtSecret!)
+            const jwt = jwtSimple.encode(userInfo, env.JWT_SECRET)
             console.log('going to end...')
             if (isTutor === false) {
                 res.json({ success: true, token: jwt });
@@ -328,7 +332,7 @@ export class UserController {
         if (!token) {
             return res.status(401).json({ error: "permission denied" });
         }
-        const payload = jwtSimple.decode(token, process.env.jwtSecret!);
+        const payload = jwtSimple.decode(token, env.JWT_SECRET);
         if (!payload) {
             return res.status(401).json({ error: "Invalid JWT" });;
         }

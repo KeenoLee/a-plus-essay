@@ -9,7 +9,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 // Status Page 
 import { env } from '../../env/env';
-import { useAppNavigation } from '../../../routes';
+import { useAppNavigation } from '../../routes';
 import { CompletedOrderListPage, MatchingOrderListPage, OngoingOrderListPage, PendingOrderListPage } from './OrderListPage';
 
 const MainTab = createMaterialTopTabNavigator<MainTabParamList>()

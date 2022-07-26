@@ -63,9 +63,10 @@ export interface ChatroomList {
 }
 
 export interface MessageInput {
-    orderId: number;
-    senderIsTutor: Boolean;
-    newMessage: string;
+    message: string;
+    order_id: number;
+    sender_id: number;
+    // newMessage: string;
 }
 
 export interface NewMessage {

@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import formidable from "formidable";
 import fs from "fs";
 import { getJWTPayload } from "../utils/get-jwt";
+import { env } from "../env";
 
 const uploadDir = "uploads";
 fs.mkdirSync(uploadDir, { recursive: true });
@@ -59,7 +60,7 @@ export class OrderController {
       return;
     }
 
-    const payload = jwtSimple.decode(token, process.env.jwtSecret!);
+    const payload = jwtSimple.decode(token, env.JWT_SECRET);
     console.log("payload: ", payload);
 
     if (!payload) {
@@ -268,6 +269,11 @@ export class OrderController {
     } catch (error) {
       res.json({ error: String(error) })
     }
+  }
+
+  completeOrder = async (req: Request, res: Response) => {
+    const orderId = req.body;
+    await this.orderService.completeOrder(orderId);
   }
 }
 

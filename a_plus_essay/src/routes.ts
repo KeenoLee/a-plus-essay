@@ -2,7 +2,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 export type AppParamList = {
     Tabs: undefined
-    Chatroom: { id: number }
+    Chatroom: { id: number, token: string, title: string }
     'Home Drawer': undefined;
     Welcome: undefined;
     ChatList: undefined;
@@ -18,6 +18,8 @@ export type AppParamList = {
     // 'A Plus Essay': undefined
     'Login': undefined
     'Account': undefined
+    'Pending': undefined
+    'View Matched Order': undefined
     'OrderList': { orderStatus: string }
 }
 
