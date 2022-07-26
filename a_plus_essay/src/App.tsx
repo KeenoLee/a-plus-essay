@@ -30,7 +30,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import Register from './src/components/Register';
 // import LoadingScreen from './src/components/LoadingScreen';
-import Home from './pages/Home';
 import Notification from './pages/Notification';
 import ChatListScreen from './pages/ChatList';
 import ChatStack from './pages/ChatList';
@@ -120,8 +119,8 @@ export const Tabs = () => {
       <Tab.Screen
         name="Order Status"
         component={OrderStatus}
-        options={{ 
-          headerRight: () => (state?.tutor ? null : 
+        options={{
+          headerRight: () => (state?.tutor ? null :
             <View
               style={{
                 flexDirection: 'row',

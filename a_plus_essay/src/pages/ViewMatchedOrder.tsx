@@ -49,7 +49,7 @@ async function makeOffer(offerInfo: OfferInfo) {
     const result = await res.json()
 }
 
-export default function ViewMatchedOrder({ order }: Order) {
+export default function ViewMatchedOrder({ order }: { order: Order }) {
     const state = useSelector((state: RootState) => state.auth)
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
     const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
@@ -131,9 +131,9 @@ export default function ViewMatchedOrder({ order }: Order) {
                         <FormControl.Label>Deadline :</FormControl.Label>
                     </Stack>
 
-                    <HStack space={4} alignItems='center'>
+                    {/* <HStack space={4} alignItems='center'>
                         <Text>{order.tutor_submission_deadline}</Text>
-                    </HStack>
+                    </HStack> */}
 
                     <HStack>
                         <FormControl.Label>Make an Offer :</FormControl.Label>
