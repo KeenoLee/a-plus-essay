@@ -293,11 +293,11 @@ export default function OrderSubmission() {
                                 </HStack>
                             </HStack>
 
-                            <HStack justifyContent="space-evenly" mt='10' mb="20">
-                                <Button p='3' _pressed={{
+                            <HStack justifyContent="space-evenly" alignSelf="center" mt='10' mb="20">
+                                <Button w="70%" _pressed={{
                                     bgColor: "success.600"
                                 }}
-                                    size='md' bgColor="success.500"
+                                    size='sm' bgColor="success.500"
                                     onPress={async () => {
                                         const result = await fetchOrder(orderValue, state.token!)
                                         const fileResult = await fetchFile({ guidelines: orderValue.guidelines, notes: orderValue.notes })
@@ -316,11 +316,11 @@ export default function OrderSubmission() {
                                             ])
                                         }
 
-                                    }}>Confirm</Button>
-                                <Button _pressed={{
+                                    }}>Submit</Button>
+                                {/* <Button _pressed={{
                                     bgColor: "secondary.500"
                                 }}
-                                    size='md' bgColor="secondary.400">Cancel</Button>
+                                    size='md' bgColor="secondary.400">Cancel</Button> */}
                             </HStack>
                         </VStack>
                     </ScrollView>
