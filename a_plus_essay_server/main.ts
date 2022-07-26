@@ -57,6 +57,7 @@ userRoutes.post("/tutor-file", userController.uploadTutorFile);
 userRoutes.post("/edit-profile", userController.editProfile);
 userRoutes.get("/login/token", userController.loginWithToken);
 userRoutes.get("/get-user-file", userController.getUserImage);
+userRoutes.get('/tutor/homeScreenProfile', userController.getTutorInfo);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:id/message", chatController.getChatroom);
@@ -74,11 +75,12 @@ orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
 orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
-orderRoutes.post('make-offer', orderController.makeOffer)
+orderRoutes.post('/make-offer', orderController.makeOffer)
 // orderRoutes.get("/order/pending", orderController.getPendingOrder)
 orderRoutes.get("/order/matching", orderController.getMatchingOrder)
 orderRoutes.get("/order/ongoing", orderController.getOngoingOrder)
 orderRoutes.get("/order/completed", orderController.getCompletedOrder)
+orderRoutes.get("/get-order-subject/:id", orderController.getOrderImages)
 
 // orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
 
