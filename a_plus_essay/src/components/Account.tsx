@@ -68,8 +68,8 @@ export default function Account() {
             })
             const result = await res.json()
             if (!result.error) {
-                setEditStudentCard(() => result.studentCard.student_card)
-                setEditTranscript(() => result.transcript)
+                result.studentCard? setEditStudentCard(() => result.studentCard.student_card) : null
+                result.transcript? setEditTranscript(() => result.transcript) : null
                 // setEditTranscript(()=>[...editTranscript, result.transcript])
                 console.log('studentcard: ', editStudentCard)
                 console.log('transcripts: ', editTranscript)
@@ -82,12 +82,19 @@ export default function Account() {
         state?.user ?
             <View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <View>
-                        {editProfile ?
-                            <TextInput placeholder='Edit Nickname' onChangeText={value => { setEditNickname(() => value); console.log('edit nickname MATCH? ', value, editNickname) }}></TextInput> :
-                            <Text>{state.user?.nickname}</Text>
-                        }
-                    </View>
+                    <HStack>
+                        <HStack>
+                            <Text fontWeight='bold'>Nickname :</Text>
+                        </HStack>
+                        <HStack>
+                            {editProfile ?
+                                <TextInput placeholder='Edit Nickname' onChangeText={value => { setEditNickname(() => value); console.log('edit nickname MATCH? ', value, editNickname) }}>
+                                </TextInput> :
+                                <Text>{state.user?.nickname}</Text>
+
+                            }
+                        </HStack>
+                    </HStack>
                     {editProfile ?
                         <TouchableOpacity onPress={async () => {
                             setEditProfile(false)
@@ -112,83 +119,105 @@ export default function Account() {
                         </TouchableOpacity>
                     }
                 </View>
-                <View>
-                    <Text>Email</Text>
-                    <Text>{state.user?.email}</Text>
-
-                </View>
-                <View>
-                    <Text>Password</Text>
-                    {editProfile ?
-                        <TextInput placeholder='Edit Password' onChangeText={value => setEditPassword(() => value)}></TextInput> :
-                        <Text>********</Text>
-                    }
-                </View>
-                <View>
-                    <Text>Phone Number</Text>
-                    {editProfile ?
-                        <TextInput placeholder='Edit Phone Number' onChangeText={value => setEditPhoneNumber(() => value)}></TextInput> :
-                        <Text>{state.user?.phone_number}</Text>
-                    }
-                </View>
+                <HStack>
+                    <HStack>
+                        <Text fontWeight='bold'>Email :</Text>
+                    </HStack>
+                    <HStack>
+                        <Text>{state.user?.email}</Text>
+                    </HStack>
+                </HStack>
+                <HStack>
+                    <HStack>
+                        <Text fontWeight='bold'>Password :</Text>
+                    </HStack>
+                    <HStack>
+                        {editProfile ?
+                            <TextInput placeholder='Edit Password' onChangeText={value => setEditPassword(() => value)}></TextInput> :
+                            <Text>********</Text>
+                        }
+                    </HStack>
+                </HStack>
+                <HStack>
+                    <HStack>
+                        <Text fontWeight='bold'>Phone Number</Text>
+                    </HStack>
+                    <HStack>
+                        {editProfile ?
+                            <TextInput placeholder='Edit Phone Number' onChangeText={value => setEditPhoneNumber(() => value)}></TextInput> :
+                            <Text>{state.user?.phone_number}</Text>
+                        }
+                    </HStack>
+                </HStack>
                 {state?.tutor ?
                     <>
-                        <View>
-                            <Text>School</Text>
-                            <Text>{state.tutor[1].school}</Text>
-                        </View>
-                        <View>
-                            <Text>Student Card</Text>
+                        <HStack>
+                            <HStack>
+                                <Text>School</Text>
+                            </HStack>
+                            <HStack>
+                                <Text>{state.tutor[1].school}</Text>
+                            </HStack>
+                        </HStack>
+                        <HStack>
+                            <HStack>
+                                <Text>Student Card</Text>
+                            </HStack>
                             {/* <Text>{state.tutor[0].student_card}</Text> */}
                             <Image style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${editStudentCard}` }} />
-                        </View>
+                            {/* Only Display the photo*/}
+                        </HStack>
                         <View>
                             <Text>Transcript</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 {editTranscript.map((transcript: any, i: number) =>
-                                    // console.log('INSide .mAP: ', transcript.filename)
-                                    transcript.filename?
-                                    <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} /> : null
+                                    // console.log('INSide .mAP: ', transcript)
+                                    transcript.filename ?
+                                        <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} /> : null
                                 )}
                             </View>
+                            {/* Only Display the photo*/}
                         </View>
-
-                        <View>
-                            <Text>Preferred Subjects</Text>
-                            {state.tutor[3].map((subject: any, i: number) => (
-                                editProfile ?
-                                    <TextInput
-                                        key={i}
-                                        placeholder='Edit Subject'
-                                        onChangeText={value => {
-                                            console.log('State.Tutor[3]: ', state.tutor[3])
-                                            let newPreferredSubject = [...state.tutor[3]]
-                                            newPreferredSubject[i].subject_name = value
-                                            console.log('NEW PreferredSubject Array: ', newPreferredSubject)
-                                            setEditPreferredSubject(newPreferredSubject)
-                                        }}></TextInput> :
-                                    <Text key={i}>{subject.subject_name}</Text>
-                            ))}
-                        </View>
-                        <View>
-                            <Text>Self Introduction</Text>
-                            {editProfile ?
-                                <TextInput placeholder='Edit Self Introduction' onChangeText={value => setEditSelfIntro(() => value)}></TextInput> :
-                                <Text>{state.tutor[0].self_intro}</Text>
-                            }
-                        </View>
-                        <View>
-                            <Text>Rating</Text>
-                            <Text>{state.tutor[0].rating}</Text>
-                        </View>
-                        <View>
-                            <Text>Ongoing Order</Text>
-                            <Text>{state.tutor[0].ongoing_order_amount}</Text>
-                        </View>
-                        <View>
-                            <Text>Completed Order</Text>
-                            <Text>{state.tutor[0].completed_order_amount}</Text>
-                        </View>
+                        <HStack>
+                            <HStack>
+                                <Text>Preferred Subjects</Text>
+                            </HStack>
+                            <HStack>
+                                {state.tutor[3].map((subject: any, i: number) => (
+                                    editProfile ?
+                                        <TextInput
+                                            key={i}
+                                            placeholder='Edit Subject'
+                                            onChangeText={value => {
+                                                console.log('State.Tutor[3]: ', state.tutor[3])
+                                                let newPreferredSubject = [...state.tutor[3]]
+                                                newPreferredSubject[i].subject_name = value
+                                                console.log('NEW PreferredSubject Array: ', newPreferredSubject)
+                                                setEditPreferredSubject(newPreferredSubject)
+                                            }}></TextInput> :
+                                        <Text key={i}>{subject.subject_name}</Text>
+                                ))}
+                            </HStack>
+                        </HStack>
+                        <HStack>
+                            <HStack>
+                                <Text>Self Introduction</Text>
+                            </HStack>
+                            <HStack>
+                                {editProfile ?
+                                    <TextInput placeholder='Edit Self Introduction' onChangeText={value => setEditSelfIntro(() => value)}></TextInput> :
+                                    <Text>{state.tutor[0].self_intro}</Text>
+                                }
+                            </HStack>
+                        </HStack>
+                        <HStack>
+                            <HStack>
+                                <Text>Rating</Text>
+                            </HStack>
+                            <HStack>
+                                <Text>{state.tutor[0].rating}</Text>
+                            </HStack>
+                        </HStack>
                     </>
                     : null}
 
