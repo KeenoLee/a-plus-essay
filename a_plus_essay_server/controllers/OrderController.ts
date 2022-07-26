@@ -203,21 +203,21 @@ export class OrderController {
 
   //     }
   // }
-  getPendingOrder = async (req: Request, res: Response) => {
-    // const {id, isTutor} = req.body
-    try {
-      let payload = getJWTPayload(req)
-      if (payload.is_tutor) {
-        let json = await this.orderService.getTutorPendingOrder(payload.id)
-        res.json(json)
-      } else {
-        let json = await this.orderService.getStudentPendingOrder(payload.id)
-        res.json(json)
-      }
-    } catch (error) {
-      res.json({ error: String(error) })
-    }
-  }
+  // getPendingOrder = async (req: Request, res: Response) => {
+  //   try {
+  //     let payload = getJWTPayload(req)
+  //     console.log('going to get pending...', payload)
+  //     if (payload.is_tutor) {
+  //       let json = await this.orderService.getTutorPendingOrder(payload.id)
+  //       res.json(json)
+  //     } else {
+  //       let json = await this.orderService.getStudentPendingOrder(payload.id)
+  //       res.json(json)
+  //     }
+  //   } catch (error) {
+  //     res.json({ error: String(error) })
+  //   }
+  // }
   // getChatMessage = async (req: Request, res: Response) => {
   //     try {
   //         const { userId, is_tutor } = req.body
@@ -228,20 +228,47 @@ export class OrderController {
   //         res.status(500).json({ message: "internal server errror" })
   //     }
   // }
-
-  acceptOrRejectQuotation = async (req: Request, res: Response) => {
-    const { orderId, tutorId, acceptQuotation } = req.body;
-    if (acceptQuotation === true) {
-      await this.orderService.acceptQuotation({ orderId, tutorId });
-    }
-    if (acceptQuotation === false) {
-      await this.orderService.rejectQuotation({ orderId, tutorId });
+  getMatchingOrder = async (req: Request, res: Response) => {
+    try {
+      let payload = getJWTPayload(req)
+      if (payload.is_tutor) {
+        let json = await this.orderService.getTutorMatchingOrder(payload.id)
+        res.json(json)
+      } else {
+        let json = await this.orderService.getStudentMatchingOrder(payload.id)
+        res.json(json)
+      }
+    } catch (error) {
+      res.json({ error: String(error) })
     }
   }
-
-  completeOrder = async (req: Request, res: Response) => {
-    const orderId = req.body;
-    await this.orderService.completeOrder(orderId);
+  getOngoingOrder = async (req: Request, res: Response) => {
+    try {
+      let payload = getJWTPayload(req)
+      if (payload.is_tutor) {
+        let json = await this.orderService.getTutorOngoingOrder(payload.id)
+        res.json(json)
+      } else {
+        let json = await this.orderService.getStudentOngoingOrder(payload.id)
+        res.json(json)
+      }
+    } catch (error) {
+      res.json({ error: String(error) })
+    }
+  }
+  getCompletedOrder = async (req: Request, res: Response) => {
+    try {
+      let payload = getJWTPayload(req)
+      if (payload.is_tutor) {
+        let json = await this.orderService.getTutorCompletedOrder(payload.id)
+        res.json(json)
+      } else {
+        let json = await this.orderService.getStudentCompletedOrder(payload.id)
+        res.json(json)
+      }
+    } catch (error) {
+      res.json({ error: String(error) })
+    }
   }
 }
 

@@ -58,7 +58,7 @@ export default function Account() {
     const [editPhoneNumber, setEditPhoneNumber] = useState<string | null>(null)
     const [editSchool, setEditSchool] = useState<string | null>(null)
     const [editStudentCard, setEditStudentCard] = useState<string | null>(null)
-    const [editTranscript, setEditTranscript] = useState<Array<EditTranscript | null>>([null])
+    const [editTranscript, setEditTranscript] = useState<Array<EditTranscript>>([])
     const [editPreferredSubject, setEditPreferredSubject] = useState<Array<PreferredSubject | null>>([null])
     const [editSelfIntro, setEditSelfIntro] = useState<string | null>(null)
     useEffect(() => {
@@ -170,7 +170,7 @@ export default function Account() {
                         <View>
                             <Text>Transcript</Text>
                             <View style={{ flexDirection: 'row' }}>
-                                {editTranscript.map((transcript: any, i: number) =>
+                                {editTranscript.map((transcript: EditTranscript, i: number) =>
                                     // console.log('INSide .mAP: ', transcript)
                                     transcript.filename ?
                                         <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} /> : null
