@@ -94,7 +94,7 @@ export const Tabs = () => {
   const state = useSelector((state: RootState) => state.auth);
   return (
     <Tab.Navigator
-      initialRouteName="View Matched Order"
+      // initialRouteName="View Matched Order"
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
