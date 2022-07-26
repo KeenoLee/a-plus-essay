@@ -120,8 +120,8 @@ export const Tabs = () => {
       <Tab.Screen
         name="Order Status"
         component={OrderStatus}
-        options={{ 
-          headerRight: () => (state?.tutor ? null : 
+        options={{
+          headerRight: () => (state?.tutor ? null :
             <View
               style={{
                 flexDirection: 'row',
@@ -270,7 +270,7 @@ export function HomeStack() {
       {/* <Stack.Screen name="Register" component={Register} /> */}
       <Stack.Screen name="Message" component={Notification} />
       <Stack.Screen name="Chatroom" component={Chatroom}
-      // options={{ headerTitle: (props: any) => props.title }}
+        options={{ headerTitle: '' }}
       // options={{
       //   headerTitle: 'Chatroom',
       //   headerRight: () => {
