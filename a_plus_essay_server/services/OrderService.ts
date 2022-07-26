@@ -452,7 +452,7 @@ export class OrderService {
 
   async getStudentMatchingOrder(id: number) {
     const orders = await this.knex
-      .select("title", "tutor_submission_deadline")
+      .select("id", "title", "tutor_submission_deadline")
       .from("order")
       .where("student_id", id)
       .whereNull("matched_time");
@@ -469,6 +469,7 @@ export class OrderService {
         .select("*")
         .from("candidate")
         .where("order_id", order.id)
+        .whereNotNull("charge")
         .andWhere("tutor_id", id);
       console.log(candidate);
     }
