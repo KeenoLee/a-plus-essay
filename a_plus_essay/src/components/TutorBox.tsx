@@ -1,16 +1,16 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 type Props = {
     isSelected: boolean
 }
-const UnSelectedBoxStyle = {
-    flexDirection: 'row',
+const UnSelectedBoxStyle: StyleProp<ViewStyle> = {
+    flexDirection: 'row' as const,
     justifyContent: 'space-between',
     width: 'auto',
     height: 'auto',
-    alignItems: 'center',
+    alignItems: 'center' as const,
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
@@ -24,25 +24,25 @@ const UnSelectedBoxStyle = {
     shadowOpacity: 0.2,
     shadowRadius: 1,
 }
-const SelectedBoxStyle = {
+const SelectedBoxStyle: StyleProp<ViewStyle> = {
     ...UnSelectedBoxStyle,
     borderWidth: 1,
-    marginTop: UnSelectedBoxStyle.marginTop-1,
-    marginBottom: UnSelectedBoxStyle.marginBottom-1,
+    marginTop: +UnSelectedBoxStyle.marginTop! - 1,
+    marginBottom: +UnSelectedBoxStyle.marginBottom! - 1,
     borderColor: 'rgb(89,149,248)',
     shadowColor: 'white'
 }
 
-export default function TutorBox({ isSelected,}: Props) {
+export default function TutorBox({ isSelected, }: Props) {
     const navigation = useNavigation()
     const [boxStyle, setBoxStyle] = useState(UnSelectedBoxStyle)
     useEffect(() => {
         console.log('selected?? ', isSelected)
-        isSelected ? setBoxStyle(() => SelectedBoxStyle) : setBoxStyle(()=>UnSelectedBoxStyle)
+        isSelected ? setBoxStyle(() => SelectedBoxStyle) : setBoxStyle(() => UnSelectedBoxStyle)
     }, [isSelected])
     return (
         // <View style={isSelected?styles.selectedBox:styles.unSelectedBox}>
-        <View style={ boxStyle }>
+        <View style={boxStyle}>
             <View style={{ flex: 7.5 }}>
                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Beeno</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

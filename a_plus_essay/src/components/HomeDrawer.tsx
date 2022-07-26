@@ -15,9 +15,9 @@ import App, { HomeStack, Tabs } from '../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SelectTutor from './SelectTutor';
 import ChatRoom from './Chatroom';
-import {useRoute} from '@react-navigation/native';
-import {RootState} from '../redux/store';
-import {useSelector} from 'react-redux';
+import { useRoute } from '@react-navigation/native';
+import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
 import ChatListScreen from '../pages/ChatList';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/dispatch';
@@ -41,7 +41,7 @@ export function HomeDrawer() {
         // headerShown: showsMenu,
         // headerLeft: ()=>null,
         // headerRight: ()=><TouchableOpacity onPress={()=>navigation.toggleDrawer()}><Text>@</Text></TouchableOpacity>,
-        // drawerType: 'front',
+        drawerType: 'slide',
         headerTintColor: 'white',
         // headerTitle: '',
         drawerPosition: 'left',
@@ -55,7 +55,7 @@ export function HomeDrawer() {
       <Drawer.Screen
         name="Tab"
         component={HomeStack}
-        options={{headerShown: false, title: 'A Plus Essay'}}
+        options={{ headerShown: false, title: 'A Plus Essay' }}
       />
       {/* <Drawer.Screen name='App' component={App} /> */}
       {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}

@@ -6,7 +6,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Chatroom from '../components/Chatroom';
 import { View, Divider } from 'native-base';
 import { then } from '@beenotung/tslib';
-import { format, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow, formatDistanceToNowStrict } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
@@ -15,7 +15,8 @@ import uuid from 'react-native-uuid';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useGet } from '../hooks/use-get';
-import { useAppNavigation } from '../../routes';
+import { useToken } from '../hooks/use-token';
+import { useAppNavigation } from '../routes';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ interface ChatRoom {
 }
 interface ChatListProps {
   chatRoom: ChatRoom;
+  token: string;
 }
 
 const ChatListItem = (props: ChatListProps) => {
@@ -36,7 +38,7 @@ const ChatListItem = (props: ChatListProps) => {
   const navigation = useAppNavigation();
 
   const onClick = () => {
-    navigation.navigate({ name: 'Chatroom', params: { id: chatRoom.order_id } });
+    navigation.navigate({ name: 'Chatroom', params: { id: chatRoom.order_id, token: props.token, title: chatRoom.title } });
     console.log('Should save user_id, order_id, last_message_id', chatRoom,)
   };
   // return (
@@ -58,7 +60,7 @@ const ChatListItem = (props: ChatListProps) => {
             <Text style={styles.timeFormat}>
               {(chatRoom.last_message_time == undefined)
                 ? ' ' :
-                (formatDistanceToNow(new Date(chatRoom.last_message_time), {
+                (formatDistanceToNowStrict(new Date(chatRoom.last_message_time), {
                   addSuffix: true,
                 }))}
             </Text>
@@ -98,7 +100,27 @@ export default function ChatListScreen() {
   console.log(chatList)
   const navigation = useAppNavigation();
 
-  return state?.user || state?.tutor ? (
+  const token = useToken()
+  useEffect(() => {
+    if (!token) {
+      Alert.alert('Unauthorized', 'Please login to view chatroom!', [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.navigate('Login');
+          },
+        },
+      ])
+    }
+  }, [token])
+
+  if (!token) {
+    return <View>
+
+    </View>
+
+  }
+  return (
     <ImageBackground
       style={{ flex: 1, width: '100%', height: '100%' }}
       source={require('../assets/chatbg.jpg')}
@@ -108,24 +130,13 @@ export default function ChatListScreen() {
           <FlatList
             style={{ width: '100%' }}
             data={json.rooms}
-            renderItem={({ item }) => <ChatListItem chatRoom={item} />}
+            renderItem={({ item }) => <ChatListItem chatRoom={item} token={token} />}
             keyExtractor={item => String(item.order_id)}
           />
         ))}
       </View>
     </ImageBackground>
-  ) : (
-    <View>
-      {Alert.alert('Unauthorized', 'Please login to view chatroom!', [
-        {
-          text: 'OK',
-          onPress: () => {
-            navigation.navigate('Login');
-          },
-        },
-      ])}
-    </View>
-  );
+  )
 }
 
 //Trying to turn the chatroom into Stack

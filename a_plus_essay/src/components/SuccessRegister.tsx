@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import * as React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import {AppParamList, useAppNavigation} from '../../routes'
+import { AppParamList, useAppNavigation } from '../routes'
 
 type Props = NativeStackScreenProps<AppParamList>
 type OnPress = {

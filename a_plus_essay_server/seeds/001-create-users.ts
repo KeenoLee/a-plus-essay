@@ -3,6 +3,9 @@ import { hashPassword } from "../utils/hash";
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
+
+    await knex("comment").del();
+    await knex("candidate").del();
     await knex("user_read_message").del();
     await knex("chat_message").del();
     await knex('preferred_subject').del();
@@ -73,7 +76,6 @@ export async function seed(knex: Knex): Promise<void> {
                 major_id: majorId,
                 student_card: "student card base 64",
                 school_id: schoolId,
-                rating: 5,
                 self_intro: "this is self intro",
                 ongoing_order_amount: 0,
                 completed_order_amount: 0,
