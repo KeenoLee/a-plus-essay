@@ -7,6 +7,7 @@ import DateTime from '../../components/DateTime'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { env } from '../../env/env'
 import { Divider } from 'native-base'
+import Rating from '../../components/Rating'
 
 
 
@@ -35,6 +36,7 @@ function OrderListPage(props: { orderStatus: string }) {
                         <View style={styles.container} key={order.id}>
                             <Text style={styles.assignmentName}>{order.title}</Text>
                             <DateTime style={styles.time} time={order.tutor_submission_deadline} />
+                            <Rating/>
                             {/* <TouchableOpacity style={styles.icon}>
                         <Ionicons name="heart-dislike" color='grey' size={18} />
                     </TouchableOpacity> */}
@@ -50,7 +52,7 @@ function OrderListPage(props: { orderStatus: string }) {
 // export function PendingOrderListPage() { return <OrderListPage orderStatus='pending' /> }
 export function MatchingOrderListPage() { return <OrderListPage orderStatus='matching' /> }
 export function OngoingOrderListPage() { return <OrderListPage orderStatus='ongoing' /> }
-export function CompletedOrderListPage() { return <OrderListPage orderStatus='completed' /> }
+export function CompletedOrderListPage() { return <OrderListPage orderStatus='completed'/> }
 
 const styles = StyleSheet.create({
     container: {
