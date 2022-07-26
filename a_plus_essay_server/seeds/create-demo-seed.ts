@@ -5,7 +5,23 @@ import { hashPassword } from "../utils/hash";
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     // await knex("table_name").del();
-
+    await knex("comment").del();
+    await knex("candidate").del();
+    await knex("user_read_message").del();
+    await knex("chat_message").del();
+    await knex('preferred_subject').del();
+    await knex('transcript_subject').del()
+    await knex('order_subject').del()
+    await knex("subject").del();
+    await knex('guideline').del()
+    await knex('note').del()
+    await knex("order").del();
+    await knex("sample").del();
+    await knex("transcript").del();
+    await knex("tutor").del();
+    await knex("school").del();
+    await knex("major").del();
+    await knex("user").del();
     // Inserts seed entries
     await knex("user").insert([
         {

@@ -84,7 +84,7 @@ export default function Account() {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <HStack>
                         <HStack>
-                            <Text fontWeight='bold'>Nickname :</Text>
+                            <Text fontWeight='bold'>Nickname: </Text>
                         </HStack>
                         <HStack>
                             {editProfile ?
@@ -121,7 +121,7 @@ export default function Account() {
                 </View>
                 <HStack>
                     <HStack>
-                        <Text fontWeight='bold'>Email :</Text>
+                        <Text fontWeight='bold'>Email: </Text>
                     </HStack>
                     <HStack>
                         <Text>{state.user?.email}</Text>
@@ -129,7 +129,7 @@ export default function Account() {
                 </HStack>
                 <HStack>
                     <HStack>
-                        <Text fontWeight='bold'>Password :</Text>
+                        <Text fontWeight='bold'>Password: </Text>
                     </HStack>
                     <HStack>
                         {editProfile ?
@@ -140,7 +140,7 @@ export default function Account() {
                 </HStack>
                 <HStack>
                     <HStack>
-                        <Text fontWeight='bold'>Phone Number</Text>
+                        <Text fontWeight='bold'>Phone Number: </Text>
                     </HStack>
                     <HStack>
                         {editProfile ?
