@@ -79,7 +79,7 @@ const ChatListItem = (props: ChatListProps) => {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      <Divider/>
+      <Divider />
     </>
     // )}
     //   </ScrollView>
@@ -131,7 +131,7 @@ export default function ChatListScreen() {
             style={{ width: '100%' }}
             data={json.rooms}
             renderItem={({ item }) => <ChatListItem chatRoom={item} token={token} />}
-            keyExtractor={item => String(item.order_id)}
+            keyExtractor={item => String(item.order_id + Math.random())}
           />
         ))}
       </View>
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   timeFormat: {
     // backgroundColor: 'green',
     AlignSelf: 'end',
-    justifyContent:'center',
+    justifyContent: 'center',
     alignItems: 'center',
     fontSize: 13,
     color: 'grey',

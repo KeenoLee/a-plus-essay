@@ -20,15 +20,14 @@ function shorterFilename(filename: string) {
     return filename
 }
 type Order = {
-    id: number,
-    student_id: number,
-    tutor_id: number,
-    title: string,
-    grade: string,
-    description: string,
-    budget: number,
-    tutor_submission_deadline: Date,
-    student_submission_deadline: Date
+    id: number
+    title: string
+    tutor_submission_deadline: Date
+    student_id?: number
+    tutor_id?: number | null
+    grade?: string
+    description?: string
+    budget?: number
 }
 type ImageFile = {
     filename: string
@@ -38,23 +37,31 @@ interface OfferInfo {
     orderId: number,
     charge: number
 }
-async function makeOffer(offerInfo: OfferInfo) {
-    const res = await fetch(`${env.BACKEND_URL}/makeOffer`, {
+async function makeOffer(offerInfo: OfferInfo, token: string) {
+    const res = await fetch(`${env.BACKEND_URL}/make-offer`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(offerInfo)
     })
     const result = await res.json()
+    if (!result.error) {
+        Alert.alert('Success to offer! Please wait for the student to confirm.')
+    } else {
+        Alert.alert('Failed to make offer! Please try again.')
+    }
 }
 
-export default function ViewMatchedOrder({ order }: Order) {
+export default function ViewMatchedOrder({route, navigation}: any) {
+    console.log(route)
+    const {order} = route.params
+    console.log('just entered VIew MAtched Order PAGe: ', order)
     const state = useSelector((state: RootState) => state.auth)
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
     const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
     const [notes, setNotes] = useState<Array<ImageFile | null>>([null])
-    const [showImage, setShowImage] = useState(false)
     const [offer, setOffer] = useState<string>('')
     useEffect(() => {
         async function getOrderSubjectAndImages(orderId: number) {
@@ -66,93 +73,97 @@ export default function ViewMatchedOrder({ order }: Order) {
                 setNotes(() => result.notes)
             }
         }
-
         getOrderSubjectAndImages(order.id)
     })
     return (
-        <SafeAreaView>
-            <ScrollView>
-                <VStack mt="4" alignSelf="center" px="4" w={{ base: "100%" }}>
-                    <Stack space={4}>
-                        <FormControl>
-                            <FormControl.Label>Project Title :</FormControl.Label>
-                            <Text>{order.title}</Text>
-                        </FormControl>
-                        <FormControl>
-                            <FormControl.Label>Subject :</FormControl.Label>
-                            <Text>{orderSubject}</Text>
-                        </FormControl>
-                    </Stack>
-                    <HStack space={4} mt="4" alignSelf="center">
-                        <HStack>
-                            <FormControl.Label>Budget :</FormControl.Label>
-                            <FormControl w="20" style={{ marginLeft: 10 }}>
-                                <Text>{order.budget}</Text>
+        state.token && state.user && state.tutor ?
+            <SafeAreaView>
+                <ScrollView>
+                    <VStack mt="4" alignSelf="center" px="4" w={{ base: "100%" }}>
+                        <Stack space={4}>
+                            <FormControl>
+                                <FormControl.Label>Project Title :</FormControl.Label>
+                                <Text>{order.title}</Text>
                             </FormControl>
-                        </HStack>
-                        <HStack>
-                            <FormControl.Label>Grade :</FormControl.Label>
-                            <FormControl w="20" style={{ marginLeft: 10 }}>
-                                <Text>{order.grade}</Text>
+                            <FormControl>
+                                <FormControl.Label>Subject :</FormControl.Label>
+                                <Text>{orderSubject}</Text>
                             </FormControl>
+                        </Stack>
+                        <HStack space={4} mt="4" alignSelf="center">
+                            <HStack>
+                                <FormControl.Label>Budget :</FormControl.Label>
+                                <FormControl w="20" style={{ marginLeft: 10 }}>
+                                    <Text>{order.budget}</Text>
+                                </FormControl>
+                            </HStack>
+                            <HStack>
+                                <FormControl.Label>Grade :</FormControl.Label>
+                                <FormControl w="20" style={{ marginLeft: 10 }}>
+                                    <Text>{order.grade}</Text>
+                                </FormControl>
+                            </HStack>
                         </HStack>
-                    </HStack>
-                    <Stack mt="4" mb="4">
-                        <FormControl.Label>Project Description :</FormControl.Label>---------------------------
-                    </Stack>
-                    <Stack alignItems="center">
-                        <Text>{order.description}</Text>
-                    </Stack>
+                        <Stack mt="4" mb="4">
+                            <FormControl.Label>Project Description :</FormControl.Label>
+                        </Stack>
+                        <Stack alignItems="center">
+                            <Text>{order.description}</Text>
+                        </Stack>
 
-                    <HStack justifyContent='space-between' alignItems='center' mt="4">
+                        <HStack justifyContent='space-between' alignItems='center' mt="4">
+                            <HStack>
+                                <FormControl.Label alignItems='center'>Guideline :</FormControl.Label>
+                            </HStack>
+                        </HStack>
+
+                        <Stack>
+                            {guidelines.map((guideline, i) => (
+                                <Guideline key={i} filename={guideline?.filename} />
+                            ))}
+                        </Stack>
+
+                        <HStack justifyContent='space-between' alignItems='center' mt="4">
+                            <HStack>
+                                <FormControl.Label alignItems='center'>Lecture Notes :</FormControl.Label>
+                            </HStack>
+                        </HStack>
+                        <Stack>
+                            {notes.map((note, i) => (
+                                <Guideline key={i} filename={note?.filename} />
+                            ))}
+                        </Stack>
+
+                        <Stack mt="4">
+                            <FormControl.Label>Deadline :</FormControl.Label>
+                        </Stack>
+
+                        <HStack space={4} alignItems='center'>
+                            <Text>{order.tutor_submission_deadline.toLocaleString()}</Text>
+                        </HStack>
+
                         <HStack>
-                            <FormControl.Label alignItems='center'>Guideline :</FormControl.Label>
+                            <FormControl.Label>Make an Offer :</FormControl.Label>
+                            <TextInput placeholder='Offer' onChangeText={value => setOffer(() => value)} />
+                            <TouchableOpacity onPress={async () => {
+                                const result = await makeOffer({
+                                    tutorId: state.user!.id,
+                                    orderId: order.id,
+                                    charge: +offer
+                                }, state.token!)
+                            }}>
+                                <Text>Confirm</Text>
+                            </TouchableOpacity>
                         </HStack>
-                    </HStack>
-
-                    <Stack>
-                        {guidelines.map((guideline, i) => (
-                            <Guideline key={i} filename={guideline?.filename} />
-                        ))}
-                    </Stack>
-
-                    <HStack justifyContent='space-between' alignItems='center' mt="4">
-                        <HStack>
-                            <FormControl.Label alignItems='center'>Lecture Notes :</FormControl.Label>
-                        </HStack>
-                    </HStack>
-                    <Stack>
-                        {notes.map((note, i) => (
-                            <Guideline key={i} filename={note?.filename} />
-                        ))}
-                    </Stack>
-
-                    <Stack mt="4">
-                        <FormControl.Label>Deadline :</FormControl.Label>
-                    </Stack>
-
-                    <HStack space={4} alignItems='center'>
-                        <Text>{order.tutor_submission_deadline}</Text>
-                    </HStack>
-
-                    <HStack>
-                        <FormControl.Label>Make an Offer :</FormControl.Label>
-                        <TextInput placeholder='Offer' onChangeText={value => setOffer(() => value)} />
-                        <TouchableOpacity onPress={async () => {
-
-                        }}>
-                            <Text>Confirm</Text>
-                        </TouchableOpacity>
-                    </HStack>
 
 
 
 
 
 
-                </VStack>
-            </ScrollView>
-        </SafeAreaView >
+                    </VStack>
+                </ScrollView>
+            </SafeAreaView > : null
 
     )
 }

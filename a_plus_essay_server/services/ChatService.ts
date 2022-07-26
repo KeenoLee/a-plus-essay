@@ -1,5 +1,6 @@
 import knex, { Knex } from "knex";
 import { Server } from "socket.io";
+import { FlowFlags } from "typescript";
 import {
     ChatroomList,
     MessageInput,
@@ -70,7 +71,7 @@ export class ChatService {
     async checkMember(input: { order_id: number, user_id: number }, knex = this.knex) {
         let order = await knex.select('id', 'student_id', 'tutor_id')
             .from('order').where('id', input.order_id).first()
-        console.log('ooooooorder', order)
+        console.log('ooooooorder', order, input)
         return order?.student_id == input.user_id || order?.tutor_id == input.user_id
 
     }
@@ -83,31 +84,28 @@ export class ChatService {
             if (!await this.checkMember({ order_id: input.order_id, user_id: input.sender_id })) {
                 throw new Error('Not a room member')
             }
+            console.log('checking inputttttttt', input)
             let [{ id, updated_at }] = await knex
                 .insert(input)
                 .into("chat_message")
                 .returning(["id", "updated_at"])
-            let [{ last_message_id }] = await knex
-                .insert({ last_message_id: id, order_id: input.order_id, user_id: input.sender_id })
-                .into('user_read_message')
-                .returning('last_message_id')
+            if ((await knex('user_read_message').select('*').where('order_id', input.order_id)).length === 0) {
+                await knex
+                    .insert({ last_message_id: id, order_id: input.order_id, user_id: input.sender_id })
+                    .into(('user_read_message'))
+                    .returning('last_message_id')
+            } else {
+                await knex('user_read_message')
+                    .whereRaw('order_id = ?', input.order_id)
+                    .update({ last_message_id: id, user_id: input.sender_id })
+                    .returning('last_message_id')
+            }
             await knex
                 .select('id')
                 .from('user_read_message')
                 .where({ order_id: input.order_id })
             return { id, updated_at, sender_id: input.sender_id, message: input.message }
         })
-
-
-        // await this.knex
-        // let newNoticeFromRoom: NewMessage = {
-        //     order_id: id,
-        // };
-        // //send this id to other's notification
-        // this.io.emit("new message", newNoticeFromRoom);
-        // return {
-        //     order_id: id
-        // }
     }
 
     async getChatroom(input: { userId: number, orderId: number }) {
