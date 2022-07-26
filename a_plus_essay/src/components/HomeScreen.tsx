@@ -67,8 +67,39 @@ export function HowToUseCard() {
                         }}>
                             {/*Show Progress*/}
                             {isOpen ?
-                                <Box mt="7" mb='7' bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
-                                    <Text>Step</Text>
+                                <Box mt="6" mb='2' bg="teal.500" rounded="md" width="82%" h="200" alignSelf='center'>
+                                    <Stack pt='2'>
+                                        <Stack ml='1'>
+                                            <Text fontWeight='bold' fontSize='16'>Step 1: </Text>
+                                        </Stack>
+                                        <Stack ml='3'>
+                                            <Text color='white'>Submit the quotation when you receive a order</Text>
+                                        </Stack>
+                                    </Stack>
+                                    <Stack>
+                                        <Stack ml='1'>
+                                            <Text fontWeight='bold' fontSize='16'>Step 2: </Text>
+                                        </Stack>
+                                        <Stack ml='3'>
+                                            <Text color='white'>Monitor the Order Status</Text>
+                                        </Stack>
+                                    </Stack>
+                                    <Stack>
+                                        <Stack ml='1'>
+                                            <Text fontWeight='bold' fontSize='16'>Step 3: </Text>
+                                        </Stack>
+                                        <Stack ml='3'>
+                                            <Text color='white'>Start chat with Student</Text>
+                                        </Stack>
+                                    </Stack>
+                                    <Stack>
+                                        <Stack ml='1'>
+                                            <Text fontWeight='bold' fontSize='16'>Step 4: </Text>
+                                        </Stack>
+                                        <Stack ml='3'>
+                                            <Text color='white'>Receive reward when you finish the task</Text>
+                                        </Stack>
+                                    </Stack>
                                 </Box>
                                 : null
                             }
@@ -125,8 +156,47 @@ export function HowToUseCard() {
                     }}>
                         {/*Show Progress*/}
                         {isOpen ?
-                            <Box mt="7" mb='7' bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
-                                <Text>Step</Text>
+                            <Box mt="6" mb='2' bg="teal.500" rounded="md" width="82%" h="240" alignSelf='center'>
+                                <Stack pt='2'>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 1: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white'>Submit Order</Text>
+                                    </Stack>
+                                </Stack>
+                                <Stack>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 2: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white'>Select your tutor</Text>
+                                    </Stack>
+                                </Stack>
+                                <Stack>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 3: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white'>Pay tuition fee</Text>
+                                    </Stack>
+                                </Stack>
+                                <Stack>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 4: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white'>Start to chat with your tutor</Text>
+                                    </Stack>
+                                </Stack>
+                                <Stack>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 5: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white'>Leave comments with ratings</Text>
+                                    </Stack>
+                                </Stack>
                             </Box>
                             : null
                         }
