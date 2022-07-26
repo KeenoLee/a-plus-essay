@@ -4,7 +4,7 @@ import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button,
 import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { format } from 'date-fns'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Alert, SafeAreaView, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -33,11 +33,29 @@ type Order = {
 type ImageFile = {
     filename: string
 }
+interface OfferInfo {
+    tutorId: number,
+    orderId: number,
+    charge: number
+}
+async function makeOffer(offerInfo: OfferInfo) {
+    const res = await fetch(`${env.BACKEND_URL}/makeOffer`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(offerInfo)
+    })
+    const result = await res.json()
+}
+
 export default function ViewMatchedOrder({ order }: Order) {
+    const state = useSelector((state: RootState) => state.auth)
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
     const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
     const [notes, setNotes] = useState<Array<ImageFile | null>>([null])
     const [showImage, setShowImage] = useState(false)
+    const [offer, setOffer] = useState<string>('')
     useEffect(() => {
         async function getOrderSubjectAndImages(orderId: number) {
             const res = await fetch(`${env.BACKEND_URL}/get-order-subject/${orderId}`)
@@ -104,7 +122,7 @@ export default function ViewMatchedOrder({ order }: Order) {
                         </HStack>
                     </HStack>
                     <Stack>
-                    {notes.map((note, i) => (
+                        {notes.map((note, i) => (
                             <Guideline key={i} filename={note?.filename} />
                         ))}
                     </Stack>
@@ -116,6 +134,18 @@ export default function ViewMatchedOrder({ order }: Order) {
                     <HStack space={4} alignItems='center'>
                         <Text>{order.tutor_submission_deadline}</Text>
                     </HStack>
+
+                    <HStack>
+                        <FormControl.Label>Make an Offer :</FormControl.Label>
+                        <TextInput placeholder='Offer' onChangeText={value => setOffer(() => value)} />
+                        <TouchableOpacity onPress={async () => {
+
+                        }}>
+                            <Text>Confirm</Text>
+                        </TouchableOpacity>
+                    </HStack>
+
+
 
 
 
