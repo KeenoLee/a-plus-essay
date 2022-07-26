@@ -97,14 +97,14 @@ export const Tabs = () => {
   const state = useSelector((state: RootState) => state.auth);
   return (
     <Tab.Navigator
-      initialRouteName="View Matched Order"
+      // initialRouteName="View Matched Order"
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
         headerStyle: { backgroundColor: '#BBD3CF' },
         // headerShown: false
       }}>
-      <Tab.Screen name="View Matched Order" component={ViewMatchedOrder} />
+      {/* <Tab.Screen name="View Matched Order" component={ViewMatchedOrder} /> */}
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -269,20 +269,22 @@ export function HomeStack() {
       {/* <Stack.Screen name="Register" component={Register} /> */}
       <Stack.Screen name="Message" component={Notification} />
       <Stack.Screen name="Chatroom" component={Chatroom}
-      // options={{ headerTitle: (props: any) => props.title }}
-      // options={{
-      //   headerTitle: 'Chatroom',
-      //   headerRight: () => {
-      //     return (
-      //       <Button titleStyle={{fontSize: 10}}
-      //         onPress={() => Alert.alert('Comfirm to complete?')}
-      //         title="Complete"
-      //         color="rgb(42,122,255)"
-      //       />
-      //     )
-      //   }
-      // }}
-      />
+        options={{ headerTitle: '' }} />
+      <Stack.Screen name="View Matched Order" component={ViewMatchedOrder} />
+      {/* // options={{ headerTitle: (props: any) => props.title }} */}
+      {/* // options={{ */}
+      {/* //   headerTitle: 'Chatroom', */}
+      {/* //   headerRight: () => { */}
+      {/* //     return ( */}
+      {/* //       <Button titleStyle={{fontSize: 10}} */}
+      {/* //         onPress={() => Alert.alert('Comfirm to complete?')} */}
+      {/* //         title="Complete" */}
+      {/* //         color="rgb(42,122,255)" */}
+      {/* //       /> */}
+      {/* //     ) */}
+      {/* //   } */}
+      {/* // }} */}
+      {/* /> */}
       {/* <Fabtn/> */}
       {/* </NavigationContainer> */}
     </Stack.Navigator>

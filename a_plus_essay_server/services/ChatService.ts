@@ -84,6 +84,7 @@ export class ChatService {
             if (!await this.checkMember({ order_id: input.order_id, user_id: input.sender_id })) {
                 throw new Error('Not a room member')
             }
+            console.log('checking inputttttttt', input)
             let [{ id, updated_at }] = await knex
                 .insert(input)
                 .into("chat_message")
@@ -95,7 +96,8 @@ export class ChatService {
                     .returning('last_message_id')
             } else {
                 await knex('user_read_message')
-                    .update({ last_message_id: id, order_id: input.order_id, user_id: input.sender_id })
+                    .whereRaw('order_id = ?', input.order_id)
+                    .update({ last_message_id: id, user_id: input.sender_id })
                     .returning('last_message_id')
             }
             await knex

@@ -87,6 +87,7 @@ export class ChatController extends RestController {
             const result = await this.chatService.postMessage({ sender_id: payload.id, order_id, message })
             this.io.to('room:' + order_id).emit('chat message', result)
             console.log('hi see result', result)
+            console.log('orrrrderid', order_id)
             res.json({ ok: true })
         } catch (err) {
             console.error('ChatControllerError: ', err)
