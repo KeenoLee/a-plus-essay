@@ -12,7 +12,11 @@ import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
 import { useAppNavigation } from '../routes';
 import { orderedExtractInObject } from 'native-base/lib/typescript/theme/tools';
+<<<<<<< HEAD
+import Guideline from './Guideline';
+=======
 import DateTime from '../components/DateTime';
+>>>>>>> 789206f6f34fe9e25eb8c098d34a4bcca116bed0
 
 function shorterFilename(filename: string) {
     if (filename.length > 16) {
@@ -95,12 +99,16 @@ export default function ViewMatchedOrder({ order }: { order: Order }) {
 
                     <Stack>
                         {guidelines.map((guideline, i) => (
+<<<<<<< HEAD
+                            <Guideline key={i} filename={guideline?.filename} />
+=======
                             showImage ?
                                 <Image source={{ uri: `${env.BACKEND_URL}/get-image/${guideline?.filename}` }} />
                                 :
                                 <TouchableOpacity>
                                     <Text>File {i + 1}</Text>
                                 </TouchableOpacity>
+>>>>>>> 789206f6f34fe9e25eb8c098d34a4bcca116bed0
                         ))}
                     </Stack>
 
