@@ -58,7 +58,7 @@ export default function Account() {
     const [editPhoneNumber, setEditPhoneNumber] = useState<string | null>(null)
     const [editSchool, setEditSchool] = useState<string | null>(null)
     const [editStudentCard, setEditStudentCard] = useState<string | null>(null)
-    const [editTranscript, setEditTranscript] = useState<Array<EditTranscript | null>>([null])
+    const [editTranscript, setEditTranscript] = useState<Array<EditTranscript>>([])
     const [editPreferredSubject, setEditPreferredSubject] = useState<Array<PreferredSubject | null>>([null])
     const [editSelfIntro, setEditSelfIntro] = useState<string | null>(null)
     useEffect(() => {
