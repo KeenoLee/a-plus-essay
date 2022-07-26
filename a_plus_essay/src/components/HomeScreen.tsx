@@ -3,9 +3,10 @@ import LottieView from 'lottie-react-native';
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import VerticalTutorCard from "./VerticalTutorCard";
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity, __spread } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { useAppNavigation } from '../routes';
 
 
 export function HowToUseCard() {
@@ -266,6 +267,7 @@ export function RenderTutor() {
 
 
 export default function Home() {
+    const navigation = useAppNavigation();
 
     return (
         <ScrollView>
@@ -278,18 +280,24 @@ export default function Home() {
             <Stack mt='4'>
                 <Heading ml='4'>More Info</Heading>
             </Stack>
-            <Pressable >
-                <HStack justifyContent='space-evenly' mt='2' pb='4'>
-                    <Box padding='10' bg={{
-                        linearGradient: {
-                            colors: ['#9896F0', '#FBC8D5'],
-                            // colors: ['#DBD5ED', '# F3E7EA'],
-                            start: [0, 2],
-                            end: [0, 0],
-                        }
-                    }} borderRadius="14">
-                        <Text fontWeight='medium' fontSize='20'>Comment</Text>
-                    </Box>
+            <HStack justifyContent='space-evenly' mt='2' pb='4'>
+                <TouchableOpacity>
+                    <View>
+                        <Box padding='10' bg={{
+                            linearGradient: {
+                                colors: ['#9896F0', '#FBC8D5'],
+                                // colors: ['#DBD5ED', '# F3E7EA'],
+                                start: [0, 2],
+                                end: [0, 0],
+                            }
+                        }} borderRadius="14">
+                            <Text fontWeight='medium' fontSize='20' onPress={() => {
+                                navigation.navigate('Comment');
+                            }} >Comment</Text>
+                        </Box>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
                     <Box padding='10' bg={{
                         linearGradient: {
                             // colors:['#9896F0', '#FBC8D5'],
@@ -299,10 +307,13 @@ export default function Home() {
                         }
                     }}
                         borderRadius="14">
-                        <Text fontWeight='medium' fontSize='20'>About Us</Text>
+                        <Text fontWeight='medium' fontSize='20' onPress={() => {
+                            navigation.navigate('About Us');
+                        }}>About Us</Text>
                     </Box>
-                </HStack>
-            </Pressable>
+                </TouchableOpacity>
+            </HStack>
+            {/* </Pressable> */}
         </ScrollView>
     )
 }
