@@ -170,7 +170,7 @@ export default function Account() {
                         <View>
                             <Text>Transcript</Text>
                             <View style={{ flexDirection: 'row' }}>
-                                {editTranscript.map((transcript: any, i: number) =>
+                                {editTranscript.map((transcript: EditTranscript, i: number) =>
                                     // console.log('INSide .mAP: ', transcript)
                                     transcript.filename ?
                                         <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} /> : null
