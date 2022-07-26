@@ -57,6 +57,7 @@ userRoutes.post("/tutor-file", userController.uploadTutorFile);
 userRoutes.post("/edit-profile", userController.editProfile);
 userRoutes.get("/login/token", userController.loginWithToken);
 userRoutes.get("/get-user-file", userController.getUserImage);
+userRoutes.get('/tutor/homeScreenProfile', userController.getTutorInfo);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:id/message", chatController.getChatroom);

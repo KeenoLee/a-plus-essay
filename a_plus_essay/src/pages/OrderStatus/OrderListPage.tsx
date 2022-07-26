@@ -7,6 +7,7 @@ import DateTime from '../../components/DateTime'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { env } from '../../env/env'
 import { Divider } from 'native-base'
+import Rating from '../../components/Rating'
 import ViewMatchedOrder from '../ViewMatchedOrder'
 import { NavigationContainer } from '@react-navigation/native'
 
@@ -50,7 +51,7 @@ function OrderListPage(props: { orderStatus: string }) {
                 {orderList.render(json => json.orders?.map((order: Order, i) =>
                     url == '/order/matching' ?
                         <TouchableOpacity key={i} onPress={() => {
-                            navigation.navigate('View Matched Order', {order: order})
+                            navigation.navigate('View Matched Order', { order: order })
                             // return <ViewMatchedOrder order={order} />
                         }}>
                             <View>
@@ -60,6 +61,7 @@ function OrderListPage(props: { orderStatus: string }) {
                                     {/* <TouchableOpacity style={styles.icon}>
                         <Ionicons name="heart-dislike" color='grey' size={18} />
                     </TouchableOpacity> */}
+                                    <Rating />
                                 </View>
                                 <Divider />
                             </View>
