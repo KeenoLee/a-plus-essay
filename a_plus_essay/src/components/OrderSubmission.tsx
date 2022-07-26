@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
-import { useAppNavigation } from '../../routes';
+import { useAppNavigation } from '../routes';
 import OrderMatched from './OrderMatched';
 import DateTime from './DateTime';
 interface UserFile {

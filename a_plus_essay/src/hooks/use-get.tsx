@@ -84,5 +84,5 @@ export function useGet<T extends { error?: string }>(
     }
     return fn(json);
   }
-  return { json, setJSON, render };
+  return { json, setJSON, render, token };
 }

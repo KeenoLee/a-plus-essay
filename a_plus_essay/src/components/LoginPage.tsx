@@ -22,7 +22,7 @@ import { RootState, store } from '../redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppDispatch } from '../redux/dispatch';
 import { Marker } from 'react-native-svg';
-import { useAppNavigation, AppParamList } from '../../routes';
+import { useAppNavigation, AppParamList } from '../routes';
 import { promisify } from '@beenotung/tslib';
 interface UserInfo {
     email: string;

@@ -11,8 +11,14 @@ export async function seed(knex: Knex): Promise<void> {
     .returning("id")
     .first();
   console.log("orderRow:", orderRow);
-const studentId = (await knex.select('id').from('user').where('email','student@student.com').first()).id
-console.log(studentId)
+  const studentId = (
+    await knex
+      .select("id")
+      .from("user")
+      .where("email", "student@student.com")
+      .first()
+  ).id;
+  console.log(studentId);
   const pendingOrderIds = await knex("order")
     .select("order.id")
     .whereNull("tutor_id")
@@ -42,12 +48,18 @@ console.log(studentId)
     : (ratingOfTutor = Math.trunc(ratingOfTutorResult.rating));
 
   // Tutor Pending Order => charge, accept_time, reject_time : null
+  // const ratingOfTutorResult = await knex('tutor').select('rating').returning('rating').first()
+  // console.log(ratingOfTutorResult)
+  // let ratingOfTutor
+  // ratingOfTutorResult == null ? ratingOfTutor = 0 : ratingOfTutor = Math.trunc(ratingOfTutorResult.rating)
+
+  // Tutor Pending Order => charge, accept_time, reject_time : null
   await knex("candidate").insert([
     {
       order_id: pendingOrderId1,
       tutor_id: tutorObject.id,
       charge: null,
-      category: ratingOfTutor,
+      category: 3,
       accept_time: null,
       reject_time: null,
       expire_time: "2022-07-28T14:00:00.000Z",
@@ -59,7 +71,7 @@ console.log(studentId)
       order_id: pendingOrderId2,
       tutor_id: tutorObject.id,
       charge: 1000,
-      category: ratingOfTutor,
+      category: 0,
       accept_time: null,
       reject_time: null,
       expire_time: "2022-07-28T14:00:00.000Z",
@@ -71,7 +83,7 @@ console.log(studentId)
       order_id: onGoingOrderId1,
       tutor_id: tutorObject.id,
       charge: 7000,
-      category: ratingOfTutor,
+      category: 5,
       accept_time: "2022-07-25T14:00:00.000Z",
       reject_time: null,
       expire_time: "2022-07-28T14:00:00.000Z",
@@ -83,51 +95,59 @@ console.log(studentId)
       order_id: pendingOrderId2,
       tutor_id: tutorObject.id,
       charge: 4000,
-      category: ratingOfTutor,
+      category: 4,
       accept_time: null,
       reject_time: "2022-07-26T14:00:00.000Z",
       expire_time: "2022-07-28T14:00:00.000Z",
     },
   ]);
 
-  const orderId = (await knex
-    .insert({
-      student_id: studentId,
-      title: "Angular",
-      grade: "Year 5",
-      description: "I am god.",
-      budget: 30000,
-      tutor_submission_deadline: "2022-07-28T14:00:00.000Z",
-      student_submission_deadline: "2022-07-28T14:00:00.000Z",
-    })
-    .into("order")
-    .returning("id"))[0].id
+  const orderId = (
+    await knex
+      .insert({
+        student_id: studentId,
+        title: "Angular",
+        grade: "Year 5",
+        description: "I am god.",
+        budget: 30000,
+        tutor_submission_deadline: "2022-07-28T14:00:00.000Z",
+        student_submission_deadline: "2022-07-28T14:00:00.000Z",
+      })
+      .into("order")
+      .returning("id")
+  )[0].id;
 
-  await knex.insert({
-    order_id: orderId,
-    tutor_id: tutorObject.id,
-    charge: 5000,
-    category: 0,
-    expire_time: "2022-07-28T14:00:00.000Z",
-  }).into('candidate')
-  const order2Id = (await knex
+  await knex
     .insert({
-      student_id: studentId,
-      title: "Angular",
-      grade: "Year 5",
-      description: "I am god.",
-      budget: 30000,
-      tutor_submission_deadline: "2022-07-28T14:00:00.000Z",
-      student_submission_deadline: "2022-07-28T14:00:00.000Z",
+      order_id: orderId,
+      tutor_id: tutorObject.id,
+      charge: 5000,
+      category: 0,
+      expire_time: "2022-07-28T14:00:00.000Z",
     })
-    .into("order")
-    .returning("id"))[0].id
+    .into("candidate");
+  const order2Id = (
+    await knex
+      .insert({
+        student_id: studentId,
+        title: "Angular",
+        grade: "Year 5",
+        description: "I am god.",
+        budget: 30000,
+        tutor_submission_deadline: "2022-07-28T14:00:00.000Z",
+        student_submission_deadline: "2022-07-28T14:00:00.000Z",
+      })
+      .into("order")
+      .returning("id")
+  )[0].id;
 
-  await knex.insert({
-    order_id: order2Id,
-    tutor_id: tutorObject.id,
-    charge: 7000,
-    category: 0,
-    expire_time: "2022-07-28T14:00:00.000Z",
-  }).into('candidate')
+  await knex
+    .insert({
+      order_id: order2Id,
+      tutor_id: tutorObject.id,
+      charge: 7000,
+      category: 0,
+      expire_time: "2022-07-28T14:00:00.000Z",
+    })
+    .into("candidate");
 }
