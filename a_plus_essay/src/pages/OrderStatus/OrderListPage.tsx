@@ -1,28 +1,45 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react'
 import { useGet } from '../../hooks/use-get'
-import { AppParamList } from '../../routes'
+import { AppParamList, useAppNavigation } from '../../routes'
 import { format } from 'date-fns'
 import DateTime from '../../components/DateTime'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { env } from '../../env/env'
 import { Divider } from 'native-base'
 import Rating from '../../components/Rating'
+import ViewMatchedOrder from '../ViewMatchedOrder'
+import { NavigationContainer } from '@react-navigation/native'
 
 
 
 type Order = {
     id: number
     title: string
-    tutor_submission_deadline: string
+    tutor_submission_deadline: Date
+    student_id?: number
+    tutor_id?: number | null
+    grade?: string
+    description?: string
+    budget?: number
+    // matched_time?: Date | null
+    // completed_tine?: Date | null
+    // paid_by_student_time?: Date | null
+    // paid_to_tutor_time?: Date | null
+    // student_submission_deadline?: Date
+    // created_at: Date
+    // updated_at: Date
 }
 
+
 function OrderListPage(props: { orderStatus: string }) {
+    const navigation = useAppNavigation()
     let status = props.orderStatus
     let title = status + ' orders'
     let url = '/order/' + status
     console.log('URL???: ', url)
     const orderList = useGet<{ error?: string, orders?: Order[] }>(title, url, { error: 'loading' })
+    console.log('ORDER lIST in :', orderList)
     useEffect(() => {
         async function getPendingOrder() {
             const res = await fetch(`${env.BACKEND_URL}/order/pending`)
@@ -31,18 +48,34 @@ function OrderListPage(props: { orderStatus: string }) {
     return (
         <View>
             <ScrollView>
-                {orderList.render(json => json.orders?.map(order =>
-                    <View>
-                        <View style={styles.container} key={order.id}>
-                            <Text style={styles.assignmentName}>{order.title}</Text>
-                            <DateTime style={styles.time} time={order.tutor_submission_deadline} />
-                            <Rating/>
-                            {/* <TouchableOpacity style={styles.icon}>
+                {orderList.render(json => json.orders?.map((order: Order, i) =>
+                    url == '/order/matching' ?
+                        <TouchableOpacity key={i} onPress={() => {
+                            navigation.navigate('View Matched Order', { order: order })
+                            // return <ViewMatchedOrder order={order} />
+                        }}>
+                            <View>
+                                <View style={styles.container} key={order.id}>
+                                    <Text style={styles.assignmentName}>{order.title}</Text>
+                                    <DateTime style={styles.time} time={order.tutor_submission_deadline} />
+                                    {/* <TouchableOpacity style={styles.icon}>
                         <Ionicons name="heart-dislike" color='grey' size={18} />
                     </TouchableOpacity> */}
+                                    <Rating />
+                                </View>
+                                <Divider />
+                            </View>
+                        </TouchableOpacity> :
+                        <View key={i}>
+                            <View style={styles.container} key={order.id}>
+                                <Text style={styles.assignmentName}>{order.title}</Text>
+                                <DateTime style={styles.time} time={order.tutor_submission_deadline} />
+                                {/* <TouchableOpacity style={styles.icon}>
+                <Ionicons name="heart-dislike" color='grey' size={18} />
+            </TouchableOpacity> */}
+                            </View>
+                            <Divider />
                         </View>
-                        <Divider/>
-                    </View>
                 ))}
             </ScrollView>
         </View>
@@ -52,7 +85,7 @@ function OrderListPage(props: { orderStatus: string }) {
 // export function PendingOrderListPage() { return <OrderListPage orderStatus='pending' /> }
 export function MatchingOrderListPage() { return <OrderListPage orderStatus='matching' /> }
 export function OngoingOrderListPage() { return <OrderListPage orderStatus='ongoing' /> }
-export function CompletedOrderListPage() { return <OrderListPage orderStatus='completed'/> }
+export function CompletedOrderListPage() { return <OrderListPage orderStatus='completed' /> }
 
 const styles = StyleSheet.create({
     container: {

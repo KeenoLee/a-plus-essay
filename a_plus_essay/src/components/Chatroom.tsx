@@ -67,18 +67,24 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
   is_first = true;
   constructor(props: IChatroomProps) {
     super(props);
+
     this.state = {
       chatMessage: '',
       messages: props.room.messages,
     };
+
     this.scrollView = '';
     this.socket = io(`${env.BACKEND_ORIGIN}`);
-    this.socket.on('connect', () => {
+    this.socket.on('connection', () => {
       console.log('connected!!!!!');
     });
+
   }
   componentDidMount() {
-    this.socket.on('chat message', this.receivedMessage)
+    this.socket.on('chat message', message => {
+      console.log("messssssage:", message);
+      this.receivedMessage(message)
+    })
     console.log('reseivedMessage!!!!', this.receivedMessage);
     this.socket.emit('join', this.props.room.order.id)
     console.log('seesee this.props.room.order.id', this.props.room.order.id);
@@ -87,12 +93,15 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
   componentWillUnmount() {
     this.socket.off('chat message', this.receivedMessage)
     this.socket.emit('leave', this.props.room.order.id)
-
-
   }
+
   receivedMessage = (message: ChatMessage) => {
-    console.log('message:', message);
-    this.setState({ messages: [...this.state.messages, message] });
+    // console.log('message:', message);
+
+    const arr = [...this.state.messages, message]
+
+    console.log(arr);
+    this.setState({ messages: arr });
   }
 
   async submitChatMessage() {
@@ -105,10 +114,12 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
       console.log('newMessageSuccess? ', json);
 
       this.socket.emit('chat message', this.state.chatMessage)
-      console.log('this.state.chatMessage:', this.state.chatMessage);;
+      console.log('this.state.chatMessage:', this.state.chatMessage);
+
       if (this.state.chatMessage == newMessage) {
         this.setState({ chatMessage: '' });
       }
+
     })
 
     // const res = await fetch(`${env.BACKEND_ORIGIN}/post/message`, {
@@ -130,39 +141,40 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
     const messageFromServer = messagesFromServer.map(msg => {
       let isIncoming = msg.sender_id == this.props.room.otherUser.id
       return (
-        <View
-          //TODO: unique ID
-          key={msg + (Math.random() * 100).toFixed(5)}
-          //TODO:
-          style={
-            isIncoming
-              ? styles.incomingMessageBox
-              : styles.sendMessageBox
-          }>
-          {isIncoming ? (
-            <View>
-              <Text style={styles.otherNickname}>
-                {this.props.room.otherUser.nickname}
-              </Text>
-              <Text style={styles.content}>{msg.message.trim() + '   '}</Text>
-              <Text style={styles.timeDisplay}>
-                {format(new Date(msg.updated_at), 'KK:mm aaa')}
-              </Text>
-            </View>
-          ) : (
-            <View>
-              <Text style={styles.content}>{msg.message.trim() + '   '}</Text>
-              <Text style={styles.timeDisplay}>
-                {format(new Date(msg.updated_at), 'KK:mm aaa')}
-              </Text>
-            </View>
-          )}
+        <View>
+          <View
+            key={msg + (Math.random() * 100).toFixed(5)}
+            style={
+              isIncoming
+                ? styles.incomingMessageBox
+                : styles.sendMessageBox
+            }>
+            {isIncoming ? (
+              <View>
+                <Text style={styles.otherNickname}>
+                  {this.props.room.otherUser.nickname}
+                </Text>
+                <Text style={styles.content}>{msg.message.trim() + '   '}</Text>
+                <Text style={styles.timeDisplay}>
+                  {format(new Date(msg.updated_at), 'KK:mm aaa')}
+                </Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={styles.content}>{msg.message.trim() + '   '}</Text>
+                <Text style={styles.timeDisplay}>
+                  {format(new Date(msg.updated_at), 'KK:mm aaa')}
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
       )
     }
     );
     return (
       <>
+        <View style={{ backgroundColor: 'rgb(188,211,207)' }}><Text style={{ alignSelf: 'center', backgroundColor: 'rgb(188,211,207)' }}>{this.props.room.order.title}</Text></View>
         <SafeAreaView
           edges={['bottom', 'left', 'right']}
           style={{ flex: 1, backgroundColor: 'rgb(188,211,207)' }}>
@@ -247,7 +259,7 @@ export default ConnectedChatroom;
 
 const styles = StyleSheet.create({
   outerContainer: {
-    backgroundColor: 'rgb(,211,207)',
+    backgroundColor: 'rgb(188,211,207)',
     flex: 1,
     width: '100%',
     flexDirection: 'column',

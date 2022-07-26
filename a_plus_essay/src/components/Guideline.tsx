@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Image, Text } from 'react-native'
@@ -8,12 +9,14 @@ type Props = {
 export default function Guideline({ filename }: Props) {
     const [showImage, setShowImage] = useState(false)
     return (
-        showImage ?
+        <>
+        {showImage ?
             <TouchableOpacity onPress={() => setShowImage(false)}>
                 <Image source={{ uri: `${env.BACKEND_URL}/get-image/${filename}` }} />
             </TouchableOpacity> :
             <TouchableOpacity onPress={() => setShowImage(true)}>
                 <Text>Guideline</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
+        </>
     )
 }

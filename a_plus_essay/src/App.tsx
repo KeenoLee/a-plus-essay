@@ -30,7 +30,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import Register from './src/components/Register';
 // import LoadingScreen from './src/components/LoadingScreen';
-import Home from './pages/Home';
 import Notification from './pages/Notification';
 import ChatListScreen from './pages/ChatList';
 import ChatStack from './pages/ChatList';
@@ -120,8 +119,8 @@ export const Tabs = () => {
       <Tab.Screen
         name="Order Status"
         component={OrderStatus}
-        options={{ 
-          headerRight: () => (state?.tutor ? null : 
+        options={{
+          headerRight: () => (state?.tutor ? null :
             <View
               style={{
                 flexDirection: 'row',
@@ -270,20 +269,22 @@ export function HomeStack() {
       {/* <Stack.Screen name="Register" component={Register} /> */}
       <Stack.Screen name="Message" component={Notification} />
       <Stack.Screen name="Chatroom" component={Chatroom}
-      // options={{ headerTitle: (props: any) => props.title }}
-      // options={{
-      //   headerTitle: 'Chatroom',
-      //   headerRight: () => {
-      //     return (
-      //       <Button titleStyle={{fontSize: 10}}
-      //         onPress={() => Alert.alert('Comfirm to complete?')}
-      //         title="Complete"
-      //         color="rgb(42,122,255)"
-      //       />
-      //     )
-      //   }
-      // }}
-      />
+        options={{ headerTitle: '' }} />
+      <Stack.Screen name="View Matched Order" component={ViewMatchedOrder} />
+      {/* // options={{ headerTitle: (props: any) => props.title }} */}
+      {/* // options={{ */}
+      {/* //   headerTitle: 'Chatroom', */}
+      {/* //   headerRight: () => { */}
+      {/* //     return ( */}
+      {/* //       <Button titleStyle={{fontSize: 10}} */}
+      {/* //         onPress={() => Alert.alert('Comfirm to complete?')} */}
+      {/* //         title="Complete" */}
+      {/* //         color="rgb(42,122,255)" */}
+      {/* //       /> */}
+      {/* //     ) */}
+      {/* //   } */}
+      {/* // }} */}
+      {/* /> */}
       {/* <Fabtn/> */}
       {/* </NavigationContainer> */}
     </Stack.Navigator>
