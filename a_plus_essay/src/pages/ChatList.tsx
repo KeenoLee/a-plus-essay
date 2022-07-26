@@ -79,7 +79,7 @@ const ChatListItem = (props: ChatListProps) => {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      <Divider style={styles.divider} />
+      <Divider/>
     </>
     // )}
     //   </ScrollView>
