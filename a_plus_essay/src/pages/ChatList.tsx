@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green',
     fontSize: 15,
     fontWeight: 'bold',
-    flex: 3,
+    flex: 2.8,
   },
 
   timeFormat: {
