@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
 import { orderedExtractInObject } from 'native-base/lib/typescript/theme/tools';
 import Guideline from '../components/Guideline';
+import Notes from '../components/Notes';
 
 function shorterFilename(filename: string) {
     if (filename.length > 16) {
@@ -35,6 +36,7 @@ type ImageFile = {
 interface OfferInfo {
     tutorId: number,
     orderId: number,
+    studentId: number,
     charge: number
 }
 async function makeOffer(offerInfo: OfferInfo, token: string) {
@@ -47,17 +49,20 @@ async function makeOffer(offerInfo: OfferInfo, token: string) {
         body: JSON.stringify(offerInfo)
     })
     const result = await res.json()
+    console.log('resULT of MAke Offer? ', result)
     if (!result.error) {
         Alert.alert('Success to offer! Please wait for the student to confirm.')
     } else {
         Alert.alert('Failed to make offer! Please try again.')
     }
+    return result
 }
 
 export default function ViewMatchedOrder({route, navigation}: any) {
     console.log(route)
     const {order} = route.params
     console.log('just entered VIew MAtched Order PAGe: ', order)
+    console.log('order.student_id: ', order.student_id)
     const state = useSelector((state: RootState) => state.auth)
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
     const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
@@ -65,16 +70,19 @@ export default function ViewMatchedOrder({route, navigation}: any) {
     const [offer, setOffer] = useState<string>('')
     useEffect(() => {
         async function getOrderSubjectAndImages(orderId: number) {
+            console.log('ORDERID!!@$#@%$', orderId)
             const res = await fetch(`${env.BACKEND_URL}/get-order-subject/${orderId}`)
             const result = await res.json()
+            console.log('result?? ', result)
             if (!result.error) {
+                console.log('I want ORDER result! ', result)
                 setOrderSubject(() => result.subject_name)
                 setGuidelines(() => result.guidelines)
                 setNotes(() => result.notes)
             }
         }
         getOrderSubjectAndImages(order.id)
-    })
+    }, [])
     return (
         state.token && state.user && state.tutor ?
             <SafeAreaView>
@@ -130,7 +138,7 @@ export default function ViewMatchedOrder({route, navigation}: any) {
                         </HStack>
                         <Stack>
                             {notes.map((note, i) => (
-                                <Guideline key={i} filename={note?.filename} />
+                                <Notes key={i} filename={note?.filename} />
                             ))}
                         </Stack>
 
@@ -148,9 +156,11 @@ export default function ViewMatchedOrder({route, navigation}: any) {
                             <TouchableOpacity onPress={async () => {
                                 const result = await makeOffer({
                                     tutorId: state.user!.id,
+                                    studentId: order.student_id,
                                     orderId: order.id,
                                     charge: +offer
                                 }, state.token!)
+                                console.log('pressed confirm ', result)
                             }}>
                                 <Text>Confirm</Text>
                             </TouchableOpacity>

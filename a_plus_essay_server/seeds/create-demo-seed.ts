@@ -5,7 +5,23 @@ import { hashPassword } from "../utils/hash";
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     // await knex("table_name").del();
-
+    await knex("comment").del();
+    await knex("candidate").del();
+    await knex("user_read_message").del();
+    await knex("chat_message").del();
+    await knex('preferred_subject').del();
+    await knex('transcript_subject').del()
+    await knex('order_subject').del()
+    await knex("subject").del();
+    await knex('guideline').del()
+    await knex('note').del()
+    await knex("order").del();
+    await knex("sample").del();
+    await knex("transcript").del();
+    await knex("tutor").del();
+    await knex("school").del();
+    await knex("major").del();
+    await knex("user").del();
     // Inserts seed entries
     await knex("user").insert([
         {
@@ -71,6 +87,22 @@ export async function seed(knex: Knex): Promise<void> {
             email: "student8@student.com",
             hashed_password: await hashPassword("student8"),
             phone_number: 96442309
+        },
+        {
+            is_admin: false,
+            is_tutor: false,
+            nickname: "student 9",
+            email: "student9@student.com",
+            hashed_password: await hashPassword("student9"),
+            phone_number: 51004376
+        },
+        {
+            is_admin: false,
+            is_tutor: false,
+            nickname: "student 10",
+            email: "student10@student.com",
+            hashed_password: await hashPassword("student10"),
+            phone_number: 95981034
         },
         {
             is_admin: false,
@@ -168,13 +200,37 @@ export async function seed(knex: Knex): Promise<void> {
             hashed_password: await hashPassword("tutor12"),
             phone_number: 61207432
         },
+        {
+            is_admin: false,
+            is_tutor: true,
+            nickname: "tutor 13",
+            email: "tutor13@tutor.com",
+            hashed_password: await hashPassword("tutor13"),
+            phone_number: 95672098
+        },
+        {
+            is_admin: false,
+            is_tutor: true,
+            nickname: "tutor 14",
+            email: "tutor14@tutor.com",
+            hashed_password: await hashPassword("tutor14"),
+            phone_number: 61225436
+        },
+        {
+            is_admin: false,
+            is_tutor: true,
+            nickname: "tutor 15",
+            email: "tutor15tutor.com",
+            hashed_password: await hashPassword("tutor15"),
+            phone_number: 90904732
+        },
     ]);
 
     await knex("order").insert([
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 8').first()).id,
             tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 1').first()).id,
-            title: "Financial Account",
+            title: "Financial Accounting",
             grade: "bachelor year 1",
             description: "final assignment of the course",
             budget: 800,
@@ -184,6 +240,48 @@ export async function seed(knex: Knex): Promise<void> {
             paid_to_tutor_time: "2022-05-06T14:00:00.000Z",
             student_submission_deadline: "2022-05-10",
             tutor_submission_deadline: "2022-05-07",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 8').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 14').first()).id,
+            title: "Game Theory",
+            grade: "bachelor year 4",
+            description: "course work",
+            budget: 500,
+            matched_time: null,
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-12-09",
+            tutor_submission_deadline: "2022-12-05",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 3').first()).id,
+            title: "Art of the classical world",
+            grade: "bachelor year 2",
+            description: "course assignment",
+            budget: 1000,
+            matched_time: null,
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2021-11-30",
+            tutor_submission_deadline: "2021-11-20",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 7').first()).id,
+            title: "Inorganic Chemistry II",
+            grade: "bachelor year 2",
+            description: "lab report",
+            budget: 1000,
+            matched_time: null,
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-09-30",
+            tutor_submission_deadline: "2022-09-27",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
@@ -198,6 +296,34 @@ export async function seed(knex: Knex): Promise<void> {
             paid_to_tutor_time: "2021-11-20T11:00:00.000Z",
             student_submission_deadline: "2021-11-30",
             tutor_submission_deadline: "2021-11-29",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 12').first()).id,
+            title: "Theories of Development",
+            grade: "bachelor year 3",
+            description: "course essay",
+            budget: 1000,
+            matched_time: "2022-11-10T13:00:00.000Z",
+            completed_time: null,
+            paid_by_student_time: "2021-11-10T14:00:00.000Z",
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-12-15",
+            tutor_submission_deadline: "2022-12-10",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 9').first()).id,
+            title: "Microcomputer Systems",
+            grade: "year 2",
+            description: "course work",
+            budget: 1000,
+            matched_time: "2022-10-20T13:00:00.000Z",
+            completed_time: null,
+            paid_by_student_time: "2022-10-23T14:00:00.000Z",
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-12-02",
+            tutor_submission_deadline: "2022-12-01",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 7').first()).id,
@@ -229,7 +355,7 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 5').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 8').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 1').first()).id,
             title: "National Security Law",
             grade: "bachelor year 1",
             description: "course essay",
@@ -242,8 +368,36 @@ export async function seed(knex: Knex): Promise<void> {
             tutor_submission_deadline: "2021-11-25",
         },
         {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 5').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 7').first()).id,
+            title: "Classical Chinese",
+            grade: "bachelor year 3",
+            description: "course essay",
+            budget: 1200,
+            matched_time: "2021-11-09T18:00:00.000Z",
+            completed_time: "2021-11-20T14:03:39.000Z",
+            paid_by_student_time: "2021-11-11T18:00:00.000Z",
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2021-12-05",
+            tutor_submission_deadline: "2021-12-02",
+        },
+        {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 3').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 6').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 10').first()).id,
+            title: "Microcomputer Systems",
+            grade: "bachelor year 2",
+            description: "lab report",
+            budget: 1000,
+            matched_time: "2022-10-02T23:00:00.000Z",
+            completed_time: null,
+            paid_by_student_time: "2021-10-03T10:00:00.000Z",
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2021-10-10",
+            tutor_submission_deadline: "2021-10-09",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 3').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 15').first()).id,
             title: "Classical social theory",
             grade: "bachelor year 2",
             description: "course essay",
@@ -285,7 +439,7 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 5').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 10').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 8').first()).id,
             title: "Software Engineering",
             grade: "year 4",
             description: "course essay",
@@ -296,6 +450,76 @@ export async function seed(knex: Knex): Promise<void> {
             paid_to_tutor_time: null,
             student_submission_deadline: "2021-12-10",
             tutor_submission_deadline: "2021-12-09",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 10').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 15').first()).id,
+            title: "Event Marketing",
+            grade: "year 3",
+            description: "course project",
+            budget: 1300,
+            matched_time: "2022-03-20T14:00:00.000Z",
+            completed_time: "2022-03-31T14:00:00.000Z",
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-04-01",
+            tutor_submission_deadline: "2022-03-30",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 3').first()).id,
+            title: "Information Management",
+            grade: "year 2",
+            description: "course project",
+            budget: 1300,
+            matched_time: null,
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-05-03",
+            tutor_submission_deadline: "2022-05-01",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 5').first()).id,
+            title: "Food Chemistry",
+            grade: "year 4",
+            description: "lab report",
+            budget: 1000,
+            matched_time: null,
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-03-30",
+            tutor_submission_deadline: "2022-03-20",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 6').first()).id,
+            title: "Chinese Civilization - History and Philosophy",
+            grade: "year 1",
+            description: "course work",
+            budget: 500,
+            matched_time: "2022-09-20T23:36:00.000Z",
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-09-30",
+            tutor_submission_deadline: "2022-09-28",
+        },
+        {
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 9').first()).id,
+            title: "News Feature Writing",
+            grade: "year 4",
+            description: "course assignment",
+            budget: 800,
+            matched_time: null,
+            completed_time: null,
+            paid_by_student_time: null,
+            paid_to_tutor_time: null,
+            student_submission_deadline: "2022-11-30",
+            tutor_submission_deadline: "2022-11-28",
         },
     ])
 };
