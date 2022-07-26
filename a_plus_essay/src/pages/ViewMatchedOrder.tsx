@@ -38,15 +38,21 @@ interface OfferInfo {
     orderId: number,
     charge: number
 }
-async function makeOffer(offerInfo: OfferInfo) {
-    const res = await fetch(`${env.BACKEND_URL}/makeOffer`, {
+async function makeOffer(offerInfo: OfferInfo, token: string) {
+    const res = await fetch(`${env.BACKEND_URL}/make-offer`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(offerInfo)
     })
     const result = await res.json()
+    if (!result.error) {
+        Alert.alert('Success to offer! Please wait for the student to confirm.')
+    } else {
+        Alert.alert('Failed to make offer! Please try again.')
+    }
 }
 
 export default function ViewMatchedOrder({ order }: { order: Order }) {
@@ -54,7 +60,6 @@ export default function ViewMatchedOrder({ order }: { order: Order }) {
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
     const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
     const [notes, setNotes] = useState<Array<ImageFile | null>>([null])
-    const [showImage, setShowImage] = useState(false)
     const [offer, setOffer] = useState<string>('')
     useEffect(() => {
         async function getOrderSubjectAndImages(orderId: number) {
@@ -70,6 +75,7 @@ export default function ViewMatchedOrder({ order }: { order: Order }) {
         getOrderSubjectAndImages(order.id)
     })
     return (
+        state.token && state.user && state.tutor ?
         <SafeAreaView>
             <ScrollView>
                 <VStack mt="4" alignSelf="center" px="4" w={{ base: "100%" }}>
@@ -139,7 +145,11 @@ export default function ViewMatchedOrder({ order }: { order: Order }) {
                         <FormControl.Label>Make an Offer :</FormControl.Label>
                         <TextInput placeholder='Offer' onChangeText={value => setOffer(() => value)} />
                         <TouchableOpacity onPress={async () => {
-
+                            const result = await makeOffer({
+                                tutorId: state.user!.id,
+                                orderId: order.id,
+                                charge: +offer
+                            }, state.token!)
                         }}>
                             <Text>Confirm</Text>
                         </TouchableOpacity>
@@ -152,7 +162,7 @@ export default function ViewMatchedOrder({ order }: { order: Order }) {
 
                 </VStack>
             </ScrollView>
-        </SafeAreaView >
+        </SafeAreaView > : null
 
     )
 }
