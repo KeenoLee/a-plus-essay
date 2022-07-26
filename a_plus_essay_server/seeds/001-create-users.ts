@@ -94,6 +94,6 @@ export async function seed(knex: Knex): Promise<void> {
     ]);
 
     await knex("sample")
-        .insert([{ id: 1, sample: "dummy_sample", tutor_id: tutorId }])
+        .insert([{ sample: "dummy_sample", tutor_id: tutorId }])
         .returning("id");
 }

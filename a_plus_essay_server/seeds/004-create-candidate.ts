@@ -37,15 +37,15 @@ export async function seed(knex: Knex): Promise<void> {
   let onGoingOrderId2;
   [onGoingOrderId1, onGoingOrderId2] = onGoingOrderIds.map((v) => v.id);
 
-  const ratingOfTutorResult = await knex("tutor")
-    .select("rating")
-    .returning("rating")
-    .first();
-  console.log(ratingOfTutorResult);
-  let ratingOfTutor;
-  ratingOfTutorResult == null
-    ? (ratingOfTutor = 0)
-    : (ratingOfTutor = Math.trunc(ratingOfTutorResult.rating));
+  // const ratingOfTutorResult = await knex("tutor")
+  //   .select("rating")
+  //   .returning("rating")
+  //   .first();
+  // console.log(ratingOfTutorResult);
+  // let ratingOfTutor;
+  // ratingOfTutorResult == null
+  //   ? (ratingOfTutor = 0)
+  //   : (ratingOfTutor = Math.trunc(ratingOfTutorResult.rating));
 
   // Tutor Pending Order => charge, accept_time, reject_time : null
   // const ratingOfTutorResult = await knex('tutor').select('rating').returning('rating').first()
