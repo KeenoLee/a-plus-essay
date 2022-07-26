@@ -1,0 +1,59 @@
+image: node:16.16-alpine
+
+stages:  
+  - server-build
+  - server-deploy
+
+variables:
+  POSTGRES_DB: aplusessay
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_HOST: postgres
+  SERVER_HOST:  13.215.212.32
+  SERVER_USER: ubuntu
+  WEB_SERVER_ROOT: ./a_plus_essay_server
+
+server-build:
+  stage: server-build  
+  artifacts:
+    paths:
+      - $WEB_SERVER_ROOT/dist
+  before_script:
+    - cd $WEB_SERVER_ROOT
+    - npm install
+  script:
+    - npx tsc -p .
+
+server-deploy:
+  stage: server-deploy
+  only:
+    - production
+  image: ubuntu:22.04
+  dependencies:
+    - server-build
+  before_script:
+    - apt update    
+    - apt install --yes git rsync openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$aplusessay_ssh_private_key" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
+    - echo "Host aplusessay" >> ~/.ssh/config
+    - echo "  Hostname $SERVER_HOST" >> ~/.ssh/config
+    - echo "  User $SERVER_USER" >> ~/.ssh/config
+    - echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+    - cd $WEB_SERVER_ROOT
+    
+  script:
+    - rsync -SavLP dist "aplusessay:~/aplusessay/a_plus_essay_server"    
+    - ssh aplusessay "        
+        cd ~/aplusessay &&        
+        git fetch &&
+        git checkout $CI_COMMIT_SHA && 
+        rm -r -f a_plus_essay &&       
+        cd ~/aplusessay/a_plus_essay_server &&
+        npm install --omit=dev &&
+        cd dist &&
+        npx knex --env production migrate:latest &&        
+        pm2 start ~/aplusessay/a_plus_essay_server/dist/main.js || pm2 reload ~/aplusessay/a_plus_essay_server/dist/main.js
+        "
