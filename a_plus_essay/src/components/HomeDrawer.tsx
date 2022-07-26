@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import * as React from 'react';
 
 import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
@@ -79,7 +79,10 @@ export function HomeDrawer() {
         <Drawer.Screen name="Logout" component={LoginPage} listeners={{
           drawerItemPress: async () => {
             dispatch(logout())
-            await removeData('token')
+            const result = await removeData('token')
+            if (result.success) {
+              Alert.alert('Logout success!')
+            }
             console.log('Store should be removed: ', state)
             console.log('async storage should be removed: ', await getData('token'))
           }
