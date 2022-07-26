@@ -275,14 +275,29 @@ export class OrderController {
             const token = permit.check(req)
             console.log('make offer TOKEN?: ', token)
             console.log('going to make offer... ', req.body)
-            const { tutorId, orderId, charge } = req.body
-            const result = await this.orderService.makeOffer(tutorId, orderId, charge)
+            const { tutorId, studentId, orderId, charge } = req.body
+            const result = await this.orderService.makeOffer(tutorId, studentId, orderId, charge)
+            console.log('result of make offer?? ', result)
             if (result) {
-                res.json({success: true})
+                res.json({ success: true })
                 return
             }
         } catch (error) {
-            res.json({error})
+            res.json({ error })
+            return
+        }
+    }
+    getOrderImages = async (req: Request, res: Response) => {
+        try {
+            console.log(req.params)
+            const orderId = +req.params.id
+            console.log('ORderID: ', orderId)
+            const { guidelines, notes, subject } = await this.orderService.getOrderImages(orderId)
+            console.log('G N', guidelines, notes)
+            res.json({ guidelines, notes, subject })
+            return
+        } catch (error) {
+            res.json({ error })
             return
         }
     }
