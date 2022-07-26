@@ -81,7 +81,7 @@ export class UserService {
     async createTutor(tutor: Tutor) {
         return this.knex.transaction(async knex => {
             let majorId;
-            if (!(await knex.select("id").from("major").where("major", tutor.major).first())) {
+            if ((await knex.select("id").from("major").where("major", tutor.major)).length === 0) {
                 majorId = (await knex.insert({ major: tutor.major }).into("major").returning("id"))[0].id
             } else {
                 majorId = (await knex.select("id").from("major").where("major", tutor.major).first())?.id
@@ -95,7 +95,6 @@ export class UserService {
                 // transcript: ????,
                 school_id: schoolId,
                 major_id: majorId,
-                rating: null,
                 self_intro: tutor.selfIntro || null,
                 ongoing_order_amount: 0,
                 completed_order_amount: 0,
