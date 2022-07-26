@@ -38,7 +38,7 @@ export function TopTabNavigator() {
                 tabBarIndicatorStyle: { backgroundColor: 'white' }
             }}
         >
-            <MainTab.Screen name="Pending" component={PendingOrderListPage}
+            {/* <MainTab.Screen name="Pending" component={PendingOrderListPage}
             // listeners={{
             //     tabPress: async (event) => {
             //         event.preventDefault()
@@ -56,7 +56,7 @@ export function TopTabNavigator() {
             //     },
             // }} 
 
-            />
+            /> */}
             <MainTab.Screen name="Matching" component={MatchingOrderListPage} />
             <MainTab.Screen name="Ongoing" component={OngoingOrderListPage} />
             <MainTab.Screen name="Completed" component={CompletedOrderListPage} />
