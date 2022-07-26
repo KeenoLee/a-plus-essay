@@ -8,8 +8,8 @@ import dotenv from "dotenv";
 import { getJWTPayload } from "../utils/get-jwt";
 import { request } from "http";
 import { resolveSoa } from "dns";
-
-dotenv.config({ path: "../.env" });
+import { Server } from "socket.io";
+import { env } from "../env";
 
 
 export interface JWTPayload {
@@ -22,36 +22,34 @@ dotenv.config()
 
 
 export class ChatController extends RestController {
-    constructor(private chatService: ChatService) {
+    constructor(private chatService: ChatService, private io: Server) {
         super();
-        this.chatService = chatService;
+        // this.chatService = chatService; private
+        this.setupSocket()
     }
-    // getUserId = async (req: Request, res: Response) => {
-    //     try {
-    //         if (!req.body.username || !req.body.password) {
-    //             res.status(401).json({ msg: "Wrong Username/Password" });
-    //             return;
-    //         }
-    //         const {username,password} = req.body;
-    //         const user = (await this.userService.getUser(username))[0];
-    //         if(!user || !(await checkPassword(password,user.password))){
-    //             res.status(401).json({msg:"Wrong Username/Password"});
-    //             return;
-    //         }
-    //         const payload = {
-    //             id: user.id,
-    //             username: user.username,
-    //             is_tutor: user.is_tutor
-    //         };
-    //         const token = jwtSimple.encode(payload, process.env.jwtSecret!);
-    //         res.json({
-    //             token: token
-    //         });
-    //         } catch (error) {
-    //             console.log(error)
-    //             res.status(500).json({msg: String(error)})
-    //         }
-    //     }
+    setupSocket() {
+        this.io.on('connection', socket => {
+            let user_id = 0
+            socket.on('login', token => {
+                user_id = jwtSimple.decode(token, env.JWT_SECRET)
+            })
+            socket.on('logout', token => {
+                user_id = 0
+            })
+            socket.on('join', async (order_id) => {
+                if (await this.chatService.checkMember({ user_id, order_id })) {
+                    console.log("id")
+                    socket.join('room:' + order_id)
+                } else {
+                    console.log("no id")
+                }
+                socket.to('room:' + order_id).emit('chat message', "test....")
+            })
+            socket.on('leave', (order_id) => {
+                socket.leave('room:' + order_id)
+            })
+        })
+    }
 
     getChatList = async (req: Request, res: Response, next: NextFunction) => {
         console.log("Getting chat list....");
@@ -71,17 +69,16 @@ export class ChatController extends RestController {
 
     postMessage = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { senderIsTutor, orderId, newMessage } = req.body
-            const result = await this.chatService.postMessage({ senderIsTutor, orderId, newMessage })
-            if (result.success) {
-                res.json(result)
-                return
-            }
-
+            const { message } = req.body
+            let payload = getJWTPayload(req)
+            let order_id = +req.params.id
+            const result = await this.chatService.postMessage({ sender_id: payload.id, order_id, message })
+            this.io.to('room:' + order_id).emit('chat message', result)
+            console.log('hi see result', result)
+            res.json({ ok: true })
         } catch (err) {
             console.error('orderControllerError: ', err)
             res.status(500).json({ error: String(err) })
-            return
         }
         // return this.chatService.sendMessage(
         //     order_id: req.params.order_id,

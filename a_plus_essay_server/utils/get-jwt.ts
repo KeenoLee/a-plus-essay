@@ -4,6 +4,7 @@ import express from 'express';
 // import { UserService } from '../services/UserService';
 // import { User } from './services/models';
 import dotenv from "dotenv";
+import { env } from '../env';
 
 dotenv.config();
 
@@ -28,7 +29,7 @@ export function getJWTPayload(req: express.Request): JWTPayload {
 
     let payload: JWTPayload
     try {
-        payload = jwtSimple.decode(token, process.env.jwtSecret!)
+        payload = jwtSimple.decode(token, env.JWT_SECRET!)
     } catch (error) {
         throw new Error('invalid JWT in bearer token. ' + error);
     }

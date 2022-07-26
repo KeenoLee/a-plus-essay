@@ -11,7 +11,6 @@
 import * as React from 'react';
 import {
   Alert,
-  Button,
   ImageBackground,
   SafeAreaView,
   ScrollView,
@@ -62,7 +61,6 @@ import jwt_decode from 'jwt-decode'
 import { fetchLoginWithToken } from './redux/auth/actions';
 import { AppDispatch } from './redux/dispatch';
 import { roundToNearestMinutes } from 'date-fns';
-import ViewMatchedOrder from './pages/ViewMatchedOrder';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 const Stack = createStackNavigator<AppParamList>();
@@ -96,14 +94,12 @@ export const Tabs = () => {
   const state = useSelector((state: RootState) => state.auth);
   return (
     <Tab.Navigator
-      // initialRouteName="View Matched Order"
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
         headerStyle: { backgroundColor: '#BBD3CF' },
         // headerShown: false
       }}>
-      {/* <Tab.Screen name="View Matched Order" component={ViewMatchedOrder} /> */}
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -267,18 +263,6 @@ export function HomeStack() {
       <Stack.Screen name="Message" component={Notification} />
       <Stack.Screen name="Chatroom" component={Chatroom}
       // options={{ headerTitle: (props: any) => props.title }}
-      // options={{
-      //   headerTitle: 'Chatroom',
-      //   headerRight: () => {
-      //     return (
-      //       <Button titleStyle={{fontSize: 10}}
-      //         onPress={() => Alert.alert('Comfirm to complete?')}
-      //         title="Complete"
-      //         color="rgb(42,122,255)"
-      //       />
-      //     )
-      //   }
-      // }}
       />
       {/* <Fabtn/> */}
       {/* </NavigationContainer> */}
@@ -321,7 +305,7 @@ export function HomeStack() {
 
 const config = {
   dependencies: {
-    'linear-gradient': require('react-native-linear-gradient').default,
+    'linear-gradient': require('react-native-web-linear-gradient').default,
   },
 };
 
@@ -349,7 +333,7 @@ function App2() {
     <NativeBaseProvider config={config}>
       <NavigationContainer>
         {/* <Fabtn/> */}
-        <HomeDrawer />
+        <HomeStack />
       </NavigationContainer>
     </NativeBaseProvider>
   );
