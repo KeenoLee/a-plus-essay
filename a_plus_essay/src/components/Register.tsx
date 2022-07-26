@@ -723,9 +723,13 @@ export default function Register() {
                         style={nextButtonStyle}
                         disabled={disableNext}
                         onPress={() => {
-                            setDisableNext(true);
-                            setNextButtonStyle(disableStyle);
-                            setPage({ step: 3 });
+                            if (!transcriptImages[0]) {
+                                Alert.alert('Please upload transcript to continue!')
+                            } else {
+                                setDisableNext(true);
+                                setNextButtonStyle(disableStyle);
+                                setPage({ step: 3 });
+                            }
                         }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
