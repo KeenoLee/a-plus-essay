@@ -41,14 +41,14 @@ export class ChatService {
         // .where(userId, order.studentId )
         // .where('order.paid_by_student_time', '!=', null)
         console.log(userId);
-        console.log('crl:', chatroomList)
+        console.log('ChatroomListDetail:', chatroomList)
         if (chatroomList.length == 0) {
             let newChatroomList = await this.knex
                 .select('title', 'id as order_id')
                 .from('order')
                 .whereNotNull('tutor_id')
                 .andWhere('student_id', userId)
-            console.log('newchatroom:', newChatroomList)
+            console.log('ChatRoomListWithOnlyTitle:', newChatroomList)
             return newChatroomList
         } else {
             return chatroomList;
@@ -68,11 +68,15 @@ export class ChatService {
         //     `, 59, )
     }
     async checkMember(input: { order_id: number, user_id: number }, knex = this.knex) {
-        let order = await knex.select('id', 'student_id', 'tutor_id').from('order').where('id', input.order_id).first()
+        let order = await knex.select('id', 'student_id', 'tutor_id')
+            .from('order').where('id', input.order_id).first()
+        console.log('ooooooorder', order)
         return order?.student_id == input.user_id || order?.tutor_id == input.user_id
 
     }
     async postMessage(input: MessageInput) {
+
+        console.log('INPUT?: ', input)
         //1. update chat_message
         //2. update user_read_message
         return this.knex.transaction(async knex => {
@@ -83,7 +87,11 @@ export class ChatService {
                 .insert(input)
                 .into("chat_message")
                 .returning(["id", "updated_at"])
-            knex
+            let [{ last_message_id }] = await knex
+                .insert({ last_message_id: id, order_id: input.order_id, user_id: input.sender_id })
+                .into('user_read_message')
+                .returning('last_message_id')
+            await knex
                 .select('id')
                 .from('user_read_message')
                 .where({ order_id: input.order_id })

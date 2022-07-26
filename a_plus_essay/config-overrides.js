@@ -15,7 +15,8 @@ module.exports = override(
         // 'react-native-ble': require.resolve('./empty/index.js'),
         // 'react-native-image-picker': require.resolve('./node_modules/source-map-loader/dist/cjs.js'),
         // 'react-native-linear-gradient': require.resolve('./empty/index.js')
-        'lottie-react-native': 'react-native-web-lottie'
+        'lottie-react-native': 'react-native-web-lottie',
+        'react-native-linear-gradient': '"react-native-web-linear-gradient'
     }),
     addWebpackPlugin(
         new webpack.DefinePlugin({
