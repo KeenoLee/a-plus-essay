@@ -10,7 +10,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 // Status Page 
 import { env } from '../../env/env';
 import { useAppNavigation } from '../../routes';
-import { CompletedOrderListPage, MatchingOrderListPage, OngoingOrderListPage } from './OrderListPage';
+import { CompletedOrderListPage, MatchingOrderListPage, OngoingOrderListPage} from './OrderListPage';
 
 const MainTab = createMaterialTopTabNavigator<MainTabParamList>()
 
@@ -30,7 +30,7 @@ export function TopTabNavigator() {
     const navigation = useAppNavigation()
     return (
         <MainTab.Navigator
-            initialRouteName="Pending"
+            initialRouteName="Matching"
             screenOptions={{
                 tabBarActiveTintColor: 'black',
                 tabBarStyle: { backgroundColor: '#BBD3CF' },
@@ -66,21 +66,7 @@ export function TopTabNavigator() {
 
 
 export default function OrderStatus() {
-    // const userInfo = useSelector((state: RootState) => state.auth.user)
-    // const navigation = useNavigation()
     return (
         <TopTabNavigator />
-        // userInfo?.userId ?
-        // <View>
-        //     {Alert.alert(
-        //         'Unauthorized',
-        //         'Please login to view order status!',
-        //         [
-        //             { text: 'OK', onPress: () => { navigation.navigate('Login') } },
-        //         ]
-        //     )}
-        // </View>
-
-
     )
 }
