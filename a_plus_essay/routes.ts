@@ -20,6 +20,7 @@ export type AppParamList = {
     'Account': undefined
     'Pending': undefined
     'View Matched Order': undefined
+    'OrderList': { orderStatus: string }
 }
 
 export type AppRouteName = keyof AppParamList

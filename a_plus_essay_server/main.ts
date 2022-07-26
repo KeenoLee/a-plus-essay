@@ -47,7 +47,7 @@ const chatController = new ChatController(chatService);
 
 app.use(express.json({ limit: "200mb" }));
 app.use(express.urlencoded({ limit: "200mb", extended: true }));
-app.use('/get-image',express.static(__dirname + '/uploads'))
+app.use('/get-image', express.static(__dirname + '/uploads'))
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
 
@@ -80,7 +80,12 @@ orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
 orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
-// orderRoutes.get("/order/pending/:id/:isTutor", orderController.getPendingOrder)
+
+orderRoutes.get("/order/pending", orderController.getPendingOrder)
+orderRoutes.post("/order/completed", orderController.completeOrder)
+// orderRoutes.get("/order/matching", orderController.getMatchingOrder)
+// orderRoutes.get("/order/ongoing", orderController.getOngoingOrder)
+// orderRoutes.get("/order/completed", orderController.getCompletedOrder)
 
 orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
 

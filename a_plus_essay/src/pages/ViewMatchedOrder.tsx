@@ -5,7 +5,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { format } from 'date-fns'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Alert, SafeAreaView } from 'react-native';
+import { Alert, SafeAreaView, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
@@ -30,13 +30,13 @@ type Order = {
     tutor_submission_deadline: Date,
     student_submission_deadline: Date
 }
-type Image = {
+type ImageFile = {
     filename: string
 }
 export default function ViewMatchedOrder({ order }: Order) {
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
-    const [guidelines, setGuidelines] = useState<Array<Image | null>>([null])
-    const [notes, setNotes] = useState<Array<Image | null>>([null])
+    const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
+    const [notes, setNotes] = useState<Array<ImageFile | null>>([null])
     const [showImage, setShowImage] = useState(false)
     useEffect(() => {
         async function getOrderSubjectAndImages(orderId: number) {
@@ -80,7 +80,7 @@ export default function ViewMatchedOrder({ order }: Order) {
                         </HStack>
                     </HStack>
                     <Stack mt="4" mb="4">
-                        <FormControl.Label>Project Description :</FormControl.Label>
+                        <FormControl.Label>Project Description :</FormControl.Label>---------------------------
                     </Stack>
                     <Stack alignItems="center">
                         <Text>{order.description}</Text>
@@ -93,14 +93,14 @@ export default function ViewMatchedOrder({ order }: Order) {
                     </HStack>
 
                     <Stack>
-                        {/* {guidelines.map((guideline, i) => (
-                            showImage?
-                            <Image source={{uri:`${env.BACKEND_URL}/get-image/${guideline.filename}`}} /> 
+                        {guidelines.map((guideline, i) => (
+                            showImage ?
+                            <Image source={{uri:`${env.BACKEND_URL}/get-image/${guideline?.filename}`}} /> 
                             : 
                             <TouchableOpacity>
                                 <Text>File {i+1}</Text>
                             </TouchableOpacity>
-                        ))} */}
+                        ))}
                     </Stack>
 
                     <HStack justifyContent='space-between' alignItems='center' mt="4">
