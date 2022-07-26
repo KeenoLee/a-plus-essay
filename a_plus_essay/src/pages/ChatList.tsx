@@ -79,7 +79,7 @@ const ChatListItem = (props: ChatListProps) => {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      <Divider style={styles.divider} />
+      <Divider/>
     </>
     // )}
     //   </ScrollView>
@@ -174,24 +174,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
-  divider: {
-    height: 3,
-  },
+  // divider: {
+  //   height: 3,
+  // },
 
   assignmentName: {
     // backgroundColor: 'green',
-    fontSize: 18,
-    fontWeight: '500',
-    flex: 0.7,
+    fontSize: 15,
+    fontWeight: 'bold',
+    flex: 3,
   },
 
   timeFormat: {
     // backgroundColor: 'green',
     AlignSelf: 'end',
+    justifyContent:'center',
+    alignItems: 'center',
     fontSize: 13,
-    marginTop: 6,
     color: 'grey',
-    flex: 0.2,
+    flex: 1,
   },
 
   text: {
