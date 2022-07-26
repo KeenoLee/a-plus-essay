@@ -38,8 +38,12 @@ export class ChatController extends RestController {
             })
             socket.on('join', async (order_id) => {
                 if (await this.chatService.checkMember({ user_id, order_id })) {
+                    console.log("id")
                     socket.join('room:' + order_id)
+                } else {
+                    console.log("no id")
                 }
+                socket.to('room:' + order_id).emit('chat message', "test....")
             })
             socket.on('leave', (order_id) => {
                 socket.leave('room:' + order_id)
@@ -69,8 +73,9 @@ export class ChatController extends RestController {
             let payload = getJWTPayload(req)
             let order_id = +req.params.id
             const result = await this.chatService.postMessage({ sender_id: payload.id, order_id, message })
-            res.json({ ok: true })
             this.io.to('room:' + order_id).emit('chat message', result)
+            console.log('hi see result', result)
+            res.json({ ok: true })
         } catch (err) {
             console.error('orderControllerError: ', err)
             res.status(500).json({ error: String(err) })

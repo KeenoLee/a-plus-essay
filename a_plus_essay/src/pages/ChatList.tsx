@@ -6,7 +6,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Chatroom from '../components/Chatroom';
 import { View, Divider } from 'native-base';
 import { then } from '@beenotung/tslib';
-import { format, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow, formatDistanceToNowStrict } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
@@ -38,7 +38,7 @@ const ChatListItem = (props: ChatListProps) => {
   const navigation = useAppNavigation();
 
   const onClick = () => {
-    navigation.navigate({ name: 'Chatroom', params: { id: chatRoom.order_id, token: props.token } });
+    navigation.navigate({ name: 'Chatroom', params: { id: chatRoom.order_id, token: props.token, title: chatRoom.title } });
     console.log('Should save user_id, order_id, last_message_id', chatRoom,)
   };
   // return (
@@ -60,7 +60,7 @@ const ChatListItem = (props: ChatListProps) => {
             <Text style={styles.timeFormat}>
               {(chatRoom.last_message_time == undefined)
                 ? ' ' :
-                (formatDistanceToNow(new Date(chatRoom.last_message_time), {
+                (formatDistanceToNowStrict(new Date(chatRoom.last_message_time), {
                   addSuffix: true,
                 }))}
             </Text>

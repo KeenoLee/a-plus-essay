@@ -52,6 +52,7 @@ interface IChatroomProps {
   room: Room;
   post: ReturnType<typeof usePost>
   token: string
+  title: string
 }
 
 interface IChatroomState {
@@ -62,7 +63,6 @@ interface IChatroomState {
 
 class Chatroom extends Component<IChatroomProps, IChatroomState> {
   socket: Socket;
-  is_hardcode_tutor: boolean;
   scrollView: any;
   is_first = true;
   constructor(props: IChatroomProps) {
@@ -71,7 +71,6 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
       chatMessage: '',
       messages: props.room.messages,
     };
-    this.is_hardcode_tutor = true;
     this.scrollView = '';
     this.socket = io(`${env.BACKEND_ORIGIN}`);
     this.socket.on('connect', () => {
@@ -80,7 +79,9 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
   }
   componentDidMount() {
     this.socket.on('chat message', this.receivedMessage)
+    console.log('reseivedMessage!!!!', this.receivedMessage);
     this.socket.emit('join', this.props.room.order.id)
+    console.log('seesee this.props.room.order.id', this.props.room.order.id);
   }
 
   componentWillUnmount() {
@@ -90,6 +91,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
 
   }
   receivedMessage = (message: ChatMessage) => {
+    console.log('message:', message);
     this.setState({ messages: [...this.state.messages, message] });
   }
 
@@ -102,7 +104,8 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
     }, json => {
       console.log('newMessageSuccess? ', json);
 
-      this.socket.emit('chat message', this.state.chatMessage);
+      this.socket.emit('chat message', this.state.chatMessage)
+      console.log('this.state.chatMessage:', this.state.chatMessage);;
       if (this.state.chatMessage == newMessage) {
         this.setState({ chatMessage: '' });
       }
@@ -195,7 +198,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
                     }}></View>
                 </ScrollView>
                 <View style={styles.inputContainer}>
-                  <Ionicons size={24} name="add-circle-outline" />
+                  {/* <Ionicons size={24} name="add-circle-outline" /> */}
                   <TextInput
                     style={styles.textInput}
                     autoCorrect={false}
@@ -225,6 +228,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
 const ConnectedChatroom = (props: {
   route: { params: AppParamList['Chatroom'] }
   token: string
+  title: string
 }) => {
   //   const navigation = useAppNavigation();
   // navigation.getState().routes
@@ -236,7 +240,7 @@ const ConnectedChatroom = (props: {
     },
   );
   const post = usePost()
-  return room.render(json => <Chatroom room={json.room!} post={post} token={props.route.params.token} />);
+  return room.render(json => <Chatroom room={json.room!} post={post} token={props.route.params.token} title={json.room!.order.title} />);
 };
 
 export default ConnectedChatroom;

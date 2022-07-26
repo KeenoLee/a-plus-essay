@@ -2,7 +2,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 export type AppParamList = {
     Tabs: undefined
-    Chatroom: { id: number, token: string }
+    Chatroom: { id: number, token: string, title: string }
     'Home Drawer': undefined;
     Welcome: undefined;
     ChatList: undefined;
