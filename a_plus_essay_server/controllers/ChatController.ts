@@ -37,20 +37,31 @@ export class ChatController extends RestController {
                 user_id = 0
             })
             socket.on('join', async (order_id) => {
-                if (await this.chatService.checkMember({ user_id, order_id })) {
-                    console.log("id")
-                    socket.join('room:' + order_id)
-                } else {
-                    console.log("no id")
-                }
-                socket.to('room:' + order_id).emit('chat message', "test....")
+                // console.log('hi', await this.chatService.checkMember({ user_id, order_id }))
+                // if () {
+                console.log('hi how are you order_id:', order_id)
+                socket.join('room:' + order_id)
+                // }
             })
             socket.on('leave', (order_id) => {
                 socket.leave('room:' + order_id)
             })
+
+
+
         })
     }
 
+
+    // await this.knex
+    // let newNoticeFromRoom: NewMessage = {
+    //     order_id: id,
+    // };
+    // //send this id to other's notification
+    // this.io.emit("new message", newNoticeFromRoom);
+    // return {
+    //     order_id: id
+    // }
     getChatList = async (req: Request, res: Response, next: NextFunction) => {
         console.log("Getting chat list....");
         try {
@@ -62,7 +73,7 @@ export class ChatController extends RestController {
             return;
 
         } catch (error) {
-            console.error('orderControllerError: ', error)
+            console.error('ChatControllerError: ', error)
             res.status(500).json({ error: String(error) })
         }
     };
@@ -70,6 +81,7 @@ export class ChatController extends RestController {
     postMessage = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { message } = req.body
+            console.log('mssmggmsg', message)
             let payload = getJWTPayload(req)
             let order_id = +req.params.id
             const result = await this.chatService.postMessage({ sender_id: payload.id, order_id, message })
@@ -77,7 +89,7 @@ export class ChatController extends RestController {
             console.log('hi see result', result)
             res.json({ ok: true })
         } catch (err) {
-            console.error('orderControllerError: ', err)
+            console.error('ChatControllerError: ', err)
             res.status(500).json({ error: String(err) })
         }
         // return this.chatService.sendMessage(
@@ -95,7 +107,7 @@ export class ChatController extends RestController {
                 this.chatService.getChatroom({ userId, orderId })
             res.json({ room })
         } catch (err) {
-            console.error('orderControllerError: ', err)
+            console.error('ChatControllerError: ', err)
             res.status(500).json({ error: String(err) })
         }
     }

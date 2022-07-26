@@ -73,12 +73,12 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
     };
     this.scrollView = '';
     this.socket = io(`${env.BACKEND_ORIGIN}`);
-    this.socket.on('connect', () => {
+    this.socket.on('connection', () => {
       console.log('connected!!!!!');
     });
   }
   componentDidMount() {
-    this.socket.on('chat message', this.receivedMessage)
+    this.socket.on('chat message', message => { console.log("messssssage:", message) })
     console.log('reseivedMessage!!!!', this.receivedMessage);
     this.socket.emit('join', this.props.room.order.id)
     console.log('seesee this.props.room.order.id', this.props.room.order.id);
