@@ -118,8 +118,8 @@ export const Tabs = () => {
       <Tab.Screen
         name="Order Status"
         component={OrderStatus}
-        options={{
-          headerRight: () => (
+        options={{ 
+          headerRight: () => (state?.tutor ? null : 
             <View
               style={{
                 flexDirection: 'row',
