@@ -305,4 +305,8 @@ export class OrderService {
         }
         return { orders }
     }
+
+    async completeOrder(orderId: number) {
+        await this.knex('order').where('id', orderId).update({ completed_time: this.knex.fn.now() });
+    }
 }

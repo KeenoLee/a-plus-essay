@@ -18,6 +18,8 @@ export type AppParamList = {
     // 'A Plus Essay': undefined
     'Login': undefined
     'Account': undefined
+    'Pending': undefined
+    'View Matched Order': undefined
     'OrderList': { orderStatus: string }
 }
 

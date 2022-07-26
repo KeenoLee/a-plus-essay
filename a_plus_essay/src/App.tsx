@@ -62,6 +62,7 @@ import jwt_decode from 'jwt-decode'
 import { fetchLoginWithToken } from './redux/auth/actions';
 import { AppDispatch } from './redux/dispatch';
 import { roundToNearestMinutes } from 'date-fns';
+import ViewMatchedOrder from './pages/ViewMatchedOrder';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 const Stack = createStackNavigator<AppParamList>();
@@ -95,12 +96,14 @@ export const Tabs = () => {
   const state = useSelector((state: RootState) => state.auth);
   return (
     <Tab.Navigator
+      // initialRouteName="View Matched Order"
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
         headerStyle: { backgroundColor: '#BBD3CF' },
         // headerShown: false
       }}>
+      {/* <Tab.Screen name="View Matched Order" component={ViewMatchedOrder} /> */}
       <Tab.Screen
         name="Home"
         component={HomeScreen}
