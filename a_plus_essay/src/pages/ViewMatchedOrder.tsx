@@ -10,8 +10,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
-import { useAppNavigation } from '../../routes';
+import { useAppNavigation } from '../routes';
 import { orderedExtractInObject } from 'native-base/lib/typescript/theme/tools';
+import DateTime from '../components/DateTime';
 
 function shorterFilename(filename: string) {
     if (filename.length > 16) {
@@ -33,7 +34,7 @@ type Order = {
 type ImageFile = {
     filename: string
 }
-export default function ViewMatchedOrder({ order }: Order) {
+export default function ViewMatchedOrder({ order }: { order: Order }) {
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
     const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
     const [notes, setNotes] = useState<Array<ImageFile | null>>([null])
@@ -44,8 +45,8 @@ export default function ViewMatchedOrder({ order }: Order) {
             const result = await res.json()
             if (!result.error) {
                 setOrderSubject(() => result.subject_name)
-                setGuidelines(()=>result.guidelines)
-                setNotes(()=>result.notes)
+                setGuidelines(() => result.guidelines)
+                setNotes(() => result.notes)
             }
         }
 
@@ -95,11 +96,11 @@ export default function ViewMatchedOrder({ order }: Order) {
                     <Stack>
                         {guidelines.map((guideline, i) => (
                             showImage ?
-                            <Image source={{uri:`${env.BACKEND_URL}/get-image/${guideline?.filename}`}} /> 
-                            : 
-                            <TouchableOpacity>
-                                <Text>File {i+1}</Text>
-                            </TouchableOpacity>
+                                <Image source={{ uri: `${env.BACKEND_URL}/get-image/${guideline?.filename}` }} />
+                                :
+                                <TouchableOpacity>
+                                    <Text>File {i + 1}</Text>
+                                </TouchableOpacity>
                         ))}
                     </Stack>
 
@@ -119,7 +120,10 @@ export default function ViewMatchedOrder({ order }: Order) {
                     </Stack>
 
                     <HStack space={4} alignItems='center'>
-                        <Text>{order.tutor_submission_deadline}</Text>
+                        <DateTime time={order.tutor_submission_deadline} />
+
+
+
                     </HStack>
 
 
