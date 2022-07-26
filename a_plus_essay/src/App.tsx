@@ -30,7 +30,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import Register from './src/components/Register';
 // import LoadingScreen from './src/components/LoadingScreen';
-import Home from './pages/Home';
 import Notification from './pages/Notification';
 import ChatListScreen from './pages/ChatList';
 import ChatStack from './pages/ChatList';
@@ -98,14 +97,14 @@ export const Tabs = () => {
   const state = useSelector((state: RootState) => state.auth);
   return (
     <Tab.Navigator
-      // initialRouteName="View Matched Order"
+      initialRouteName="View Matched Order"
       screenOptions={{
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
         headerStyle: { backgroundColor: '#BBD3CF' },
         // headerShown: false
       }}>
-      {/* <Tab.Screen name="View Matched Order" component={ViewMatchedOrder} /> */}
+      <Tab.Screen name="View Matched Order" component={ViewMatchedOrder} />
       <Tab.Screen
         name="Home"
         component={HomeScreen}
