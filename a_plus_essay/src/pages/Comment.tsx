@@ -2,7 +2,7 @@ import React from 'react'
 import { VStack, Center, Text, Box, Stack, Button, View, PresenceTransition, Heading, HStack, Pressable } from 'native-base';
 import LottieView from 'lottie-react-native';
 
-export default function Rules() {
+export default function Comment() {
     const animationRef = React.useRef<LottieView>(null)
 
     return (

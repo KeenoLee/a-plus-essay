@@ -247,7 +247,7 @@ export default ConnectedChatroom;
 
 const styles = StyleSheet.create({
   outerContainer: {
-    backgroundColor: 'rgb(188,211,207)',
+    backgroundColor: 'rgb(,211,207)',
     flex: 1,
     width: '100%',
     flexDirection: 'column',

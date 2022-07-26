@@ -63,6 +63,8 @@ import { fetchLoginWithToken } from './redux/auth/actions';
 import { AppDispatch } from './redux/dispatch';
 import { roundToNearestMinutes } from 'date-fns';
 import ViewMatchedOrder from './pages/ViewMatchedOrder';
+import Comment from './pages/Comment';
+import AboutUs from './pages/AboutUs';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 const Stack = createStackNavigator<AppParamList>();
@@ -118,8 +120,8 @@ export const Tabs = () => {
       <Tab.Screen
         name="Order Status"
         component={OrderStatus}
-        options={{
-          headerRight: () => (
+        options={{ 
+          headerRight: () => (state?.tutor ? null : 
             <View
               style={{
                 flexDirection: 'row',
@@ -263,6 +265,8 @@ export function HomeStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Select Tutor" component={SelectTutor} />
+      <Stack.Screen name="Comment" component={Comment} />
+      <Stack.Screen name="About Us" component={AboutUs} />
       {/* <Stack.Screen name="Register" component={Register} /> */}
       <Stack.Screen name="Message" component={Notification} />
       <Stack.Screen name="Chatroom" component={Chatroom}

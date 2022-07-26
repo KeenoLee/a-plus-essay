@@ -3,9 +3,10 @@ import LottieView from 'lottie-react-native';
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import VerticalTutorCard from "./VerticalTutorCard";
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity, __spread } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { useAppNavigation } from '../routes';
 
 
 export function HowToUseCard() {
@@ -67,8 +68,39 @@ export function HowToUseCard() {
                         }}>
                             {/*Show Progress*/}
                             {isOpen ?
-                                <Box mt="7" mb='7' bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
-                                    <Text>Step</Text>
+                                <Box mt="6" mb='2' bg="teal.500" rounded="md" width="82%" h="200" alignSelf='center'>
+                                    <Stack pt='2'>
+                                        <Stack ml='1'>
+                                            <Text fontWeight='bold' fontSize='16'>Step 1: </Text>
+                                        </Stack>
+                                        <Stack ml='3'>
+                                            <Text color='white' fontWeight='semibold'>Submit the quotation when you receive a order</Text>
+                                        </Stack>
+                                    </Stack>
+                                    <Stack>
+                                        <Stack ml='1'>
+                                            <Text fontWeight='bold' fontSize='16'>Step 2: </Text>
+                                        </Stack>
+                                        <Stack ml='3'>
+                                            <Text color='white' fontWeight='semibold'>Monitor the Order Status</Text>
+                                        </Stack>
+                                    </Stack>
+                                    <Stack>
+                                        <Stack ml='1'>
+                                            <Text fontWeight='bold' fontSize='16'>Step 3: </Text>
+                                        </Stack>
+                                        <Stack ml='3'>
+                                            <Text color='white' fontWeight='semibold'>Start chat with Student</Text>
+                                        </Stack>
+                                    </Stack>
+                                    <Stack>
+                                        <Stack ml='1'>
+                                            <Text fontWeight='bold' fontSize='16'>Step 4: </Text>
+                                        </Stack>
+                                        <Stack ml='3'>
+                                            <Text color='white' fontWeight='semibold'>Receive reward when you finish the task</Text>
+                                        </Stack>
+                                    </Stack>
                                 </Box>
                                 : null
                             }
@@ -125,8 +157,47 @@ export function HowToUseCard() {
                     }}>
                         {/*Show Progress*/}
                         {isOpen ?
-                            <Box mt="7" mb='7' bg="teal.500" rounded="md" width="80%" h="200" alignSelf='center'>
-                                <Text>Step</Text>
+                            <Box mt="6" mb='2' bg="teal.500" rounded="md" width="82%" h="240" alignSelf='center'>
+                                <Stack pt='2'>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 1: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white' fontWeight='semibold'>Submit Order</Text>
+                                    </Stack>
+                                </Stack>
+                                <Stack>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 2: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white' fontWeight='semibold'>Select your tutor</Text>
+                                    </Stack>
+                                </Stack>
+                                <Stack>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 3: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white' fontWeight='semibold'>Pay tuition fee</Text>
+                                    </Stack>
+                                </Stack>
+                                <Stack>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 4: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white' fontWeight='semibold'>Start to chat with your tutor</Text>
+                                    </Stack>
+                                </Stack>
+                                <Stack>
+                                    <Stack ml='1'>
+                                        <Text fontWeight='bold' fontSize='16'>Step 5: </Text>
+                                    </Stack>
+                                    <Stack ml='3'>
+                                        <Text color='white' fontWeight='semibold'>Leave comments with ratings</Text>
+                                    </Stack>
+                                </Stack>
                             </Box>
                             : null
                         }
@@ -196,6 +267,7 @@ export function RenderTutor() {
 
 
 export default function Home() {
+    const navigation = useAppNavigation();
 
     return (
         <ScrollView>
@@ -208,18 +280,24 @@ export default function Home() {
             <Stack mt='4'>
                 <Heading ml='4'>More Info</Heading>
             </Stack>
-            <Pressable >
-                <HStack justifyContent='space-evenly' mt='2' pb='4'>
-                    <Box padding='10' bg={{
-                        linearGradient: {
-                            colors: ['#9896F0', '#FBC8D5'],
-                            // colors: ['#DBD5ED', '# F3E7EA'],
-                            start: [0, 2],
-                            end: [0, 0],
-                        }
-                    }} borderRadius="14">
-                        <Text fontWeight='medium' fontSize='20'>Comment</Text>
-                    </Box>
+            <HStack justifyContent='space-evenly' mt='2' pb='4'>
+                <TouchableOpacity>
+                    <View>
+                        <Box padding='10' bg={{
+                            linearGradient: {
+                                colors: ['#9896F0', '#FBC8D5'],
+                                // colors: ['#DBD5ED', '# F3E7EA'],
+                                start: [0, 2],
+                                end: [0, 0],
+                            }
+                        }} borderRadius="14">
+                            <Text fontWeight='medium' fontSize='20' onPress={() => {
+                                navigation.navigate('Comment');
+                            }} >Comment</Text>
+                        </Box>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
                     <Box padding='10' bg={{
                         linearGradient: {
                             // colors:['#9896F0', '#FBC8D5'],
@@ -229,10 +307,13 @@ export default function Home() {
                         }
                     }}
                         borderRadius="14">
-                        <Text fontWeight='medium' fontSize='20'>About Us</Text>
+                        <Text fontWeight='medium' fontSize='20' onPress={() => {
+                            navigation.navigate('About Us');
+                        }}>About Us</Text>
                     </Box>
-                </HStack>
-            </Pressable>
+                </TouchableOpacity>
+            </HStack>
+            {/* </Pressable> */}
         </ScrollView>
     )
 }
