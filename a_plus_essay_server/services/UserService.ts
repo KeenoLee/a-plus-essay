@@ -103,6 +103,7 @@ export class UserService {
             // .map入面如果係async function，佢會直接return成舊promise，而唔係你想要既value！
             // .map會return個array出黎！
             let subjectsFromDB: Array<SubjectFromDB> = []
+            // To find out whether the subjects are already inserted
             for (let subject of tutor.subjects) {
                 const result = await knex.select("id", "subject_name").from("subject").where("subject_name", subject.subject).first()
                 if (!result) {
@@ -114,6 +115,7 @@ export class UserService {
                 }
             }
 
+            // If all subjects are new...
             if (subjectsFromDB.length === 0) {
                 console.log('sub from db = 0! :) ')
                 for (let subject of tutor.subjects) {
@@ -125,6 +127,7 @@ export class UserService {
             };
             // console.log([1,2,3,4,5].find(num=>num===3)) // return 3
             if (subjectsFromDB.length > 0) {
+                // If some subjects are old...
                 for (let subjectFromDB of subjectsFromDB) {
                     await knex.insert({
                         tutor_id: tutor.userId,
@@ -134,6 +137,7 @@ export class UserService {
                 }
 
                 let unInsertedSubjects: Array<Subject> = tutor.subjects
+                // If some subjects are new...
                 if (subjectsFromDB.length < tutor.subjects.length) {
                     for (let subjectFromDB of subjectsFromDB) {
                         let duplicatedSubject = tutor.subjects.find(subject => subject.subject === subjectFromDB.subject_name)
