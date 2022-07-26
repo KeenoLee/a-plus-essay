@@ -237,5 +237,10 @@ export class OrderController {
       await this.orderService.rejectQuotation({ orderId, tutorId });
     }
   }
+
+  completeOrder = async (req: Request, res: Response) => {
+    const orderId = req.body;
+    await this.orderService.completeOrder(orderId);
+  }
 }
 
