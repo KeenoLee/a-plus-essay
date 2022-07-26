@@ -270,10 +270,5 @@ export class OrderController {
       res.json({ error: String(error) })
     }
   }
-
-  completeOrder = async (req: Request, res: Response) => {
-    const orderId = req.body;
-    await this.orderService.completeOrder(orderId);
-  }
 }
 
