@@ -483,4 +483,12 @@ export class UserController {
             return
         }
     }
+    getTutorInfo = async (req: Request, res: Response) => {
+        try {
+            
+        }
+        catch (error) {
+            res.json({error: String(error)})
+        }
+    }
 }
