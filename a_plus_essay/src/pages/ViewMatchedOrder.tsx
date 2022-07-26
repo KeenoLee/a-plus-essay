@@ -4,15 +4,14 @@ import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button,
 import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { format } from 'date-fns'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Alert, SafeAreaView, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
-import { useAppNavigation } from '../routes';
 import { orderedExtractInObject } from 'native-base/lib/typescript/theme/tools';
-import DateTime from '../components/DateTime';
+import Guideline from '../components/Guideline';
 
 function shorterFilename(filename: string) {
     if (filename.length > 16) {
@@ -34,11 +33,29 @@ type Order = {
 type ImageFile = {
     filename: string
 }
-export default function ViewMatchedOrder({ order }: { order: Order }) {
+interface OfferInfo {
+    tutorId: number,
+    orderId: number,
+    charge: number
+}
+async function makeOffer(offerInfo: OfferInfo) {
+    const res = await fetch(`${env.BACKEND_URL}/makeOffer`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(offerInfo)
+    })
+    const result = await res.json()
+}
+
+export default function ViewMatchedOrder({ order }: Order) {
+    const state = useSelector((state: RootState) => state.auth)
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
     const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
     const [notes, setNotes] = useState<Array<ImageFile | null>>([null])
     const [showImage, setShowImage] = useState(false)
+    const [offer, setOffer] = useState<string>('')
     useEffect(() => {
         async function getOrderSubjectAndImages(orderId: number) {
             const res = await fetch(`${env.BACKEND_URL}/get-order-subject/${orderId}`)
@@ -95,12 +112,7 @@ export default function ViewMatchedOrder({ order }: { order: Order }) {
 
                     <Stack>
                         {guidelines.map((guideline, i) => (
-                            showImage ?
-                                <Image source={{ uri: `${env.BACKEND_URL}/get-image/${guideline?.filename}` }} />
-                                :
-                                <TouchableOpacity>
-                                    <Text>File {i + 1}</Text>
-                                </TouchableOpacity>
+                            <Guideline key={i} filename={guideline?.filename} />
                         ))}
                     </Stack>
 
@@ -110,9 +122,9 @@ export default function ViewMatchedOrder({ order }: { order: Order }) {
                         </HStack>
                     </HStack>
                     <Stack>
-                        <TouchableOpacity>
-                            <Text>Click to view notes</Text>
-                        </TouchableOpacity>
+                        {notes.map((note, i) => (
+                            <Guideline key={i} filename={note?.filename} />
+                        ))}
                     </Stack>
 
                     <Stack mt="4">
@@ -120,11 +132,20 @@ export default function ViewMatchedOrder({ order }: { order: Order }) {
                     </Stack>
 
                     <HStack space={4} alignItems='center'>
-                        <DateTime time={order.tutor_submission_deadline} />
-
-
-
+                        <Text>{order.tutor_submission_deadline}</Text>
                     </HStack>
+
+                    <HStack>
+                        <FormControl.Label>Make an Offer :</FormControl.Label>
+                        <TextInput placeholder='Offer' onChangeText={value => setOffer(() => value)} />
+                        <TouchableOpacity onPress={async () => {
+
+                        }}>
+                            <Text>Confirm</Text>
+                        </TouchableOpacity>
+                    </HStack>
+
+
 
 
 

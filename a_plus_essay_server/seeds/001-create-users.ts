@@ -57,11 +57,11 @@ export async function seed(knex: Knex): Promise<void> {
 
     const majorId = (
         await knex("major")
-            .insert([{ id: 1, major: "dummy_major" }])
+            .insert([{ major: "dummy_major" }])
             .returning("id")
     )[0].id;
     const subjectId = (await knex("subject")
-        .insert([{ id: 1, subject_name: "dummy_subject" }])
+        .insert([{ subject_name: "dummy_subject" }])
         .returning("id"))[0].id;
     const schoolId = (await knex
         .insert({ school: "Tecky University" })

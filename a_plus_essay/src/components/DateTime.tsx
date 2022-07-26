@@ -9,6 +9,6 @@ export default function DateTime(props: {
     return (
         <Text style={props.style}>{props.time
             ? format(new Date(props.time), 'yyyy-MM-dd HH:mm')
-            : ''}</Text>
+            : <Text>{format(Date.now(), 'yyyy-MM-dd HH:mm')}</Text>}</Text>
     )
 }
