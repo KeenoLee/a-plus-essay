@@ -38,7 +38,7 @@ export function useGet<T extends { error?: string }>(
       })
       .catch(error => ({ error: String(error) }))
       .then(json => {
-        // console.log('JSON: ', json);
+        console.log('IAM JSON: ', json);
         setJSON(json);
         // if (json.error) {
         //   Alert.alert('Fail to load ' + name, json.error, [{text: 'Dismiss'}]);
@@ -46,6 +46,7 @@ export function useGet<T extends { error?: string }>(
       });
   }, [url, token]);
   function render(fn: (json: T) => any) {
+    console.log('FUCK YOU BEENO on99', json)
     if (json.error == 'loading') {
       return (
         <HStack space={2} justifyContent="center">
