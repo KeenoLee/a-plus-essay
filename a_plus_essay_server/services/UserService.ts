@@ -95,7 +95,6 @@ export class UserService {
                 // transcript: ????,
                 school_id: schoolId,
                 major_id: majorId,
-                rating: null,
                 self_intro: tutor.selfIntro || null,
                 ongoing_order_amount: 0,
                 completed_order_amount: 0,
