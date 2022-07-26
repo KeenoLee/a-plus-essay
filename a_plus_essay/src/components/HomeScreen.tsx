@@ -73,7 +73,7 @@ export function HowToUseCard() {
                                             <Text fontWeight='bold' fontSize='16'>Step 1: </Text>
                                         </Stack>
                                         <Stack ml='3'>
-                                            <Text color='white'>Submit the quotation when you receive a order</Text>
+                                            <Text color='white' fontWeight='semibold'>Submit the quotation when you receive a order</Text>
                                         </Stack>
                                     </Stack>
                                     <Stack>
@@ -81,7 +81,7 @@ export function HowToUseCard() {
                                             <Text fontWeight='bold' fontSize='16'>Step 2: </Text>
                                         </Stack>
                                         <Stack ml='3'>
-                                            <Text color='white'>Monitor the Order Status</Text>
+                                            <Text color='white' fontWeight='semibold'>Monitor the Order Status</Text>
                                         </Stack>
                                     </Stack>
                                     <Stack>
@@ -89,7 +89,7 @@ export function HowToUseCard() {
                                             <Text fontWeight='bold' fontSize='16'>Step 3: </Text>
                                         </Stack>
                                         <Stack ml='3'>
-                                            <Text color='white'>Start chat with Student</Text>
+                                            <Text color='white' fontWeight='semibold'>Start chat with Student</Text>
                                         </Stack>
                                     </Stack>
                                     <Stack>
@@ -97,7 +97,7 @@ export function HowToUseCard() {
                                             <Text fontWeight='bold' fontSize='16'>Step 4: </Text>
                                         </Stack>
                                         <Stack ml='3'>
-                                            <Text color='white'>Receive reward when you finish the task</Text>
+                                            <Text color='white' fontWeight='semibold'>Receive reward when you finish the task</Text>
                                         </Stack>
                                     </Stack>
                                 </Box>
@@ -162,7 +162,7 @@ export function HowToUseCard() {
                                         <Text fontWeight='bold' fontSize='16'>Step 1: </Text>
                                     </Stack>
                                     <Stack ml='3'>
-                                        <Text color='white'>Submit Order</Text>
+                                        <Text color='white' fontWeight='semibold'>Submit Order</Text>
                                     </Stack>
                                 </Stack>
                                 <Stack>
@@ -170,7 +170,7 @@ export function HowToUseCard() {
                                         <Text fontWeight='bold' fontSize='16'>Step 2: </Text>
                                     </Stack>
                                     <Stack ml='3'>
-                                        <Text color='white'>Select your tutor</Text>
+                                        <Text color='white' fontWeight='semibold'>Select your tutor</Text>
                                     </Stack>
                                 </Stack>
                                 <Stack>
@@ -178,7 +178,7 @@ export function HowToUseCard() {
                                         <Text fontWeight='bold' fontSize='16'>Step 3: </Text>
                                     </Stack>
                                     <Stack ml='3'>
-                                        <Text color='white'>Pay tuition fee</Text>
+                                        <Text color='white' fontWeight='semibold'>Pay tuition fee</Text>
                                     </Stack>
                                 </Stack>
                                 <Stack>
@@ -186,7 +186,7 @@ export function HowToUseCard() {
                                         <Text fontWeight='bold' fontSize='16'>Step 4: </Text>
                                     </Stack>
                                     <Stack ml='3'>
-                                        <Text color='white'>Start to chat with your tutor</Text>
+                                        <Text color='white' fontWeight='semibold'>Start to chat with your tutor</Text>
                                     </Stack>
                                 </Stack>
                                 <Stack>
@@ -194,7 +194,7 @@ export function HowToUseCard() {
                                         <Text fontWeight='bold' fontSize='16'>Step 5: </Text>
                                     </Stack>
                                     <Stack ml='3'>
-                                        <Text color='white'>Leave comments with ratings</Text>
+                                        <Text color='white' fontWeight='semibold'>Leave comments with ratings</Text>
                                     </Stack>
                                 </Stack>
                             </Box>
