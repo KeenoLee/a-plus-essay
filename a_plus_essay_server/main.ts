@@ -81,12 +81,12 @@ orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
 orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
 
-orderRoutes.get("/order/pending", orderController.getPendingOrder)
-// orderRoutes.get("/order/matching", orderController.getMatchingOrder)
-// orderRoutes.get("/order/ongoing", orderController.getOngoingOrder)
-// orderRoutes.get("/order/completed", orderController.getCompletedOrder)
+// orderRoutes.get("/order/pending", orderController.getPendingOrder)
+orderRoutes.get("/order/matching", orderController.getMatchingOrder)
+orderRoutes.get("/order/ongoing", orderController.getOngoingOrder)
+orderRoutes.get("/order/completed", orderController.getCompletedOrder)
 
-orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
+// orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
 
 app.use(userRoutes);
 app.use(orderRoutes);
