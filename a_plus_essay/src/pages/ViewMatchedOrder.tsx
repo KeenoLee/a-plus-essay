@@ -98,16 +98,16 @@ export default function ViewMatchedOrder({ route, navigation }: any) {
                                 <Text>{orderSubject}</Text>
                             </FormControl>
                         </Stack>
-                        <HStack space={4} mt="4" alignSelf="center">
+                        <HStack space={4} mt="4">
                             <HStack>
                                 <FormControl.Label>Budget :</FormControl.Label>
-                                <FormControl w="20" style={{ marginLeft: 10 }}>
-                                    <Text>{order.budget}</Text>
+                                <FormControl w="20" style={{ marginLeft: 10, marginTop: 4 }}>
+                                    <Text>$ {order.budget}</Text>
                                 </FormControl>
                             </HStack>
                             <HStack>
                                 <FormControl.Label>Grade :</FormControl.Label>
-                                <FormControl w="20" style={{ marginLeft: 10 }}>
+                                <FormControl w="200" style={{ marginLeft: 10, marginTop: 4 }}>
                                     <Text>{order.grade}</Text>
                                 </FormControl>
                             </HStack>
@@ -142,18 +142,28 @@ export default function ViewMatchedOrder({ route, navigation }: any) {
                             ))}
                         </Stack>
 
-                        <Stack mt="4">
+                        {/* <Stack mt="4">
                             <FormControl.Label>Deadline :</FormControl.Label>
-                        </Stack>
+                        </Stack> */}
 
-                        <HStack space={4} alignItems='center'>
-                            <Text>{order.tutor_submission_deadline.toLocaleString()}</Text>
+                        <HStack mt='4'>
+                            <HStack>
+                                <FormControl.Label>Deadline :</FormControl.Label>
+                            </HStack>
+                            <HStack>
+                                <Text ml='4' mt='1' >{order.tutor_submission_deadline.toLocaleString()}</Text>
+                            </HStack>
                         </HStack>
                         {order.charge ?
-                            <HStack style={{flexDirection: 'column'}}>
-                                <FormControl.Label>Your offer: {order.charge}</FormControl.Label>
-                                <Text>Waiting for student to confirm your offer...</Text>
-                            </HStack>
+                            <Stack>
+                                <HStack mt='4'>
+                                    <HStack>
+                                        <FormControl.Label>Your offer:</FormControl.Label>
+                                        <Text mt='1' ml='2'>$ {order.charge}</Text>
+                                    </HStack>
+                                </HStack>
+                                {/* <Text ml='4'>Waiting for student to confirm your offer...</Text> */}
+                            </Stack>
                             :
                             <HStack>
                                 <FormControl.Label>Make an Offer :</FormControl.Label>
@@ -171,12 +181,6 @@ export default function ViewMatchedOrder({ route, navigation }: any) {
                                 </TouchableOpacity>
                             </HStack>
                         }
-
-
-
-
-
-
                     </VStack>
                 </ScrollView>
             </SafeAreaView > : null
