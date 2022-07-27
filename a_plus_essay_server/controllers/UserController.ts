@@ -485,10 +485,16 @@ export class UserController {
     }
     getTutorInfo = async (req: Request, res: Response) => {
         try {
-            
+            const tutorId = +req.params.tutorId
+            console.log(' LAST pLS',tutorId)
+            const tutorInfo = await this.userService.getTutorInfoForStudent(tutorId)
+            console.log('LAS tF PLS: ', tutorInfo)
+            res.json(tutorInfo)
+            return
         }
         catch (error) {
             res.json({error: String(error)})
+            return
         }
     }
 }

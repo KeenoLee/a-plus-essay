@@ -116,7 +116,7 @@ export class OrderController {
             return;
         }
         console.log("going to insert into db... ");
-        await this.orderService.createOrder({
+        const orderId = await this.orderService.createOrder({
             studentId,
             title,
             subject,
@@ -128,19 +128,20 @@ export class OrderController {
         });
         // console.log('orderID: ', orderId)
         // await this.orderService.matchOrder(orderId)
-        res.json({ success: true });
+        res.json({orderId});
         return;
     };
     uploadOrderFile = async (req: Request, res: Response) => {
         try {
             form.parse(req, async (err, fields, files) => {
                 console.log("fields??? ", fields);
+                const orderId: number = +fields.orderId
                 if (err) {
                     res.json({ error: err });
                     return;
                 }
                 if (files) {
-                    await this.orderService.uploadOrderFile(files);
+                    await this.orderService.uploadOrderFile(orderId, files);
                     res.json({ success: true });
                     return;
                 }
@@ -295,6 +296,34 @@ export class OrderController {
             const { guidelines, notes, subject } = await this.orderService.getOrderImages(orderId)
             console.log('G N', guidelines, notes)
             res.json({ guidelines, notes, subject })
+            return
+        } catch (error) {
+            res.json({ error })
+            return
+        }
+    }
+    confirmTutor = async (req: Request, res: Response) => {
+        try {
+            const { tutorId, orderId } = req.body
+            console.log('ALLSFSALT: ', tutorId, orderId)
+            const result = await this.orderService.confirmTutor(tutorId, orderId)
+            if (result.success) {
+                res.json({ success: true })
+                return
+            }
+
+        } catch (error) {
+            res.json({ error })
+            return
+        }
+    }
+    getCandidates = async (req: Request, res: Response) => {
+        try {
+            console.log('PARMASADS? ', req.params.orderId)
+            const orderId = +req.params.orderId
+            const candidates = await this.orderService.getCandidates(orderId)
+            console.log('ORDER CANDIDATES ID??', candidates)
+            res.json(candidates)
             return
         } catch (error) {
             res.json({ error })

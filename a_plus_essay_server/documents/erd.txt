@@ -122,7 +122,7 @@ student_id integer FK >0- user.id
 tutor_id integer NULL FK >0- user.id
 title varchar(63)
 grade varchar(63)
-description text
+description text NULL
 budget integer
 matched_time timestamp NULL
 completed_time timestamp NULL

@@ -314,4 +314,9 @@ export class UserService {
             return { error }
         }
     }
+    async getTutorInfoForStudent(id: number) {
+        const tutorInfo = (await this.knex.select('id', 'nickname').from('user').where('id', id))[0]
+        const tutorBackground = (await this.knex.select('id', 'self_intro', 'completed_order_amount').from('tutor').where('id', id))[0]
+        return [tutorInfo, tutorBackground]
+    }
 }
