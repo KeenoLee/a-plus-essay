@@ -47,8 +47,7 @@ export class ChatService {
             let newChatroomList = await this.knex
                 .select('title', 'id as order_id')
                 .from('order')
-                .whereNotNull('tutor_id')
-                .andWhere('student_id', userId)
+                .whereRaw(`(tutor_id = ? or student_id = ?) and tutor_id IS NOT NULL`, [userId, userId])
             console.log('ChatRoomListWithOnlyTitle:', newChatroomList)
             return newChatroomList
         } else {
