@@ -21,6 +21,7 @@ export function useGet<T extends { error?: string }>(
 ) {
   const [json, setJSON] = useState<T>(defaultValue);
   const token = useSelector((state: RootState) => state.auth.token);
+  
   useEffect(() => {
     fetch(env.BACKEND_ORIGIN + url, {
       headers: {

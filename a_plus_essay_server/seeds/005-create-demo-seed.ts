@@ -603,11 +603,11 @@ export async function seed(knex: Knex): Promise<void> {
             paid_by_student_time: "2022-05-02T14:00:00.000Z",
             paid_to_tutor_time: "2022-05-06T14:00:00.000Z",
             student_submission_deadline: "2022-05-06T14:00:00.000Z",
-            tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
+            tutor_submission_deadline: "2022-06-06T10:00:00.000Z",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 5').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 14').first()).id,
+            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 2').first()).id,
             title: "Introduction to Marketing",
             grade: "Year 4",
             description: "course work",
@@ -617,7 +617,7 @@ export async function seed(knex: Knex): Promise<void> {
             paid_by_student_time: null,
             paid_to_tutor_time: null,
             student_submission_deadline: "2022-05-06T14:00:00.000Z",
-            tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
+            tutor_submission_deadline: "2022-07-05T13:00:00.000Z",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
@@ -631,7 +631,7 @@ export async function seed(knex: Knex): Promise<void> {
             paid_by_student_time: null,
             paid_to_tutor_time: null,
             student_submission_deadline: "2022-05-06T14:00:00.000Z",
-            tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
+            tutor_submission_deadline: "2022-05-25T10:00:00.000Z",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
@@ -645,7 +645,7 @@ export async function seed(knex: Knex): Promise<void> {
             paid_by_student_time: null,
             paid_to_tutor_time: null,
             student_submission_deadline: "2022-05-06T14:00:00.000Z",
-            tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
+            tutor_submission_deadline: "2022-05-14T22:00:00.000Z",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
@@ -658,8 +658,8 @@ export async function seed(knex: Knex): Promise<void> {
             completed_time: "2021-11-17T14:03:39.000Z",
             paid_by_student_time: "2021-11-10T14:00:00.000Z",
             paid_to_tutor_time: "2021-11-20T11:00:00.000Z",
-            student_submission_deadline: "2022-05-06T14:00:00.000Z",
-            tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
+            student_submission_deadline: "2022-05-14T14:00:00.000Z",
+            tutor_submission_deadline: "2022-06-01T17:00:00.000Z",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
@@ -672,8 +672,8 @@ export async function seed(knex: Knex): Promise<void> {
             completed_time: null,
             paid_by_student_time: "2021-11-10T14:00:00.000Z",
             paid_to_tutor_time: null,
-            student_submission_deadline: "2022-05-06T14:00:00.000Z",
-            tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
+            student_submission_deadline: "2022-07-06T14:00:00.000Z",
+            tutor_submission_deadline: "2022-08-06T08:00:00.000Z",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
@@ -686,8 +686,8 @@ export async function seed(knex: Knex): Promise<void> {
             completed_time: null,
             paid_by_student_time: "2022-10-23T14:00:00.000Z",
             paid_to_tutor_time: null,
-            student_submission_deadline: "2022-05-06T14:00:00.000Z",
-            tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
+            student_submission_deadline: "2022-07-26T14:00:00.000Z",
+            tutor_submission_deadline: "2022-07-28T18:00:00.000Z",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
@@ -701,7 +701,7 @@ export async function seed(knex: Knex): Promise<void> {
             paid_by_student_time: null,
             paid_to_tutor_time: null,
             student_submission_deadline: "2022-05-06T14:00:00.000Z",
-            tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
+            tutor_submission_deadline: "2022-05-20T14:00:00.000Z",
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 4').first()).id,
