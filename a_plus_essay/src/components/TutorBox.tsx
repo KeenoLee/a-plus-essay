@@ -2,8 +2,10 @@ import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Order } from '../pages/OrderStatus/OrderListPage'
 type Props = {
     isSelected: boolean
+    order: Order
 }
 const UnSelectedBoxStyle: StyleProp<ViewStyle> = {
     flexDirection: 'row' as const,
@@ -33,13 +35,19 @@ const SelectedBoxStyle: StyleProp<ViewStyle> = {
     shadowColor: 'white'
 }
 
-export default function TutorBox({ isSelected, }: Props) {
+export default function TutorBox({ isSelected, order, tutorId}: any) {
+    console.log('order in STUDENT select tutor: ', order)
     const navigation = useNavigation()
     const [boxStyle, setBoxStyle] = useState(UnSelectedBoxStyle)
     useEffect(() => {
         console.log('selected?? ', isSelected)
         isSelected ? setBoxStyle(() => SelectedBoxStyle) : setBoxStyle(() => UnSelectedBoxStyle)
     }, [isSelected])
+    useEffect(()=>{
+        async function getTutorInfo() {
+
+        }
+    }, [])
     return (
         // <View style={isSelected?styles.selectedBox:styles.unSelectedBox}>
         <View style={boxStyle}>

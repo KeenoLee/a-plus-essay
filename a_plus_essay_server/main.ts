@@ -75,7 +75,7 @@ orderRoutes.get("/order/data", orderController.getOrderData);
 orderRoutes.post("/order-submission", orderController.createOrder)
 orderRoutes.post("/order-file", orderController.uploadOrderFile)
 orderRoutes.post('/order/candidateQuote', orderController.submitQuotation)
-orderRoutes.post('/make-offer', orderController.makeOffer)
+orderRoutes.post('/make-offer', orderController.submitQuotation)
 // orderRoutes.get("/order/pending", orderController.getPendingOrder)
 orderRoutes.get("/order/matching", orderController.getMatchingOrder)
 orderRoutes.get("/order/ongoing", orderController.getOngoingOrder)

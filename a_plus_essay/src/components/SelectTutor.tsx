@@ -48,7 +48,9 @@ export function TutorDetailStacks() {
 }
 const SelectTutorStack = createStackNavigator()
 
-export default function SelectTutor() {
+export default function SelectTutor({ route }: any) {
+    const { order } = route.params
+    console.log('route in select tutor: ', order)
     const [tutors, setTutors] = useState('hi')
     const [isSelected, setIsSelected] = useState(false)
     const state = useSelector((state: RootState) => state.auth)
@@ -69,20 +71,8 @@ export default function SelectTutor() {
                 <TouchableOpacity onPress={() => {
                     setIsSelected(!isSelected)
                 }}>
-                    <TutorBox isSelected={isSelected} />
+                    <TutorBox isSelected={isSelected} order={order} tutorId={order.tutor_id} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                    setIsSelected(!isSelected)
-                }}>
-                    <TutorBox isSelected={isSelected} />
-                </TouchableOpacity><TouchableOpacity onPress={() => {
-                    setIsSelected(!isSelected)
-                }}>
-                    <TutorBox isSelected={isSelected} />
-                </TouchableOpacity>
-                {/* <SelectTutorStack.Navigator>
-                    <SelectTutorStack.Screen name="Tutor Box" component={TutorBox} />
-                </SelectTutorStack.Navigator> */}
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 50 }}>
 
@@ -95,15 +85,7 @@ export default function SelectTutor() {
                     </TouchableOpacity>
                 </View>
             </View> :
-            <View>
-                {/* {Alert.alert(
-                'Unauthorized',
-                'Please login to submit order!',
-                // [
-                //     { text: 'OK', onPress: () => { navigation.navigate('Welcome') }},
-                // ]
-                )} */}
-            </View>
+            null
     )
 }
 
