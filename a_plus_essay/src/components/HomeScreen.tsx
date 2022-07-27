@@ -2,7 +2,7 @@ import { VStack, Center, Text, Box, Stack, Button, View, PresenceTransition, Hea
 import LottieView from 'lottie-react-native';
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import VerticalTutorCard from "./VerticalTutorCard";
+import { tutorData, VerticalTutorCard } from "./VerticalTutorCard";
 import { FlatList, TouchableOpacity, __spread } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -236,12 +236,12 @@ export function RenderTutor() {
             <FlatList
                 style={{}}
                 horizontal
-                data={DATA}
+                data={tutorData}
                 listKey='Tutor Introductions'
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => String(item.id + Math.random())}
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ item, index }) => (
-                    <VerticalTutorCard />
+                renderItem={({ item }) => (
+                    <VerticalTutorCard name={item.name} rating={item.rating} school={item.school} major1={item.major1} major2={item.major2} major3={item.major3} donePaper={item.donePaper} />
                 )}
             />
         </Stack>
