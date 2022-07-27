@@ -228,7 +228,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
                   }
                   }
                   automaticallyAdjustContentInsets={true}>
-                  {messageFromServer}
+                  {/* {messageFromServer} */}
                   {chatMessages}
                   <View
                     style={{
