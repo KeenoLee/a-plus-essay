@@ -17,7 +17,7 @@ export const tutorData = [{
   id: Math.random(),
   name: "Alex",
   rating: "5.0",
-  school: "The University of Hong Kong",
+  school: "The Chinese University of Hong Kong",
   major1: "Account",
   major2: "Business Analysis",
   major3: "Philosophy",
@@ -27,22 +27,32 @@ export const tutorData = [{
   id: Math.random(),
   name: "Dennis",
   rating: "4.9",
-  school: "The Chinese University of Hong Kong",
+  school: "The Hong Kong Polytechnic University",
   major1: "Architecture",
   major2: "Programming",
   major3: "Electronic Engineering",
   donePaper: 10
 },
-  // {
-  //   id: Math.random(),
-  //   name:
-  //   rating:
-  //   school:
-  //   major1:
-  //   major2:
-  //   major3:
-  //   donePaper:
-  // },
+  {
+    id: Math.random(),
+    name: "William",
+    rating: "4.8",
+    school: "The City University of Hong Kong",
+    major1: "Accounting",
+    major2: "Finance",
+    major3: "Economics",
+    donePaper: 4
+  },
+  {
+    id: Math.random(),
+    name: "Jacky",
+    rating: "4.6",
+    school: "The Hong Kong University of Science and Technology",
+    major1: "Computer Science",
+    major2: "English",
+    major3: "Chinese",
+    donePaper: 4
+  },
 ]
 //@ts-ignore
 export const VerticalTutorCard = ({ id, name, rating, school, major1, major2, major3, donePaper }) => {
@@ -63,7 +73,8 @@ export const VerticalTutorCard = ({ id, name, rating, school, major1, major2, ma
         maxWidth="100%"
         alignItems="center"
         flex="1"
-        py="2">
+        py="2"
+        height='100%'>
         {/*Nickname + Rating: LeftIcon: Star, Right: Avserage rating -> should generated from backend */}
         <HStack mr="2" ml="2">
           <HStack
