@@ -44,7 +44,7 @@ type TutorBackground = {
     self_intro: string,
     completed_order_amount: number
 }
-export default function TutorBox({ isSelected, tutorId, order }: any) {
+export default function TutorBox({ isSelected, setIsSelected, tutorId, order }: any) {
     console.log('@@@@@@@@@@order in STUDENT select tutor: ', tutorId)
     const navigation = useNavigation()
     const [boxStyle, setBoxStyle] = useState(UnSelectedBoxStyle)
