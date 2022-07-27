@@ -1,9 +1,51 @@
-import {View} from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
-import {Box, Divider, HStack, ScrollView, Stack, Text} from 'native-base';
+import { Box, Divider, HStack, ScrollView, Stack, Text } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function VerticalTutorCard() {
+export const tutorData = [{
+  id: Math.random(),
+  name: 'Beeno',
+  rating: '5.0',
+  school: 'The Hong Kong Polytechnic University',
+  major1: "Programming",
+  major2: "Marketing",
+  major3: "Finance",
+  donePaper: 32
+},
+{
+  id: Math.random(),
+  name: "Alex",
+  rating: "5.0",
+  school: "The University of Hong Kong",
+  major1: "Account",
+  major2: "Business Analysis",
+  major3: "Philosophy",
+  donePaper: 99
+},
+{
+  id: Math.random(),
+  name: "Dennis",
+  rating: "4.9",
+  school: "The Chinese University of Hong Kong",
+  major1: "Architecture",
+  major2: "Programming",
+  major3: "Electronic Engineering",
+  donePaper: 10
+},
+  // {
+  //   id: Math.random(),
+  //   name:
+  //   rating:
+  //   school:
+  //   major1:
+  //   major2:
+  //   major3:
+  //   donePaper:
+  // },
+]
+//@ts-ignore
+export const VerticalTutorCard = ({ id, name, rating, school, major1, major2, major3, donePaper }) => {
   return (
     <ScrollView>
       <Box
@@ -32,7 +74,7 @@ export default function VerticalTutorCard() {
             ml="1"
             mr="1">
             <Text textAlign="center" fontWeight="extrabold" fontSize="20">
-              Beeno
+              {name}
             </Text>
           </HStack>
           <HStack
@@ -45,7 +87,7 @@ export default function VerticalTutorCard() {
             py="1">
             <Ionicons name="star" color="white" size={13} />
             <Text ml="1" color="white" fontWeight="bold" fontSize="13">
-              5.0
+              {rating}
             </Text>
           </HStack>
         </HStack>
@@ -53,7 +95,7 @@ export default function VerticalTutorCard() {
         <Stack>
           {/*University -> Limited Text*/}
           <Text pl="3" pr="3" fontWeight="bold" textAlign="center">
-            The Hong Kong Polytechnic University
+            {school}
           </Text>
         </Stack>
         <Stack>
@@ -61,19 +103,19 @@ export default function VerticalTutorCard() {
           {/* 2. Preferred Subject -> Limited Text*/}
           {/* 3. Preferred Subject -> Limited Text*/}
           <Text fontWeight="light" textAlign="center">
-            Programming
+            {major1}
           </Text>
           <Text fontWeight="light" textAlign="center">
-            Marketing
+            {major2}
           </Text>
           <Text fontWeight="light" textAlign="center">
-            Finance
+            {major3}
           </Text>
         </Stack>
         <Stack pb="2">
           {/* No. of completed order + "Finished Papers"*/}
           <Text fontWeight="medium" textAlign="center">
-            32 Finished Papers
+            {donePaper} Finished Papers
           </Text>
         </Stack>
       </Box>
