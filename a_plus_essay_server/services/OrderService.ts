@@ -537,7 +537,7 @@ export class OrderService {
         const candidateId = await this.knex('candidate')
             .where('tutor_id', tutorId)
             .andWhere('order_id', orderId)
-            .update({ charge: charge })
+            .update({ charge: charge, accept_time: Date.now() })
             .returning('id')
         console.log('id: ', candidateId)
         // const { studentId } = (await this.knex.select('student_id').from('order').where('id', orderId).first())
