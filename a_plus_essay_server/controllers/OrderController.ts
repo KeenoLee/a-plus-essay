@@ -126,8 +126,9 @@ export class OrderController {
             tutorDeadline,
             studentDeadline,
         });
-        // console.log('orderID: ', orderId)
-        // await this.orderService.matchOrder(orderId)
+        console.log('orderID HIHI BEE: ', orderId)
+        const result = await this.orderService.matchTutor(orderId)
+        console.log('RESutl: ', result)
         res.json({orderId});
         return;
     };

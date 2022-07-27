@@ -54,10 +54,8 @@ async function fetchOrder(order: OrderValue, token: string) {
         body: JSON.stringify(order)
     })
     const result = await res.json()
-    if (result.error) {
-        return result
-    }
-    return 'success'
+    console.log('WHY noT NUM???', result)
+    return result
 }
 async function fetchFile(orderFiles: OrderFiles, orderId: number) {
     // console.log('WHATs type??: ', typeof orderFiles.guidelines[0].file)
@@ -65,8 +63,9 @@ async function fetchFile(orderFiles: OrderFiles, orderId: number) {
     console.log('NOTES: ', orderFiles.notes)
     const formData = new FormData()
     console.log('FORMDATA: ', formData)
-    formData.append('orderId', orderId.toString());
-
+    if (!isNaN(orderId)) {
+        formData.append('orderId', orderId.toString());
+    }
     for (let g = 0; g < orderFiles.guidelines.length; g++) {
         console.log(orderFiles.guidelines[g])
         formData.append(`guideline_${g}`, orderFiles.guidelines[g] as any)
@@ -75,7 +74,6 @@ async function fetchFile(orderFiles: OrderFiles, orderId: number) {
         formData.append(`note_${n}`, orderFiles.notes[n] as any)
     }
     console.log('FORMDATA: ', formData)
-
     const res = await fetch(`${env.BACKEND_URL}/order-file`, {
         method: 'POST',
         headers: {
@@ -302,6 +300,7 @@ export default function OrderSubmission() {
                                     size='sm' bgColor="success.500"
                                     onPress={async () => {
                                         const result = await fetchOrder(orderValue, state.token!)
+                                        console.log('REUSLT IS NOT NUM!!!???', result)
                                         const fileResult = await fetchFile({ guidelines: orderValue.guidelines, notes: orderValue.notes }, result.orderId)
                                         console.log('fileResult: ', fileResult)
                                         // console.log('result of creating order', result)
