@@ -301,5 +301,33 @@ export class OrderController {
             return
         }
     }
+    confirmTutor = async (req: Request, res: Response) => {
+        try {
+            const { tutorId, orderId } = req.body
+            console.log('ALLSFSALT: ', tutorId, orderId)
+            const result = await this.orderService.confirmTutor(tutorId, orderId)
+            if (result.success) {
+                res.json({ success: true })
+                return
+            }
+
+        } catch (error) {
+            res.json({ error })
+            return
+        }
+    }
+    getCandidates = async (req: Request, res: Response) => {
+        try {
+            console.log('PARMASADS? ', req.params.orderId)
+            const orderId = +req.params.orderId
+            const candidates = await this.orderService.getCandidates(orderId)
+            console.log('ORDER CANDIDATES ID??', candidates)
+            res.json(candidates)
+            return
+        } catch (error) {
+            res.json({ error })
+            return
+        }
+    }
 }
 

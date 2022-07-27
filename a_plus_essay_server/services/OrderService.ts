@@ -459,12 +459,16 @@ export class OrderService {
         // 2.1
         // await this.knex.
         const orders = await this.knex
-            .select('order.id', 'order.title', 'order.student_id', 'order.tutor_id', 'order.grade', 'order.description', 'order.budget', 'order.tutor_submission_deadline', 'candidate.charge')
+            .select('order.id', 'order.title', 'order.student_id', 'candidate.tutor_id', 'order.grade', 'order.description', 'order.budget', 'order.tutor_submission_deadline', 'candidate.charge')
             .from("order")
             .innerJoin('candidate', 'order.id', 'candidate.order_id')
-            .whereNull('candidate.charge')
-            .orWhereRaw(`candidate.charge IS NOT NULL and candidate.accept_time IS NULL`)
-            .andWhere('order.student_id', id)
+            .whereRaw(`(candidate.charge is not null or (candidate.charge IS NOT NULL and candidate.accept_time IS NULL)) AND "order".student_id = ?`, id)
+
+        // .whereNull('candidate.charge')
+        // .orWhereRaw(`candidate.charge IS NOT NULL and candidate.accept_time IS NULL`)
+        // .andWhere('order.student_id', id)
+
+
         console.log('matching orders for student: ', orders)
         return { orders };
     }
@@ -477,7 +481,7 @@ export class OrderService {
 
         console.log('can get id? ', id)
         const orders = await this.knex
-            .select('order.id', 'order.title', 'order.student_id', 'order.tutor_id', 'order.grade', 'order.description', 'order.budget', 'order.tutor_submission_deadline', 'candidate.charge')
+            .select('order.id', 'order.title', 'order.student_id', 'candidate.tutor_id', 'order.grade', 'order.description', 'order.budget', 'order.tutor_submission_deadline', 'candidate.charge')
             .from("order")
             .innerJoin('candidate', 'order.id', 'candidate.order_id')
             .whereRaw(`(candidate.charge is not null or (candidate.charge IS NOT NULL and candidate.accept_time IS NULL)) AND candidate.tutor_id = ?`, id)
@@ -547,5 +551,17 @@ export class OrderService {
             .where('order.id', orderId))
         console.log('NO subject? ', subject)
         return { guidelines, notes, subject }
+    }
+    async confirmTutor(tutorId: number, orderId: number) {
+        const result = (await this.knex('order').update('tutor_id', tutorId).where('id', orderId).returning('tutor_id'))[0]
+        console.log('CAN update confirm tutor??$ ', result)
+        if (result.tutor_id !== tutorId) {
+            return { success: false }
+        }
+        return { success: true }
+    }
+    async getCandidates(orderId: number) {
+        const candidates = (await this.knex.select('id', 'tutor_id', 'charge').from('candidate').where('order_id', orderId))
+        return candidates
     }
 }
