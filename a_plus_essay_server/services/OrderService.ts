@@ -195,7 +195,7 @@ export class OrderService {
                 .first());
             console.log('NEW TUTOR ID: ', newTutorId)
             if (newTutorId) {
-                tutorId.push({ newTutorId });
+                tutorId.push({ id: newTutorId.id });
             } else tutorId.push({ id: 0 });
             console.log('ARRAY OF TUTORID?: ', tutorId)
             console.log(orderId)
@@ -272,6 +272,7 @@ export class OrderService {
                 return "No tutor can be matched now";
             }
             console.log('tutorID in matching an order%%%%%%: ', tutorId)
+            return "Tutor matched success"
             // tutorId.map((tutor) => {
             //     if (tutor.id > 0) {
             //         this.io.to(`${tutor.id}`).emit("new-order", "You have a new order.");
