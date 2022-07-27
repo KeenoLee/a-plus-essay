@@ -42,8 +42,8 @@ function OrderListPage(props: { orderStatus: string }) {
     let url = '/order/' + status
     console.log('URL???: ', url)
     const orderList = useGet<{ error?: string, orders?: Order[] }>(title, url, { error: 'loading' })
-    console.log('ORDER lIST in :', orderList.json.orders)
-   
+    console.log('ORDER lIST in :', orderList)
+
     return (
         <View>
             <ScrollView>

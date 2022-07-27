@@ -106,7 +106,18 @@ export default function LoginPage({ }: Props) {
                         <Text style={{ color: '#14b8a6', fontWeight: 'bold' }}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}> */}
+                    {/* <View
+                        style={{
+                            flexDirection: 'column',
+                            flex: 4,
+                            borderWidth: 1,
+                            borderColor: 'grey',
+                            height: 1,
+                            margin: 30,
+                        }} */}
+                    {/* /> */}
+                    {/* <Text style={{ flex: 1, textAlign: 'center', color: 'grey' }}>OR</Text>
                     <View
                         style={{
                             flexDirection: 'column',
@@ -116,21 +127,10 @@ export default function LoginPage({ }: Props) {
                             height: 1,
                             margin: 30,
                         }}
-                    />
-                    <Text style={{ flex: 1, textAlign: 'center', color: 'grey' }}>OR</Text>
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            flex: 4,
-                            borderWidth: 1,
-                            borderColor: 'grey',
-                            height: 1,
-                            margin: 30,
-                        }}
-                    />
-                </View>
+                    /> */}
+                {/* </View> */}
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={{
                         justifyContent: 'center',
                         backgroundColor: '#007AFF',
@@ -141,15 +141,15 @@ export default function LoginPage({ }: Props) {
                         height: 35,
                         borderRadius: 15,
                         margin: 10,
-                    }}>
-                    <View style={{}}>{/* <Image source={ } /> */}</View>
+                    }}> */}
+                    {/* <View style={{}}><Image source={ } /></View>
                     <Text style={{ textAlign: 'center', color: 'white' }}>
                         Sign in with Facebook
                     </Text>
                     <View style={{}}></View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={{
                         justifyContent: 'center',
                         borderColor: 'black',
@@ -160,14 +160,14 @@ export default function LoginPage({ }: Props) {
                         borderRadius: 15,
                         margin: 10,
                     }}>
-                    <View style={{}}>{/* <Image source={ } /> */}</View>
+                    <View style={{}}><Image source={ } /></View>
                     <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
                         Sign in with Google
                     </Text>
                     <View style={{}}></View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
-                <View style={{ alignItems: 'center', marginTop: 30 }}>
+                <View style={{ alignItems: 'center', marginTop: 20 }}>
                     <Text style={{ fontSize: 12 }}>
                         By using our services you are agreeing to our
                     </Text>

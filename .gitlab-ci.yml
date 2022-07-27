@@ -47,7 +47,8 @@ server-deploy:
   script:
     - rsync -SavLP dist "aplusessay:~/aplusessay/a_plus_essay_server"    
     - ssh aplusessay "        
-        cd ~/aplusessay &&        
+        cd ~/aplusessay &&  
+        rm ./a_plus_essay_server/yarn.lock &&      
         git fetch &&
         git checkout $CI_COMMIT_SHA && 
         rm -r -f a_plus_essay &&       
