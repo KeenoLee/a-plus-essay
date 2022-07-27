@@ -582,6 +582,12 @@ export async function seed(knex: Knex): Promise<void> {
         },
     ]).into("preferred_subject");
 
+    // await knex.insert([
+    //     {
+    //         order_id: (await knex.select("id").from("order").where("id",))
+    //     }
+    // ])
+
     await knex("order").insert([
         {
             student_id: (await knex.select("id").from("user").where("nickname", 'student 2').first()).id,
