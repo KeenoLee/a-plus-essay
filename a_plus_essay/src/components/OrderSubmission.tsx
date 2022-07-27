@@ -59,12 +59,14 @@ async function fetchOrder(order: OrderValue, token: string) {
     }
     return 'success'
 }
-async function fetchFile(orderFiles: OrderFiles) {
+async function fetchFile(orderFiles: OrderFiles, orderId: number) {
     // console.log('WHATs type??: ', typeof orderFiles.guidelines[0].file)
     console.log('GUIDELINE: ', orderFiles.guidelines)
     console.log('NOTES: ', orderFiles.notes)
     const formData = new FormData()
     console.log('FORMDATA: ', formData)
+    formData.append('orderId', orderId.toString());
+
     for (let g = 0; g < orderFiles.guidelines.length; g++) {
         console.log(orderFiles.guidelines[g])
         formData.append(`guideline_${g}`, orderFiles.guidelines[g] as any)
@@ -300,7 +302,7 @@ export default function OrderSubmission() {
                                     size='sm' bgColor="success.500"
                                     onPress={async () => {
                                         const result = await fetchOrder(orderValue, state.token!)
-                                        const fileResult = await fetchFile({ guidelines: orderValue.guidelines, notes: orderValue.notes })
+                                        const fileResult = await fetchFile({ guidelines: orderValue.guidelines, notes: orderValue.notes }, result.orderId)
                                         console.log('fileResult: ', fileResult)
                                         // console.log('result of creating order', result)
                                         if (result.error || fileResult.error) {
