@@ -44,7 +44,6 @@ export async function seed(knex: Knex): Promise<void> {
       order_id: pendingOrderId1,
       tutor_id: tutorObject.id,
       charge: null,
-      category: 3,
       accept_time: null,
       reject_time: null,
       expire_time: "2022-07-28T14:00:00.000Z",
@@ -56,7 +55,6 @@ export async function seed(knex: Knex): Promise<void> {
       order_id: pendingOrderId2,
       tutor_id: tutorObject.id,
       charge: 1000,
-      category: 0,
       accept_time: null,
       reject_time: null,
       expire_time: "2022-07-28T14:00:00.000Z",
@@ -68,7 +66,6 @@ export async function seed(knex: Knex): Promise<void> {
       order_id: onGoingOrderId1,
       tutor_id: tutorObject.id,
       charge: 7000,
-      category: 5,
       accept_time: "2022-07-25T14:00:00.000Z",
       reject_time: null,
       expire_time: "2022-07-28T14:00:00.000Z",
@@ -80,7 +77,6 @@ export async function seed(knex: Knex): Promise<void> {
       order_id: pendingOrderId2,
       tutor_id: tutorObject.id,
       charge: 4000,
-      category: 4,
       accept_time: null,
       reject_time: "2022-07-26T14:00:00.000Z",
       expire_time: "2022-07-28T14:00:00.000Z",
@@ -107,7 +103,6 @@ export async function seed(knex: Knex): Promise<void> {
       order_id: orderId,
       tutor_id: tutorObject.id,
       charge: 5000,
-      category: 0,
       expire_time: "2022-07-28T14:00:00.000Z",
     })
     .into("candidate");
@@ -131,7 +126,6 @@ export async function seed(knex: Knex): Promise<void> {
       order_id: order2Id,
       tutor_id: tutorObject.id,
       charge: 7000,
-      category: 0,
       expire_time: "2022-07-28T14:00:00.000Z",
     })
     .into("candidate");
@@ -148,7 +142,7 @@ export async function seed(knex: Knex): Promise<void> {
     student_submission_deadline: "2022-07-28T14:00:00.000Z"
   }).into('order').returning('id'))[0].id
 
-  await knex.insert({ order_id: matchingOrderId, tutor_id: tutorObject.id, category: 0, expire_time: "2022-07-28T14:00:00.000Z" }).into('candidate')
+  await knex.insert({ order_id: matchingOrderId, tutor_id: tutorObject.id, expire_time: "2022-07-28T14:00:00.000Z" }).into('candidate')
 
   await knex.insert({
     order_id: matchingOrderId,
@@ -166,10 +160,10 @@ export async function seed(knex: Knex): Promise<void> {
     order_id: matchingOrderId,
     filename: '02663f1359e3e36b234fda106.jpg'
   }).into('note')
-  const subjectId = (await knex.insert({subject_name: 'Computer Science'}).into('subject').returning('id'))[0].id
+  const subjectId = (await knex.insert({ subject_name: 'Computer Science' }).into('subject').returning('id'))[0].id
   await knex.insert({
     order_id: matchingOrderId,
     subject_id: subjectId
   }).into('order_subject')
-  
+
 }

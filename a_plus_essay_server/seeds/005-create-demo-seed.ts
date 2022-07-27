@@ -584,11 +584,13 @@ export async function seed(knex: Knex): Promise<void> {
 
     // await knex.insert([
     //     {
-    //         order_id: (await knex.select("id").from("order").where("id",))
+    //         tutor_id:(await knex.select("id").from("user").where("nickname",'tutor 1').first()).id,
+    //         order_id: (await knex.select("order.id").from("order").innerJoin("candidate", "order.tutor_id","candidate.tutor_id").first()).id,
+    //         charge:
     //     }
     // ])
 
-    await knex("order").insert([
+    const orderIds = await knex("order").insert([
         {
             student_id: (await knex.select("id").from("user").where("nickname", 'student 2').first()).id,
             tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
@@ -883,5 +885,157 @@ export async function seed(knex: Knex): Promise<void> {
             student_submission_deadline: "2022-05-06T14:00:00.000Z",
             tutor_submission_deadline: "2022-06-06T14:00:00.000Z",
         },
-    ])
+    ]).returning("id");
+
+    await knex.insert([
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[0].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
+            charge: 3000,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[0].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 5').first()).id,
+            charge: 1000,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[0].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 8').first()).id,
+            charge: 12000,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[0].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 10').first()).id,
+            charge: 800,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+    ]).into("candidate");
+
+    await knex.insert([
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[1].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 2').first()).id,
+            charge: 1000,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[1].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 8').first()).id,
+            charge: 2000,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+
+    ]).into("candidate");
+
+    await knex.insert([
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[2].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 10').first()).id,
+            charge: 1500,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[2].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 3').first()).id,
+            charge: 2500,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[2].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 11').first()).id,
+            charge: 1800,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+    ]).into("candidate");
+    await knex.insert([
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[3].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 3').first()).id,
+            charge: 500,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[3].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 13').first()).id,
+            charge: 2000,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[3].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 9').first()).id,
+            charge: 1800,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[3].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 5').first()).id,
+            charge: 1100,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[3].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 6').first()).id,
+            charge: 2800,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+    ]).into("candidate");
+    await knex.insert([
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[4].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
+            charge: 1500,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[4].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 10').first()).id,
+            charge: 2100,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+        {
+            order_id: (await knex.select("id").from("order").where("id", orderIds[4].id).first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 3').first()).id,
+            charge: 1100,
+            accept_time: null,
+            reject_time: null,
+            expire_time: knex.raw("current_timestamp + interval '2 hours'")
+        },
+
+    ]).into("candidate");
+
 };
