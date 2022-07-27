@@ -17,7 +17,7 @@ export class OrderService {
 
     async createOrder(order: OrderItem): Promise<Number | void> {
         let id: number;
-        await this.knex.transaction(async (knex) => {
+        return await this.knex.transaction(async (knex) => {
             const orderId: number = (
                 await knex
                     .insert({
@@ -68,44 +68,9 @@ export class OrderService {
             )[0].id;
             console.log("orderSubjectID!: ", orderSubjectId);
 
-            // for (let guideline of order.guidelines) {
-            // Guideline {
-            //     filename: string,
-            //     base64Data: long long string,
-            //     file: {
-            //         _data: {
-            //             blobId: string,
-            //             offset: 0,
-            //             size: 35,
-            //             type: long long string, (seems same as bas64Data)
-            //             lastModified: 1658464651040,
-            //             __collecror: {},
-            //             name: 'photo'
-            //         }
-            //     }
-            // }
-            //     console.log('Guideline', guideline)
-            //     await knex.insert({
-            //         order_id: orderId,
-            //         guideline_base64: guideline.base64Data
-            //     }).into('guideline')
-            // }
-            // for (let note of order.notes) {
-            //     await knex.insert({
-            //         order_id: orderId,
-            //         note_base64: note.base64Data
-            //     }).into('note')
-            // }
             console.log("goin to return : ", orderId);
-            // order.guidelines.map(async guideline => {
-            //     await knex.insert({
-            //         order_id: orderId,
-            //         guideline_base64: guideline.base64
-            //     }).into('guideline')
-            // })
 
             // order.notes.map(async note => {
-                await this.matchTutor(orderId)
             // })
             // this.matchOrder(orderId)
             return orderId;
@@ -113,7 +78,7 @@ export class OrderService {
         });
         // return id;
     }
-    async uploadOrderFile(orderId:number, files: any) {
+    async uploadOrderFile(orderId: number, files: any) {
         try {
             let objectKeys = Object.keys(files);
             console.log('ORderId In LsatFinAlly: ', orderId)
@@ -188,7 +153,7 @@ export class OrderService {
         }
     }
 
-    async matchTutor(orderId: number) {
+    async matchTutor(orderId: any) {
         console.log('HI ALEX', orderId)
         try {
             let tutorId = await this.knex
@@ -228,71 +193,90 @@ export class OrderService {
                 .where("completed_order_amount", "<", "5")
                 .orderBy("ongoing_order_amount", "asc")
                 .first());
-                console.log('NEW TUTOR ID: ', newTutorId)
+            console.log('NEW TUTOR ID: ', newTutorId)
             if (newTutorId) {
                 tutorId.push({ newTutorId });
             } else tutorId.push({ id: 0 });
             console.log('ARRAY OF TUTORID?: ', tutorId)
+            console.log(orderId)
+            const value1 = (await this.knex.select('id').from('order').where('id', orderId).first())
+            console.log('HIHI BEE', value1)
+            for (let tutor of tutorId) {
+                if (tutor.id !== 0) {
+                    await this.knex.insert({
+                        order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
+                        tutor_id: (await this.knex.select('id').from('user').where('id', tutor.id).first()).id,
+                        charge: null,
+                        category: 0,
+                        accept_time: null,
+                        reject_time: null,
+                        expire_time: this.knex.raw(
+                            "current_timestamp + interval '2 hours'"
+                        ),
+                    }).into('candidate')
+                }
+                continue
+            }
+            // await this.knex
+            //     .insert([
+            //         {
+            //             order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
+            //             tutor_id: (),
+            //             charge: null,
+            //             category: 0,
+            //             accept_time: null,
+            //             reject_time: null,
+            //             expire_time: this.knex.raw(
+            //                 "current_timestamp + interval '2 hours'"
+            //             ),
+            //         },
+            //         {
+            //             order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
+            //             tutor_id: (await this.knex.select('id').from('order').where('id', tutorId[1].id).first()).id,
+            //             charge: null,
+            //             category: 0,
+            //             accept_time: null,
+            //             reject_time: null,
+            //             expire_time: this.knex.raw(
+            //                 "current_timestamp + interval '2 hours'"
+            //             ),
+            //         },
+            //         {
+            //             order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
+            //             tutor_id: (await this.knex.select('id').from('order').where('id', tutorId[2].id).first()).id,
+            //             charge: null,
+            //             category: 0,
+            //             accept_time: null,
+            //             reject_time: null,
+            //             expire_time: this.knex.raw(
+            //                 "current_timestamp + interval '2 hours'"
+            //             ),
+            //         },
+            //         {
+            //             order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
+            //             tutor_id: (await this.knex.select('id').from('order').where('id', tutorId[3].id).first()).id,
+            //             charge: null,
+            //             category: 0,
+            //             accept_time: null,
+            //             reject_time: null,
+            //             expire_time: this.knex.raw(
+            //                 "current_timestamp + interval '2 hours'"
+            //             ),
+            //         },
+            //     ])
+            //     .into("candidate");
 
-            await this.knex
-                .insert([
-                    {
-                        order_id: orderId,
-                        tutor_id: tutorId[0].id,
-                        charge: null,
-                        category: 0,
-                        accept_time: null,
-                        reject_time: null,
-                        expire_time: this.knex.raw(
-                            "current_timestamp + interval '2 hours'"
-                        ),
-                    },
-                    {
-                        order_id: orderId,
-                        tutor_id: tutorId[1].id,
-                        charge: null,
-                        category: 0,
-                        accept_time: null,
-                        reject_time: null,
-                        expire_time: this.knex.raw(
-                            "current_timestamp + interval '2 hours'"
-                        ),
-                    },
-                    {
-                        order_id: orderId,
-                        tutor_id: tutorId[2].id,
-                        charge: null,
-                        category: 0,
-                        accept_time: null,
-                        reject_time: null,
-                        expire_time: this.knex.raw(
-                            "current_timestamp + interval '2 hours'"
-                        ),
-                    },
-                    {
-                        order_id: orderId,
-                        tutor_id: newTutorId || 0,
-                        charge: null,
-                        category: 0,
-                        accept_time: null,
-                        reject_time: null,
-                        expire_time: this.knex.raw(
-                            "current_timestamp + interval '2 hours'"
-                        ),
-                    },
-                ])
-                .into("candidate");
-
-            const isTutorMatched = tutorId.some((tutor) => tutor.id > 0);
+            const isTutorMatched = tutorId.some((tutor) => tutor.id !== 0);
             if (isTutorMatched === false) {
+                console.log('FALSE?')
                 return "No tutor can be matched now";
             }
             console.log('tutorID in matching an order%%%%%%: ', tutorId)
-            tutorId.map((tutor) => {
-                if (tutor.id > 0) {
-                    this.io.to(`${tutor.id}`).emit("new-order", "You have a new order.");
-                }
-            });
+            // tutorId.map((tutor) => {
+            //     if (tutor.id > 0) {
+            //         this.io.to(`${tutor.id}`).emit("new-order", "You have a new order.");
+            //     }
+            // });
         } catch (error) {
             console.log(error);
         }
