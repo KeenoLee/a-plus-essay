@@ -515,7 +515,7 @@ export class OrderService {
 
     async getStudentCompletedOrder(id: number) {
         const orders = await this.knex
-            .select("id", "title", "tutor_submission_deadline")
+            .select("id", "title", "tutor_submission_deadline", "completed_time")
             .from("order")
             .where("student_id", id)
             .whereNotNull("completed_time");

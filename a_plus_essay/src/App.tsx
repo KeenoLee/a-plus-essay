@@ -64,6 +64,7 @@ import { roundToNearestMinutes } from 'date-fns';
 import ViewMatchedOrder from './pages/ViewMatchedOrder';
 import Comment from './pages/Comment';
 import AboutUs from './pages/AboutUs';
+import { SSRProvider } from '@react-aria/ssr';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 const Stack = createStackNavigator<AppParamList>();
@@ -351,12 +352,14 @@ function App2() {
     getStorage()
   }, [])
   return (
-    <NativeBaseProvider config={config}>
-      <NavigationContainer>
-        {/* <Fabtn/> */}
-        <HomeDrawer />
-      </NavigationContainer>
-    </NativeBaseProvider>
+    <SSRProvider>
+      <NativeBaseProvider config={config}>
+        <NavigationContainer>
+          {/* <Fabtn/> */}
+          <HomeDrawer />
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </SSRProvider>
   );
 }
 export default function App() {

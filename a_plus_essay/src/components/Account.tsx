@@ -1,7 +1,7 @@
 import { Alert, Image } from 'react-native'
 import * as React from 'react'
 import { useState, useEffect } from 'react'
-import { Box, HStack, IconButton, StatusBar, Text, View } from 'native-base';
+import { Box, HStack, IconButton, StatusBar, Text, View, VStack } from 'native-base';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
@@ -201,17 +201,17 @@ export default function Account() {
                                 ))}
                             </HStack>
                         </HStack>
-                        <HStack ml='2' marginY='2'>
-                            <HStack>
+                        <VStack ml='2' marginY='2'>
+                            <VStack>
                                 <Text fontWeight='bold' fontSize='16'>Self Introduction :</Text>
-                            </HStack>
-                            <HStack ml='4' mt='0.5'>
+                            </VStack>
+                            <VStack ml='4' mt='0.5' width='100%'>
                                 {editProfile ?
                                     <TextInput placeholder='Edit Self Introduction' onChangeText={value => setEditSelfIntro(() => value)}></TextInput> :
                                     <Text>{state.tutor[0].self_intro}</Text>
                                 }
-                            </HStack>
-                        </HStack>
+                            </VStack>
+                        </VStack>
                         {/* <HStack  ml='2' marginY='2'>
                             <HStack>
                                 <Text fontWeight='bold' fontSize='16'>Rating :</Text>
