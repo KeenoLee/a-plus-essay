@@ -97,7 +97,7 @@ export default function SelectTutor({ route }: any) {
                             setIsSelected(!isSelected)
                             setSelectedTutor(() => candidate.tutor_id)
                         }}>
-                            <TutorBox isSelected={isSelected} setIsSelected={setIsSelected} tutorId={candidate?.tutor_id} order={order} />
+                            <TutorBox isSelected={isSelected} selectedTutor={selectedTutor} tutorId={candidate?.tutor_id} order={order} />
                         </TouchableOpacity> : null
                 ))
                 }
