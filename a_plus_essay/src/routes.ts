@@ -1,4 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { Order } from "./pages/OrderStatus/OrderListPage";
 
 export type AppParamList = {
     Tabs: undefined
@@ -10,7 +11,7 @@ export type AppParamList = {
     'Order Submission': undefined;
     'Thank You': undefined;
     'Tutor Information': undefined;
-    'Select Tutor': undefined;
+    'Select Tutor': { order: Order };
     'Sign up': undefined;
     Register: undefined;
     Message: undefined;
@@ -19,7 +20,7 @@ export type AppParamList = {
     'Login': undefined
     'Account': undefined
     'Pending': undefined
-    'View Matched Order': undefined
+    'View Matched Order': { order: Order }
     'OrderList': { orderStatus: string }
     'About Us': undefined
     'Comment': undefined
