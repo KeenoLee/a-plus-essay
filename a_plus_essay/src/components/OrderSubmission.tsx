@@ -8,13 +8,14 @@ import FilePicker from './FilePicker';
 import { format } from 'date-fns'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Alert, SafeAreaView } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { env } from '../env/env';
 import { useAppNavigation } from '../routes';
 import OrderMatched from './OrderMatched';
 import DateTime from './DateTime';
+import { updateOrder } from '../redux/order/actions';
 interface UserFile {
     uri: string
     type: string
@@ -87,6 +88,7 @@ async function fetchFile(orderFiles: OrderFiles, orderId: number) {
 export default function OrderSubmission() {
     const navigation = useAppNavigation()
     const state = useSelector((state: RootState) => state.auth)
+    const dispatch = useDispatch()
     const [orderMatched, setOrderMatched] = useState(false)
     const [orderValue, setOrderValue] = useState<OrderValue>({
         title: '',
@@ -312,6 +314,8 @@ export default function OrderSubmission() {
                                                     text: 'OK',
                                                     onPress: () => {
                                                         setOrderMatched(true)
+                                                        dispatch(updateOrder())
+
                                                     },
                                                 },
                                             ])
