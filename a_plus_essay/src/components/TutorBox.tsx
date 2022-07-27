@@ -44,7 +44,7 @@ type TutorBackground = {
     self_intro: string,
     completed_order_amount: number
 }
-export default function TutorBox({ isSelected, setIsSelected, tutorId, order }: any) {
+export default function TutorBox({ isSelected, selectedTutor, tutorId, order }: any) {
     console.log('@@@@@@@@@@order in STUDENT select tutor: ', tutorId)
     const navigation = useNavigation()
     const [boxStyle, setBoxStyle] = useState(UnSelectedBoxStyle)
@@ -54,7 +54,7 @@ export default function TutorBox({ isSelected, setIsSelected, tutorId, order }: 
 
     useEffect(() => {
         console.log('selected?? ', isSelected)
-        isSelected ? setBoxStyle(() => SelectedBoxStyle) : setBoxStyle(() => UnSelectedBoxStyle)
+        isSelected && selectedTutor === tutorId ? setBoxStyle(() => SelectedBoxStyle) : setBoxStyle(() => UnSelectedBoxStyle)
     }, [isSelected])
     useEffect(() => {
         async function getTutorInfo(tutorId: number) {
