@@ -19,6 +19,7 @@ export type Order = {
     id: number
     title: string
     tutor_submission_deadline: Date
+    completed_time: string | Date | null | undefined
     student_id?: number
     tutor_id?: number | null
     grade?: string
@@ -68,7 +69,6 @@ function OrderListPage(props: { orderStatus: string }) {
                                     <View style={styles.container} key={order.id}>
                                         <Text style={styles.assignmentName}>{order.title}</Text>
                                         <DateTime style={styles.time} time={order.tutor_submission_deadline} />
-                                        <Rating />
                                     </View>
                                     <Divider />
                                 </View>
@@ -78,6 +78,7 @@ function OrderListPage(props: { orderStatus: string }) {
                             <View style={styles.container} key={order.id}>
                                 <Text style={styles.assignmentName}>{order.title}</Text>
                                 <DateTime style={styles.time} time={order.tutor_submission_deadline} />
+                                {order.completed_time ? <Rating /> : <View></View>}
                             </View>
                             <Divider />
                         </View>

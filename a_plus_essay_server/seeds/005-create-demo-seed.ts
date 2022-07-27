@@ -27,175 +27,586 @@ export async function seed(knex: Knex): Promise<void> {
         {
             is_admin: false,
             is_tutor: false,
-            nickname: "student 1",
-            email: "student1@student.com",
-            hashed_password: await hashPassword("student1"),
+            nickname: 'student 1',
+            email: 'student1@student.com',
+            hashed_password: await hashPassword('student1'),
             phone_number: 91004523,
         },
         {
             is_admin: false,
             is_tutor: false,
-            nickname: "student 2",
-            email: "student2@student.com",
-            hashed_password: await hashPassword("student2"),
+            nickname: 'student 2',
+            email: 'student2@student.com',
+            hashed_password: await hashPassword('student2'),
             phone_number: 90312458
         },
         {
             is_admin: false,
             is_tutor: false,
-            nickname: "student 3",
-            email: "student3@student.com",
-            hashed_password: await hashPassword("student3"),
+            nickname: 'student 3',
+            email: 'student3@student.com',
+            hashed_password: await hashPassword('student3'),
             phone_number: 60993124
         },
         {
             is_admin: false,
             is_tutor: false,
-            nickname: "student 4",
-            email: "student4@student.com",
-            hashed_password: await hashPassword("student4"),
+            nickname: 'student 4',
+            email: 'student4@student.com',
+            hashed_password: await hashPassword('student4'),
             phone_number: 91084437
         },
         {
             is_admin: false,
             is_tutor: false,
-            nickname: "student 5",
-            email: "student5@student.com",
-            hashed_password: await hashPassword("student5"),
+            nickname: 'student 5',
+            email: 'student5@student.com',
+            hashed_password: await hashPassword('student5'),
             phone_number: 65789230
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 1",
-            email: "tutor1@tutor.com",
-            hashed_password: await hashPassword("tutor1"),
+            nickname: 'tutor 1',
+            email: 'tutor1@tutor.com',
+            hashed_password: await hashPassword('tutor1'),
             phone_number: 91774230
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 2",
-            email: "tutor2@tutor.com",
-            hashed_password: await hashPassword("tutor2"),
+            nickname: 'tutor 2',
+            email: 'tutor2@tutor.com',
+            hashed_password: await hashPassword('tutor2'),
             phone_number: 98015743
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 3",
-            email: "tutor3@tutor.com",
-            hashed_password: await hashPassword("tutor3"),
+            nickname: 'tutor 3',
+            email: 'tutor3@tutor.com',
+            hashed_password: await hashPassword('tutor3'),
             phone_number: 62896674
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 4",
-            email: "tutor4@tutor.com",
-            hashed_password: await hashPassword("tutor4"),
+            nickname: 'tutor 4',
+            email: 'tutor4@tutor.com',
+            hashed_password: await hashPassword('tutor4'),
             phone_number: 90715299
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 5",
-            email: "tutor5@tutor.com",
-            hashed_password: await hashPassword("tutor5"),
+            nickname: 'tutor 5',
+            email: 'tutor5@tutor.com',
+            hashed_password: await hashPassword('tutor5'),
             phone_number: 97657823
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 6",
-            email: "tutor6@tutor.com",
-            hashed_password: await hashPassword("tutor6"),
+            nickname: 'tutor 6',
+            email: 'tutor6@tutor.com',
+            hashed_password: await hashPassword('tutor6'),
             phone_number: 92305643
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 7",
-            email: "tutor7@tutor.com",
-            hashed_password: await hashPassword("tutor7"),
+            nickname: 'tutor 7',
+            email: 'tutor7@tutor.com',
+            hashed_password: await hashPassword('tutor7'),
             phone_number: 67448901
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 8",
-            email: "tutor8@tutor.com",
-            hashed_password: await hashPassword("tutor8"),
+            nickname: 'tutor 8',
+            email: 'tutor8@tutor.com',
+            hashed_password: await hashPassword('tutor8'),
             phone_number: 52017789
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 9",
-            email: "tutor9@tutor.com",
-            hashed_password: await hashPassword("tutor9"),
+            nickname: 'tutor 9',
+            email: 'tutor9@tutor.com',
+            hashed_password: await hashPassword('tutor9'),
             phone_number: 59082312
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 10",
-            email: "tutor10@tutor.com",
-            hashed_password: await hashPassword("tutor10"),
+            nickname: 'tutor 10',
+            email: 'tutor10@tutor.com',
+            hashed_password: await hashPassword('tutor10'),
             phone_number: 55436781
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 11",
-            email: "tutor11@tutor.com",
-            hashed_password: await hashPassword("tutor11"),
+            nickname: 'tutor 11',
+            email: 'tutor11@tutor.com',
+            hashed_password: await hashPassword('tutor11'),
             phone_number: 53209898
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 12",
-            email: "tutor12@tutor.com",
-            hashed_password: await hashPassword("tutor12"),
+            nickname: 'tutor 12',
+            email: 'tutor12@tutor.com',
+            hashed_password: await hashPassword('tutor12'),
             phone_number: 61207432
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 13",
-            email: "tutor13@tutor.com",
-            hashed_password: await hashPassword("tutor13"),
+            nickname: 'tutor 13',
+            email: 'tutor13@tutor.com',
+            hashed_password: await hashPassword('tutor13'),
             phone_number: 95672098
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 14",
-            email: "tutor14@tutor.com",
-            hashed_password: await hashPassword("tutor14"),
+            nickname: 'tutor 14',
+            email: 'tutor14@tutor.com',
+            hashed_password: await hashPassword('tutor14'),
             phone_number: 61225436
         },
         {
             is_admin: false,
             is_tutor: true,
-            nickname: "tutor 15",
-            email: "tutor15tutor.com",
-            hashed_password: await hashPassword("tutor15"),
+            nickname: 'tutor 15',
+            email: 'tutor15tutor.com',
+            hashed_password: await hashPassword('tutor15'),
             phone_number: 90904732
         },
     ]);
 
+    await knex.insert([
+        { school: 'The University of Hong Kong' },
+        { school: 'The Chinese University of Hong Kong' },
+        { school: 'The Hong Kong University of Science and Technology' },
+        { school: 'The Hong Kong Polytechnic University' },
+        { school: 'City University of Hong Kong' },
+        { school: 'Hong Kong Baptist University' },
+        { school: 'Hong Kong Metropolitan University' },
+        { school: 'Lingnan University' },
+        { school: 'The Education University of Hong Kong' },
+        { school: 'Hong Kong Shue Yan University' },
+    ]).into("school")
+
+    await knex.insert([
+        { major: 'Chinese Literature' },
+        { major: 'Mathematics' },
+        { major: 'Chemistry' },
+        { major: 'Marketing' },
+        { major: 'Accounting' },
+        { major: 'Computer Science' },
+        { major: 'Mechanical Engineering' },
+        { major: 'Public Policy' },
+        { major: 'History' },
+        { major: 'Psychology' },
+        { major: 'Electronic Engineering' },
+        { major: 'Sociology' },
+        { major: 'Art' },
+        { major: 'Finance' },
+        { major: 'Civil Engineering' },
+        { major: 'English Studies' },
+        { major: 'Journalism' },
+        { major: 'Nursing' },
+        { major: 'Social Work' },
+        { major: 'Radiography' },
+    ]).into("major")
+
+    await knex.insert([
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'History').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'Lingnan University').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 2').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Mathematics').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The Hong Kong University of Science and Technology').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 3').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Mechanical Engineering').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The Hong Kong Polytechnic University').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 4').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Chinese Literature').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'Hong Kong Shue Yan University').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 5').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Finance').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'City University of Hong Kong').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 6').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Computer Science').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The Chinese University of Hong Kong').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 7').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'English Studies').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'Hong Kong Metropolitan University').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 8').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Computer Science').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The Chinese University of Hong Kong').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 9').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select('id').from("major").where("major", "Nursing").first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The Chinese University of Hong Kong').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 10').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Radiography').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The Hong Kong Polytechnic University').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 11').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Art').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The University of Hong Kong').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 12').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Public Policy').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'Hong Kong Shue Yan University').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 13').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Mechanical Engineering').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The Hong Kong University of Science and Technology').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 14').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Social Work').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'The Chinese University of Hong Kong').first()).id
+        },
+        {
+            id: (await knex.select("id").from("user").where("nickname", 'tutor 15').first()).id,
+            is_verified: true,
+            student_card: null,
+            major_id: (await knex.select("id").from("major").where("major", 'Civil Engineering').first()).id,
+            rating: 4.0,
+            self_intro: null,
+            ongoing_order_amount: 2,
+            completed_order_amount: 5,
+            school_id: (await knex.select("id").from("school").where("school", 'Hong Kong Baptist University').first()).id
+        },
+    ]).into('tutor');
+
+    await knex.insert([
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
+            filename: '12345afsdkjfdlgd',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 2').first()).id,
+            filename: 'sdfhskoruwo583',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 3').first()).id,
+            filename: 'djget34i3cv0dpbid0',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 4').first()).id,
+            filename: 'nkdjwe5i34 - 53',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 5').first()).id,
+            filename: '12345afsdkjfdlgd',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 6').first()).id,
+            filename: 'skjw5240i',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 7').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 8').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 9').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 10').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 11').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 12').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 13').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 14').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 15').first()).id,
+            filename: 'sdkfw0t53y',
+        },
+
+    ]).into("transcript")
+
+    await knex.insert([
+        { subject_name: 'Financial Accounting' },
+        { subject_name: 'Introduction to Marketing' },
+        { subject_name: 'Art of the classical world' },
+        { subject_name: 'Inorganic Chemistry II' },
+        { subject_name: 'National Security Law' },
+        { subject_name: 'Theories of Development' },
+        { subject_name: 'Microcomputer Systems' },
+        { subject_name: 'Mobile Computing' },
+        { subject_name: 'Politics and Media' },
+        { subject_name: 'Classical Chinese' },
+        { subject_name: 'Classical social theory' },
+        { subject_name: 'Writing Hong Kong history' },
+        { subject_name: 'Applied translation studies' },
+        { subject_name: 'Software Engineering' },
+        { subject_name: 'Event Marketing' },
+        { subject_name: 'Food Chemistry' },
+        { subject_name: 'Information Management' },
+        { subject_name: 'Chinese Civilization - History and Philosophy' },
+        { subject_name: 'News Feature Writing' },
+    ]).into("subject")
+
+    await knex.insert([
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Financial Accounting').first()).id,
+            score: 'A-',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 2').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Information Management').first()).id,
+            score: 'A',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 3').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Software Engineering').first()).id,
+            score: 'B+',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 4').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Classical Chinese').first()).id,
+            score: 'A',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 5').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Inorganic Chemistry II').first()).id,
+            score: 'B+',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 6').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Introduction to Marketing').first()).id,
+            score: 'B+',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 7').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Politics and Media').first()).id,
+            score: 'A',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 8').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'News Feature Writing').first()).id,
+            score: 'A-',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 9').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Mobile Computing').first()).id,
+            score: 'A',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 10').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Classical social theory').first()).id,
+            score: 'A-',
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor11').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Applied translation studies').first()).id,
+            score: 'B',
+        },
+    ]).into("transcript_subject");
+
+    await knex.insert([
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Financial Accounting').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 2').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Chinese Civilization - History and Philosophy').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 3').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Writing Hong Kong history').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 4').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Inorganic Chemistry II').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 5').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'News Feature Writing').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 6').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Applied translation studies').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 7').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Theories of Development').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 8').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Introduction to Marketing').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 9').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Microcomputer Systems').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 10').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'News Feature Writing').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 11').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Art of the classical world').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 12').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Event Marketing').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 13').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Information Management').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 14').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Food Chemistry').first()).id
+        },
+        {
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 15').first()).id,
+            subject_id: (await knex.select("id").from("subject").where("subject_name", 'Event Marketing').first()).id
+        },
+    ]).into("preferred_subject");
+
     await knex("order").insert([
         {
-            student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 1').first()).id,
-            title: "Financial Accounting",
-            grade: "Year 1",
-            description: "final assignment of the course",
+            student_id: (await knex.select("id").from("user").where("nickname", 'student 2').first()).id,
+            tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
+            title: 'Financial Accounting',
+            grade: 'Year 1',
+            description: 'final assignment of the course',
             budget: 800,
-            matched_time: "2022-05-01T11:00:00.000Z",
-            completed_time: "2022-05-03T14:03:39.000Z",
+            matched_time: '2022-05-01T11:00:00.000Z',
+            completed_time: '2022-05-03T14:03:39.000Z',
             paid_by_student_time: "2022-05-02T14:00:00.000Z",
             paid_to_tutor_time: "2022-05-06T14:00:00.000Z",
             student_submission_deadline: "2022-05-06T14:00:00.000Z",
