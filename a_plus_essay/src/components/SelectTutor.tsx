@@ -101,31 +101,34 @@ export default function SelectTutor({ route }: any) {
                         </TouchableOpacity> : null
                 ))
                 }
+                {candidates.length > 0 ?
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 50 }}>
-                    <TouchableOpacity
-                        style={{ backgroundColor: 'rgb(142,208,175)', padding: 10, borderRadius: 10, width: 80 }}
-                        onPress={async () => {
-                            if (!selectedTutor) {
-                                Alert.alert('Please select a tutor!')
-                                return
-                            }
-                            const result = await confirmSelectTutor(selectedTutor, order.id)
-                            console.log('can choose tutor??: ', result)
-                            if (result.success) {
-                                Alert.alert('Successfully chose tutor!')
-                            } else {
-                                Alert.alert('Pleasr try again!')
-                            }
-                        }}
-                    >
-                        <Text style={styles.buttonText}>Confirm</Text>
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 50 }}>
+                        <TouchableOpacity
+                            style={{ backgroundColor: 'rgb(142,208,175)', padding: 10, borderRadius: 10, width: 80 }}
+                            onPress={async () => {
+                                if (!selectedTutor) {
+                                    Alert.alert('Please select a tutor!')
+                                    return
+                                }
+                                const result = await confirmSelectTutor(selectedTutor, order.id)
+                                console.log('can choose tutor??: ', result)
+                                if (result.success) {
+                                    Alert.alert('Successfully chose tutor!')
+                                } else {
+                                    Alert.alert('Pleasr try again!')
+                                }
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Confirm</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={{ backgroundColor: 'rgb(214,148,172)', padding: 10, borderRadius: 10, width: 80 }}>
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity style={{ backgroundColor: 'rgb(214,148,172)', padding: 10, borderRadius: 10, width: 80 }}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View> :
+                    <Text>We are matching tutor for you...</Text>
+                }
             </View> :
             null
     )

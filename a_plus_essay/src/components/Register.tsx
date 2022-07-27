@@ -412,43 +412,9 @@ export default function Register() {
             {/* <SafeAreaView> */}
             {page.step === 1 && !isOAuth ? (
                 <>
-                    <TouchableOpacity
-                        onPress={async () => {
-                            // setPage({ step: 5 })
-                            console.log(`${Math.random() * 8}`.split('.')[1].substring(0, 8));
-                            const result = await fetchTutor({
-                                isTutor: true,
-                                nickname: 'nickname',
-                                email: `${Math.random() * 6}@gmail.com`,
-                                password: 'password',
-                                rePassword: 'password',
-                                phoneNumber: `${Math.random() * 8}`
-                                    .split('.')[1]
-                                    .substring(0, 8),
-                                isOAuth: false,
-                                transcript: [
-                                    ...transcriptImages,
-                                    { uri: 'testing', name: 'testing', type: 'testing' },
-                                ],
-                                studentCard: {
-                                    uri: 'testing',
-                                    name: 'testing',
-                                    type: 'testing',
-                                }!,
-                                school: 'schoolLife.school',
-                                major: 'schoolLife.major',
-                                selfIntro: 'schoolLife.tutorIntroduction',
-                                subjects: [
-                                    { key: '1', subject: 'A', score: 'A', isChecked: true },
-                                    { key: '2', subject: 'B', score: 'B', isChecked: true },
-                                    { key: '3', subject: 'C', score: 'C', isChecked: false },
-                                    { key: '4', subject: 'D', score: 'D', isChecked: true },
-                                ],
-                            });
-                            console.log('Hseudo-Result: ', result);
-                        }}>
+                    <Text>
                         <Text style={styles.title}>Create New Account</Text>
-                    </TouchableOpacity>
+                    </Text>
                     <RadioGroup
                         containerStyle={{
                             flexDirection: 'row',
