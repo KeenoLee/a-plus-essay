@@ -451,30 +451,41 @@ export class OrderService {
     //   }
 
     async getStudentMatchingOrder(id: number) {
+        // Object : { noMatchedTutor: orders, matchedTutorButNoOffer: orders, madeOfferButNotConfirmed: orders }
+        // 1.
+        // select all orders
+        // 2.
+        // loop the orders
+        // 2.1
+        // await this.knex.
         const orders = await this.knex
-            .select('id', 'title', 'student_id', 'tutor_id', 'grade', 'description', 'budget', 'tutor_submission_deadline')
+            .select('order.id', 'order.title', 'order.student_id', 'order.tutor_id', 'order.grade', 'order.description', 'order.budget', 'order.tutor_submission_deadline', 'candidate.charge')
             .from("order")
-            .where("student_id", id)
-            .whereNull("matched_time");
+            .innerJoin('candidate', 'order.id', 'candidate.order_id')
+            .whereNull('candidate.charge')
+            .orWhereRaw(`candidate.charge IS NOT NULL and candidate.accept_time IS NULL`)
+            .andWhere('order.student_id', id)
         console.log('matching orders for student: ', orders)
         return { orders };
     }
     async getTutorMatchingOrder(id: number) {
+        // Object: { matchedButNotYetOffer: orders, offeredButNotYetConfirmed: orders}
+        // 1.
+        // await this.knex.select('*').from('candidate').where('tutor_id', id).whereNull('charge')
+        // 2.
+        // await this.knex.select('*').from('candidate').where('tutor_id', id).whereNotNull('charge')
+
         console.log('can get id? ', id)
         const orders = await this.knex
-            .select('id', 'title', 'student_id', 'tutor_id', 'grade', 'description', 'budget', 'tutor_submission_deadline')
+            .select('order.id', 'order.title', 'order.student_id', 'order.tutor_id', 'order.grade', 'order.description', 'order.budget', 'order.tutor_submission_deadline', 'candidate.charge')
             .from("order")
-            .where("tutor_id", id)
-            .whereNull("matched_time");
-        // for (let order of orders) {
-        //     const candidate = await this.knex
-        //         .select("*")
-        //         .from("candidate")
-        //         .where("order_id", order.id)
-        //         .whereNotNull("charge")
-        //         .andWhere("tutor_id", id);
-        //     console.log(candidate);
-        // }
+            .innerJoin('candidate', 'order.id', 'candidate.order_id')
+            .whereRaw(`(candidate.charge is not null or (candidate.charge IS NOT NULL and candidate.accept_time IS NULL)) AND candidate.tutor_id = ?`, id)
+
+        // .whereNull('candidate.charge')
+        // .orWhereRaw(`candidate.charge IS NOT NULL and candidate.accept_time IS NULL`)
+        // .andWhere('candidate.tutor_id', id)
+
         console.log('matching orders for tutor: ', orders)
         return { orders };
     }
