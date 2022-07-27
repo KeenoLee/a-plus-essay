@@ -14,12 +14,7 @@ import { orderedExtractInObject } from 'native-base/lib/typescript/theme/tools';
 import Guideline from '../components/Guideline';
 import Notes from '../components/Notes';
 
-function shorterFilename(filename: string) {
-    if (filename.length > 16) {
-        return filename.substring(0, 17) + '...'
-    }
-    return filename
-}
+
 type Order = {
     id: number
     title: string
