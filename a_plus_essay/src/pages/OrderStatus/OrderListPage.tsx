@@ -15,7 +15,7 @@ import { RootState } from '../../redux/store'
 
 
 
-type Order = {
+export type Order = {
     id: number
     title: string
     tutor_submission_deadline: Date
@@ -43,11 +43,7 @@ function OrderListPage(props: { orderStatus: string }) {
     console.log('URL???: ', url)
     const orderList = useGet<{ error?: string, orders?: Order[] }>(title, url, { error: 'loading' })
     console.log('ORDER lIST in :', orderList)
-    useEffect(() => {
-        async function getPendingOrder() {
-            const res = await fetch(`${env.BACKEND_URL}/order/pending`)
-        }
-    }, [])
+   
     return (
         <View>
             <ScrollView>

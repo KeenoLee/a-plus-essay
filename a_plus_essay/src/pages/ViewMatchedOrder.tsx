@@ -58,9 +58,9 @@ async function makeOffer(offerInfo: OfferInfo, token: string) {
     return result
 }
 
-export default function ViewMatchedOrder({route, navigation}: any) {
-    console.log(route)
-    const {order} = route.params
+export default function ViewMatchedOrder({ route, navigation }: any) {
+    // console.log(route)
+    const { order } = route.params
     console.log('just entered VIew MAtched Order PAGe: ', order)
     console.log('order.student_id: ', order.student_id)
     const state = useSelector((state: RootState) => state.auth)
@@ -149,22 +149,28 @@ export default function ViewMatchedOrder({route, navigation}: any) {
                         <HStack space={4} alignItems='center'>
                             <Text>{order.tutor_submission_deadline.toLocaleString()}</Text>
                         </HStack>
-
-                        <HStack>
-                            <FormControl.Label>Make an Offer :</FormControl.Label>
-                            <TextInput placeholder='Offer' onChangeText={value => setOffer(() => value)} />
-                            <TouchableOpacity onPress={async () => {
-                                const result = await makeOffer({
-                                    tutorId: state.user!.id,
-                                    studentId: order.student_id,
-                                    orderId: order.id,
-                                    charge: +offer
-                                }, state.token!)
-                                console.log('pressed confirm ', result)
-                            }}>
-                                <Text>Confirm</Text>
-                            </TouchableOpacity>
-                        </HStack>
+                        {order.charge ?
+                            <HStack style={{flexDirection: 'column'}}>
+                                <FormControl.Label>Your offer: {order.charge}</FormControl.Label>
+                                <Text>Waiting for student to confirm your offer...</Text>
+                            </HStack>
+                            :
+                            <HStack>
+                                <FormControl.Label>Make an Offer :</FormControl.Label>
+                                <TextInput placeholder='Offer' onChangeText={value => setOffer(() => value)} />
+                                <TouchableOpacity onPress={async () => {
+                                    const result = await makeOffer({
+                                        tutorId: state.user!.id,
+                                        studentId: order.student_id,
+                                        orderId: order.id,
+                                        charge: +offer
+                                    }, state.token!)
+                                    console.log('pressed confirm ', result)
+                                }}>
+                                    <Text>Confirm</Text>
+                                </TouchableOpacity>
+                            </HStack>
+                        }
 
 
 
