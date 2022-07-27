@@ -52,4 +52,5 @@ export interface OrderState {
     file?: Array<FileInfo>
     guideline?: Array<Guideline>
     note?: Array<Note>
+    newOrder?: boolean
 }
