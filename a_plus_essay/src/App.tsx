@@ -145,7 +145,7 @@ export const Tabs = () => {
           headerTitleAlign: 'left',
           tabBarLabel: 'Order',
           // TODO: No. of unread message
-          tabBarBadge: '1',
+          // tabBarBadge: '1',
           tabBarBadgeStyle: { backgroundColor: '#0d9488' },
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
@@ -162,7 +162,7 @@ export const Tabs = () => {
         options={{
           tabBarLabel: 'Chats',
           // TODO: No. of unread message
-          tabBarBadge: '1',
+          // tabBarBadge: '1',
           tabBarBadgeStyle: { backgroundColor: '#0d9488' },
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
