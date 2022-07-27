@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Stack } from 'native-base'
 import { env } from '../env/env'
+import LottieView from 'lottie-react-native';
 // import { NavigationContainer } from '@react-navigation/native'
 // import { createStackNavigator } from '@react-navigation/stack'
 interface StudentReview {
@@ -64,6 +65,8 @@ type Candidate = {
     charge: number
 }
 export default function SelectTutor({ route }: any) {
+    const animationRef = React.useRef<LottieView>(null)
+
     const { order } = route.params
     // console.log('route in select tutor: ', order)
     const [tutors, setTutors] = useState('hi')
@@ -127,7 +130,16 @@ export default function SelectTutor({ route }: any) {
                             <Text style={styles.buttonText}>Cancel</Text>
                         </TouchableOpacity>
                     </View> :
-                    <Text>We are matching tutor for you...</Text>
+                    <View>
+                        <View style={{ marginTop: 100, padding: 200, alignSelf: 'center' }}>
+                            <LottieView
+                                ref={animationRef}
+                                source={require('../assets/Matching.json')}
+                                autoPlay
+                                loop />
+                        </View>
+                        <Text style={{fontWeight: 'bold', textAlign:'center', color:'#14b8a6', fontSize:16}}>We are matching tutor for you...</Text>
+                    </View>
                 }
             </View> :
             null
