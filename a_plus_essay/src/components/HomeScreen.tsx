@@ -229,22 +229,6 @@ export function RenderTutor() {
             id: '58694a0f-3da1-471f-bwefewfd96-145571e29d72',
             title: 'Third efeItem',
         },
-        {
-            id: '58694a0f-3da1-47wef1wefweff-bd96-145571e29d72',
-            title: 'Thirdeweffe Item',
-        },
-        {
-            id: '58694a0f-3da1-471wefweff-bd96-145571e29d72',
-            title: 'Thirdefewef Item',
-        },
-        {
-            id: '58694a0f-3da1-471wefweff-bd96-1455741e29d72',
-            title: 'Thirdefghe Item',
-        },
-        {
-            id: '58694a0f-3da1-471wefw2eff-bd96-145571e29d72',
-            title: 'Thirdhefe Item',
-        },
     ];
 
     return (
