@@ -179,7 +179,7 @@ async function fetchTutor(registerData: TutorData) {
     formData.append('tutorId', result.tutorId.toString());
     for (let t = 0; t < registerData.transcript.length; t++) {
         formData.append(`transcript_${t}`, registerData.transcript[t] as any);
-        console.log('WHAT THE FUCK HAPPEN?: ', registerData.transcript[t]);
+        console.log('WHAT HAPPEN?: ', registerData.transcript[t]);
     }
     if (registerData.studentCard) {
         formData.append(`student_card`, registerData.studentCard as any);
