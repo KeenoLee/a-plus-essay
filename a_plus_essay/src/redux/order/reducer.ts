@@ -12,5 +12,17 @@ export const orderReducer = (state: OrderState, action: OrderActions): OrderStat
             
         }
     }
+    if (action.type === '@@order/UPDATE_ORDER') {
+        return {
+            ...state,
+            newOrder: true
+        }
+    }
+    if (action.type === '@@order/UPDATED_ORDER') {
+        return {
+            ...state,
+            newOrder: false
+        }
+    }
     return initialState
 }

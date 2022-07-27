@@ -9,9 +9,10 @@ import {
   Text,
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import {Text} from 'react-native';
 import { env } from '../env/env';
+import { updatedOrder, updateOrder } from '../redux/order/actions';
 import { RootState } from '../redux/store';
 
 export function useGet<T extends { error?: string }>(
@@ -21,6 +22,9 @@ export function useGet<T extends { error?: string }>(
 ) {
   const [json, setJSON] = useState<T>(defaultValue);
   const token = useSelector((state: RootState) => state.auth.token);
+  const orderState = useSelector((state: RootState) => state.order);
+  
+  const dispatch = useDispatch()
   useEffect(() => {
     fetch(env.BACKEND_ORIGIN + url, {
       headers: {
@@ -40,11 +44,12 @@ export function useGet<T extends { error?: string }>(
       .then(json => {
         console.log('IAM JSON: ', json);
         setJSON(json);
+        dispatch(updatedOrder())
         // if (json.error) {
         //   Alert.alert('Fail to load ' + name, json.error, [{text: 'Dismiss'}]);
         // }
       });
-  }, [url, token]);
+  }, [url, token, orderState]);
   function render(fn: (json: T) => any) {
     console.log('useGet JSON:', json)
     if (json.error == 'loading') {
