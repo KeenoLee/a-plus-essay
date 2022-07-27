@@ -87,11 +87,11 @@ export default function ViewMatchedOrder({ route, navigation }: any) {
                         <Stack space={4}>
                             <FormControl>
                                 <FormControl.Label>Project Title :</FormControl.Label>
-                                <Text>{order.title}</Text>
+                                <Text mt='4'>{order.title}</Text>
                             </FormControl>
                             <FormControl>
                                 <FormControl.Label>Subject :</FormControl.Label>
-                                <Text>{orderSubject}</Text>
+                                <Text mt='2'>{orderSubject}</Text>
                             </FormControl>
                         </Stack>
                         <HStack space={4} mt="4">
