@@ -14,12 +14,7 @@ import { orderedExtractInObject } from 'native-base/lib/typescript/theme/tools';
 import Guideline from '../components/Guideline';
 import Notes from '../components/Notes';
 
-function shorterFilename(filename: string) {
-    if (filename.length > 16) {
-        return filename.substring(0, 17) + '...'
-    }
-    return filename
-}
+
 type Order = {
     id: number
     title: string
@@ -77,6 +72,7 @@ export default function ViewMatchedOrder({ route, navigation }: any) {
             if (!result.error) {
                 console.log('I want ORDER result! ', result)
                 setOrderSubject(() => result.subject_name)
+                console.log('no subject????', result.subject_name)
                 setGuidelines(() => result.guidelines)
                 setNotes(() => result.notes)
             }
