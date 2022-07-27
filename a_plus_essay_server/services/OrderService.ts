@@ -458,12 +458,13 @@ export class OrderService {
             .innerJoin('candidate', 'order.id', 'candidate.order_id')
             .whereRaw(`(candidate.charge is not null or (candidate.charge IS NOT NULL and candidate.accept_time IS NULL)) AND "order".student_id = ?`, id)
         if (orders.length === 0) {
-            console.log('matching orders for student: ', orders)
             orders = await this.knex
                 .select('id', 'title', 'tutor_submission_deadline')
                 .from('order')
                 .whereNull('matched_time')
                 .whereNull('tutor_id')
+                .where('student_id', id)
+            console.log('matching orders for student: ', orders)
             return { orders };
         } else {
             console.log('matching orders for student: ', orders)

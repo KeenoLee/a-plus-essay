@@ -103,6 +103,7 @@ export const Tabs = () => {
         tabBarActiveTintColor: 'white',
         tabBarStyle: { backgroundColor: '#BBD3CF' },
         headerStyle: { backgroundColor: '#BBD3CF' },
+        unmountOnBlur: true
         // headerShown: false
       }}>
       {/* <Tab.Screen name="View Matched Order" component={ViewMatchedOrder} /> */}
