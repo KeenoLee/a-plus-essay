@@ -128,7 +128,7 @@ export default function Account() {
                 </HStack>
                 <HStack ml='2' marginY='2'>
                     <HStack>
-                        <Text fontWeight='semibold' fontSize='14' textAlign='center'>Password :</Text>
+                        <Text fontWeight='semibold' fontSize='16' textAlign='center'>Password :</Text>
                     </HStack>
                     <HStack ml='4' mt='0.5'>
                         {editProfile ?
