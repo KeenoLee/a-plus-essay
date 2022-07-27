@@ -66,46 +66,6 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             is_admin: false,
-            is_tutor: false,
-            nickname: "student 6",
-            email: "student6@student.com",
-            hashed_password: await hashPassword("student6"),
-            phone_number: 91234567
-        },
-        {
-            is_admin: false,
-            is_tutor: false,
-            nickname: "student 7",
-            email: "student7@student.com",
-            hashed_password: await hashPassword("student7"),
-            phone_number: 67890123
-        },
-        {
-            is_admin: false,
-            is_tutor: false,
-            nickname: "student 8",
-            email: "student8@student.com",
-            hashed_password: await hashPassword("student8"),
-            phone_number: 96442309
-        },
-        {
-            is_admin: false,
-            is_tutor: false,
-            nickname: "student 9",
-            email: "student9@student.com",
-            hashed_password: await hashPassword("student9"),
-            phone_number: 51004376
-        },
-        {
-            is_admin: false,
-            is_tutor: false,
-            nickname: "student 10",
-            email: "student10@student.com",
-            hashed_password: await hashPassword("student10"),
-            phone_number: 95981034
-        },
-        {
-            is_admin: false,
             is_tutor: true,
             nickname: "tutor 1",
             email: "tutor1@tutor.com",
@@ -228,7 +188,7 @@ export async function seed(knex: Knex): Promise<void> {
 
     await knex("order").insert([
         {
-            student_id: (await knex.select('id').from('user').where('nickname', 'student 8').first()).id,
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
             tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 1').first()).id,
             title: "Financial Accounting",
             grade: "Year 1",
@@ -242,7 +202,7 @@ export async function seed(knex: Knex): Promise<void> {
             tutor_submission_deadline: "2022-05-07",
         },
         {
-            student_id: (await knex.select('id').from('user').where('nickname', 'student 8').first()).id,
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 5').first()).id,
             tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 14').first()).id,
             title: "Introduction to Marketing",
             grade: "Year 4",
@@ -326,7 +286,7 @@ export async function seed(knex: Knex): Promise<void> {
             tutor_submission_deadline: "2022-12-01",
         },
         {
-            student_id: (await knex.select('id').from('user').where('nickname', 'student 7').first()).id,
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
             tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 2').first()).id,
             title: "Mobile Computing",
             grade: "Year 4",
@@ -452,7 +412,7 @@ export async function seed(knex: Knex): Promise<void> {
             tutor_submission_deadline: "2021-12-09",
         },
         {
-            student_id: (await knex.select('id').from('user').where('nickname', 'student 10').first()).id,
+            student_id: (await knex.select('id').from('user').where('nickname', 'student 3').first()).id,
             tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 15').first()).id,
             title: "Event Marketing",
             grade: "Year 3",
