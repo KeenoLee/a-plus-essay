@@ -138,7 +138,7 @@ export default function SelectTutor({ route }: any) {
                                 autoPlay
                                 loop />
                         </View>
-                        <Text style={{fontWeight: 'bold', textAlign:'center', color:'#14b8a6', fontSize:16}}>We are matching tutor for you...</Text>
+                        <Text style={{fontWeight: 'bold', textAlign:'center', color:'#14b8a6', fontSize:16 }}>We are matching tutor for you...</Text>
                     </View>
                 }
             </View> :
