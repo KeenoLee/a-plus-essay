@@ -207,7 +207,6 @@ export class OrderService {
                         order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
                         tutor_id: (await this.knex.select('id').from('user').where('id', tutor.id).first()).id,
                         charge: null,
-                        category: 0,
                         accept_time: null,
                         reject_time: null,
                         expire_time: this.knex.raw(
@@ -223,7 +222,6 @@ export class OrderService {
             //             order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
             //             tutor_id: (),
             //             charge: null,
-            //             category: 0,
             //             accept_time: null,
             //             reject_time: null,
             //             expire_time: this.knex.raw(
@@ -234,7 +232,6 @@ export class OrderService {
             //             order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
             //             tutor_id: (await this.knex.select('id').from('order').where('id', tutorId[1].id).first()).id,
             //             charge: null,
-            //             category: 0,
             //             accept_time: null,
             //             reject_time: null,
             //             expire_time: this.knex.raw(
@@ -245,7 +242,6 @@ export class OrderService {
             //             order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
             //             tutor_id: (await this.knex.select('id').from('order').where('id', tutorId[2].id).first()).id,
             //             charge: null,
-            //             category: 0,
             //             accept_time: null,
             //             reject_time: null,
             //             expire_time: this.knex.raw(
@@ -256,7 +252,6 @@ export class OrderService {
             //             order_id: (await this.knex.select('id').from('order').where('id', orderId).first()).id,
             //             tutor_id: (await this.knex.select('id').from('order').where('id', tutorId[3].id).first()).id,
             //             charge: null,
-            //             category: 0,
             //             accept_time: null,
             //             reject_time: null,
             //             expire_time: this.knex.raw(
