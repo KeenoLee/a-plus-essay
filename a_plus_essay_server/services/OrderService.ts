@@ -25,7 +25,7 @@ export class OrderService {
                         tutor_id: null,
                         title: order.title,
                         grade: order.grade,
-                        description: order.description,
+                        description: order.description || '',
                         budget: order.budget,
                         matched_time: null,
                         completed_time: null,
@@ -105,7 +105,7 @@ export class OrderService {
             // })
 
             // order.notes.map(async note => {
-
+                await this.matchTutor(orderId)
             // })
             // this.matchOrder(orderId)
             return orderId;
@@ -113,21 +113,24 @@ export class OrderService {
         });
         // return id;
     }
-    async uploadOrderFile(files: any) {
+    async uploadOrderFile(orderId:number, files: any) {
         try {
             let objectKeys = Object.keys(files);
+            console.log('ORderId In LsatFinAlly: ', orderId)
             for (let i = 0; i < objectKeys.length; i++) {
                 if (objectKeys[i].includes("guideline")) {
                     console.log("HIHIHIHIHI: ", files.guideline_0.originalFilename);
                     console.log("HIHIHIHIHI: ", objectKeys);
                     await this.knex
                         .insert({
+                            order_id: orderId,
                             filename: files[objectKeys[i]].originalFilename,
                         })
                         .into("guideline");
                 } else if (objectKeys[i].includes("note")) {
                     await this.knex
                         .insert({
+                            order_id: orderId,
                             filename: files[objectKeys[i]].originalFilename,
                         })
                         .into("note");
@@ -186,6 +189,7 @@ export class OrderService {
     }
 
     async matchTutor(orderId: number) {
+        console.log('HI ALEX', orderId)
         try {
             let tutorId = await this.knex
                 .select("tutor.id")
@@ -198,20 +202,20 @@ export class OrderService {
                 )
                 .innerJoin("tutor", "preferred_subject.tutor_id", "=", "tutor.id")
                 .orderBy("ongoing_order_amount", "asc");
-
             if (tutorId.length === 0) {
                 for (let i = 0; i < 3; i++) {
-                    tutorId.push({ id: -1 });
+                    tutorId.push({ id: 0 });
                 }
             }
 
             if (tutorId.length < 3) {
                 for (let i = 3; i - tutorId.length > 0; i--) {
-                    tutorId.push({ id: -1 });
+                    tutorId.push({ id: 0 });
                 }
             }
+            console.log('ARRAY OF TUTORID?: ', tutorId)
 
-            let newTutorId = await this.knex
+            let newTutorId = (await this.knex
                 .select("tutor.id")
                 .from("order_subject")
                 .innerJoin(
@@ -223,51 +227,57 @@ export class OrderService {
                 .innerJoin("tutor", "preferred_subject.tutor_id", "=", "tutor.id")
                 .where("completed_order_amount", "<", "5")
                 .orderBy("ongoing_order_amount", "asc")
-                .first();
+                .first());
+                console.log('NEW TUTOR ID: ', newTutorId)
             if (newTutorId) {
-                tutorId.push({ id: newTutorId });
-            } else tutorId.push({ id: -1 });
+                tutorId.push({ newTutorId });
+            } else tutorId.push({ id: 0 });
+            console.log('ARRAY OF TUTORID?: ', tutorId)
 
             await this.knex
                 .insert([
                     {
                         order_id: orderId,
-                        tutor_id: tutorId[0],
+                        tutor_id: tutorId[0].id,
                         charge: null,
+                        category: 0,
                         accept_time: null,
                         reject_time: null,
                         expire_time: this.knex.raw(
-                            'current_timestamp + interval "2 hours"'
+                            "current_timestamp + interval '2 hours'"
                         ),
                     },
                     {
                         order_id: orderId,
-                        tutor_id: tutorId[1],
+                        tutor_id: tutorId[1].id,
                         charge: null,
+                        category: 0,
                         accept_time: null,
                         reject_time: null,
                         expire_time: this.knex.raw(
-                            'current_timestamp + interval "2 hours"'
+                            "current_timestamp + interval '2 hours'"
                         ),
                     },
                     {
                         order_id: orderId,
-                        tutor_id: tutorId[2],
+                        tutor_id: tutorId[2].id,
                         charge: null,
+                        category: 0,
                         accept_time: null,
                         reject_time: null,
                         expire_time: this.knex.raw(
-                            'current_timestamp + interval "2 hours"'
+                            "current_timestamp + interval '2 hours'"
                         ),
                     },
                     {
                         order_id: orderId,
-                        tutor_id: newTutorId,
+                        tutor_id: newTutorId || 0,
                         charge: null,
+                        category: 0,
                         accept_time: null,
                         reject_time: null,
                         expire_time: this.knex.raw(
-                            'current_timestamp + interval "2 hours"'
+                            "current_timestamp + interval '2 hours'"
                         ),
                     },
                 ])
@@ -277,7 +287,7 @@ export class OrderService {
             if (isTutorMatched === false) {
                 return "No tutor can be matched now";
             }
-
+            console.log('tutorID in matching an order%%%%%%: ', tutorId)
             tutorId.map((tutor) => {
                 if (tutor.id > 0) {
                     this.io.to(`${tutor.id}`).emit("new-order", "You have a new order.");

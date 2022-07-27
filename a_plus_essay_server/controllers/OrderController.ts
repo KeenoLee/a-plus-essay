@@ -116,7 +116,7 @@ export class OrderController {
             return;
         }
         console.log("going to insert into db... ");
-        await this.orderService.createOrder({
+        const orderId = await this.orderService.createOrder({
             studentId,
             title,
             subject,
@@ -128,19 +128,20 @@ export class OrderController {
         });
         // console.log('orderID: ', orderId)
         // await this.orderService.matchOrder(orderId)
-        res.json({ success: true });
+        res.json({orderId});
         return;
     };
     uploadOrderFile = async (req: Request, res: Response) => {
         try {
             form.parse(req, async (err, fields, files) => {
                 console.log("fields??? ", fields);
+                const orderId: number = +fields.orderId
                 if (err) {
                     res.json({ error: err });
                     return;
                 }
                 if (files) {
-                    await this.orderService.uploadOrderFile(files);
+                    await this.orderService.uploadOrderFile(orderId, files);
                     res.json({ success: true });
                     return;
                 }

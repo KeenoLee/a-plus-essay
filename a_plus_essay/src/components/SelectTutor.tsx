@@ -65,10 +65,11 @@ type Candidate = {
 }
 export default function SelectTutor({ route }: any) {
     const { order } = route.params
-    console.log('route in select tutor: ', order)
+    // console.log('route in select tutor: ', order)
     const [tutors, setTutors] = useState('hi')
     const [isSelected, setIsSelected] = useState(false)
     const [candidates, setCandidates] = useState<Array<Candidate | null>>([null])
+    const [selectedTutor, setSelectedTutor] = useState<number | null>(null)
     const state = useSelector((state: RootState) => state.auth)
     const navigation = useNavigation()
     // Get candidates of same order
@@ -91,11 +92,13 @@ export default function SelectTutor({ route }: any) {
 
                 {candidates.map((candidate, i) => (
                     // console.log('@@@@@cCNASDOIATE', candidate?.tutor_id)
-                    <TouchableOpacity key={i} onPress={() => {
-                        setIsSelected(!isSelected)
-                    }}>
-                        <TutorBox isSelected={isSelected} tutorId={candidate?.tutor_id} order={order} />
-                    </TouchableOpacity>
+                    candidate?.tutor_id ?
+                        <TouchableOpacity key={i} onPress={() => {
+                            setIsSelected(!isSelected)
+                            setSelectedTutor(() => candidate.tutor_id)
+                        }}>
+                            <TutorBox isSelected={isSelected} setIsSelected={setIsSelected} tutorId={candidate?.tutor_id} order={order} />
+                        </TouchableOpacity> : null
                 ))
                 }
 
@@ -103,7 +106,11 @@ export default function SelectTutor({ route }: any) {
                     <TouchableOpacity
                         style={{ backgroundColor: 'rgb(142,208,175)', padding: 10, borderRadius: 10, width: 80 }}
                         onPress={async () => {
-                            const result = await confirmSelectTutor(order.tutor_id, order.id)
+                            if (!selectedTutor) {
+                                Alert.alert('Please select a tutor!')
+                                return
+                            }
+                            const result = await confirmSelectTutor(selectedTutor, order.id)
                             console.log('can choose tutor??: ', result)
                             if (result.success) {
                                 Alert.alert('Successfully chose tutor!')
