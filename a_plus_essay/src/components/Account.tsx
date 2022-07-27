@@ -1,7 +1,7 @@
 import { Alert, Image } from 'react-native'
 import * as React from 'react'
 import { useState, useEffect } from 'react'
-import { Box, HStack, IconButton, StatusBar, Text, View, VStack } from 'native-base';
+import { Box, HStack, IconButton, ScrollView, Stack, StatusBar, Text, View, VStack } from 'native-base';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
@@ -81,6 +81,7 @@ export default function Account() {
     return (
         state?.user ?
             <View>
+                <ScrollView>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <HStack ml='2' marginY='2'>
                         <HStack>
@@ -150,14 +151,14 @@ export default function Account() {
                 </HStack>
                 {state?.tutor ?
                     <>
-                        <HStack ml='2' marginY='2'>
-                            <HStack>
+                        <Stack ml='2' marginY='2'>
+                            <Stack>
                                 <Text fontWeight='bold' fontSize='16'>School :</Text>
-                            </HStack>
-                            <HStack>
-                                <Text ml='4' mt='0.5'>{state.tutor[1].school}</Text>
-                            </HStack>
-                        </HStack>
+                            </Stack>
+                            <Stack>
+                                <Text ml='4' mt='2'>{state.tutor[1].school}</Text>
+                            </Stack>
+                        </Stack>
                         <View ml='2' marginY='2'>
                             <HStack>
                                 <Text fontWeight='bold' fontSize='16'>Student Card :</Text>
@@ -180,11 +181,11 @@ export default function Account() {
                             </View>
                             {/* Only Display the photo*/}
                         </View>
-                        <HStack ml='2' marginY='2'>
-                            <HStack>
+                        <Stack ml='2' marginY='2'>
+                            <Stack>
                                 <Text fontWeight='bold' fontSize='16'>Preferred Subjects :</Text>
-                            </HStack>
-                            <HStack ml='4' mt='0.5'>
+                            </Stack>
+                            <Stack ml='4' mt='2'>
                                 {state.tutor[3].map((subject: any, i: number) => (
                                     editProfile ?
                                         <TextInput
@@ -199,13 +200,13 @@ export default function Account() {
                                             }}></TextInput> :
                                         <Text key={i}>{subject.subject_name}</Text>
                                 ))}
-                            </HStack>
-                        </HStack>
+                            </Stack>
+                        </Stack>
                         <VStack ml='2' marginY='2'>
                             <VStack>
                                 <Text fontWeight='bold' fontSize='16'>Self Introduction :</Text>
                             </VStack>
-                            <VStack ml='4' mt='0.5' width='100%'>
+                            <VStack ml='4' mt='0.5' mb='10'width='80%'>
                                 {editProfile ?
                                     <TextInput placeholder='Edit Self Introduction' onChangeText={value => setEditSelfIntro(() => value)}></TextInput> :
                                     <Text>{state.tutor[0].self_intro}</Text>
@@ -221,8 +222,9 @@ export default function Account() {
                             </HStack>
                         </HStack> */}
                     </>
+                    
                     : null}
-
+                </ScrollView>
             </View> : null
     )
 }
