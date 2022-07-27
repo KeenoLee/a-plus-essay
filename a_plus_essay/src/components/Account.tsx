@@ -205,7 +205,7 @@ export default function Account() {
                             <VStack>
                                 <Text fontWeight='bold' fontSize='16'>Self Introduction :</Text>
                             </VStack>
-                            <VStack ml='4' mt='0.5' width='100%'>
+                            <VStack ml='4' mt='0.5' width='80%' alignSelf='center'>
                                 {editProfile ?
                                     <TextInput placeholder='Edit Self Introduction' onChangeText={value => setEditSelfIntro(() => value)}></TextInput> :
                                     <Text>{state.tutor[0].self_intro}</Text>
