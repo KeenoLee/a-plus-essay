@@ -23,11 +23,13 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/dispatch';
 import { logout } from '../redux/auth/actions';
 import { getData, removeData } from '../storage/storage';
+import { useAppNavigation } from '../routes';
 
 const Drawer = createDrawerNavigator();
 
 export function HomeDrawer() {
   const state = useSelector((state: RootState) => state.auth);
+  const navigation = useAppNavigation()
   const dispatch = useDispatch<AppDispatch>()
   //    let loc = useLocationHook();
 
@@ -81,7 +83,13 @@ export function HomeDrawer() {
             dispatch(logout())
             const result = await removeData('token')
             if (result.success) {
-              Alert.alert('Logout success!')
+              Alert.alert('Logout', 'Success!', [
+                {
+                  text: 'Confirm',
+                  onPress: () => {
+                    navigation.navigate('Login');
+                  },
+                }])
             }
             console.log('Store should be removed: ', state)
             console.log('async storage should be removed: ', await getData('token'))

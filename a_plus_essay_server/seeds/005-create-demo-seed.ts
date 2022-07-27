@@ -619,7 +619,7 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 3').first()).id,
+            tutor_id: null,
             title: "Art of the classical world",
             grade: "Year 2",
             description: "course assignment",
@@ -633,7 +633,7 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 1').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 7').first()).id,
+            tutor_id: null,
             title: "Inorganic Chemistry II",
             grade: "Year 2",
             description: "lab report",
@@ -689,7 +689,7 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 2').first()).id,
+            tutor_id: null,
             title: "Mobile Computing",
             grade: "Year 4",
             description: "course project",
@@ -829,7 +829,7 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 3').first()).id,
+            tutor_id: null,
             title: "Information Management",
             grade: "Year 2",
             description: "course project",
@@ -843,7 +843,7 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 5').first()).id,
+            tutor_id: null,
             title: "Food Chemistry",
             grade: "Year 4",
             description: "lab report",
@@ -871,7 +871,7 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             student_id: (await knex.select('id').from('user').where('nickname', 'student 2').first()).id,
-            tutor_id: (await knex.select('id').from('user').where('nickname', 'tutor 9').first()).id,
+            tutor_id: null,
             title: "News Feature Writing",
             grade: "Year 4",
             description: "course assignment",
