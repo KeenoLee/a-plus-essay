@@ -82,16 +82,15 @@ export default function Account() {
         state?.user ?
             <View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <HStack>
+                    <HStack ml='2' marginY='2'>
                         <HStack>
-                            <Text fontWeight='bold'>Nickname: </Text>
+                            <Text fontWeight='bold' fontSize='16' textAlign='center'>Nickname :</Text>
                         </HStack>
-                        <HStack>
+                        <HStack ml='6' mt='0.5'>
                             {editProfile ?
                                 <TextInput placeholder='Edit Nickname' onChangeText={value => { setEditNickname(() => value); console.log('edit nickname MATCH? ', value, editNickname) }}>
                                 </TextInput> :
-                                <Text>{state.user?.nickname}</Text>
-
+                                <Text fontWeight='semibold' fontSize='14' textAlign='center'>{state.user?.nickname}</Text>
                             }
                         </HStack>
                     </HStack>
@@ -119,30 +118,30 @@ export default function Account() {
                         </TouchableOpacity>
                     }
                 </View>
-                <HStack>
+                <HStack ml='2' marginY='2'>
                     <HStack>
-                        <Text fontWeight='bold'>Email: </Text>
+                        <Text fontWeight='bold' fontSize='16'>Email :</Text>
                     </HStack>
-                    <HStack>
+                    <HStack ml='4' mt='0.5'>
                         <Text>{state.user?.email}</Text>
                     </HStack>
                 </HStack>
-                <HStack>
+                <HStack ml='2' marginY='2'>
                     <HStack>
-                        <Text fontWeight='bold'>Password: </Text>
+                        <Text fontWeight='semibold' fontSize='14' textAlign='center'>Password :</Text>
                     </HStack>
-                    <HStack>
+                    <HStack ml='4' mt='0.5'>
                         {editProfile ?
                             <TextInput placeholder='Edit Password' onChangeText={value => setEditPassword(() => value)}></TextInput> :
                             <Text>********</Text>
                         }
                     </HStack>
                 </HStack>
-                <HStack>
+                <HStack ml='2' marginY='2'>
                     <HStack>
-                        <Text fontWeight='bold'>Phone Number: </Text>
+                        <Text fontWeight='bold' fontSize='16'>Phone Number :</Text>
                     </HStack>
-                    <HStack>
+                    <HStack ml='4' mt='0.5'>
                         {editProfile ?
                             <TextInput placeholder='Edit Phone Number' onChangeText={value => setEditPhoneNumber(() => value)}></TextInput> :
                             <Text>{state.user?.phone_number}</Text>
@@ -151,39 +150,41 @@ export default function Account() {
                 </HStack>
                 {state?.tutor ?
                     <>
-                        <HStack>
+                        <HStack ml='2' marginY='2'>
                             <HStack>
-                                <Text>School</Text>
+                                <Text fontWeight='bold' fontSize='16'>School :</Text>
                             </HStack>
                             <HStack>
-                                <Text>{state.tutor[1].school}</Text>
+                                <Text ml='4' mt='0.5'>{state.tutor[1].school}</Text>
                             </HStack>
                         </HStack>
-                        <HStack>
+                        <View ml='2' marginY='2'>
                             <HStack>
-                                <Text>Student Card</Text>
+                                <Text fontWeight='bold' fontSize='16'>Student Card :</Text>
                             </HStack>
-                            {/* <Text>{state.tutor[0].student_card}</Text> */}
-                            <Image style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${editStudentCard}` }} />
-                            {/* Only Display the photo*/}
-                        </HStack>
-                        <View>
-                            <Text>Transcript</Text>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View mt='2' marginX='4'>
+                                {/* <Text>{state.tutor[0].student_card}</Text> */}
+                                <Image style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${editStudentCard}` }} />
+                                {/* Only Display the photo*/}
+                            </View>
+                        </View>
+                        <View ml='2' marginY='2'>
+                            <Text fontWeight='bold' fontSize='16'>Transcript :</Text>
+                            <View mt='2' marginX='2' style={{ flexDirection: 'row' }}>
                                 {editTranscript.map((transcript: EditTranscript, i: number) =>
                                     // console.log('INSide .mAP: ', transcript)
                                     transcript.filename ?
-                                        <Image key={i} style={{ width: 100, height: 100 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} />
+                                        <Image key={i} style={{ width: 100, height: 100, margin: 10 }} source={{ uri: `${env.BACKEND_URL}/get-image/${transcript.filename}` }} />
                                         : null
                                 )}
                             </View>
                             {/* Only Display the photo*/}
                         </View>
-                        <HStack>
+                        <HStack ml='2' marginY='2'>
                             <HStack>
-                                <Text>Preferred Subjects</Text>
+                                <Text fontWeight='bold' fontSize='16'>Preferred Subjects :</Text>
                             </HStack>
-                            <HStack>
+                            <HStack ml='4' mt='0.5'>
                                 {state.tutor[3].map((subject: any, i: number) => (
                                     editProfile ?
                                         <TextInput
@@ -200,25 +201,25 @@ export default function Account() {
                                 ))}
                             </HStack>
                         </HStack>
-                        <HStack>
+                        <HStack ml='2' marginY='2'>
                             <HStack>
-                                <Text>Self Introduction</Text>
+                                <Text fontWeight='bold' fontSize='16'>Self Introduction :</Text>
                             </HStack>
-                            <HStack>
+                            <HStack ml='4' mt='0.5'>
                                 {editProfile ?
                                     <TextInput placeholder='Edit Self Introduction' onChangeText={value => setEditSelfIntro(() => value)}></TextInput> :
                                     <Text>{state.tutor[0].self_intro}</Text>
                                 }
                             </HStack>
                         </HStack>
-                        <HStack>
+                        {/* <HStack  ml='2' marginY='2'>
                             <HStack>
-                                <Text>Rating</Text>
+                                <Text fontWeight='bold' fontSize='16'>Rating :</Text>
                             </HStack>
                             <HStack>
                                 <Text>{state.tutor[0].rating}</Text>
                             </HStack>
-                        </HStack>
+                        </HStack> */}
                     </>
                     : null}
 

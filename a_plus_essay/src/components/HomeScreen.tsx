@@ -68,7 +68,7 @@ export function HowToUseCard() {
                         }}>
                             {/*Show Progress*/}
                             {isOpen ?
-                                <Box mt="6" mb='2' bg="teal.500" rounded="md" width="82%" h="200" alignSelf='center'>
+                                <Box mt="6" mb='2' bg="teal.500" rounded="md" width="82%" h="220" alignSelf='center'>
                                     <Stack pt='2'>
                                         <Stack ml='1'>
                                             <Text fontWeight='bold' fontSize='16'>Step 1: </Text>
@@ -245,7 +245,6 @@ export function RenderTutor() {
             id: '58694a0f-3da1-471wefw2eff-bd96-145571e29d72',
             title: 'Thirdhefe Item',
         },
-
     ];
 
     return (

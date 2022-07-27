@@ -10,6 +10,8 @@ import { Divider } from 'native-base'
 import Rating from '../../components/Rating'
 import ViewMatchedOrder from '../ViewMatchedOrder'
 import { NavigationContainer } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
 
 
 
@@ -33,6 +35,7 @@ type Order = {
 
 
 function OrderListPage(props: { orderStatus: string }) {
+    const state = useSelector((state: RootState) => state.auth)
     const navigation = useAppNavigation()
     let status = props.orderStatus
     let title = status + ' orders'
@@ -50,29 +53,35 @@ function OrderListPage(props: { orderStatus: string }) {
             <ScrollView>
                 {orderList.render(json => json.orders?.map((order: Order, i) =>
                     url == '/order/matching' ?
-                        <TouchableOpacity key={i} onPress={() => {
-                            navigation.navigate('View Matched Order', { order: order })
-                            // return <ViewMatchedOrder order={order} />
-                        }}>
-                            <View>
-                                <View style={styles.container} key={order.id}>
-                                    <Text style={styles.assignmentName}>{order.title}</Text>
-                                    <DateTime style={styles.time} time={order.tutor_submission_deadline} />
-                                    {/* <TouchableOpacity style={styles.icon}>
-                        <Ionicons name="heart-dislike" color='grey' size={18} />
-                    </TouchableOpacity> */}
-                                    <Rating />
+                        state.tutor ?
+                            <TouchableOpacity key={i} onPress={() => {
+                                navigation.navigate('View Matched Order', { order: order })
+                            }}>
+                                <View>
+                                    <View style={styles.container} key={order.id}>
+                                        <Text style={styles.assignmentName}>{order.title}</Text>
+                                        <DateTime style={styles.time} time={order.tutor_submission_deadline} />
+                                    </View>
+                                    <Divider />
                                 </View>
-                                <Divider />
-                            </View>
-                        </TouchableOpacity> :
+                            </TouchableOpacity> :
+                            <TouchableOpacity key={i} onPress={() => {
+                                navigation.navigate('Select Tutor', { order: order })
+                            }}>
+                                <View>
+                                    <View style={styles.container} key={order.id}>
+                                        <Text style={styles.assignmentName}>{order.title}</Text>
+                                        <DateTime style={styles.time} time={order.tutor_submission_deadline} />
+                                        <Rating />
+                                    </View>
+                                    <Divider />
+                                </View>
+                            </TouchableOpacity>
+                        :
                         <View key={i}>
                             <View style={styles.container} key={order.id}>
                                 <Text style={styles.assignmentName}>{order.title}</Text>
                                 <DateTime style={styles.time} time={order.tutor_submission_deadline} />
-                                {/* <TouchableOpacity style={styles.icon}>
-                <Ionicons name="heart-dislike" color='grey' size={18} />
-            </TouchableOpacity> */}
                             </View>
                             <Divider />
                         </View>

@@ -46,7 +46,7 @@ export function useGet<T extends { error?: string }>(
       });
   }, [url, token]);
   function render(fn: (json: T) => any) {
-    console.log('FUCK YOU BEENO on99', json)
+    console.log('useGet JSON:', json)
     if (json.error == 'loading') {
       return (
         <HStack space={2} justifyContent="center">
