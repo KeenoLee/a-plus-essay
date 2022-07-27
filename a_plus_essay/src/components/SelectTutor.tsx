@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import * as React from 'react'
 // import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -47,36 +47,71 @@ export function TutorDetailStacks() {
     )
 }
 const SelectTutorStack = createStackNavigator()
-
+async function confirmSelectTutor(tutorId: number, orderId: number) {
+    const res = await fetch(`${env.BACKEND_ORIGIN}/confirm-tutor`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tutorId, orderId })
+    })
+    const result = await res.json()
+    return result
+}
+type Candidate = {
+    id: number,
+    tutor_id: number,
+    charge: number
+}
 export default function SelectTutor({ route }: any) {
     const { order } = route.params
     console.log('route in select tutor: ', order)
     const [tutors, setTutors] = useState('hi')
     const [isSelected, setIsSelected] = useState(false)
+    const [candidates, setCandidates] = useState<Array<Candidate | null>>([null])
     const state = useSelector((state: RootState) => state.auth)
     const navigation = useNavigation()
-    // const TutorInformationStack = createStackNavigator()
-    useCallback(async () => {
-        const res = await fetch(`${env.BACKEND_URL}/select-tutor`)
-        const matchedTutors = await res.json()
-        console.log(matchedTutors)
-        if (matchedTutors.error) {
-            console.log(matchedTutors.error)
+    // Get candidates of same order
+    useEffect(() => {
+        async function getCandidates(orderId: number) {
+            const res = await fetch(`${env.BACKEND_ORIGIN}/get-candidates/${orderId}`)
+            const result = await res.json()
+            console.log('result in slect tutor: ', result)
+            const newCandidates = result
+            setCandidates(() => newCandidates)
+            console.log('!!!!!!!!!!CANDIdates??? safd', candidates)
         }
+        getCandidates(order.id)
 
     }, [])
+
     return (
         state.user && !state.tutor ?
             <View style={styles.page}>
-                <TouchableOpacity onPress={() => {
-                    setIsSelected(!isSelected)
-                }}>
-                    <TutorBox isSelected={isSelected} order={order} tutorId={order.tutor_id} />
-                </TouchableOpacity>
+
+                {candidates.map((candidate, i) => (
+                    // console.log('@@@@@cCNASDOIATE', candidate?.tutor_id)
+                    <TouchableOpacity key={i} onPress={() => {
+                        setIsSelected(!isSelected)
+                    }}>
+                        <TutorBox isSelected={isSelected} tutorId={candidate?.tutor_id} order={order} />
+                    </TouchableOpacity>
+                ))
+                }
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 50 }}>
-
-                    <TouchableOpacity style={{ backgroundColor: 'rgb(142,208,175)', padding: 10, borderRadius: 10, width: 80 }}>
+                    <TouchableOpacity
+                        style={{ backgroundColor: 'rgb(142,208,175)', padding: 10, borderRadius: 10, width: 80 }}
+                        onPress={async () => {
+                            const result = await confirmSelectTutor(order.tutor_id, order.id)
+                            console.log('can choose tutor??: ', result)
+                            if (result.success) {
+                                Alert.alert('Successfully chose tutor!')
+                            } else {
+                                Alert.alert('Pleasr try again!')
+                            }
+                        }}
+                    >
                         <Text style={styles.buttonText}>Confirm</Text>
                     </TouchableOpacity>
 

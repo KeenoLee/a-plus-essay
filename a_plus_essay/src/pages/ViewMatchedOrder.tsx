@@ -77,6 +77,7 @@ export default function ViewMatchedOrder({ route, navigation }: any) {
             if (!result.error) {
                 console.log('I want ORDER result! ', result)
                 setOrderSubject(() => result.subject_name)
+                console.log('no subject????', result.subject_name)
                 setGuidelines(() => result.guidelines)
                 setNotes(() => result.notes)
             }
@@ -150,7 +151,7 @@ export default function ViewMatchedOrder({ route, navigation }: any) {
                             <Text>{order.tutor_submission_deadline.toLocaleString()}</Text>
                         </HStack>
                         {order.charge ?
-                            <HStack style={{flexDirection: 'column'}}>
+                            <HStack style={{ flexDirection: 'column' }}>
                                 <FormControl.Label>Your offer: {order.charge}</FormControl.Label>
                                 <Text>Waiting for student to confirm your offer...</Text>
                             </HStack>
