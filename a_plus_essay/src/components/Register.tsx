@@ -413,7 +413,7 @@ export default function Register() {
             {/* <SafeAreaView> */}
             {page.step === 1 && !isOAuth ? (
                 <>
-                    <Text>
+                    <Text style={{paddingTop: 30, paddingBottom: 10}}>
                         <Text style={styles.title}>Create New Account</Text>
                     </Text>
                     <RadioGroup
