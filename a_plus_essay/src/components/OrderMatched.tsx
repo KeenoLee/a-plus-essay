@@ -30,7 +30,7 @@ export default function OrderMatched({ onPress }: OnPress) {
                 borderRadius: 15
             }}
                 onPress={() => {
-                    onPress()
+                    // onPress()
                     navigation.navigate('Tabs')
                 }}
             >
