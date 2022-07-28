@@ -314,8 +314,6 @@ export default function OrderSubmission() {
                                                     text: 'OK',
                                                     onPress: () => {
                                                         setOrderMatched(true)
-                                                        dispatch(updateOrder())
-
                                                     },
                                                 },
                                             ])

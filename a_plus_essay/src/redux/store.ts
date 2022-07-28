@@ -7,12 +7,12 @@ import { orderReducer } from "./order/reducer";
 
 export interface RootState {
     auth: AuthState
-    order: OrderState
+    // order: OrderState
 }
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    order: orderReducer
+    // order: orderReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

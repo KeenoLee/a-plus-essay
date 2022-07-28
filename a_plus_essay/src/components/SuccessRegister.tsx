@@ -3,14 +3,23 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import * as React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { useDispatch } from 'react-redux'
+import { fetchLogin } from '../redux/auth/actions'
+import { AppDispatch } from '../redux/dispatch'
 import { AppParamList, useAppNavigation } from '../routes'
 
 type Props = NativeStackScreenProps<AppParamList>
 type OnPress = {
     onPress: () => void
 }
-export default function SuccessRegister({ onPress }: OnPress) {
+type Prop = {
+    onPress: () => void
+    email: string
+    password: string
+}
+export default function SuccessRegister({ onPress, email, password }: Prop) {
     const navigation = useAppNavigation()
+    const dispatch = useDispatch<AppDispatch>()
     return (
         <View style={{
             height: '70%',
@@ -36,6 +45,7 @@ export default function SuccessRegister({ onPress }: OnPress) {
                 borderRadius: 15,
             }} onPress={() => {
                 onPress()
+                dispatch(fetchLogin({ email: email, password: password }));
                 navigation.navigate('Tabs')
             }}>
                 <Text style={{

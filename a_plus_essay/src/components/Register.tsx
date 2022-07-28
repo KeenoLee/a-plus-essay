@@ -230,6 +230,7 @@ export default function Register() {
 
     // Page One Information (Create new account)
     const [role, setRole] = useState<RadioButtonProps[]>(roleData);
+    console.log('RolE?? ', role)
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -412,7 +413,7 @@ export default function Register() {
             {/* <SafeAreaView> */}
             {page.step === 1 && !isOAuth ? (
                 <>
-                    <Text>
+                    <Text style={{paddingTop: 30, paddingBottom: 10}}>
                         <Text style={styles.title}>Create New Account</Text>
                     </Text>
                     <RadioGroup
@@ -510,7 +511,8 @@ export default function Register() {
                 </>
             ) : null}
 
-            {!isTutor && page.step === 1 && (
+            {/* {!isTutor && page.step === 1 && ( */}
+            {role[0].selected && page.step === 1 && (
                 <View>
                     <TouchableOpacity
                         style={nextButtonStyle}
@@ -556,7 +558,8 @@ export default function Register() {
                 </View>
             )}
             {/* Submit Page 1 */}
-            {isTutor && page.step === 1 && (
+            {role[1].selected && page.step === 1 && (
+                // {isTutor && page.step === 1 && (
                 <>
                     <TouchableOpacity
                         style={nextButtonStyle}
@@ -883,7 +886,7 @@ export default function Register() {
                                 setDisableNext(true);
                                 setNextButtonStyle(disableStyle);
                                 setPage({ step: 5 });
-                                dispatch(fetchLogin({ email: email, password: password }));
+                                // dispatch(fetchLogin({ email: email, password: password }));
                             }
                         }}>
                         <Text style={styles.buttonText}>Create Account</Text>
@@ -891,7 +894,7 @@ export default function Register() {
                 </>
             ) : null}
             {page.step === 5 ? (
-                <SuccessRegister onPress={() => setPage({ step: 1 })} />
+                <SuccessRegister onPress={() => setPage({ step: 1 })} email={email} password={password} />
             ) : null}
             {/* </SafeAreaView> */}
         </View>
