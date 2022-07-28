@@ -559,7 +559,7 @@ export default function Register() {
             )}
             {/* Submit Page 1 */}
             {role[1].selected && page.step === 1 && (
-            // {isTutor && page.step === 1 && (
+                // {isTutor && page.step === 1 && (
                 <>
                     <TouchableOpacity
                         style={nextButtonStyle}
@@ -886,7 +886,7 @@ export default function Register() {
                                 setDisableNext(true);
                                 setNextButtonStyle(disableStyle);
                                 setPage({ step: 5 });
-                                dispatch(fetchLogin({ email: email, password: password }));
+                                // dispatch(fetchLogin({ email: email, password: password }));
                             }
                         }}>
                         <Text style={styles.buttonText}>Create Account</Text>
@@ -894,7 +894,7 @@ export default function Register() {
                 </>
             ) : null}
             {page.step === 5 ? (
-                <SuccessRegister onPress={() => setPage({ step: 1 })} />
+                <SuccessRegister onPress={() => setPage({ step: 1 })} email={email} password={password} />
             ) : null}
             {/* </SafeAreaView> */}
         </View>
