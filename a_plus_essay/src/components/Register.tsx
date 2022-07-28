@@ -230,6 +230,7 @@ export default function Register() {
 
     // Page One Information (Create new account)
     const [role, setRole] = useState<RadioButtonProps[]>(roleData);
+    console.log('RolE?? ', role)
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -510,7 +511,8 @@ export default function Register() {
                 </>
             ) : null}
 
-            {!isTutor && page.step === 1 && (
+            {/* {!isTutor && page.step === 1 && ( */}
+            {role[0].selected && page.step === 1 && (
                 <View>
                     <TouchableOpacity
                         style={nextButtonStyle}
@@ -556,7 +558,8 @@ export default function Register() {
                 </View>
             )}
             {/* Submit Page 1 */}
-            {isTutor && page.step === 1 && (
+            {role[1].selected && page.step === 1 && (
+            // {isTutor && page.step === 1 && (
                 <>
                     <TouchableOpacity
                         style={nextButtonStyle}
