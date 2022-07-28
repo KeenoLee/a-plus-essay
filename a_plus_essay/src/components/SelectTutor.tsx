@@ -12,6 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Stack } from 'native-base'
 import { env } from '../env/env'
 import LottieView from 'lottie-react-native';
+import { useAppNavigation } from '../routes'
 // import { NavigationContainer } from '@react-navigation/native'
 // import { createStackNavigator } from '@react-navigation/stack'
 interface StudentReview {
@@ -74,7 +75,7 @@ export default function SelectTutor({ route }: any) {
     const [candidates, setCandidates] = useState<Array<Candidate | null>>([null])
     const [selectedTutor, setSelectedTutor] = useState<number | null>(null)
     const state = useSelector((state: RootState) => state.auth)
-    const navigation = useNavigation()
+    const navigation = useAppNavigation()
     // Get candidates of same order
     useEffect(() => {
         async function getCandidates(orderId: number) {
@@ -117,7 +118,14 @@ export default function SelectTutor({ route }: any) {
                                 const result = await confirmSelectTutor(selectedTutor, order.id)
                                 console.log('can choose tutor??: ', result)
                                 if (result.success) {
-                                    Alert.alert('Successfully chose tutor!')
+                                    Alert.alert('Success!', 'Tutor chose!', [
+                                        {
+                                            text: 'OK',
+                                            onPress: () => {
+                                                navigation.navigate('Thank You')
+                                            },
+                                        }
+                                    ])
                                 } else {
                                     Alert.alert('Pleasr try again!')
                                 }

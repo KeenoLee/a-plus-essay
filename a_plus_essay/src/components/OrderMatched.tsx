@@ -18,7 +18,7 @@ export default function OrderMatched({ onPress }: OnPress) {
                 fontWeight: 'bold',
                 fontSize: 30,
                 padding: 20
-            }}>Order Matched!</Text>
+            }}>Order Matching!</Text>
             <Text style={styles.message}>We are processing your request.</Text>
             <Text style={styles.message}>A confirmation message</Text>
             <Text style={styles.message}>will be sent toyou shortly.</Text>
