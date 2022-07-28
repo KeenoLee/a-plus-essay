@@ -891,7 +891,7 @@ export async function seed(knex: Knex): Promise<void> {
         {
             order_id: (await knex.select("id").from("order").where("id", orderIds[0].id).first()).id,
             tutor_id: (await knex.select("id").from("user").where("nickname", 'tutor 1').first()).id,
-            charge: 3000,
+            charge: 2000,
             accept_time: null,
             reject_time: null,
             expire_time: knex.raw("current_timestamp + interval '2 hours'")
@@ -1037,5 +1037,24 @@ export async function seed(knex: Knex): Promise<void> {
         },
 
     ]).into("candidate");
+
+    for (let i = 0; i < orderIds.length; i++) {
+        await knex.insert({
+            filename: 'guidelines001.jpeg',
+            order_id: orderIds[i].id
+        }).into('guideline')
+        await knex.insert({
+            filename: 'guidelines002.jpeg',
+            order_id: orderIds[i].id
+        }).into('guideline')
+        await knex.insert({
+            filename: 'notes001.jpeg',
+            order_id: orderIds[i].id
+        }).into('note')
+        await knex.insert({
+            filename: 'notes002.jpeg',
+            order_id: orderIds[i].id
+        }).into('note')
+    }
 
 };
