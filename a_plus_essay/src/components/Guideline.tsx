@@ -12,7 +12,7 @@ export default function Guideline({ filename }: Props) {
     return (
         <>
         {showImage ?
-            <TouchableOpacity onPress={() => setShowImage(true)}>
+            <TouchableOpacity onPress={() => setShowImage(false)}>
                 <Image style={{width:100, height: 100, }} source={{ uri: `${env.BACKEND_URL}/get-image/${filename}` }} />
             </TouchableOpacity> :
             <TouchableOpacity onPress={() => setShowImage(true)}>
