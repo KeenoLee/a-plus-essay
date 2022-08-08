@@ -41,18 +41,24 @@ export class UserService {
     async checkEmailDuplication(email: string) {
         const userId: number = await this.knex.select("id").from("user").where("email", email).first();
         console.log('boolean: ', userId)
+
+        // return userId === undefined is ok
+
         if (userId === undefined) {
             return false
         }
+
         return true;
     }
 
     async checkPhoneNumberDuplication(phoneNumber: number) {
         const userId: number = await this.knex.select("id").from("user").where("phone_number", phoneNumber).first();
         console.log('checking phone number... ')
+
         if (userId === undefined) {
             return false
         }
+
         return true;
     }
 
@@ -63,8 +69,11 @@ export class UserService {
     async createUser(user: User) {
         const hashedPassword = await hashPassword(user.password);
         console.log('hashedPassword: ', hashedPassword)
+
         const date = new Date();
-        const userInfo = await this.knex.insert({
+
+        const userInfo = await this.knex
+        .insert({
             is_admin: false,
             is_tutor: user.isTutor,
             nickname: user.nickname,
@@ -73,23 +82,33 @@ export class UserService {
             phone_number: user.phoneNumber,
             // created_at: date,
             // updated_at: date
-        }).into("user")
-            .returning(['id', 'nickname', 'is_tutor']);
+        })
+        .into("user")
+        .returning(['id', 'nickname', 'is_tutor']);
+
         return userInfo;
     }
 
     async createTutor(tutor: Tutor) {
         return this.knex.transaction(async knex => {
             let majorId;
+
             if ((await knex.select("id").from("major").where("major", tutor.major)).length === 0) {
                 majorId = (await knex.insert({ major: tutor.major }).into("major").returning("id"))[0].id
-            } else {
+            } 
+            else {
                 majorId = (await knex.select("id").from("major").where("major", tutor.major).first())?.id
             };
-            const schoolId = (await knex.insert({
+
+            const schoolId = (await knex
+            .insert({
                 school: tutor.school,
-            }).into("school").returning('id'))[0].id;
-            await knex.insert({
+            })
+            .into("school")
+            .returning('id'))[0].id;
+
+            await knex
+            .insert({
                 id: tutor.userId,
                 is_verified: false,
                 // transcript: ????,
@@ -98,9 +117,12 @@ export class UserService {
                 self_intro: tutor.selfIntro || null,
                 ongoing_order_amount: 0,
                 completed_order_amount: 0,
-            }).into("tutor")
+            })
+            .into("tutor")
+
             // .map入面如果係async function，佢會直接return成舊promise，而唔係你想要既value！
             // .map會return個array出黎！
+
             let subjectsFromDB: Array<SubjectFromDB> = []
             // To find out whether the subjects are already inserted
             for (let subject of tutor.subjects) {
@@ -138,14 +160,21 @@ export class UserService {
                 let unInsertedSubjects: Array<Subject> = tutor.subjects
                 // If some subjects are new...
                 if (subjectsFromDB.length < tutor.subjects.length) {
+
                     for (let subjectFromDB of subjectsFromDB) {
+
                         let duplicatedSubject = tutor.subjects.find(subject => subject.subject === subjectFromDB.subject_name)
                         unInsertedSubjects = unInsertedSubjects.filter(subject => subject !== duplicatedSubject)
                     }
 
                     for (let unInsertedSubject of unInsertedSubjects) {
                         console.log('uninserted sub?: ', unInsertedSubject)
-                        let subjectId = (await knex.insert({ subject_name: unInsertedSubject.subject }).into('subject').returning('id'))[0].id
+                        let subjectId = (await knex
+                            .insert({ subject_name: unInsertedSubject.subject })
+                            .into('subject')
+                            .returning('id')
+                        )[0].id
+
                         // let subjectId = (await knex.select('id').from('subject').where('subject_name', unInsertedSubject.subject).first()).id
                         console.log('should hv IDDDDD! ', subjectId)
                         await knex.insert({
@@ -178,16 +207,21 @@ export class UserService {
     async loginWithPassword(account: { email: string, password: string }) {
         const userInfo = await this.knex.select('*').from("user").where("email", account.email).first();
         console.log('userInfo: ', userInfo)
+
         const correctPassword = await checkPassword(account.password, userInfo.hashed_password);
         console.log('correctPassword: ', correctPassword)
+
         if (!correctPassword) {
             return { success: false };
         };
+
         delete userInfo.hashed_password;
+
         if (userInfo.is_tutor) {
             const tutorInfo = await this.getTutorInfo(userInfo.id)
             return { success: true, userInfo, tutorInfo }
         }
+
         return { success: true, userInfo: userInfo };
     }
 
@@ -198,6 +232,7 @@ export class UserService {
 
     async registerByOAuth(input: { isTutor: boolean, nickname: string, email: string }) {
         const date = new Date();
+
         const userInfo = await this.knex.insert({
             is_admin: false,
             is_tutor: input.isTutor,
@@ -207,14 +242,20 @@ export class UserService {
             phone_number: null,
             created_at: date,
             updated_at: date
-        }).into("user")
-            .returning(['id', 'nickname', 'is_tutor']);
+        })
+        .into("user")
+        .returning(['id', 'nickname', 'is_tutor']);
+
         return userInfo;
     }
 
     async resetPassword(account: { id: number, newPassword: string }) {
         const hashedPassword = hashPassword(account.newPassword);
-        const userId: number = (await this.knex("user").update("hashed_password", hashedPassword, ["id"]).where("id", account.id).first()).id;
+        const userId: number = ( await 
+            this.knex("user")
+            .update("hashed_password", hashedPassword, ["id"])
+            .where("id", account.id).first()
+        ).id;
         return userId;
     }
     async getTutorInfo(userId: number) {
@@ -223,54 +264,72 @@ export class UserService {
         }
         const tutor = await this.knex.select('*').from('tutor').where('id', userId).first()
         delete tutor.major_id
+
         const school = await this.knex.select('*').from('school').where('id', tutor.school_id).first()
         delete tutor.school_id
+
         const transcript = await this.knex.select('id', 'filename').from('transcript').where('tutor_id', userId)
         console.log('TRANSCRIPT: ', transcript)
+
         const preferredSubjectId = await this.knex.select('subject_id').from('preferred_subject').where('tutor_id', userId)
         console.log('PRESUB ID:', preferredSubjectId)
+
         let preferredSubject = []
         if (preferredSubjectId) {
             for (let i = 0; i < preferredSubjectId.length; i++) {
                 preferredSubject.push((await this.knex.select('subject_name').from('subject').where('id', preferredSubjectId[i]['subject_id']))[0])
             }
         }
+
         console.log('preferredSubject?: ', preferredSubject)
         return [tutor, school, transcript, preferredSubject]
     }
+
     async uploadTutorFile(tutorId: number, files: any) {
         console.log('tutor files ', files)
         try {
+
             let objectKeys = Object.keys(files)
             console.log('obJECT KEYS?????!%$%&$%#$: ', objectKeys)
             console.log('going to insert images! tutorID: ', tutorId)
+
             for (let i = 0; i < objectKeys.length; i++) {
                 // console.log('%$*$%^*W#$^&#QYH%ERYHSR', files[objectKeys[i]])
                 console.log('%$*$%^*W#$^&#QYH%ERYHSR', objectKeys[i])
+
                 if (objectKeys[i].includes('transcript')) {
                     console.log('OBJECTKEY?? ', objectKeys[i])
                     console.log('OBJECTKEY?? ', files[objectKeys[i]])
-                    await this.knex.insert({
+
+                    await this.knex
+                    .insert({
                         tutor_id: tutorId,
                         filename: files[objectKeys[i]].newFilename
-                    }).into('transcript')
-                } else if (objectKeys[i] === 'student_card') {
+                    })
+                    .into('transcript')
+                } 
+                else if (objectKeys[i] === 'student_card') {
                     console.log('WHY NO ORI NAMe in student CARD??: ', files[objectKeys[i]].newFilename)
                     await this.knex('tutor').update({ student_card: files[objectKeys[i]].newFilename }).where('id', tutorId)
                 }
             }
+
             return { success: true }
-        } catch (error) {
+        } 
+        catch (error) {
             console.log(error)
             return { error: error }
         }
     }
+
     async editProfile(editInfo: EditInfo) {
         const { userId, nickname, password, phoneNumber, preferredSubject, selfIntro } = editInfo
+
         console.log('USERID ', userId)
         console.log('NIckname SHOULD bE BEENO GOD:  ', nickname)
         console.log('PRE SUBJECT ARRAY: ', preferredSubject)
         console.log('self INTRO', selfIntro)
+
         return this.knex.transaction(async knex => {
             try {
                 if (nickname) {
@@ -307,10 +366,14 @@ export class UserService {
         try {
             const [studentCard] = await this.knex.select('student_card').from('tutor').where('id', id)
             console.log('student card?: ', studentCard)
+
             const transcript = await this.knex.select('id', 'filename').from('transcript').where('tutor_id', id)
             console.log('TRANScript: ', transcript)
+
             return { studentCard, transcript }
-        } catch (error) {
+
+        } 
+        catch (error) {
             return { error }
         }
     }

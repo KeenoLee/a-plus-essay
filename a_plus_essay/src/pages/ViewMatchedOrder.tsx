@@ -25,15 +25,18 @@ type Order = {
     description?: string
     budget?: number
 }
+
 type ImageFile = {
     filename: string
 }
+
 interface OfferInfo {
     tutorId: number,
     orderId: number,
     studentId: number,
     charge: number
 }
+
 async function makeOffer(offerInfo: OfferInfo, token: string) {
     const res = await fetch(`${env.BACKEND_URL}/make-offer`, {
         method: 'POST',
@@ -43,26 +46,34 @@ async function makeOffer(offerInfo: OfferInfo, token: string) {
         },
         body: JSON.stringify(offerInfo)
     })
+
     const result = await res.json()
+
     console.log('resULT of MAke Offer? ', result)
     if (!result.error) {
         Alert.alert('Success to offer! Please wait for the student to confirm.')
-    } else {
+    } 
+    else {
         Alert.alert('Failed to make offer! Please try again.')
     }
+
     return result
 }
 
 export default function ViewMatchedOrder({ route, navigation }: any) {
     // console.log(route)
     const { order } = route.params
+
     console.log('just entered VIew MAtched Order PAGe: ', order)
     console.log('order.student_id: ', order.student_id)
+
     const state = useSelector((state: RootState) => state.auth)
+
     const [orderSubject, setOrderSubject] = useState<string | null>(null)
     const [guidelines, setGuidelines] = useState<Array<ImageFile | null>>([null])
     const [notes, setNotes] = useState<Array<ImageFile | null>>([null])
     const [offer, setOffer] = useState<string>('')
+
     useEffect(() => {
         async function getOrderSubjectAndImages(orderId: number) {
             console.log('ORDERID!!@$#@%$', orderId)

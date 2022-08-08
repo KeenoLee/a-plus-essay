@@ -1,23 +1,28 @@
-import express, { Request, Response } from "express";
-import socketio from "socket.io";
-import http, { request } from "http";
 import cors from "cors";
+import Knex from "knex";
+import path from 'path';
+import config from "./knexfile";
+import socketio from "socket.io";
+import express, { Request, Response } from "express";
+import http, { request } from "http";
+
 import { UserService } from "./services/UserService";
 import { UserController } from "./controllers/UserController";
+
 import { OrderService } from "./services/OrderService";
 import { OrderController } from "./controllers/OrderController";
-import Knex from "knex";
-import config from "./knexfile";
+
 import { ChatController } from "./controllers/ChatController";
 import { ChatService } from "./services/ChatService";
-import path from 'path';
-import { getJWTPayload, JWTPayload } from "./utils/get-jwt";
+
 import { env } from "./env";
+import { getJWTPayload, JWTPayload } from "./utils/get-jwt";
 
 const dirPath = path.join(__dirname, '/uploads')
 export const knex = Knex(config[env.NODE_ENV || "development"]);
 
 const app = express();
+// But why?
 const userRoutes = express.Router();
 const orderRoutes = express.Router();
 const chatRoutes = express.Router();
@@ -93,7 +98,6 @@ app.use(chatRoutes);
 app.use((req, res) => {
     res.status(404).json({ error: 'routes not found, method: ' + req.method + ' url: ' + req.url })
 })
-
 
 const PORT = 8111;
 

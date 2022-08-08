@@ -21,10 +21,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
     onChange: (value: Date) => void
-
-
 }
+
 export default function DateTimePicker({ onChange }: Props) {
+    
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
 

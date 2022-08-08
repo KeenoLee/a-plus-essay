@@ -31,15 +31,20 @@ interface UserInfo {
 type Props = NativeStackScreenProps<AppParamList>;
 
 export default function LoginPage({ }: Props) {
+
     const navigation = useAppNavigation();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isVerified, setIsVerified] = useState(false);
+
     const dispatch = useDispatch<AppDispatch>();
     const state = useSelector((state: RootState) => state);
+
     console.log('state!!!!STORE', state);
     // const auth = useSelector((state: RootState) => state.auth)
     // const user = useSelector((state: RootState) => state.auth.user)
+
     useEffect(() => {
         console.log('state from store: ', state);
         if (state.auth.user) {
@@ -47,6 +52,7 @@ export default function LoginPage({ }: Props) {
             navigation.navigate('Tabs');
         }
     }, [state]);
+    
     // console.log('auth of state from store: ', auth)
     // console.log('user of auth from store: ', user)
     // const navigation = useNavigation()

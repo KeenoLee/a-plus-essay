@@ -54,6 +54,7 @@ export class ChatService {
             return chatroomList;
         }
     }
+
     async getUnReadMessageNotification() {
         // 
         // 
@@ -67,6 +68,7 @@ export class ChatService {
         //         ORDER BY cm.id DESC
         //     `, 59, )
     }
+
     async checkMember(input: { order_id: number, user_id: number }, knex = this.knex) {
         let order = await knex.select('id', 'student_id', 'tutor_id')
             .from('order').where('id', input.order_id).first()
@@ -74,6 +76,7 @@ export class ChatService {
         return order?.student_id == input.user_id || order?.tutor_id == input.user_id
 
     }
+
     async postMessage(input: MessageInput) {
 
         console.log('INPUT?: ', input)
@@ -83,49 +86,74 @@ export class ChatService {
             if (!await this.checkMember({ order_id: input.order_id, user_id: input.sender_id })) {
                 throw new Error('Not a room member')
             }
+
             console.log('checking inputttttttt', input)
+
             let [{ id, updated_at }] = await knex
                 .insert(input)
                 .into("chat_message")
                 .returning(["id", "updated_at"])
+
             if ((await knex('user_read_message').select('*').where('order_id', input.order_id)).length === 0) {
                 await knex
                     .insert({ last_message_id: id, order_id: input.order_id, user_id: input.sender_id })
                     .into(('user_read_message'))
                     .returning('last_message_id')
-            } else {
+            } 
+            else {
                 await knex('user_read_message')
                     .whereRaw('order_id = ?', input.order_id)
                     .update({ last_message_id: id, user_id: input.sender_id })
                     .returning('last_message_id')
             }
+
             await knex
                 .select('id')
                 .from('user_read_message')
                 .where({ order_id: input.order_id })
+
             return { id, updated_at, sender_id: input.sender_id, message: input.message }
         })
     }
 
     async getChatroom(input: { userId: number, orderId: number }) {
         console.log(input)
+
         let order = await this.knex
             .select('id', 'tutor_id', 'student_id', 'title')
             .from('order')
             .where('id', input.orderId).first()
-        if (!order) { return { error: 'order not found' }; }
+
+        if (!order) { 
+            return { 
+                error: 'order not found'
+            };
+        }
+
         // let otherUserId = order.tutor_id == input.userId ? order.student_id : order.tutor_id;
         let otherUserId: string
 
         if (order.tutor_id == input.userId) {
             otherUserId = order.student_id
-        } else if (order.student_id == input.userId) {
+        } 
+        else if (order.student_id == input.userId) {
             otherUserId = order.tutor_id
-        } else {
+        } 
+        else {
             return { error: 'not room member' }
         }
-        let otherUser = await this.knex.select('id', 'nickname', 'is_tutor').from('user').where('id', otherUserId).first()
-        if (!otherUser) { return { error: 'cannot find other user, id = ' + otherUserId } }
+
+        let otherUser = await this.knex
+            .select('id', 'nickname', 'is_tutor')
+            .from('user')
+            .where('id', otherUserId)
+            .first()
+
+        if (!otherUser) { 
+            return { 
+                error: 'cannot find other user, id = ' + otherUserId
+            }
+        }
 
         let messages = await this.knex
             .select(

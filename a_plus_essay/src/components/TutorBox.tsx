@@ -56,6 +56,7 @@ export default function TutorBox({ isSelected, selectedTutor, tutorId, order }: 
         console.log('selected?? ', isSelected)
         isSelected && selectedTutor === tutorId ? setBoxStyle(() => SelectedBoxStyle) : setBoxStyle(() => UnSelectedBoxStyle)
     }, [isSelected])
+    
     useEffect(() => {
         async function getTutorInfo(tutorId: number) {
             const res = await fetch(`${env.BACKEND_URL}/get-tutor/${tutorId}`)

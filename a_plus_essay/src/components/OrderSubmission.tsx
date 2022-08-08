@@ -67,13 +67,16 @@ async function fetchFile(orderFiles: OrderFiles, orderId: number) {
     if (!isNaN(orderId)) {
         formData.append('orderId', orderId.toString());
     }
+
     for (let g = 0; g < orderFiles.guidelines.length; g++) {
         console.log(orderFiles.guidelines[g])
         formData.append(`guideline_${g}`, orderFiles.guidelines[g] as any)
     }
+
     for (let n = 0; n < orderFiles.notes.length; n++) {
         formData.append(`note_${n}`, orderFiles.notes[n] as any)
     }
+
     console.log('FORMDATA: ', formData)
     const res = await fetch(`${env.BACKEND_URL}/order-file`, {
         method: 'POST',
@@ -82,13 +85,16 @@ async function fetchFile(orderFiles: OrderFiles, orderId: number) {
         },
         body: formData
     })
+
     const result = await res.json()
     return result
 }
 export default function OrderSubmission() {
+    
     const navigation = useAppNavigation()
     const state = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
+
     const [orderMatched, setOrderMatched] = useState(false)
     const [orderValue, setOrderValue] = useState<OrderValue>({
         title: '',

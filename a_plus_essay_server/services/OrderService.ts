@@ -167,6 +167,7 @@ export class OrderService {
                 )
                 .innerJoin("tutor", "preferred_subject.tutor_id", "=", "tutor.id")
                 .orderBy("ongoing_order_amount", "asc");
+
             if (tutorId.length === 0) {
                 for (let i = 0; i < 3; i++) {
                     tutorId.push({ id: 0 });
@@ -178,6 +179,7 @@ export class OrderService {
                     tutorId.push({ id: 0 });
                 }
             }
+
             console.log('ARRAY OF TUTORID?: ', tutorId)
 
             let newTutorId = (await this.knex
@@ -194,13 +196,20 @@ export class OrderService {
                 .orderBy("ongoing_order_amount", "asc")
                 .first());
             console.log('NEW TUTOR ID: ', newTutorId)
+
             if (newTutorId) {
                 tutorId.push({ id: newTutorId.id });
-            } else tutorId.push({ id: 0 });
+            } 
+            else {
+                tutorId.push({ id: 0 });
+            }
+
             console.log('ARRAY OF TUTORID?: ', tutorId)
             console.log(orderId)
+
             const value1 = (await this.knex.select('id').from('order').where('id', orderId).first())
             console.log('HIHI BEE', value1)
+
             for (let tutor of tutorId) {
                 if (tutor.id !== 0) {
                     await this.knex.insert({
@@ -212,7 +221,8 @@ export class OrderService {
                         expire_time: this.knex.raw(
                             "current_timestamp + interval '2 hours'"
                         ),
-                    }).into('candidate')
+                    })
+                    .into('candidate')
                 }
                 continue
             }
@@ -262,10 +272,12 @@ export class OrderService {
             //     .into("candidate");
 
             const isTutorMatched = tutorId.some((tutor) => tutor.id !== 0);
+
             if (isTutorMatched === false) {
                 console.log('FALSE?')
                 return "No tutor can be matched now";
             }
+
             console.log('tutorID in matching an order%%%%%%: ', tutorId)
             return "Tutor matched success"
             // tutorId.map((tutor) => {
@@ -303,6 +315,7 @@ export class OrderService {
             .select("student_id")
             .from("order")
             .where("id", quote.orderId);
+
         this.io
             .to(`${studentId}`)
             .emit("new-quotation", "Your order got an new quotation.");
@@ -318,9 +331,11 @@ export class OrderService {
         await this.knex("order")
             .where("id", input.orderId)
             .update({ tutor_id: input.tutorId, matched_time: this.knex.fn.now() });
+
         this.io
             .to(`${input.tutorId}`)
             .emit("order-matched", "An order is matched successfully.");
+            
         return;
     }
 

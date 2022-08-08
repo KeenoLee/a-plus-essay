@@ -13,12 +13,14 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
             ...initialState
         }
     }
+
     if (action.type === '@@auth/LOGIN_AS_STUDENT') {
         return {
             ...state,
             user: action.userInfo
         }
     }
+
     if (action.type === '@@auth/LOGIN_AS_TUTOR') {
         console.log('action in LOGINASTUTOR: ', action.userInfo)
         console.log('action in LOGINASTUTOR: ', action.tutorInfo)
@@ -32,6 +34,7 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
             tutor: [tutorInfo, schoolInfo, transcriptInfo, preferredSubject]
         }
     }
+
     if (action.type === '@@auth/SAVE_TOKEN') {
         console.log('TOKEN>:', action)
         return {
@@ -39,10 +42,12 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
             token: action.token
         }
     }
+
     if (action.type === '@@auth/LOGOUT') {
         console.log('logouting... going to initialize state...')
         return initialState
     }
+    
     console.log('returning initialState... ', initialState)
     return initialState
 }

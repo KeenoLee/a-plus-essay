@@ -20,9 +20,11 @@ const form = formidable({
     maxFileSize: 1024 * 1080 ** 2, // the default limit is 200KB
     filter: part => part.mimetype?.startsWith('image/') || false,
 })
+
 const permit = new Bearer({
     query: "access_token"
 })
+
 export class UserController {
     //TODO:
     constructor(private userService: UserService) {
@@ -87,6 +89,7 @@ export class UserController {
         const userInfo = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
         const jwt = jwtSimple.encode(userInfo, env.JWT_SECRET)
         console.log('going to end...')
+
         if (isTutor === false) {
             res.json({ success: true, token: jwt });
             return;
@@ -95,6 +98,7 @@ export class UserController {
         const tutorId = await this.createTutor(req, res, userInfo[0].id);
         console.log('SUCCESS to create!: ', tutorId)
         res.json({ success: true, token: jwt, tutorId: tutorId });
+
         return;
     }
 
@@ -117,15 +121,18 @@ export class UserController {
             res.status(400).json({ error: "The major is missed" })
             return;
         };
+
         console.log('req.body: ', req.body)
         let preferredSubjects: string[] = []
         subjects.map((subject: Subject) => (subject.isChecked ? preferredSubjects.push(subject.subject) : null))
+
 
         if (subjects.length === 0 || preferredSubjects.length === 0) {
             await this.userService.deleteUser(email);
             res.status(400).json({ error: "Subject or score or preferred subject is missed" });
             return;
         };
+
         console.log('controller line 125')
         const tutorId = await this.userService.createTutor(
             {
@@ -138,9 +145,11 @@ export class UserController {
                 preferredSubjects
             }
         )
+
         if (!tutorId) {
             res.json({ error: 'Failed to create account, please try again!' })
         }
+
         console.log('TUTORIDDDDDDD: DGSDFGDFG: ', tutorId)
         // res.json({ success: true });
         return tutorId
@@ -179,8 +188,7 @@ export class UserController {
         if (isLoggedIn.success === false) {
             res.status(400).json({ error: "Incorrect password" });
             return;
-        };
-
+        }; // Better just use if else
         if (isLoggedIn.success === true) {
             const jwt = jwtSimple.encode(isLoggedIn.userInfo, env.JWT_SECRET);
             if (!isLoggedIn.tutorInfo) {
@@ -195,13 +203,16 @@ export class UserController {
 
     loginWithFacebook = async (req: Request, res: Response) => {
         let { isTutor, nickname, email, phoneNumber, accessToken } = req.body;
+
         try {
             if (!accessToken) {
                 res.status(401).json({ msg: "Wrong Access Token!" });
                 return;
             }
+
             const fetchResponse = await fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=id,email`);
             const result = await fetchResponse.json();
+
             if (result.error) {
                 res.status(401).json({ error: "Wrong Access Token!" });
                 return;
@@ -254,6 +265,7 @@ export class UserController {
     }
 
     loginWithGoogle = async (req: Request, res: Response) => {
+
         let { isTutor, nickname, email, phoneNumber, accessToken } = req.body;
 
         try {
@@ -270,6 +282,7 @@ export class UserController {
             });
 
             const result = await fetchResponse.json();
+
             if (result.error) {
                 res.status(401).json({ error: "Wrong Access Token!" });
                 return;
@@ -324,18 +337,25 @@ export class UserController {
     // logout = async () => { }
     resetPassword = async (req: Request, res: Response) => {
         let { email, newPassword, reNewPassword } = req.body;
+
         const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // define it one times 
         const permit = new Bearer({
             query: "access_token"
         });
+
         const token = permit.check(req);
         if (!token) {
             return res.status(401).json({ error: "permission denied" });
         }
+
+        // Bettr use try catch at here
         const payload = jwtSimple.decode(token, env.JWT_SECRET);
         if (!payload) {
             return res.status(401).json({ error: "Invalid JWT" });;
         }
+
         if (!email) {
             res.status(400).json({ error: "Missing email" })
             return;
@@ -344,6 +364,7 @@ export class UserController {
             res.status(400).json({ error: "Invalid email address" });
             return;
         };
+
         const emailRegistration = await this.userService.checkEmailDuplication(email);
         if (!emailRegistration) {
             res.status(400).json({ error: "This email address has not been registered in the system" })
@@ -374,17 +395,21 @@ export class UserController {
     checkEmailAndPhoneDuplication = async (req: Request, res: Response) => {
         const { email, phoneNumber } = req.body
         const emailDuplication = await this.userService.checkEmailDuplication(email);
+
         console.log('hv email? ', emailDuplication)
         if (emailDuplication) {
             res.status(400).json({ error: "This email address has been registered. Please register with another email address." })
             return;
         };
+
         const phoneNumberDuplication = await this.userService.checkPhoneNumberDuplication(phoneNumber);
         console.log('hv phone? ', phoneNumberDuplication)
+
         if (phoneNumberDuplication) {
             res.status(400).json({ error: "This phone number has been registered. Please register with another phone number." })
             return;
         };
+
         res.json({ success: true })
         return
     }
@@ -392,18 +417,22 @@ export class UserController {
     uploadTutorFile = async (req: Request, res: Response) => {
         try {
             form.parse(req, async (err, fields, files) => {
+
                 console.log(files)
                 console.log('FIELDS??? ', fields)
+
                 const tutorId: number = +fields.tutorId
                 if (err) {
                     res.json({ error: err })
                     return
                 }
+
                 if (files) {
                     const result = await this.userService.uploadTutorFile(tutorId, files)
                     res.json(result)
                     return
                 }
+
             })
         } catch (err) {
             console.log(err)
@@ -414,13 +443,17 @@ export class UserController {
 
     editProfile = async (req: Request, res: Response) => {
         try {
+
             const editInfo = req.body
             console.log('EDIT INFO: ', editInfo)
+
             const result = await this.userService.editProfile(editInfo)
+
             if (result.success) {
                 res.json({ success: true })
                 return
             }
+
             return
         } catch (error) {
             console.log(error)
@@ -428,28 +461,37 @@ export class UserController {
             return
         }
     }
+
     loginWithToken = async (req: Request, res: Response) => {
+
         console.log('going to login with token... : ')
         const token: string = permit.check(req);
+
         console.log('cAN GET tokEN?!!: ?? ', token)
         try {
             console.log('token in user controller: ', token)
+
             if (!token) {
                 res.json({ error: 'Please login!' })
                 return
             }
+
             const userInfo: any = jwt_decode(token)
             if (!userInfo) {
                 res.json({ error: 'Please login!' })
                 return
             }
+
             if (!userInfo.is_tutor) {
                 res.json({ success: true, token, userInfo })
                 return
-            } else {
+            } 
+            else {
                 console.log('userinfo.id?? in usercontroller: ', userInfo.id)
+
                 const tutorInfo = await this.userService.getTutorInfo(userInfo.id)
                 console.log('tutorinfo in usercontroller: ', tutorInfo)
+
                 res.json({ success: true, token, userInfo, tutorInfo })
                 return
             }
@@ -460,22 +502,27 @@ export class UserController {
     }
     getUserImage = async (req: Request, res: Response) => {
         try {
+
             const token: string = permit.check(req)
             if (!token) {
                 res.json({ error: 'Please login!' })
                 return
             }
+
             const userInfo: any = jwt_decode(token)
             if (userInfo.is_tutor) {
                 const result = await this.userService.getUserImage(userInfo.id)
                 console.log(result)
+
                 if (!result.error) {
                     res.json(result)
                     return
                 }
+
                 res.json(result.error)
                 return
             }
+
             res.json({ error: 'user is not a tutor' })
             return
         } catch (error) {
@@ -487,8 +534,10 @@ export class UserController {
         try {
             const tutorId = +req.params.tutorId
             console.log(' LAST pLS',tutorId)
+
             const tutorInfo = await this.userService.getTutorInfoForStudent(tutorId)
             console.log('LAS tF PLS: ', tutorInfo)
+            
             res.json(tutorInfo)
             return
         }

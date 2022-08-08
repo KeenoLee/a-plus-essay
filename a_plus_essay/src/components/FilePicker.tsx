@@ -15,6 +15,7 @@ export default function FilePicker() {
 
     const handleFilePicker = async () => {
         try {
+            
             const pickerResult = await DocumentPicker.pick({
                 presentationStyle: "fullScreen",
                 copyTo: "cachesDirectory",
@@ -22,11 +23,13 @@ export default function FilePicker() {
                 // You can also limit the file type here 
                 // type: [types.doc, types.docx]
             })
+
             let result = {
                 uri: pickerResult[0].uri,
                 filename: pickerResult[0].name,
                 filetype: pickerResult[0].type
             }
+
             setFileData([...fileData, result])
         }
         catch (err) {

@@ -27,6 +27,7 @@ export class ChatController extends RestController {
         // this.chatService = chatService; private
         this.setupSocket()
     }
+
     setupSocket() {
         this.io.on('connection', socket => {
             let user_id = 0
@@ -47,8 +48,6 @@ export class ChatController extends RestController {
                 socket.leave('room:' + order_id)
             })
 
-
-
         })
     }
 
@@ -62,6 +61,7 @@ export class ChatController extends RestController {
     // return {
     //     order_id: id
     // }
+
     getChatList = async (req: Request, res: Response, next: NextFunction) => {
         console.log("Getting chat list....");
         try {
@@ -82,12 +82,20 @@ export class ChatController extends RestController {
         try {
             const { message } = req.body
             console.log('mssmggmsg', message)
+
             let payload = getJWTPayload(req)
             let order_id = +req.params.id
-            const result = await this.chatService.postMessage({ sender_id: payload.id, order_id, message })
+
+            const result = await this.chatService.postMessage({ 
+                sender_id: payload.id,
+                order_id, message
+            })
+
             this.io.to('room:' + order_id).emit('chat message', result)
+
             console.log('hi see result', result)
             console.log('orrrrderid', order_id)
+
             res.json({ ok: true })
         } catch (err) {
             console.error('ChatControllerError: ', err)
@@ -104,9 +112,10 @@ export class ChatController extends RestController {
             let payload = getJWTPayload(req)
             let userId = payload.id
             const orderId = +req.params.id
-            const room = await
-                this.chatService.getChatroom({ userId, orderId })
+
+            const room = await this.chatService.getChatroom({ userId, orderId })
             res.json({ room })
+            
         } catch (err) {
             console.error('ChatControllerError: ', err)
             res.status(500).json({ error: String(err) })

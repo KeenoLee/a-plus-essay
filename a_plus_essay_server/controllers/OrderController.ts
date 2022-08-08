@@ -132,6 +132,7 @@ export class OrderController {
         res.json({orderId});
         return;
     };
+
     uploadOrderFile = async (req: Request, res: Response) => {
         try {
             form.parse(req, async (err, fields, files) => {
@@ -152,6 +153,7 @@ export class OrderController {
             return;
         }
     };
+
     getOrderData = async (req: Request, res: Response) => {
         try {
             const userId = 1;
@@ -230,6 +232,7 @@ export class OrderController {
     //         res.status(500).json({ message: "internal server errror" })
     //     }
     // }
+
     getMatchingOrder = async (req: Request, res: Response) => {
         try {
             let payload = getJWTPayload(req)
@@ -244,9 +247,11 @@ export class OrderController {
             res.json({ error: String(error) })
         }
     }
+
     getOngoingOrder = async (req: Request, res: Response) => {
         try {
             let payload = getJWTPayload(req)
+
             if (payload.is_tutor) {
                 let json = await this.orderService.getTutorOngoingOrder(payload.id)
                 res.json(json)
@@ -254,10 +259,12 @@ export class OrderController {
                 let json = await this.orderService.getStudentOngoingOrder(payload.id)
                 res.json(json)
             }
+
         } catch (error) {
             res.json({ error: String(error) })
         }
     }
+
     getCompletedOrder = async (req: Request, res: Response) => {
         try {
             let payload = getJWTPayload(req)
@@ -289,6 +296,7 @@ export class OrderController {
             return
         }
     }
+
     getOrderImages = async (req: Request, res: Response) => {
         try {
             console.log(req.params)
@@ -303,6 +311,7 @@ export class OrderController {
             return
         }
     }
+
     confirmTutor = async (req: Request, res: Response) => {
         try {
             const { tutorId, orderId } = req.body
@@ -318,6 +327,7 @@ export class OrderController {
             return
         }
     }
+
     getCandidates = async (req: Request, res: Response) => {
         try {
             console.log('PARMASADS? ', req.params.orderId)
@@ -325,6 +335,7 @@ export class OrderController {
             const candidates = await this.orderService.getCandidates(orderId)
             console.log('ORDER CANDIDATES ID??', candidates)
             res.json(candidates)
+            
             return
         } catch (error) {
             res.json({ error })

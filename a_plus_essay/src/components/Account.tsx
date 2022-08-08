@@ -35,10 +35,12 @@ async function fetchEditProfile(editInfo: EditInfo) {
     const result = await res.json()
     return result
 }
+
 async function fetchGetImage(tutorId: number) {
     const res = await fetch(`${env.BACKEND_URL}/get-image/${tutorId}`)
     const result = await res.json()
 }
+
 export default function Account() {
     const state: any = useSelector((state: RootState) => state.auth)
 
@@ -52,6 +54,7 @@ export default function Account() {
     console.log('tutorInfo in Account', state?.tutor)
     const navigation = useAppNavigation()
     // const [isAuth, setIsAuth] = useState(false)
+
     const [editProfile, setEditProfile] = useState<Boolean | null>(null)
     const [editNickname, setEditNickname] = useState<string | null>(null)
     const [editPassword, setEditPassword] = useState<string | null>(null)
@@ -61,6 +64,7 @@ export default function Account() {
     const [editTranscript, setEditTranscript] = useState<Array<EditTranscript>>([])
     const [editPreferredSubject, setEditPreferredSubject] = useState<Array<PreferredSubject | null>>([null])
     const [editSelfIntro, setEditSelfIntro] = useState<string | null>(null)
+
     useEffect(() => {
         async function fetchImageFilename() {
             const res = await fetch(`${env.BACKEND_URL}/get-user-file`, {
