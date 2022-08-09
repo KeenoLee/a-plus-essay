@@ -11,6 +11,7 @@ import { env } from "../env";
 const uploadDir = "uploads";
 fs.mkdirSync(uploadDir, { recursive: true });
 dotenv.config({ path: "../.env" || "../../.env" });
+
 const form = formidable({
     uploadDir,
     multiples: true,
@@ -115,6 +116,7 @@ export class OrderController {
             res.status(400).json({ error: "Student submission deadline is missed" });
             return;
         }
+
         console.log("going to insert into db... ");
         const orderId = await this.orderService.createOrder({
             studentId,
@@ -235,11 +237,13 @@ export class OrderController {
 
     getMatchingOrder = async (req: Request, res: Response) => {
         try {
+
             let payload = getJWTPayload(req)
             if (payload.is_tutor) {
                 let json = await this.orderService.getTutorMatchingOrder(payload.id)
                 res.json(json)
-            } else {
+            } 
+            else {
                 let json = await this.orderService.getStudentMatchingOrder(payload.id)
                 res.json(json)
             }
@@ -255,7 +259,8 @@ export class OrderController {
             if (payload.is_tutor) {
                 let json = await this.orderService.getTutorOngoingOrder(payload.id)
                 res.json(json)
-            } else {
+            } 
+            else {
                 let json = await this.orderService.getStudentOngoingOrder(payload.id)
                 res.json(json)
             }

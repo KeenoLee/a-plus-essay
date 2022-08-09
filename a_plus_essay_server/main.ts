@@ -23,7 +23,7 @@ export const knex = Knex(config[env.NODE_ENV || "development"]);
 
 const app = express();
 // But why?
-const userRoutes = express.Router();
+// const userRoutes = express.Router();
 const orderRoutes = express.Router();
 const chatRoutes = express.Router();
 
@@ -35,8 +35,6 @@ let io = new socketio.Server(server, {
     },
 });
 
-const userService = new UserService(knex);
-const userController = new UserController(userService);
 const orderService = new OrderService(knex, io);
 const orderController = new OrderController(orderService);
 
@@ -50,24 +48,10 @@ app.use('/get-image', express.static(__dirname + '/uploads'))
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
 
-userRoutes.post("/register/student", userController.createUser);
-userRoutes.post("/register/tutor", userController.createUser);
-userRoutes.post("/login/password", userController.loginWithPassword);
-// userRoutes.post("/login/password/:id/:isTutor", userController.loginWithPassword);
-userRoutes.post("/checkemailandphone", userController.checkEmailAndPhoneDuplication);
-userRoutes.get("/login/google", userController.loginWithGoogle);
-userRoutes.get("/login/facebook", userController.loginWithFacebook);
-userRoutes.post("/resetpassword", userController.resetPassword);
-userRoutes.post("/tutor-file", userController.uploadTutorFile);
-userRoutes.post("/edit-profile", userController.editProfile);
-userRoutes.get("/login/token", userController.loginWithToken);
-userRoutes.get("/get-user-file", userController.getUserImage);
-userRoutes.get('/get-tutor/:tutorId', userController.getTutorInfo);
 
 chatRoutes.get("/chat/list", chatController.getChatList);
 chatRoutes.get("/chat/:id/message", chatController.getChatroom);
 chatRoutes.post("/chat/:id/message", chatController.postMessage);
-
 
 
 // async function testing() {
@@ -90,6 +74,8 @@ orderRoutes.post('/confirm-tutor', orderController.confirmTutor)
 orderRoutes.get('/get-candidates/:orderId', orderController.getCandidates)
 
 // orderRoutes.post('/order/acceptOrRejectQuote', orderController.acceptOrRejectQuotation)
+
+import { userRoutes } from "./router/userRoutes"
 
 app.use(userRoutes);
 app.use(orderRoutes);

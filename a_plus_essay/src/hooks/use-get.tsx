@@ -19,7 +19,9 @@ export function useGet<T extends { error?: string }>(
   url: string,
   defaultValue: T,
 ) {
+
   const [json, setJSON] = useState<T>(defaultValue);
+
   const token = useSelector((state: RootState) => state.auth.token);
   
   useEffect(() => {
@@ -46,8 +48,11 @@ export function useGet<T extends { error?: string }>(
         // }
       });
   }, [url, token]);
+
   function render(fn: (json: T) => any) {
+
     console.log('useGet JSON:', json)
+
     if (json.error == 'loading') {
       return (
         <HStack space={2} justifyContent="center">
@@ -58,6 +63,7 @@ export function useGet<T extends { error?: string }>(
         </HStack>
       );
     }
+
     if (json.error) {
       return (
         <Alert w="100%" status={'error'}>
@@ -84,7 +90,10 @@ export function useGet<T extends { error?: string }>(
         </Alert>
       );
     }
+
     return fn(json);
+    
   }
+
   return { json, setJSON, render, token };
 }

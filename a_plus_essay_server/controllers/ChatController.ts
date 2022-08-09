@@ -30,13 +30,16 @@ export class ChatController extends RestController {
 
     setupSocket() {
         this.io.on('connection', socket => {
-            let user_id = 0
+            let user_id = 0;
+
             socket.on('login', token => {
                 user_id = jwtSimple.decode(token, env.JWT_SECRET)
             })
+
             socket.on('logout', token => {
                 user_id = 0
             })
+
             socket.on('join', async (order_id) => {
                 // console.log('hi', await this.chatService.checkMember({ user_id, order_id }))
                 // if () {
@@ -44,6 +47,7 @@ export class ChatController extends RestController {
                 socket.join('room:' + order_id)
                 // }
             })
+            
             socket.on('leave', (order_id) => {
                 socket.leave('room:' + order_id)
             })

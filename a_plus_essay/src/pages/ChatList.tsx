@@ -17,6 +17,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useGet } from '../hooks/use-get';
 import { useToken } from '../hooks/use-token';
 import { useAppNavigation } from '../routes';
+import { useGetRee } from '../hooks/useGetRee';
 
 const Stack = createStackNavigator();
 
@@ -88,11 +89,14 @@ const ChatListItem = (props: ChatListProps) => {
 };
 
 export default function ChatListScreen() {
+
   const chatList = useGet<{ rooms: ChatRoom[]; error?: string }>(
     'chatrooms',
     '/chat/list',
     { error: 'loading', rooms: [] },
   );
+
+  const [ backData, isDataLoading, someError, fetchAgain ] = useGetRee("", "POST", {});
 
   const state = useSelector((state: RootState) => state.auth);
   console.log('userInfo in ChatList', state?.user);

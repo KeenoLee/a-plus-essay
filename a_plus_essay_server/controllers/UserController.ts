@@ -88,6 +88,7 @@ export class UserController {
         //set encode payload { id, nickname, is_tutor} into jwt
         const userInfo = await this.userService.createUser({ isTutor, nickname, email, password, phoneNumber });
         const jwt = jwtSimple.encode(userInfo, env.JWT_SECRET)
+        // throw new Error()
         console.log('going to end...')
 
         if (isTutor === false) {

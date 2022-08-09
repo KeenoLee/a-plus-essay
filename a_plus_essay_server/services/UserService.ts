@@ -100,6 +100,7 @@ export class UserService {
                 majorId = (await knex.select("id").from("major").where("major", tutor.major).first())?.id
             };
 
+
             const schoolId = (await knex
             .insert({
                 school: tutor.school,
@@ -127,10 +128,12 @@ export class UserService {
             // To find out whether the subjects are already inserted
             for (let subject of tutor.subjects) {
                 const result = await knex.select("id", "subject_name").from("subject").where("subject_name", subject.subject).first()
+                
                 if (!result) {
                     console.log('no result found')
                     continue
-                } else {
+                } 
+                else {
                     console.log('result in for loop: ', result)
                     subjectsFromDB.push(result)
                 }
@@ -138,11 +141,14 @@ export class UserService {
 
             // If all subjects are new...
             if (subjectsFromDB.length === 0) {
+
                 console.log('sub from db = 0! :) ')
+
                 for (let subject of tutor.subjects) {
                     const result = await knex.insert({ subject_name: subject.subject }).into("subject").returning('*')
                     console.log('result of insert subject: ', result)
                 }
+
                 console.log(':++!@#%@#$^ ', subjectsFromDB, ':))')
 
             };
@@ -169,6 +175,7 @@ export class UserService {
 
                     for (let unInsertedSubject of unInsertedSubjects) {
                         console.log('uninserted sub?: ', unInsertedSubject)
+
                         let subjectId = (await knex
                             .insert({ subject_name: unInsertedSubject.subject })
                             .into('subject')
@@ -177,28 +184,39 @@ export class UserService {
 
                         // let subjectId = (await knex.select('id').from('subject').where('subject_name', unInsertedSubject.subject).first()).id
                         console.log('should hv IDDDDD! ', subjectId)
-                        await knex.insert({
+                        await knex
+                        .insert({
                             tutor_id: tutor.userId,
                             subject_id: subjectId,
                             score: tutor.subjects.filter((subject: Subject) => (subject.subject !== unInsertedSubject.subject))[0].score
-                        }).into("transcript_subject")
+                        })
+                        .into("transcript_subject")
                     }
                 }
             }
-            let preferredSubjects = tutor.subjects.filter(subject => subject.isChecked === true)
+            let preferredSubjects = tutor.subjects.filter(subject => subject.isChecked)
+
             console.log('what is preferred?: ', preferredSubjects)
             if (!preferredSubjects[0]) {
-                return { error: 'at least one subject should be chosen' }
+                return { 
+                    error: 'at least one subject should be chosen'
+                }
             }
+
             for (let preferredSubject of tutor.preferredSubjects) {
                 console.log('preferred Subject: ', preferredSubject)
+
                 let subjectId = (await knex.select("id").from("subject").where("subject_name", preferredSubject).first()).id
                 console.log('subjectId: ', subjectId)
-                await knex.insert({
+
+                await knex
+                .insert({
                     tutor_id: tutor.userId,
                     subject_id: subjectId
-                }).into("preferred_subject")
+                })
+                .into("preferred_subject")
             }
+
             console.log(tutor.userId)
             return tutor.userId;
         })

@@ -237,6 +237,7 @@ export default function Register() {
     const [firmPassword, setFirmPassword] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
     const [isTutor, setIsTutor] = useState(false);
+
     function onPressRole(roleData: RadioButtonProps[]) {
         setRole(roleData);
     }
@@ -273,11 +274,15 @@ export default function Register() {
                 mediaType: 'photo',
             },
             res => {
+
                 if (res.didCancel) {
                     console.log('user cancelled image picker');
-                } else if (res.errorMessage) {
+                } 
+                else if (res.errorMessage) {
                     console.log('Error: ', res.errorMessage);
-                } else {
+                } 
+                else {
+
                     let uri = res.assets?.[0].uri;
                     let name = res.assets?.[0].fileName;
                     let type = res.assets?.[0].type;
@@ -286,6 +291,7 @@ export default function Register() {
                         callback({ uri, name, type });
                         return;
                     }
+
                     console.log('file is not found');
                     return;
                 }
@@ -313,15 +319,18 @@ export default function Register() {
             isChecked: false,
         },
     ]);
+
     function onCheckBox(isChecked: boolean, index: number) {
         setSubjects(state =>
             state.map((subject: Subject, i: number) => {
+
                 if (i === index) {
                     return {
                         ...subject,
                         isChecked: isChecked,
                     };
                 }
+
                 return subject;
             }),
         );
@@ -339,9 +348,11 @@ export default function Register() {
         password.length > passwordLength
             ? setPasswordLengthEnough(true)
             : setPasswordLengthEnough(false);
+
+
         firmPassword === password
-            ? setPasswordMatch(true)
-            : setPasswordMatch(false);
+            ? setPasswordMatch(true) 
+            :  setPasswordMatch(false);
         mobileNumber.length === mobileNumberLength && !isNaN(+mobileNumber)
             ? setMobileValid(true)
             : setMobileValid(false);
@@ -582,6 +593,7 @@ export default function Register() {
                         }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
+
                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <Text>Have an account? </Text>
                         <TouchableOpacity
