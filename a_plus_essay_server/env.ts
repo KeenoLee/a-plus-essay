@@ -9,7 +9,7 @@ export const env = {
     DB_USERNAME: '',
     DB_PASSWORD: '',
     JWT_SECRET: '',
-    NODE_ENV: ''
+    NODE_ENV: 'development'
 }
 
 populateEnv(env, { mode: 'halt' })

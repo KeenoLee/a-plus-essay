@@ -15,7 +15,7 @@ import { getJWTPayload, JWTPayload } from "./utils/get-jwt";
 import { env } from "./env";
 
 const dirPath = path.join(__dirname, '/uploads')
-export const knex = Knex(config[env.NODE_ENV || "development"]);
+export const knex = Knex(config[env.NODE_ENV]);
 
 const app = express();
 const userRoutes = express.Router();
