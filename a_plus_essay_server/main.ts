@@ -18,6 +18,7 @@ const dirPath = path.join(__dirname, '/uploads')
 export const knex = Knex(config[env.NODE_ENV]);
 
 const app = express();
+app.use(cors())
 const userRoutes = express.Router();
 const orderRoutes = express.Router();
 const chatRoutes = express.Router();
