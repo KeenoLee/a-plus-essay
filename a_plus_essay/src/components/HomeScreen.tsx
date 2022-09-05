@@ -241,7 +241,7 @@ export function RenderTutor() {
                 keyExtractor={(item) => String(item.id + Math.random())}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
-                    <VerticalTutorCard name={item.name} rating={item.rating} school={item.school} major1={item.major1} major2={item.major2} major3={item.major3} donePaper={item.donePaper} />
+                    <VerticalTutorCard id={item.id} name={item.name} rating={item.rating} school={item.school} major1={item.major1} major2={item.major2} major3={item.major3} donePaper={item.donePaper} />
                 )}
             />
         </Stack>

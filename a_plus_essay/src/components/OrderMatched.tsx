@@ -3,10 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useAppNavigation } from '../routes'
 
-type OnPress = {
-    onPress: () => void
-}
-export default function OrderMatched({ onPress }: OnPress) {
+export default function OrderMatched(props: {onPress: ()=>void}) {
     const navigation = useAppNavigation()
     return (
         <View style={{
@@ -21,7 +18,7 @@ export default function OrderMatched({ onPress }: OnPress) {
             }}>Order Matching!</Text>
             <Text style={styles.message}>We are processing your request.</Text>
             <Text style={styles.message}>A confirmation message</Text>
-            <Text style={styles.message}>will be sent toyou shortly.</Text>
+            <Text style={styles.message}>will be sent to you shortly.</Text>
             <TouchableOpacity style={{
                 margin: 30,
                 padding: 10,
@@ -30,7 +27,7 @@ export default function OrderMatched({ onPress }: OnPress) {
                 borderRadius: 15
             }}
                 onPress={() => {
-                    // onPress()
+                    props.onPress()
                     navigation.navigate('Tabs')
                 }}
             >

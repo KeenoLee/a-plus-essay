@@ -4,11 +4,15 @@ module.exports = function (api) {
 
   // Adding 'react-native-web' plugin without a platform check breaks native builds; but platform
   // check is not possible? So plugins applied here are either "all platforms" or "no platforms"?
-  const plugins = platform === 'web' ? [['react-native-web', { commonjs: true }, 'react-native-reanimated/plugin']] : ['react-native-reanimated/plugin']
+  const plugins = ['@babel/plugin-syntax-jsx']
+  if (platform === 'web') {
+    plugins.push(['react-native-web', { commonjs: true }])
+  }
+  plugins.push('react-native-reanimated/plugin')
 
   api.cache(true)
   return {
-    "presets": ['module:metro-react-native-babel-preset'],
+    "presets": ['@babel/preset-react','module:metro-react-native-babel-preset'],
     plugins,
   }
 }

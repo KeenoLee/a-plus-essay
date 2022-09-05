@@ -268,8 +268,6 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
 }
 const ConnectedChatroom = (props: {
   route: { params: AppParamList['Chatroom'] }
-  token: string
-  title: string
 }) => {
   //   const navigation = useAppNavigation();
   // navigation.getState().routes

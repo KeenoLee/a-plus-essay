@@ -18,7 +18,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from './SubjectRow';
 import DocumentPicker from 'react-native-document-picker';
-import SuccessRegister from './SuccessRegister';
 import { env } from '../env/env';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -894,7 +893,39 @@ export default function Register() {
                 </>
             ) : null}
             {page.step === 5 ? (
-                <SuccessRegister onPress={() => setPage({ step: 1 })} email={email} password={password} />
+                <View style={{
+                    height: '70%',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <Text style={{
+                        fontWeight: 'bold',
+                        fontSize: 30,
+                        padding: 20,
+                        textAlign: 'center',
+                        marginBottom: 15
+                    }}>Thank you for your registration!</Text>
+                    <Text style={styles.message}>We are processing your request.</Text>
+                    <Text style={styles.message}>A confirmation message</Text>
+                    <Text style={styles.message}>will be sent toyou shortly.</Text>
+                    <TouchableOpacity style={{
+                        margin: 30,
+                        marginTop: 50,
+                        padding: 10,
+                        backgroundColor: 'rgb(27,70,245)',
+                        width: 250,
+                        borderRadius: 15,
+                    }} onPress={() => {
+                        setPage({ step: 1 })
+                        dispatch(fetchLogin({ email: email, password: password }));
+                        navigation.navigate('Tabs')
+                    }}>
+                        <Text style={{
+                            textAlign: 'center',
+                            color: 'white',
+                        }}>Let's started</Text>
+                    </TouchableOpacity>
+                </View>
             ) : null}
             {/* </SafeAreaView> */}
         </View>
@@ -983,4 +1014,12 @@ const styles = StyleSheet.create({
         width: 300,
         height: 40,
     },
+    message: {
+        paddingLeft: 60,
+        paddingRight: 60,
+        textAlign: 'center',
+        fontStyle: 'italic',
+        color: 'rgb(132,164,193)',
+        fontWeight: 'bold'
+    }
 });

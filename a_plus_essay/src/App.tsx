@@ -41,7 +41,6 @@ import OrderMatched from './components/OrderMatched';
 
 import { Center, NativeBaseProvider, Fab, Box } from 'native-base';
 import OrderSubmission from './components/OrderSubmission';
-import SuccessRegister from './components/SuccessRegister';
 import LoadingScreen from './components/LoadingScreen';
 import LoginPage from './components/LoginPage';
 import Chatroom from './components/Chatroom';
@@ -258,8 +257,7 @@ export function HomeStack() {
           {/* {(props) => <LoginPage navigation={props} />}
           </Stack.Screen> */}
       {/* <Stack.Screen name="ChatList" component={ChatList} /> */}
-      <Stack.Screen name="Success Register" component={SuccessRegister} />
-      <Stack.Screen name="Thank You" component={OrderMatched} />
+      {/* <Stack.Screen name="Thank You" component={OrderMatched} /> */}
       <Stack.Screen
         name="Tutor Information"
         component={TutorInformation}

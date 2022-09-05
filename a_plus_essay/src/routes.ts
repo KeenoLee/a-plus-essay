@@ -7,7 +7,6 @@ export type AppParamList = {
     'Home Drawer': undefined;
     Welcome: undefined;
     ChatList: undefined;
-    'Success Register': undefined;
     'Order Submission': undefined;
     'Thank You': undefined;
     'Tutor Information': undefined;
