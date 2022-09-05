@@ -59,6 +59,8 @@ import jwt_decode from 'jwt-decode'
 import { fetchLoginWithToken } from './redux/auth/actions';
 import { AppDispatch } from './redux/dispatch';
 import { roundToNearestMinutes } from 'date-fns';
+import AboutUs from './pages/AboutUs';
+import Comment from './pages/Comment';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 const Stack = createStackNavigator<AppParamList>();
@@ -257,6 +259,8 @@ export function HomeStack() {
       />
       <Stack.Screen name="Select Tutor" component={SelectTutor} />
       {/* <Stack.Screen name="Register" component={Register} /> */}
+      <Stack.Screen name="Comment" component={Comment} />
+      <Stack.Screen name="About Us" component={AboutUs} />
       <Stack.Screen name="Message" component={Notification} />
       <Stack.Screen name="Chatroom" component={Chatroom}
       // options={{ headerTitle: (props: any) => props.title }}
