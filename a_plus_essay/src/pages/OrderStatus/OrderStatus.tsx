@@ -1,7 +1,6 @@
 import { Alert } from 'react-native'
 import React from 'react'
 import { Box, HStack, IconButton, StatusBar, Text, View } from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';

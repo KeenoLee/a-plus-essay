@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import DocumentPicker, { types } from 'react-native-document-picker'
 import { Button, Stack } from 'native-base'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import { AppIonIcon } from './Icon'
 
 type File = {
     uri: string,
@@ -40,7 +40,7 @@ export default function FilePicker() {
 
     return (
         <Stack>
-            <Button onPress={() => handleFilePicker()} leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
+            <Button onPress={() => handleFilePicker()} leftIcon={<AppIonIcon name="cloud-upload-outline" color="white" />}>
                 Upload
             </Button>
             {fileData.length > 0 

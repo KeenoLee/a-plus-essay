@@ -25,12 +25,12 @@ import {
   VStack,
 } from 'native-base';
 import { launchImageLibrary } from 'react-native-image-picker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input as InputN } from 'native-base';
 import { env } from '../env/env';
 import { AppParamList, useAppNavigation } from '../routes';
 import { useGet } from '../hooks/use-get';
 import { usePost } from '../hooks/use-post';
+import { AppIonIcon } from './Icon';
 
 // import { Header } from '@react-navigation/native-stack'
 
@@ -239,7 +239,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
                     }}></View>
                 </ScrollView>
                 <View style={styles.inputContainer}>
-                  {/* <Ionicons size={24} name="add-circle-outline" /> */}
+                  {/* <AppIonIcon size={24} name="add-circle-outline" /> */}
                   <TextInput
                     style={styles.textInput}
                     autoCorrect={false}
@@ -251,7 +251,7 @@ class Chatroom extends Component<IChatroomProps, IChatroomState> {
                       this.setState({ chatMessage });
                     }}
                   />
-                  <Ionicons
+                  <AppIonIcon
                     size={24}
                     name="send"
                     onPress={() => this.submitChatMessage()}

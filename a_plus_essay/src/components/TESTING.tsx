@@ -7,9 +7,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { format } from 'date-fns'
 import { Button, Center, Divider, Heading, Select, Stack, VStack } from 'native-base';
 import { launchImageLibrary } from 'react-native-image-picker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input as InputN } from 'native-base'
 import { env } from '../env/env';
+import { AppIonIcon } from './Icon';
 
 // import { Header } from '@react-navigation/native-stack'
 
@@ -145,7 +145,7 @@ export default class Chatroom extends Component<IChatroomProps, IChatroomState> 
                                 </Select>
                             </VStack> */}
                             <View style={styles.inputContainer}>
-                                <Ionicons size={24} name="add-circle-outline" />
+                                <AppIonIcon size={24} name="add-circle-outline" />
                                 <TextInput
                                     style={styles.textInput}
                                     autoCorrect={false}
@@ -156,7 +156,7 @@ export default class Chatroom extends Component<IChatroomProps, IChatroomState> 
                                     onChangeText={chatMessage => {
                                         this.setState({ chatMessage })
                                     }} />
-                                <Ionicons size={24} name="send" onPress={() => this.submitChatMessage()} />
+                                <AppIonIcon size={24} name="send" onPress={() => this.submitChatMessage()} />
 
                             </View>
                         </View>

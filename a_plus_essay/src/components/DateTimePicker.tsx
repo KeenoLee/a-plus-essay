@@ -1,7 +1,6 @@
 import { Button, HStack } from 'native-base'
 import React, { useState } from 'react'
 import DatePicker from 'react-native-date-picker'
-import Ionicons from 'react-native-vector-icons/Ionicons';
 // export function formatDate(date: Date) {
 //     let newDate = date.toLocaleString('zh-hk', { hour12: false })
 //     // console.log('newDate', newDate)

@@ -19,7 +19,6 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import SubjectRow, { Subject } from './SubjectRow';
 import DocumentPicker from 'react-native-document-picker';
 import { env } from '../env/env';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { just } from '@beenotung/tslib';
 import {
@@ -38,6 +37,7 @@ import { fetchLogin } from '../redux/auth/actions';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/dispatch';
 import { useAppNavigation } from '../routes';
+import { AppIonIcon } from './Icon';
 // import RNFetchBlob from 'rn-fetch-blob'
 
 const roleData: RadioButtonProps[] = [
@@ -614,7 +614,7 @@ export default function Register() {
                                 </Select>
                             </VStack> */}
                             <TouchableOpacity onPress={() => addTranscriptImage()}>
-                                <Ionicons name="attach" color="grey" size={18} />
+                                <AppIonIcon name="attach" color="grey" size={18} />
                                 {/* <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text> */}
                             </TouchableOpacity>
                         </View>
@@ -650,7 +650,7 @@ export default function Register() {
                                                         images.filter((_, i) => i !== index),
                                                     );
                                                 }}>
-                                                <Ionicons name="close" color="grey" size={18} />
+                                                <AppIonIcon name="close" color="grey" size={18} />
                                                 {/* <Text style={{ color: 'grey' }}>x</Text> */}
                                             </TouchableOpacity>
                                         </View>
@@ -674,13 +674,13 @@ export default function Register() {
                                         onPress={() => {
                                             setStudentCardImage(() => null);
                                         }}>
-                                        <Ionicons name="close" color="grey" size={18} />
+                                        <AppIonIcon name="close" color="grey" size={18} />
                                         {/* <Text style={{ color: 'grey' }}>x</Text> */}
                                     </TouchableOpacity>
                                 </View>
                             ) : (
                                 <TouchableOpacity onPress={() => addStudentCardImage()}>
-                                    <Ionicons name="attach" color="grey" size={18} />
+                                    <AppIonIcon name="attach" color="grey" size={18} />
                                     {/* <Text style={{ paddingRight: 10, color: '#888888' }}>Upload Photo</Text> */}
                                 </TouchableOpacity>
                             )}
@@ -801,7 +801,7 @@ export default function Register() {
                         {/* // style={{ flex: 1, borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: 'black', borderRadius: 30, width: 17, height: 30 }} */}
                         {/* // onPress={() => { setSubjects((subjects) => [...subjects, { subject: '', score: '', isChecked: false, key: genUniqueKey() }]) }}> */}
                         {/* <Text style={{}}>+</Text> */}
-                        {/* <Ionicons name="add-circle-outline" color='grey' size={18} />
+                        {/* <AppIonIcon name="add-circle-outline" color='grey' size={18} />
                             </TouchableOpacity> */}
                     </View>
                     {subjects.map((subject, index) => (
@@ -845,7 +845,7 @@ export default function Register() {
                             ]);
                         }}>
                         {/* <Text style={{}}>+</Text> */}
-                        <Ionicons name="add-circle-outline" color="#0f766e" size={30} />
+                        <AppIonIcon name="add-circle-outline" color="#0f766e" size={30} />
                     </TouchableOpacity>
 
                     <TouchableOpacity

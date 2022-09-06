@@ -8,7 +8,7 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useAppNavigation } from '../routes';
 import { env } from '../env/env';
 import { getData } from '../storage/storage';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { AppIonIcon } from './Icon';
 interface PreferredSubject {
     subject_name: string
 }
@@ -112,10 +112,10 @@ export default function Account() {
                                 }
                             }
                             }>
-                                <Ionicons name="checkmark-circle-outline" color='grey' size={25} />
+                                <AppIonIcon name="checkmark-circle-outline" color='grey' size={25} />
                             </TouchableOpacity> :
                             <TouchableOpacity onPress={() => setEditProfile(true)}>
-                                <Ionicons name="create-outline" color='grey' size={25} />
+                                <AppIonIcon name="create-outline" color='grey' size={25} />
                             </TouchableOpacity>
                         }
                     </View>

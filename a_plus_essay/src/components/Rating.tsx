@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import { Button, Center, FormControl, Input, Modal, Stack } from 'native-base';
+import { AppIonIcon } from './Icon';
 
 export default function Rating() {
     const [showModal, setShowModal] = useState(false);
@@ -9,7 +9,7 @@ export default function Rating() {
     return <Center>
         {/* {changeIcon ? */}
             <Stack>
-                <Ionicons name="heart-dislike" color='grey' size={18} onPress={() => setShowModal(true)} />
+                <AppIonIcon name="heart-dislike" color='grey' size={18} onPress={() => setShowModal(true)} />
                 <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                     <Modal.Content maxWidth="400px">
                         <Modal.CloseButton />

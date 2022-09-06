@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useState, useEffect } from 'react'
 import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button, Icon, CloseIcon, IconButton, View, ScrollView } from "native-base";
 import { launchImageLibrary } from 'react-native-image-picker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { format } from 'date-fns'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Alert, SafeAreaView, Image } from 'react-native';

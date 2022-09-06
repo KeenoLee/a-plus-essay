@@ -27,7 +27,6 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 // import Register from './src/components/Register';
 // import LoadingScreen from './src/components/LoadingScreen';
 import Notification from './pages/Notification';
@@ -64,6 +63,7 @@ import ViewMatchedOrder from './pages/ViewMatchedOrder';
 import Comment from './pages/Comment';
 import AboutUs from './pages/AboutUs';
 import { SSRProvider } from '@react-aria/ssr';
+import { AppIonIcon } from './components/Icon';
 // import OrderSubmission from './src/components/OrderSubmission';
 
 const Stack = createStackNavigator<AppParamList>();
@@ -84,7 +84,7 @@ export const Fabtn = () => {
           right={9}
           marginBottom={90}
           backgroundColor="teal.700"
-          icon={<Ionicons name="notifications" color="white" size={18} />}
+          icon={<AppIonIcon name="notifications" color="white" size={18} />}
         />
       </Box>
     </Center>
@@ -113,7 +113,7 @@ export const Tabs = () => {
           // headerShown: false,
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="home" color={color} size={focused ? 30 : size} />
+            <AppIonIcon name="home" color={color} size={focused ? 30 : size} />
           ),
         }}
       />
@@ -129,8 +129,8 @@ export const Tabs = () => {
                 justifyContent: 'space-between',
                 marginRight: 15,
               }}>
-              <Ionicons name="funnel" color="grey" size={18} />
-              <Ionicons
+              <AppIonIcon name="funnel" color="grey" size={18} />
+              <AppIonIcon
                 name="add-circle"
                 color="grey"
                 size={18}
@@ -149,7 +149,7 @@ export const Tabs = () => {
           // tabBarBadge: '1',
           tabBarBadgeStyle: { backgroundColor: '#0d9488' },
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
+            <AppIonIcon
               name="hourglass"
               color={color}
               size={focused ? 30 : size}
@@ -166,7 +166,7 @@ export const Tabs = () => {
           // tabBarBadge: '1',
           tabBarBadgeStyle: { backgroundColor: '#0d9488' },
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
+            <AppIonIcon
               name="chatbubbles"
               color={color}
               size={focused ? 30 : size}
@@ -181,7 +181,7 @@ export const Tabs = () => {
           tabBarLabel: 'Account',
           tabBarIcon: ({ focused, color, size }) => (
             // Sometime cannot navigate
-            <Ionicons
+            <AppIonIcon
               name="person-circle"
               color={color}
               size={focused ? 30 : size}

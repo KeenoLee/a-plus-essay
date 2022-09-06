@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Box, FormControl, Text, Input, Stack, VStack, TextArea, HStack, Button, Icon, CloseIcon, IconButton, View, ScrollView } from "native-base";
 import DateTimePicker from './DateTimePicker';
 import { launchImageLibrary } from 'react-native-image-picker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import FilePicker from './FilePicker';
 import { format } from 'date-fns'
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -16,6 +15,7 @@ import { useAppNavigation } from '../routes';
 import OrderMatched from './OrderMatched';
 import DateTime from './DateTime';
 import { updateOrder } from '../redux/order/actions';
+import { AppIonIcon } from './Icon';
 interface UserFile {
     uri: string
     type: string
@@ -197,7 +197,7 @@ export default function OrderSubmission() {
                                     }}
                                         size='sm' bgColor="teal.500"
                                         onPress={() => addGuideline()}
-                                        leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
+                                        leftIcon={<AppIonIcon name="cloud-upload-outline" color="white" />}>
                                         Upload
                                     </Button>
                                 </HStack>
@@ -218,7 +218,7 @@ export default function OrderSubmission() {
                                                     })
                                                 }}
                                             >
-                                                <Ionicons name="close" color='grey' size={18} />
+                                                <AppIonIcon name="close" color='grey' size={18} />
                                             </TouchableOpacity>
                                         </View>
                                     ))}
@@ -235,7 +235,7 @@ export default function OrderSubmission() {
                                     }}
                                         size='sm' bgColor="teal.500"
                                         onPress={() => addNote()}
-                                        leftIcon={<Ionicons name="cloud-upload-outline" color="white" />}>
+                                        leftIcon={<AppIonIcon name="cloud-upload-outline" color="white" />}>
                                         Upload
                                     </Button>
                                 </HStack>
@@ -254,7 +254,7 @@ export default function OrderSubmission() {
                                                 })
                                             }}
                                         >
-                                            <Ionicons name="close" color='grey' size={18} />
+                                            <AppIonIcon name="close" color='grey' size={18} />
                                         </TouchableOpacity>
                                     </View>
                                 ))}

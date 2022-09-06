@@ -4,7 +4,7 @@ import { useState } from 'react'
 // import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native'
 import { TextInput } from "react-native-gesture-handler"
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import { AppIonIcon } from './Icon'
 
 export type Subject = {
     key: string,
@@ -46,7 +46,7 @@ export default function SubjectRow({ index, subject, onSubjectChange, onScoreCha
             <TextInput autoCapitalize="none" style={styles.subject} onChangeText={(text) => onSubjectChange(text)} value={subject.subject} />
             <TextInput autoCapitalize="none" style={styles.subjectScore} value={subject.score} onChangeText={text => onScoreChange(text)} />
             <TouchableOpacity style={styles.editRow} onPress={() => { console.log('at delete button:', index); onDelete(index) }}>
-                <Ionicons name="close-circle-outline" color='#14b8a6' size={25} />
+                <AppIonIcon name="close-circle-outline" color='#14b8a6' size={25} />
             </TouchableOpacity>
         </View>
     )

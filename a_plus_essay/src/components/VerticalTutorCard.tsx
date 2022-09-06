@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import React from 'react';
 import { Box, Divider, HStack, ScrollView, Stack, Text } from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { AppIonIcon } from './Icon';
 
 export const tutorData = [{
   id: Math.random(),
@@ -96,7 +96,7 @@ export const VerticalTutorCard = ({ id, name, rating, school, major1, major2, ma
             borderRadius="14"
             w="60"
             py="1">
-            <Ionicons name="star" color="white" size={13} />
+            <AppIonIcon name="star" color="white" size={13} />
             <Text ml="1" color="white" fontWeight="bold" fontSize="13">
               {rating}
             </Text>
