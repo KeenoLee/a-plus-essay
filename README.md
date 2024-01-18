@@ -31,17 +31,17 @@ Our app is crafted using a combination of cutting-edge technologies:
 
 ## Screenshots & Demo
 Here's a sneak peek of A Plus Essay in action!
-![A Plus Essay Interface](/public/presentation/interface.png)
+![A Plus Essay Interface](a_plus_essay/public/presentation/interface.png)
 
 ## Overview
 
-![PPT Side](public/presentation/overview.jpg)
-![PPT Side 1](public/presentation/overview-p.1.jpg)
-![PPT Side 2](public/presentation/overview-p.2.jpg)
-![PPT Side 3](public/presentation/overview-p.3.jpg)
-![PPT Side 4](public/presentation/overview-p.4.jpg)
-![PPT Side 5](public/presentation/overview-p.5.jpg)
-![PPT Side 6](public/presentation/overview-p.6.jpg)
+![PPT Side](a_plus_essay/public/presentation/overview.jpg)
+![PPT Side 1](a_plus_essay/public/presentation/overview-p.1.jpg)
+![PPT Side 2](a_plus_essay/public/presentation/overview-p.2.jpg)
+![PPT Side 3](a_plus_essay/public/presentation/overview-p.3.jpg)
+![PPT Side 4](a_plus_essay/public/presentation/overview-p.4.jpg)
+![PPT Side 5](a_plus_essay/public/presentation/overview-p.5.jpg)
+![PPT Side 6](a_plus_essay/public/presentation/overview-p.6.jpg)
 
 
 
